@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\components\clip_slot.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 10057 bytes
@@ -109,7 +109,8 @@ class ClipSlotComponent(Component):
         except (KeyError, IndexError):
             if self._clip_rgb_table is not None:
                 return find_nearest_color(self._clip_rgb_table, color)
-            return self._stopped_value
+            else:
+                return self._stopped_value
 
     def _track_is_armed(self, track):
         return liveobj_valid(track) and track.can_be_armed and any([track.arm, track.implicit_arm])
@@ -119,18 +120,19 @@ class ClipSlotComponent(Component):
             if slot_or_clip.will_record_on_start:
                 return self._triggered_to_record_color
             return self._triggered_to_play_color
-            if slot_or_clip.is_playing:
-                if slot_or_clip.is_recording:
-                    return self._recording_color
-                return self._started_value
-            if slot_or_clip.color is not None:
-                return self._color_value(slot_or_clip)
-            if getattr(slot_or_clip, "controls_other_clips", True):
-                return self._stopped_value
-        elif self._track_is_armed(track):
-            if self._clip_slot.has_stop_button and self._record_button_color is not None:
-                return self._record_button_color
-        return self._empty_slot_color
+        if slot_or_clip.is_playing:
+            if slot_or_clip.is_recording:
+                return self._recording_color
+            return self._started_value
+        if slot_or_clip.color is not None:
+            return self._color_value(slot_or_clip)
+        if getattr(slot_or_clip, "controls_other_clips", True):
+            return self._stopped_value
+        if self._track_is_armed(track):
+            if self._clip_slot.has_stop_button:
+                if self._record_button_color is not None:
+                    return self._record_button_color
+            return self._empty_slot_color
 
     def _update_clip_property_slots(self):
         clip = self._clip_slot.clip if self._clip_slot else None
@@ -196,16 +198,14 @@ class ClipSlotComponent(Component):
     def _on_launch_button_pressed(self):
         if is_button_pressed(self._select_button):
             self._do_select_clip(self._clip_slot)
-        else:
-            if liveobj_valid(self._clip_slot):
-                if is_button_pressed(self._duplicate_button):
-                    self._do_duplicate_clip()
-                else:
-                    if is_button_pressed(self._delete_button):
-                        self._do_delete_clip()
-                    else:
-                        self._do_launch_clip(True)
-                        self._show_launched_clip_as_highlighted_clip()
+        elif liveobj_valid(self._clip_slot):
+            if is_button_pressed(self._duplicate_button):
+                self._do_duplicate_clip()
+            elif is_button_pressed(self._delete_button):
+                self._do_delete_clip()
+            else:
+                self._do_launch_clip(True)
+                self._show_launched_clip_as_highlighted_clip()
 
     @launch_button.released
     def launch_button(self, button):

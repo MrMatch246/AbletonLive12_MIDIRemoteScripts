@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Akai_Force_MPC\transport.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9938 bytes
@@ -91,7 +91,7 @@ class TransportComponent(TransportComponentBase):
 
     @tempo_control.value
     def tempo_control(self, value, _):
-        self.song.tempo = clamp(float("".join(map(chr, value[2[:None]]))), TEMPO_MIN, TEMPO_MAX)
+        self.song.tempo = clamp(float("".join(map(chr, value[2:]))), TEMPO_MIN, TEMPO_MAX)
 
     @play_button.pressed
     def play_button(self, _):
@@ -193,7 +193,7 @@ class TransportComponent(TransportComponentBase):
 
     def _update_clip_trigger_quantization_color_controls(self):
         quantization = self.song.clip_trigger_quantization
-        for index, control in enumerate(self.clip_trigger_quantization_color_controls):
+        for (index, control) in enumerate(self.clip_trigger_quantization_color_controls):
             control.color = "DefaultButton.On" if RADIO_BUTTON_GROUP_QUANTIZATION_VALUES[index] == quantization else "DefaultButton.Off"
 
     def _update_tui_metronome_button(self):

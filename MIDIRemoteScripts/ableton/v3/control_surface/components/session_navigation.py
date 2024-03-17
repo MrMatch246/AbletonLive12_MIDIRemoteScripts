@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\session_navigation.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7277 bytes
@@ -47,7 +47,7 @@ class SessionRingScroller(Scrollable):
         if self.snap_track_offset:
             if delta > 0:
                 return offset < len(self.session_ring.tracks_to_use()) - self.page_size
-        return delta < 0 < offset or offset + delta in range(self._max_track_offset() + 1)
+            return delta < 0 < offset or offset + delta in range(self._max_track_offset() + 1)
 
     def _can_scroll_scenes(self, delta):
         offset = self.session_ring.scene_offset

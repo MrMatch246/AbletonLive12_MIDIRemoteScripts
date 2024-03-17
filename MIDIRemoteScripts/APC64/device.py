@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\APC64\device.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 3749 bytes
@@ -18,23 +18,23 @@ class MacroMapping(NamedTuple):
     bank_1: Optional[list]
 
 
-MACRO_MAPPINGS = {1:MacroMapping(bank_0=[0, None, None, None, None, None, None]), 
- 2:MacroMapping(bank_0=[0, None, 1, None, None, None, None, None]), 
- 4:MacroMapping(bank_0=[0, 1, 2, 3, None, None, None, None]), 
- 6:MacroMapping(bank_0=[0, 1, 3, 4, 2, None, 5, None]), 
- 8:MacroMapping(bank_0=[0, 1, 4, 5, 2, 3, 6, 7]), 
+MACRO_MAPPINGS = {1:MacroMapping(bank_0=[0,None,None,None,None,None,None]), 
+ 2:MacroMapping(bank_0=[0,None,1,None,None,None,None,None]), 
+ 4:MacroMapping(bank_0=[0,1,2,3,None,None,None,None]), 
+ 6:MacroMapping(bank_0=[0,1,3,4,2,None,5,None]), 
+ 8:MacroMapping(bank_0=[0,1,4,5,2,3,6,7]), 
  10:MacroMapping(bank_0=[
-  0, 1, 5, 6, 2, 3, 7, 8],
-   bank_1=[4, None, 9, None, None, None, None, None]), 
+  0,1,5,6,2,3,7,8],
+   bank_1=[4,None,9,None,None,None,None,None]), 
  12:MacroMapping(bank_0=[
-  0, 1, 6, 7, 2, 3, 8, 9],
-   bank_1=[4, 5, 10, 11, None, None, None, None]), 
+  0,1,6,7,2,3,8,9],
+   bank_1=[4,5,10,11,None,None,None,None]), 
  14:MacroMapping(bank_0=[
-  0, 1, 7, 8, 2, 3, 9, 10],
-   bank_1=[4, 5, 11, 12, 6, None, 13, None]), 
+  0,1,7,8,2,3,9,10],
+   bank_1=[4,5,11,12,6,None,13,None]), 
  16:MacroMapping(bank_0=[
-  0, 1, 8, 9, 2, 3, 10, 11],
-   bank_1=[4, 5, 12, 13, 6, 7, 14, 15])}
+  0,1,8,9,2,3,10,11],
+   bank_1=[4,5,12,13,6,7,14,15])}
 
 class DeviceBankNavigationComponent(DeviceBankNavigationComponentBase):
 
@@ -42,7 +42,7 @@ class DeviceBankNavigationComponent(DeviceBankNavigationComponentBase):
         if self._bank_provider is not None:
             if is_device_rack(self._bank_provider.device):
                 return self._bank_provider.index == 0 and self._bank_provider.device.visible_macro_count > 8
-        return super().can_scroll_up()
+            return super().can_scroll_up()
 
 
 class DeviceComponent(DeviceComponentBase):
@@ -59,9 +59,9 @@ class DeviceComponent(DeviceComponentBase):
 
     def _get_provided_parameters(self):
         if self._is_rack:
-            macros = self.device.parameters[1[:17]]
+            macros = self.device.parameters[1:17]
             mappings = MACRO_MAPPINGS[self.device.visible_macro_count]
-            return [self._create_parameter_info(macros[m] if (m is not None and self.device.macros_mapped[m]) else None, None) for m in getattr(mappings, "bank_{}".format(self._bank.index))]
+            return [self._create_parameter_info(macros[m] if (m is not None) and (self.device.macros_mapped[m]) else None, None) for m in getattr(mappings, "bank_{}".format(self._bank.index))]
         return super()._get_provided_parameters()
 
     @listens("visible_macro_count")

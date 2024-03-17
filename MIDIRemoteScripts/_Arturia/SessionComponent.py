@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Arturia\SessionComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2022 bytes
@@ -29,10 +29,9 @@ class SessionComponent(SessionComponentBase):
         current_index = list(all_scenes).index(selected_scene)
         if value > 0 and selected_scene != all_scenes[-1]:
             self.song().view.selected_scene = all_scenes[current_index + 1]
-        else:
-            if value < 0:
-                if selected_scene != all_scenes[0]:
-                    self.song().view.selected_scene = all_scenes[current_index - 1]
+        elif value < 0:
+            if selected_scene != all_scenes[0]:
+                self.song().view.selected_scene = all_scenes[current_index - 1]
 
     def on_selected_scene_changed(self):
         super(SessionComponent, self).on_selected_scene_changed()

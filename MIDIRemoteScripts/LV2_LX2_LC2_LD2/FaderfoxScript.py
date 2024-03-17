@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\LV2_LX2_LC2_LD2\FaderfoxScript.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4502 bytes
@@ -137,13 +137,14 @@ class FaderfoxScript(object):
                 c.receive_midi_cc(channel, cc_no, cc_value)
 
             self.param_map.receive_midi_cc(channel, cc_no, cc_value)
-        else:
-            if status == NOTEON_STATUS or status == NOTEOFF_STATUS:
-                note_no = midi_bytes[1]
-                note_vel = midi_bytes[2]
-                for c in self.components:
-                    c.receive_midi_note(channel, status, note_no, note_vel)
+        elif status == NOTEON_STATUS or status == NOTEOFF_STATUS:
+            note_no = midi_bytes[1]
+            note_vel = midi_bytes[2]
+            for c in self.components:
+                c.receive_midi_note(channel, status, note_no, note_vel)
 
-                self.param_map.receive_midi_note(channel, status, note_no, note_vel)
+            self.param_map.receive_midi_note(channel, status, note_no, note_vel)
+        else:
+            pass
 
 # okay decompiling ./MIDIRemoteScripts/LV2_LX2_LC2_LD2/FaderfoxScript.pyc

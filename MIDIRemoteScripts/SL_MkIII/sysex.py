@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\SL_MkIII\sysex.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2051 bytes
@@ -43,14 +43,15 @@ def collate_message_segments(segments):
         return []
     collated = []
     offset = 0
-    for index, segment in enumerate(segments):
+    for (index, segment) in enumerate(segments):
         if len(collated) + len(segment) > INNER_MESSAGE_MAX_LENGTH:
             break
-        collated.extend(segment)
-        offset = index
+        else:
+            collated.extend(segment)
+            offset = index
 
     return [
-     tuple(collated)] + collate_message_segments(segments[(offset + 1)[:None]])
+     tuple(collated)] + collate_message_segments(segments[offset + 1:])
 
 
 def make_sysex_from_segments(segments):

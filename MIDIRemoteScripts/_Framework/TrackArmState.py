@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\TrackArmState.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1479 bytes
@@ -18,7 +18,7 @@ class TrackArmState(Subject, SlotManager):
     def set_track(self, track):
         self._track = track
         self._arm = track and track.can_be_armed and (track.arm or track.implicit_arm)
-        subject = track if (track and track.can_be_armed) else None
+        subject = track if track and (track.can_be_armed) else None
         self._on_explicit_arm_changed.subject = subject
         self._on_implicit_arm_changed.subject = subject
 

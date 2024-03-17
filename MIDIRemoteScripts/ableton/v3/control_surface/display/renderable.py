@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\display\renderable.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6037 bytes
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from typing_extensions import Unpack
 
 def collect_properties(cls):
-    return (name for cls in inspect.getmro(cls) for name, _ in EventObjectMeta.collect_listenable_properties(cls.__dict__))
+    return (name for cls in inspect.getmro(cls))
 
 
 class Renderable(CompoundDisconnectable):
@@ -58,7 +58,7 @@ class Renderable(CompoundDisconnectable):
     def _init_state_from_controls(self, renderable_state):
         if hasattr(self, "_control_states"):
             for cls in reversed(inspect.getmro(self.__class__)):
-                for name, value in vars(cls).items():
+                for (name, value) in vars(cls).items():
                     if isinstance(value, self.control_base_type):
                         control_state = getattr(value, "_get_state")(self)
                         if isinstance(control_state, Renderable):

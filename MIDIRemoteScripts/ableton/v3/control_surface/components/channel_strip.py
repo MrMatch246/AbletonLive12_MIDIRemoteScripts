@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\channel_strip.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 9693 bytes
@@ -101,12 +101,12 @@ class ChannelStripComponent(Component, Renderable):
         solo_exclusive = self.song.exclusive_solo != self.shift_button.is_pressed and not ChannelStripComponent.other_solo_buttons_pressed(self)
         new_value = not self._track.solo
         for track in chain(self.song.tracks, self.song.return_tracks):
-            if not track == self._track:
-                if self._track.is_part_of_selection:
-                    if track.is_part_of_selection:
-                        track.solo = new_value
-                if solo_exclusive and track.solo:
-                    track.solo = False
+            if not not track == self._track:
+                if not self._track.is_part_of_selection or track.is_part_of_selection:
+                    track.solo = new_value
+                if solo_exclusive:
+                    if track.solo:
+                        track.solo = False
 
     @arm_button.pressed
     def arm_button(self, _):
@@ -152,7 +152,7 @@ class ChannelStripComponent(Component, Renderable):
         self._connect_send_parameters(self.indexed_send_controls)
 
     def _connect_send_parameters(self, send_controls):
-        for index, send_control in enumerate(send_controls):
+        for (index, send_control) in enumerate(send_controls):
             if index < len(self._track.mixer_device.sends):
                 send_control.mapped_parameter = self._track.mixer_device.sends[index]
             else:

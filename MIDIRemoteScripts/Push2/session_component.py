@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\session_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5162 bytes
@@ -66,12 +66,12 @@ class ClipSlotComponent(SpecialClipSlotComponent):
                 if isinstance(slot_or_clip, Live.Clip.Clip):
                     return Blink(color1=CLIP_PLAYING_COLOR, color2=(IndexedColor(clip_color)), speed=TRIGGERED_CLIP_BLINK_SPEED)
                 return "Session.EmptySlotTriggeredPlay"
-        if slot_or_clip.is_playing:
-            animate_to_color = RECORDING_COLOR if slot_or_clip.is_recording else IndexedColor(clip_color)
-            return Pulse(color1=(IndexedColor.from_push_index(clip_color, 2)),
-              color2=animate_to_color,
-              speed=PLAYING_CLIP_PULSE_SPEED)
-        return super(ClipSlotComponent, self)._feedback_value(track, slot_or_clip)
+            if slot_or_clip.is_playing:
+                animate_to_color = RECORDING_COLOR if slot_or_clip.is_recording else IndexedColor(clip_color)
+                return Pulse(color1=(IndexedColor.from_push_index(clip_color, 2)),
+                  color2=animate_to_color,
+                  speed=PLAYING_CLIP_PULSE_SPEED)
+            return super(ClipSlotComponent, self)._feedback_value(track, slot_or_clip)
 
     def _color_value(self, slot_or_clip):
         return translate_color_index(slot_or_clip.color_index)

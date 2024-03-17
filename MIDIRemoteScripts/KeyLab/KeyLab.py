@@ -1,26 +1,26 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\KeyLab\KeyLab.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 10987 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 import Live
-import _Framework.ButtonElement as ButtonElement
-import _Framework.ButtonMatrixElement as ButtonMatrixElement
-import _Framework.ClipCreator as ClipCreator
-import _Framework.DeviceComponent as DeviceComponent
-import _Framework.DisplayDataSource as DisplayDataSource
-import _Framework.DrumRackComponent as DrumRackComponent
-import _Framework.EncoderElement as EncoderElement
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.ButtonMatrixElement import ButtonMatrixElement as ButtonMatrixElement
+from _Framework.ClipCreator import ClipCreator as ClipCreator
+from _Framework.DeviceComponent import DeviceComponent as DeviceComponent
+from _Framework.DisplayDataSource import DisplayDataSource as DisplayDataSource
+from _Framework.DrumRackComponent import DrumRackComponent as DrumRackComponent
+from _Framework.EncoderElement import EncoderElement as EncoderElement
 from _Framework.InputControlElement import MIDI_CC_TYPE
-import _Framework.Layer as Layer
-import _Framework.SessionRecordingComponent as SessionRecordingComponent
-import _Framework.SliderElement as SliderElement
-import _Framework.TransportComponent as TransportComponent
-import _Framework.ViewControlComponent as ViewControlComponent
+from _Framework.Layer import Layer as Layer
+from _Framework.SessionRecordingComponent import SessionRecordingComponent as SessionRecordingComponent
+from _Framework.SliderElement import SliderElement as SliderElement
+from _Framework.TransportComponent import TransportComponent as TransportComponent
+from _Framework.ViewControlComponent import ViewControlComponent as ViewControlComponent
 from _Arturia.ArturiaControlSurface import MODE_PROPERTY, SETUP_MSG_PREFIX, SETUP_MSG_SUFFIX, ArturiaControlSurface
 from .DeviceNavigationComponent import DeviceNavigationComponent
 from .DisplayElement import DisplayElement
@@ -35,17 +35,17 @@ SLIDER_MSG_IDS = (73, 75, 79, 72, 80, 81, 82, 83, 85)
 PAD_MSG_IDS = list(range(36, 52))
 MESSAGE_DELAY = 0.1
 BUTTON_HARDWARE_AND_MESSAGE_IDS = {
- 'session_record_button': (91, 5), 
- 'stop_all_clips_button': (92, 4), 
- 'stop_button': (89, 102), 
- 'play_button': (88, 2), 
- 'record_button': (90, 6), 
- 'loop_button': (93, 55), 
- 'device_left_button': (18, 22), 
- 'device_right_button': (19, 23), 
- 'scene_up_button': (25, 29), 
- 'scene_down_button': (26, 30), 
- 'scene_launch_button': (27, 31)}
+  'session_record_button': (91, 5),
+  'stop_all_clips_button': (92, 4),
+  'stop_button': (89, 102),
+  'play_button': (88, 2),
+  'record_button': (90, 6),
+  'loop_button': (93, 55),
+  'device_left_button': (18, 22),
+  'device_right_button': (19, 23),
+  'scene_up_button': (25, 29),
+  'scene_down_button': (26, 30),
+  'scene_launch_button': (27, 31)}
 ENCODER_CHANNEL = 0
 PAD_CHANNEL = 9
 
@@ -72,7 +72,7 @@ class KeyLab(ArturiaControlSurface):
 
     def _create_controls(self):
         self._device_encoders = ButtonMatrixElement(rows=[[EncoderElement(MIDI_CC_TYPE, ENCODER_CHANNEL, identifier, (Live.MidiMap.MapMode.relative_smooth_binary_offset), name=("Device_Encoder_%d_%d" % (col_index, row_index))) for col_index, identifier in enumerate(row)] for row_index, row in enumerate((
-         ENCODER_MSG_IDS[None[:4]], ENCODER_MSG_IDS[4[:8]]))])
+         ENCODER_MSG_IDS[:4], ENCODER_MSG_IDS[4:8]))])
         self._horizontal_scroll_encoder = EncoderElement(MIDI_CC_TYPE,
           ENCODER_CHANNEL,
           (ENCODER_MSG_IDS[-2]),
@@ -84,7 +84,7 @@ class KeyLab(ArturiaControlSurface):
           (Live.MidiMap.MapMode.relative_smooth_binary_offset),
           name="Vertical_Scroll_Encoder")
         self._volume_sliders = ButtonMatrixElement(rows=[
-         [SliderElement(MIDI_CC_TYPE, ENCODER_CHANNEL, identifier) for identifier in SLIDER_MSG_IDS[None[:-1]]]])
+         [SliderElement(MIDI_CC_TYPE, ENCODER_CHANNEL, identifier) for identifier in SLIDER_MSG_IDS[:-1]]])
         self._master_slider = SliderElement(MIDI_CC_TYPE, ENCODER_CHANNEL, SLIDER_MSG_IDS[-1])
 
         def make_keylab_button(name):
@@ -102,7 +102,7 @@ class KeyLab(ArturiaControlSurface):
 
     def _create_display(self):
         self._display_line1, self._display_line2 = DisplayElement(16, 1), DisplayElement(16, 1)
-        for index, display_line in enumerate((self._display_line1, self._display_line2)):
+        for (index, display_line) in enumerate((self._display_line1, self._display_line2)):
             display_line.set_message_parts(SETUP_MSG_PREFIX + (4, 0, 96), SETUP_MSG_SUFFIX)
             display_line.segment(0).set_position_identifier((index + 1,))
 
@@ -173,16 +173,16 @@ class KeyLab(ArturiaControlSurface):
         self._mixer.set_enabled(True)
 
     def _collect_setup_messages(self):
-        for hardware_id, identifier in zip(ENCODER_HARDWARE_IDS, ENCODER_MSG_IDS):
+        for (hardware_id, identifier) in zip(ENCODER_HARDWARE_IDS, ENCODER_MSG_IDS):
             self._setup_hardware_encoder(hardware_id, identifier, ENCODER_CHANNEL)
 
-        for hardware_id, identifier in zip(SLIDER_HARDWARE_IDS, SLIDER_MSG_IDS):
+        for (hardware_id, identifier) in zip(SLIDER_HARDWARE_IDS, SLIDER_MSG_IDS):
             self._setup_hardware_slider(hardware_id, identifier, ENCODER_CHANNEL)
 
-        for hardware_id, identifier in BUTTON_HARDWARE_AND_MESSAGE_IDS.values():
+        for (hardware_id, identifier) in BUTTON_HARDWARE_AND_MESSAGE_IDS.values():
             self._setup_hardware_button(hardware_id, identifier)
 
-        for hardware_id, identifier in zip(PAD_HARDWARE_IDS, PAD_MSG_IDS):
+        for (hardware_id, identifier) in zip(PAD_HARDWARE_IDS, PAD_MSG_IDS):
             self._setup_hardware_pad(hardware_id, identifier)
 
     def _setup_hardware_encoder(self, hardware_id, identifier, channel=0):
@@ -206,7 +206,7 @@ class KeyLab(ArturiaControlSurface):
         self._collect_setup_message(MODE_PROPERTY, hardware_id, PAD_NOTE_MODE)
 
     def _setup_hardware(self):
-        for i, msg in enumerate(self._messages_to_send):
+        for (i, msg) in enumerate(self._messages_to_send):
             self.schedule_message(MESSAGE_DELAY * i + 1, self._send_midi, msg)
 
         self._messages_to_send = []

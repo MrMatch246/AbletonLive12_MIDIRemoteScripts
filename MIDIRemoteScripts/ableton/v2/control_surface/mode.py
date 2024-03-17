@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\mode.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 21350 bytes
@@ -17,29 +17,29 @@ from .resource import StackingResource
 def tomode(thing):
     if thing is None:
         return Mode()
-        if isinstance(thing, Mode):
-            return thing
-        if old_hasattr(thing, "set_enabled"):
-            return EnablingMode(thing)
-    elif isinstance(thing, tuple):
+    if isinstance(thing, Mode):
+        return thing
+    if old_hasattr(thing, "set_enabled"):
+        return EnablingMode(thing)
+    if isinstance(thing, tuple):
         if len(thing) == 2:
             if isinstance(thing[0], Component):
                 if isinstance(thing[1], (Layer, CompoundLayer)):
                     return LayerMode(*thing)
-            if callable(thing[0]):
-                if callable(thing[1]):
-                    mode = Mode()
-                    mode.enter_mode, mode.leave_mode = thing
-                    return mode
-    if is_iterable(thing):
-        return CompoundMode(*thing)
-    if is_contextmanager(thing):
-        return ContextManagerMode(thing)
-    if callable(thing):
-        mode = Mode()
-        mode.enter_mode = thing
-        return mode
-    return thing
+                if callable(thing[0]):
+                    if callable(thing[1]):
+                        mode = Mode()
+                        (mode.enter_mode, mode.leave_mode) = thing
+                        return mode
+                    if is_iterable(thing):
+                        return CompoundMode(*thing)
+                if is_contextmanager(thing):
+                    return ContextManagerMode(thing)
+            if callable(thing):
+                mode = Mode()
+                mode.enter_mode = thing
+                return mode
+        return thing
 
 
 def to_camel_case_name(mode_name, separator=''):
@@ -244,11 +244,10 @@ class ModeButtonControl(ButtonControlBase):
             selected_groups = self._modes_component.get_mode_groups(selected_mode)
             if selected_mode == self._mode_name:
                 self._control_element.set_light(self.mode_selected_color)
+            elif bool(groups & selected_groups):
+                self._control_element.set_light(self.mode_group_active_color)
             else:
-                if bool(groups & selected_groups):
-                    self._control_element.set_light(self.mode_group_active_color)
-                else:
-                    self._control_element.set_light(self.mode_unselected_color)
+                self._control_element.set_light(self.mode_unselected_color)
 
 
 class ModeButtonBehaviour(object):
@@ -454,7 +453,7 @@ class ModesComponent(Component):
 
     def _update_mode_buttons(self, selected):
         if self.is_enabled():
-            for name, entry in iteritems(self._mode_map):
+            for (name, entry) in iteritems(self._mode_map):
                 self._get_mode_behaviour(name).update_button(self, name, selected)
 
     @cycle_mode_button.pressed
@@ -499,9 +498,8 @@ class ModesComponent(Component):
         if not self.is_enabled():
             self._last_selected_mode = self.selected_mode
             self._mode_stack.release_all()
-        else:
-            if self._last_selected_mode:
-                self.push_mode(self._last_selected_mode)
+        elif self._last_selected_mode:
+            self.push_mode(self._last_selected_mode)
 
 
 class EnablingModesComponent(ModesComponent):

@@ -1,32 +1,10 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\control_surface.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 20413 bytes
-
--- Stacks of completed symbols:
-START ::= |- stmts . 
-generator_exp ::= load_closure . load_genexpr LOAD_STR MAKE_FUNCTION_0 expr GET_ITER CALL_FUNCTION_1
-generator_exp ::= load_closure . load_genexpr LOAD_STR MAKE_FUNCTION_8 expr GET_ITER CALL_FUNCTION_1
-lambda_body ::= load_closure . LOAD_LAMBDA LOAD_STR MAKE_FUNCTION_8
-list_comp ::= load_closure . LOAD_LISTCOMP LOAD_STR MAKE_FUNCTION_0 expr GET_ITER CALL_FUNCTION_1
-load_closure ::= LOAD_CLOSURE . 
-load_closure ::= LOAD_CLOSURE . BUILD_TUPLE_1
-load_closure ::= LOAD_CLOSURE BUILD_TUPLE_1 . 
-load_closure ::= load_closure . LOAD_CLOSURE
-load_genexpr ::= BUILD_TUPLE_1 . LOAD_GENEXPR LOAD_STR
-mkfunc ::= load_closure . LOAD_CODE LOAD_STR MAKE_FUNCTION_8
-return_closure ::= LOAD_CLOSURE . DUP_TOP STORE_NAME RETURN_VALUE RETURN_LAST
-return_closure ::= LOAD_CLOSURE . RETURN_VALUE RETURN_LAST
-Instruction context:
-   
- L. 372         0  LOAD_CLOSURE             'self'
-                   2  BUILD_TUPLE_1         1 
-->                 4  LOAD_DICTCOMP            '<code_object <dictcomp>>'
-                   6  LOAD_STR                 'ControlSurface._create_background.<locals>.<dictcomp>'
-                   8  MAKE_FUNCTION_8          'closure'
 from __future__ import absolute_import, print_function, unicode_literals
 from contextlib import contextmanager, nullcontext
 from ableton.v2.control_surface import SimpleControlSurface
@@ -78,13 +56,14 @@ class ControlSurface(SimpleControlSurface, ControlSurfaceMappingMixin):
             self._ControlSurface__on_target_track_changed.subject = self._target_track
             self._create_feedback_related_listeners()
             with self._create_extended_injector():
-                self._auto_arm = specification.auto_arm_component_type(is_enabled=False) if (is_identifiable and specification.include_auto_arming) else None
-                self.setup()
-                if self._drum_group_component or self._sliced_simpler_component:
-                    self._ControlSurface__on_instrument_changed()
-                if specification.display_specification.protocol:
-                    self.display = self.register_disconnectable(Display(specification.display_specification, self.renderable_components, self.elements))
-                    self._deferring_render_and_update_display = self.display.deferring_render_and_update_display
+                if is_identifiable:
+                    self._auto_arm = specification.auto_arm_component_type(is_enabled=False) if specification.include_auto_arming else None
+                    self.setup()
+                    if self._drum_group_component or self._sliced_simpler_component:
+                        self._ControlSurface__on_instrument_changed()
+                    if specification.display_specification.protocol:
+                        self.display = self.register_disconnectable(Display(specification.display_specification, self.renderable_components, self.elements))
+                        self._deferring_render_and_update_display = self.display.deferring_render_and_update_display
         self._can_enable_session_ring = is_identifiable and find_if((lambda x: isinstance(x, SessionComponent)), self._components) is not None
 
     def disconnect(self):
@@ -105,7 +84,7 @@ class ControlSurface(SimpleControlSurface, ControlSurfaceMappingMixin):
 
     @property
     def renderable_components(self):
-        return tuple((comp for comp in self._components if isinstance(comp, Renderable)))
+        return tuple((comp for comp in self._components))
 
     @property
     def controls(self):
@@ -215,7 +194,12 @@ class ControlSurface(SimpleControlSurface, ControlSurfaceMappingMixin):
     def _create_elements(specification):
         return specification.elements_type()
 
-    def _create_backgroundParse error at or near `LOAD_DICTCOMP' instruction at offset 4
+    def _create_background(self, priority):
+        layer_dict = {c.name: c for c in self._controls if self._should_include_element_in_background(c)}
+        layer_dict["priority"] = priority
+        background = BackgroundComponent(is_enabled=False, layer=Layer(**layer_dict))
+        background.set_enabled(True)
+        return background
 
     def _create_identification(self, specification):
         identification = IdentificationComponent(identity_request=(specification.identity_request),
@@ -256,9 +240,9 @@ class ControlSurface(SimpleControlSurface, ControlSurfaceMappingMixin):
     def _create_extended_injector(self):
         inject_dict = {'full_velocity':const(self._c_instance.full_velocity), 
          'target_track':const(self._target_track), 
-         'session_ring':lambda: self._create_session_ring, 
-         'device_provider':lambda: self._create_device_provider, 
-         'device_bank_registry':lambda: self._create_device_bank_registry, 
+         'session_ring':lambda: (self._create_session_ring), 
+         'device_provider':lambda: (self._create_device_provider), 
+         'device_bank_registry':lambda: (self._create_device_bank_registry), 
          'toggle_lock':const(self._c_instance.toggle_lock), 
          'playhead':const(self._c_instance.playhead)}
         inject_dict.update(self._get_additional_dependencies() or {})
@@ -341,3 +325,5 @@ class ControlSurface(SimpleControlSurface, ControlSurfaceMappingMixin):
         if self._can_enable_session_ring:
             self._session_ring.set_enabled(is_identified)
         self._update_auto_arm()
+
+# okay decompiling ./MIDIRemoteScripts/ableton/v3/control_surface/control_surface.pyc

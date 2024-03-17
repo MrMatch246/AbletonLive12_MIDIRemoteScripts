@@ -1,14 +1,14 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_APC\RingedEncoderElement.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3318 bytes
 from __future__ import absolute_import, division, print_function, unicode_literals
 from past.utils import old_div
-import _Framework.ButtonElement as ButtonElement
-import _Framework.EncoderElement as EncoderElement
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.EncoderElement import EncoderElement as EncoderElement
 RING_OFF_VALUE = 0
 RING_SIN_VALUE = 1
 RING_VOL_VALUE = 2
@@ -52,19 +52,18 @@ class RingedEncoderElement(EncoderElement):
         if self._ring_mode_button != None:
             if self.is_mapped_manually():
                 self._ring_mode_button.send_value(RING_SIN_VALUE, force=True)
-            else:
-                if self._parameter_to_map_to != None:
-                    param = self._parameter_to_map_to
-                    p_range = param.max - param.min
-                    value = old_div(param.value - param.min, p_range) * 127
-                    self.send_value((int(value)), force=True)
-                    if self._parameter_to_map_to.min == -1 * self._parameter_to_map_to.max:
-                        self._ring_mode_button.send_value(RING_PAN_VALUE, force=True)
-                    elif self._parameter_to_map_to.is_quantized:
-                        self._ring_mode_button.send_value(RING_SIN_VALUE, force=True)
-                    else:
-                        self._ring_mode_button.send_value(RING_VOL_VALUE, force=True)
+            elif self._parameter_to_map_to != None:
+                param = self._parameter_to_map_to
+                p_range = param.max - param.min
+                value = old_div(param.value - param.min, p_range) * 127
+                self.send_value((int(value)), force=True)
+                if self._parameter_to_map_to.min == -1 * self._parameter_to_map_to.max:
+                    self._ring_mode_button.send_value(RING_PAN_VALUE, force=True)
+                elif self._parameter_to_map_to.is_quantized:
+                    self._ring_mode_button.send_value(RING_SIN_VALUE, force=True)
                 else:
-                    self._ring_mode_button.send_value(RING_OFF_VALUE, force=True)
+                    self._ring_mode_button.send_value(RING_VOL_VALUE, force=True)
+            else:
+                self._ring_mode_button.send_value(RING_OFF_VALUE, force=True)
 
 # okay decompiling ./MIDIRemoteScripts/_APC/RingedEncoderElement.pyc

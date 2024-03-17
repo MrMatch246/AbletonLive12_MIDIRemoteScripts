@@ -1,22 +1,22 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchkey\Launchkey.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 10941 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import object, range, str
 import Live
-import _Framework.ButtonElement as ButtonElement
-import _Framework.ControlSurface as ControlSurface
-import _Framework.DeviceComponent as DeviceComponent
-import _Framework.EncoderElement as EncoderElement
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.ControlSurface import ControlSurface as ControlSurface
+from _Framework.DeviceComponent import DeviceComponent as DeviceComponent
+from _Framework.EncoderElement import EncoderElement as EncoderElement
 from _Framework.InputControlElement import MIDI_CC_TYPE, MIDI_NOTE_TYPE, InputControlElement
-import _Framework.SessionComponent as SessionComponent
-import _Framework.SliderElement as SliderElement
-import _Framework.TransportComponent as TransportComponent
-import Launchpad.ConfigurableButtonElement as ConfigurableButtonElement
+from _Framework.SessionComponent import SessionComponent as SessionComponent
+from _Framework.SliderElement import SliderElement as SliderElement
+from _Framework.TransportComponent import TransportComponent as TransportComponent
+from Launchpad.ConfigurableButtonElement import ConfigurableButtonElement as ConfigurableButtonElement
 from .consts import *
 from .SessionNavigationComponent import SessionNavigationComponent
 from .SpecialMixerComponent import SpecialMixerComponent
@@ -103,7 +103,7 @@ class Launchkey(ControlSurface):
         self.schedule_message(3, self._send_midi, SIZE_QUERY)
 
     def handle_sysex(self, midi_bytes):
-        if midi_bytes[0[:11]] == self._identity_response:
+        if midi_bytes[0:11] == self._identity_response:
             self._has_sliders = midi_bytes[11] != 48
             self._send_midi(LED_FLASHING_ON)
             self._update_mixer_offset()

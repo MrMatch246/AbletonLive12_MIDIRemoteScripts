@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\banking_util.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6851 bytes
@@ -24,11 +24,10 @@ def create_parameter_bank(device, banking_info):
         if size >= DEFAULT_BANK_SIZE:
             if banking_info.has_bank_count(device):
                 bank_class = MaxDeviceParameterBank
-            else:
-                if banking_info.device_bank_definition(device) is not None:
-                    bank_class = DescribedDeviceParameterBank
-        bank = bank_class(device=device, size=size, banking_info=banking_info)
-    return bank
+            elif banking_info.device_bank_definition(device) is not None:
+                bank_class = DescribedDeviceParameterBank
+            bank = bank_class(device=device, size=size, banking_info=banking_info)
+        return bank
 
 
 class DescribedDeviceParameterBank(DescribedDeviceParameterBankBase):
@@ -40,7 +39,7 @@ class DescribedDeviceParameterBank(DescribedDeviceParameterBankBase):
             if next_index < bank_count:
                 result = (self._definition.value_by_index(self.index).get(BANK_PARAMETERS_KEY) or tuple()) + (self._definition.value_by_index(next_index).get(BANK_PARAMETERS_KEY) or tuple())
                 return result
-        return super()._current_parameter_slots()
+            return super()._current_parameter_slots()
 
     def _calc_name(self):
         if self._size > DEFAULT_BANK_SIZE:
@@ -53,14 +52,13 @@ class MaxDeviceParameterBank(MaxDeviceParameterBankBase):
     def _collect_parameters(self):
         bank_count = self._banking_info.device_bank_count(self._device)
         if bank_count == 0:
-            return [
-             (None, None)] * self._size
+            return [(None, None)] * self._size
         bank = self._get_parameters_for_bank_index(self.index)
         next_index = self.index + 1
         if self._size > DEFAULT_BANK_SIZE:
             if next_index < bank_count:
                 bank.extend(self._get_parameters_for_bank_index(next_index))
-        return bank
+            return bank
 
     def _get_parameters_for_bank_index(self, bank_index):
         parameters = self._device.parameters
@@ -74,7 +72,7 @@ class MaxDeviceParameterBank(MaxDeviceParameterBankBase):
         if self._size > DEFAULT_BANK_SIZE:
             if self.index < bank_count:
                 return self._banking_info.device_bank_names(self._device)[self.index]
-        return super()._calc_name()
+            return super()._calc_name()
 
 
 class BankingInfo(BankingInfoBase):
@@ -106,6 +104,6 @@ class BankingInfo(BankingInfoBase):
                 result = [BANK_NAME_JOIN_STR.join(n) for n in [(names[i], names[i + 1]) for i in range(len(names) - 1)]]
                 result.append(names[-1])
                 return result
-        return names
+            return names
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v3/control_surface/banking_util.pyc

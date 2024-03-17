@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\KeyLab_Essential_mk3\elements.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6123 bytes
@@ -102,7 +102,7 @@ class Elements(ElementsBase):
           send_message_generator=(partial(midi.make_full_screen_message, 23)),
           optimized=True)
         self.display_parameter_commands = []
-        for i, element in enumerate(self.continuous_controls_raw + [self.encoder_9, self.fader_9]):
+        for (i, element) in enumerate(self.continuous_controls_raw + [self.encoder_9, self.fader_9]):
             self.add_sysex_element((midi.DISPLAY_HEADER + (32, i)),
               ("Display_Parameter_Command_{}".format(i)),
               send_message_generator=partial((midi.make_full_screen_message),

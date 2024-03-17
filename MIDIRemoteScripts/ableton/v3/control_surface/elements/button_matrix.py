@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\elements\button_matrix.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1431 bytes
@@ -23,10 +23,9 @@ class ButtonMatrixElement(ButtonMatrixElementBase, Renderable):
 
     @lazy_attribute
     def renderable_state(self):
-        if not any((isinstance(button, Renderable) for row in self._orig_buttons for button in row)):
+        if not any((isinstance(button, Renderable) for row in self._orig_buttons)):
             return
-        matrix = recursive_map((lambda button:         if isinstance(button, Renderable):
-button.renderable_state # Avoid dead code: None), self._orig_buttons)
+        matrix = recursive_map((lambda button: button.renderable_state if isinstance(button, Renderable) else None), self._orig_buttons)
         if len(matrix) == 1:
             return matrix[0]
         return matrix

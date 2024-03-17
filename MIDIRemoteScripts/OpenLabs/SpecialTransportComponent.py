@@ -1,17 +1,17 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\OpenLabs\SpecialTransportComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4549 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 import Live
-import _Framework.ButtonElement as ButtonElement
-import _Framework.EncoderElement as EncoderElement
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.EncoderElement import EncoderElement as EncoderElement
 from _Framework.InputControlElement import *
-import _Framework.TransportComponent as TransportComponent
+from _Framework.TransportComponent import TransportComponent as TransportComponent
 
 class SpecialTransportComponent(TransportComponent):
 
@@ -61,19 +61,18 @@ class SpecialTransportComponent(TransportComponent):
             self.update()
 
     def _undo_value(self, value):
-        if self.is_enabled():
-            if not (value != 0 or self._undo_button.is_momentary()):
-                if self.song().can_undo:
-                    self.song().undo()
+        if not (self.is_enabled() and value != 0 or self._undo_button.is_momentary()):
+            if self.song().can_undo:
+                self.song().undo()
 
     def _redo_value(self, value):
-        if self.is_enabled():
-            if not (value != 0 or self._redo_button.is_momentary()):
-                if self.song().can_redo:
-                    self.song().redo()
+        if not (self.is_enabled() and value != 0 or self._redo_button.is_momentary()):
+            if self.song().can_redo:
+                self.song().redo()
 
     def _bts_value(self, value):
         if self.is_enabled():
-            self.song().current_song_time = value != 0 or self._bts_button.is_momentary() or 0.0
+            if not (value != 0 or self._bts_button.is_momentary()):
+                self.song().current_song_time = 0.0
 
 # okay decompiling ./MIDIRemoteScripts/OpenLabs/SpecialTransportComponent.pyc

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad\MainSelectorComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 12070 bytes
@@ -25,7 +25,7 @@ class MainSelectorComponent(ModeSelectorComponent):
         self._zooming.name = "Session_Overview"
         self._matrix = matrix
         self._side_buttons = side_buttons
-        self._nav_buttons = top_buttons[None[:4]]
+        self._nav_buttons = top_buttons[:4]
         self._config_button = config_button
         self._zooming.set_empty_value(LED_OFF)
         self._all_buttons = []
@@ -37,7 +37,7 @@ class MainSelectorComponent(ModeSelectorComponent):
         self._sub_modes.set_update_callback(self._update_control_channels)
         self._init_session()
         self._all_buttons = tuple(self._all_buttons)
-        self.set_modes_buttons(top_buttons[4[:None]])
+        self.set_modes_buttons(top_buttons[4:])
 
     def disconnect(self):
         for button in self._modes_buttons:
@@ -116,24 +116,22 @@ class MainSelectorComponent(ModeSelectorComponent):
             if self._mode_index == SESSION_MODE:
                 self._setup_mixer(not as_active)
                 self._setup_session(as_active, as_enabled)
+            elif self._mode_index == USER_1_MODE:
+                self._setup_session(not as_active, not as_enabled)
+                self._setup_mixer(not as_active)
+                self._setup_user(release_buttons)
+            elif self._mode_index == USER_2_MODE:
+                self._setup_session(not as_active, not as_enabled)
+                self._setup_mixer(not as_active)
+                self._setup_user(release_buttons)
+            elif self._mode_index == MIXER_MODE:
+                self._setup_session(not as_active, as_enabled)
+                self._setup_mixer(as_active)
             else:
-                if self._mode_index == USER_1_MODE:
-                    self._setup_session(not as_active, not as_enabled)
-                    self._setup_mixer(not as_active)
-                    self._setup_user(release_buttons)
-                else:
-                    if self._mode_index == USER_2_MODE:
-                        self._setup_session(not as_active, not as_enabled)
-                        self._setup_mixer(not as_active)
-                        self._setup_user(release_buttons)
-                    else:
-                        if self._mode_index == MIXER_MODE:
-                            self._setup_session(not as_active, as_enabled)
-                            self._setup_mixer(as_active)
-                        else:
-                            self._session.set_allow_update(True)
-                            self._zooming.set_allow_update(True)
-                            self._update_control_channels()
+                pass
+            self._session.set_allow_update(True)
+            self._zooming.set_allow_update(True)
+            self._update_control_channels()
 
     def _update_control_channels(self):
         new_channel = self.channel_for_current_mode()

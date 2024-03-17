@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\scrollable_list.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 19344 bytes
@@ -97,7 +97,7 @@ class ScrollableList(EventObject, Scrollable):
 
     @property
     def visible_items(self):
-        return self.items[self._offset[:self._offset + self._num_visible_items]]
+        return self.items[self._offset:self._offset + self._num_visible_items]
 
     def select_item_index_with_offset(self, index, offset):
         if index != self.selected_item_index:
@@ -110,14 +110,13 @@ class ScrollableList(EventObject, Scrollable):
     def select_item_index_with_border(self, index, border_size):
         if self.fixed_offset is not None:
             self.select_item_index_with_offset(index, self.fixed_offset)
-        else:
-            if index >= 0:
-                if index < len(self._items):
-                    if not in_range(index, self._offset + border_size, self._offset + self._num_visible_items - border_size):
-                        offset = index - (self._num_visible_items - 2 * border_size) if self.selected_item_index < index else index - border_size
-                        self._offset = clamp(offset, 0, len(self._items))
-                    self._normalize_offset(index)
-                    self._do_set_selected_item_index(index)
+        elif index >= 0:
+            if index < len(self._items):
+                if not in_range(index, self._offset + border_size, self._offset + self._num_visible_items - border_size):
+                    offset = index - (self._num_visible_items - 2 * border_size) if self.selected_item_index < index else index - border_size
+                    self._offset = clamp(offset, 0, len(self._items))
+                self._normalize_offset(index)
+                self._do_set_selected_item_index(index)
 
     def next_page(self):
         if self.can_scroll_down():
@@ -154,9 +153,8 @@ class ScrollableList(EventObject, Scrollable):
         if index >= 0:
             if index >= self._offset + self._num_visible_items:
                 self._offset = index - (self._num_visible_items - 1)
-            else:
-                if index < self._offset:
-                    self._offset = index
+            elif index < self._offset:
+                self._offset = index
             self._offset = clamp(self._offset, 0, len(self._items) - self._num_visible_items)
 
     @property
@@ -386,16 +384,15 @@ class ListComponent(Component):
         if self._current_action_item == None:
             if self._action_target_is_next_item():
                 color = "Browser.LoadNext"
+            elif self._can_be_used_for_action(self.selected_item):
+                color = "Browser.Load"
             else:
-                if self._can_be_used_for_action(self.selected_item):
-                    color = "Browser.Load"
-                else:
-                    color = "Browser.LoadNotPossible"
+                color = "Browser.LoadNotPossible"
         self.action_button.color = color
 
     def _update_display(self):
         visible_items = self._scrollable_list.visible_items if self._scrollable_list else []
-        for index, data_source in enumerate(self._data_sources):
+        for (index, data_source) in enumerate(self._data_sources):
             item = visible_items[index] if index < len(visible_items) else None
             action_in_progress = item and item == self._current_action_item
             display_string = self.item_formatter(index, item, action_in_progress)

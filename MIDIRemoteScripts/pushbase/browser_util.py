@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\browser_util.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1797 bytes
@@ -34,9 +34,8 @@ def get_selection_for_new_device(selection, insert_left=False):
     if isinstance(selected, Live.DrumPad.DrumPad) and selected.chains and selected.chains[0].devices:
         index = 0 if insert_left else -1
         selected = selected.chains[0].devices[index]
-    else:
-        if not isinstance(selected, Live.Device.Device):
-            selected = selection.selected_device
+    elif not isinstance(selected, Live.Device.Device):
+        selected = selection.selected_device
     return selected
 
 # okay decompiling ./MIDIRemoteScripts/pushbase/browser_util.pyc

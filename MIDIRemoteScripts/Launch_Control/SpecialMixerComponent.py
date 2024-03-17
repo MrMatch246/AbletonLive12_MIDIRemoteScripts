@@ -1,14 +1,14 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launch_Control\SpecialMixerComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4129 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 from future.moves.itertools import zip_longest
-import _Framework.MixerComponent as MixerComponent
+from _Framework.MixerComponent import MixerComponent as MixerComponent
 from _Framework.ModesComponent import LatchingBehaviour, LayerMode, ModesComponent
 from _Framework.SubjectSlot import subject_slot
 from _Framework.Util import clamp
@@ -57,12 +57,12 @@ class SpecialMixerComponent(MixerComponent):
     selected_send_index = property(_get_selected_send_index, _set_selected_send_index)
 
     def set_pan_controls(self, controls):
-        for control, channel_strip in zip_longest(controls or [], self._channel_strips):
+        for (control, channel_strip) in zip_longest(controls or [], self._channel_strips):
             if channel_strip:
                 channel_strip.set_pan_control(control)
 
     def set_volume_controls(self, controls):
-        for control, channel_strip in zip_longest(controls or [], self._channel_strips):
+        for (control, channel_strip) in zip_longest(controls or [], self._channel_strips):
             if channel_strip:
                 channel_strip.set_volume_control(control)
 
@@ -84,7 +84,7 @@ class SpecialMixerComponent(MixerComponent):
             self._selected_send_index -= 1
 
     def _update_send_controls(self):
-        for index, channel_strip in enumerate(self._channel_strips):
+        for (index, channel_strip) in enumerate(self._channel_strips):
             send_controls = [self._send_controls.get_button(index, i) for i in (1,
                                                                                 0)] if self._send_controls else [
              None]

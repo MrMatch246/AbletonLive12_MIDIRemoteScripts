@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\message_box_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7241 bytes
@@ -10,7 +10,7 @@ from builtins import map, object
 from future.moves.itertools import zip_longest
 import re
 from ableton.v2.base import const, forward_property, listenable_property, listens, nop
-import ableton.v2.base.dependency as dependency
+from ableton.v2.base.dependency import dependency as dependency
 from ableton.v2.control_surface import Component
 from ableton.v2.control_surface.components import BackgroundComponent
 from ableton.v2.control_surface.elements import DisplayDataSource
@@ -21,7 +21,7 @@ def strip_restriction_markup_and_format(text_or_text_spec):
     if isinstance(text_or_text_spec, tuple):
         format_string = text_or_text_spec[0]
         stripped_format_string = re.sub(FORMAT_SPECIFIER_WITH_MARKUP_PATTERN, "%\\g<3>", format_string)
-        arguments = text_or_text_spec[1[:None]]
+        arguments = text_or_text_spec[1:]
         return stripped_format_string % arguments
     return text_or_text_spec
 
@@ -81,7 +81,7 @@ class MessageBoxComponent(BackgroundComponent):
     def _update_display(self):
         if self._current_text != None:
             lines = self._current_text.split("\n")
-            for source_line, line in zip_longest(self.data_sources, lines):
+            for (source_line, line) in zip_longest(self.data_sources, lines):
                 if source_line:
                     source_line.set_display_string(line or "")
 
@@ -159,7 +159,7 @@ class DialogComponent(Component):
         can_cancel = self._next_message != None
         self._message_box.text = message
         self._message_box.can_cancel = can_cancel
-        self._message_box.set_enabled(self.application.open_dialog_count > 0 or not open_dialog_changed and self._next_message)
+        self._message_box.set_enabled((self.application.open_dialog_count > 0) or ((not open_dialog_changed) and (self._next_message)))
 
 
 class InfoComponent(BackgroundComponent):

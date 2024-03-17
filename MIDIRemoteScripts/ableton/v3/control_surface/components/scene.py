@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\scene.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5236 bytes
@@ -59,12 +59,11 @@ class SceneComponent(Component, Renderable):
                 self.notify(self.notifications.Scene.select, scene_name)
         elif self.duplicate_button.is_pressed:
             action.duplicate(self._scene)
+        elif self.delete_button.is_pressed:
+            if action.delete(self._scene):
+                self.notify(self.notifications.Scene.delete, scene_name)
         else:
-            if self.delete_button.is_pressed:
-                if action.delete(self._scene):
-                    self.notify(self.notifications.Scene.delete, scene_name)
-            else:
-                self._do_launch_scene()
+            self._do_launch_scene()
 
     def _do_launch_scene(self):
         action.fire((self._scene), button_state=True)
@@ -102,7 +101,7 @@ class SceneComponent(Component, Renderable):
         if liveobj_valid(self._scene) and self.is_enabled():
             scene_offset = scene_index(self._scene)
             regular_tracks = self.song.tracks
-            for slot_wrapper, track in zip(self._clip_slots, self._session_ring.tracks):
+            for (slot_wrapper, track) in zip(self._clip_slots, self._session_ring.tracks):
                 if track in regular_tracks:
                     slot_wrapper.set_clip_slot(track.clip_slots[scene_offset])
                 else:

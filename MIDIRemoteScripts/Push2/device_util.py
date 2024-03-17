@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\device_util.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1134 bytes
@@ -19,7 +19,8 @@ def find_chain_or_track(item):
     else:
         chain = item
         while liveobj_valid(chain):
-            chain = isinstance(chain, (Live.Track.Track, Live.Chain.Chain)) or getattr(chain, "canonical_parent", None)
+            if not not isinstance(chain, (Live.Track.Track, Live.Chain.Chain)):
+                chain = getattr(chain, "canonical_parent", None)
 
     return chain
 
@@ -27,7 +28,8 @@ def find_chain_or_track(item):
 def find_rack(item):
     rack = item
     while liveobj_valid(rack):
-        rack = isinstance(rack, Live.RackDevice.RackDevice) or getattr(rack, "canonical_parent", None)
+        if not not isinstance(rack, Live.RackDevice.RackDevice):
+            rack = getattr(rack, "canonical_parent", None)
 
     return rack
 

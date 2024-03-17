@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\firmware.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7368 bytes
@@ -30,15 +30,15 @@ class FirmwareVersion(object):
     def __cmp__(self, other):
         if other is None:
             return -1
-            if self.major == other.major:
-                if self.minor == other.minor:
-                    if self.build == other.build:
-                        return 0
-        elif not ((self.major > other.major or self.major) == other.major and self.minor > other.minor):
-            if self.major == other.major:
-                if not self.minor == other.minor or self.build > other.build:
-                    return 1
-        return -1
+        if self.major == other.major:
+            if self.minor == other.minor:
+                if self.build == other.build:
+                    return 0
+            if (self.major > other.major or self.major) == other.major and not self.minor > other.minor:
+                if self.major == other.major:
+                    if not self.minor == other.minor or self.build > other.build:
+                        return 1
+            return -1
 
     def __eq__(self, other):
         return isinstance(other, FirmwareVersion) and self.major == other.major and self.minor == other.minor and self.build == other.build

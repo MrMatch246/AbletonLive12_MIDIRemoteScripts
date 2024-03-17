@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\decoration.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2586 bytes
@@ -40,12 +40,12 @@ class TrackDecoratorFactory(DecoratorFactory):
         if old_hasattr(parent_chain_or_track, "canonical_parent"):
             if old_hasattr(parent_chain_or_track.canonical_parent, "canonical_parent"):
                 return self._get_chain_nesting_level(parent_chain_or_track) + 1
-        return 0
+            return 0
 
     def _get_track_for_chain(self, mixable):
         parent = mixable.canonical_parent
         while not isinstance(parent, Live.Track.Track):
-            if not isinstance(parent, Live.Chain.Chain):
+            if not not isinstance(parent, Live.Chain.Chain):
                 parent = parent.canonical_parent
 
         return parent
@@ -55,14 +55,13 @@ class TrackDecoratorFactory(DecoratorFactory):
         if getattr(track, "group_track", None):
             decorated.parent_track = self.decorate(track.group_track)
             decorated.nesting_level = self._get_nesting_level(track)
+        elif isinstance(track, Live.Chain.Chain):
+            parent_track = self._get_track_for_chain(track)
+            decorated.parent_track = self.decorate(parent_track)
+            decorated.nesting_level = self._get_chain_nesting_level(track)
         else:
-            if isinstance(track, Live.Chain.Chain):
-                parent_track = self._get_track_for_chain(track)
-                decorated.parent_track = self.decorate(parent_track)
-                decorated.nesting_level = self._get_chain_nesting_level(track)
-            else:
-                decorated.parent_track = None
-                decorated.nesting_level = 0
+            decorated.parent_track = None
+            decorated.nesting_level = 0
         return decorated
 
 # okay decompiling ./MIDIRemoteScripts/Push2/decoration.pyc

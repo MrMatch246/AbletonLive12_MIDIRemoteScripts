@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\melodic_pattern.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6097 bytes
@@ -13,14 +13,14 @@ from ableton.v2.base import NamedTuple, find_if, lazy_attribute, memoize
 from . import consts
 from .matrix_maps import FEEDBACK_CHANNELS
 CIRCLE_OF_FIFTHS = tuple([7 * k % 12 for k in range(12)])
-ROOT_NOTES = CIRCLE_OF_FIFTHS[0[:6]] + CIRCLE_OF_FIFTHS[(-1)[5:-1]]
+ROOT_NOTES = CIRCLE_OF_FIFTHS[0:6] + CIRCLE_OF_FIFTHS[-1:5:-1]
 NOTE_NAMES = ('C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A♭', 'A', 'B♭', 'B')
 
 def pitch_index_to_string(index):
     if index is not None:
         if 0 <= index < 128:
             return NOTE_NAMES[index % 12] + str(old_div(index, 12) - 2)
-    return consts.CHAR_ELLIPSIS
+        return consts.CHAR_ELLIPSIS
 
 
 class Scale(NamedTuple):
@@ -79,7 +79,7 @@ class TuningSystemPattern:
         return "NoteScale"
 
     def _get_note_info(self, octave_and_note, channel=0):
-        octave, note = octave_and_note
+        (octave, note) = octave_and_note
         note_index = self._number_of_notes * octave + note + self.first_note
         if 0 <= note_index <= 127:
             return NoteInfo(index=note_index,
@@ -90,7 +90,8 @@ class TuningSystemPattern:
     def _octave_and_note_by_index(self, index):
         octave = index // self._number_of_notes
         note = index % self._number_of_notes
-        return (octave, note)
+        return (
+         octave, note)
 
     def _octave_and_note(self, x, y):
         index = self.steps[0] * x + self.steps[1] * y
@@ -146,7 +147,8 @@ class MelodicPattern(NamedTuple):
         scale_size = len(scale)
         octave = old_div(index, scale_size)
         note = scale[index % scale_size]
-        return (octave, note)
+        return (
+         octave, note)
 
     def _octave_and_note(self, x, y):
         index = self.steps[0] * (self.origin[0] + x) + self.steps[1] * (self.origin[1] + y)
@@ -160,7 +162,7 @@ class MelodicPattern(NamedTuple):
         return "NoteNotScale"
 
     def _get_note_info(self, octave_note, root_note, channel=0):
-        octave, note = octave_note
+        (octave, note) = octave_note
         note_index = 12 * octave + note + root_note
         if 0 <= note_index <= 127:
             return NoteInfo(index=note_index,

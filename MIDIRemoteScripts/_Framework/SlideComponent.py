@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\SlideComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4192 bytes
@@ -48,7 +48,7 @@ class SlideComponent(CompoundComponent, Scrollable):
         (super(SlideComponent, self).__init__)(*a, **k)
         slideable = slideable or self
         self._slideable = slideable
-        self._position_scroll, self._page_scroll = self.register_components(ScrollComponent(), ScrollComponent())
+        (self._position_scroll, self._page_scroll) = self.register_components(ScrollComponent(), ScrollComponent())
         self._position_scroll.scrollable = self
         self._page_scroll.can_scroll_up = self.can_scroll_page_up
         self._page_scroll.can_scroll_down = self.can_scroll_page_down
@@ -104,11 +104,10 @@ class SlideComponent(CompoundComponent, Scrollable):
             remainder = (model.position - model.page_offset) % model.page_length
             if sign > 0:
                 delta = model.page_length - remainder
+            elif remainder == 0:
+                delta = -model.page_length
             else:
-                if remainder == 0:
-                    delta = -model.page_length
-                else:
-                    delta = -remainder
+                delta = -remainder
             self._scroll_position(delta)
 
     def update(self):

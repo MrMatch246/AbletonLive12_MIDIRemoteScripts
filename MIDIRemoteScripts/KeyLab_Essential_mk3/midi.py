@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\KeyLab_Essential_mk3\midi.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2900 bytes
@@ -25,40 +25,40 @@ make_connection_message = lambda parameter_byte: SYSEX_HEADER + (
 CONNECTION_MESSAGE = make_connection_message(1)
 DISCONNECTION_MESSAGE = make_connection_message(0)
 BUTTON_ID_TO_SYSEX_ID = {
- 20: 20, 
- 21: 21, 
- 22: 22, 
- 23: 23, 
- 24: 16, 
- 25: 17, 
- 26: 18, 
- 27: 19, 
- 40: 12, 
- 41: 13, 
- 42: 14, 
- 43: 15, 
- 44: 24, 
- 45: 25, 
- 46: 26, 
- 47: 27, 
- 119: 7}
+  20: 20,
+  21: 21,
+  22: 22,
+  23: 23,
+  24: 16,
+  25: 17,
+  26: 18,
+  27: 19,
+  40: 12,
+  41: 13,
+  42: 14,
+  43: 15,
+  44: 24,
+  45: 25,
+  46: 26,
+  47: 27,
+  119: 7}
 PAD_ID_TO_SYSEX_ID = {
- 36: 32, 
- 37: 33, 
- 38: 34, 
- 39: 35, 
- 40: 28, 
- 41: 29, 
- 42: 30, 
- 43: 31, 
- 44: 40, 
- 45: 41, 
- 46: 42, 
- 47: 43, 
- 48: 36, 
- 49: 37, 
- 50: 38, 
- 51: 39}
+  36: 32,
+  37: 33,
+  38: 34,
+  39: 35,
+  40: 28,
+  41: 29,
+  42: 30,
+  43: 31,
+  44: 40,
+  45: 41,
+  46: 42,
+  47: 43,
+  48: 36,
+  49: 37,
+  50: 38,
+  51: 39}
 
 def make_full_screen_message(screen_id, line1=None, line2=None, line3=None):
     line1_bytes = (1, ) + line1 + (0, ) if line1 is not None else tuple()

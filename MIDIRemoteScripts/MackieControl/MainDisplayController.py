@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\MackieControl\MainDisplayController.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9866 bytes
@@ -99,10 +99,9 @@ class MainDisplayController(MackieControlComponent):
                 else:
                     tracks = self.song().visible_tracks
                 for t in track_index_range:
-                    if self._MainDisplayController__parameters:
-                        if self._MainDisplayController__show_parameter_names:
-                            if self._MainDisplayController__parameters[strip_index]:
-                                upper_string += self._MainDisplayController__generate_6_char_string(self._MainDisplayController__parameters[strip_index][1])
+                    if self._MainDisplayController__parameters and self._MainDisplayController__show_parameter_names:
+                        if self._MainDisplayController__parameters[strip_index]:
+                            upper_string += self._MainDisplayController__generate_6_char_string(self._MainDisplayController__parameters[strip_index][1])
                         else:
                             upper_string += self._MainDisplayController__generate_6_char_string("")
                     elif t < len(tracks):
@@ -110,28 +109,24 @@ class MainDisplayController(MackieControlComponent):
                     else:
                         upper_string += self._MainDisplayController__generate_6_char_string("")
                     upper_string += " "
-                    if self._MainDisplayController__parameters:
-                        if self._MainDisplayController__parameters[strip_index]:
-                            if self._MainDisplayController__parameters[strip_index][0]:
-                                lower_string += self._MainDisplayController__generate_6_char_string(str(self._MainDisplayController__parameters[strip_index][0]))
+                    if self._MainDisplayController__parameters and self._MainDisplayController__parameters[strip_index]:
+                        if self._MainDisplayController__parameters[strip_index][0]:
+                            lower_string += self._MainDisplayController__generate_6_char_string(str(self._MainDisplayController__parameters[strip_index][0]))
                         else:
                             lower_string += self._MainDisplayController__generate_6_char_string("")
+                    elif self._MainDisplayController__channel_strip_strings and self._MainDisplayController__channel_strip_strings[strip_index]:
+                        lower_string += self._MainDisplayController__generate_6_char_string(self._MainDisplayController__channel_strip_strings[strip_index])
                     else:
-                        if self._MainDisplayController__channel_strip_strings and self._MainDisplayController__channel_strip_strings[strip_index]:
-                            lower_string += self._MainDisplayController__generate_6_char_string(self._MainDisplayController__channel_strip_strings[strip_index])
-                        else:
-                            lower_string += self._MainDisplayController__generate_6_char_string("")
+                        lower_string += self._MainDisplayController__generate_6_char_string("")
                     lower_string += " "
                     strip_index += 1
 
                 display.send_display_string(upper_string, 0, 0)
-                if not self._MainDisplayController__meters_enabled:
+                if not not self._MainDisplayController__meters_enabled:
                     display.send_display_string(lower_string, 1, 0)
-                else:
-                    ascii_message = "< _1234 guck ma #!?:;_ >"
-                    if not self._MainDisplayController__test:
-                        self._MainDisplayController__test = 0
-            else:
+                ascii_message = "< _1234 guck ma #!?:;_ >"
+                if not self._MainDisplayController__test:
+                    self._MainDisplayController__test = 0
                 self._MainDisplayController__test = self._MainDisplayController__test + 1
                 if self._MainDisplayController__test > NUM_CHARS_PER_DISPLAY_LINE - len(ascii_message):
                     self._MainDisplayController__test = 0
@@ -140,22 +135,23 @@ class MainDisplayController(MackieControlComponent):
     def __generate_6_char_string(self, display_string):
         if not display_string:
             return "      "
-            if len(display_string.strip()) > 6:
-                if display_string.endswith("dB"):
-                    if display_string.find(".") != -1:
-                        display_string = display_string[None[:-2]]
-            if len(display_string) > 6:
-                for um in (' ', 'i', 'o', 'u', 'e', 'a'):
-                    while len(display_string) > 6 and display_string.rfind(um, 1) != -1:
-                        um_pos = display_string.rfind(um, 1)
-                        display_string = display_string[None[:um_pos]] + display_string[(um_pos + 1)[:None]]
+        if len(display_string.strip()) > 6:
+            if display_string.endswith("dB"):
+                if display_string.find(".") != -1:
+                    display_string = display_string[:-2]
+                if len(display_string) > 6:
+                    for um in (' ', 'i', 'o', 'u', 'e', 'a'):
+                        while len(display_string) > 6:
+                            if display_string.rfind(um, 1) != -1:
+                                um_pos = display_string.rfind(um, 1)
+                                display_string = display_string[:um_pos] + display_string[um_pos + 1:]
 
-        else:
-            display_string = display_string.center(6)
-        ret = ""
-        for i in range(6):
-            ret += display_string[i]
+                else:
+                    display_string = display_string.center(6)
+                ret = ""
+                for i in range(6):
+                    ret += display_string[i]
 
-        return ret
+            return ret
 
 # okay decompiling ./MIDIRemoteScripts/MackieControl/MainDisplayController.pyc

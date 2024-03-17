@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\roar.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6937 bytes
@@ -87,10 +87,11 @@ class RoarDeviceComponent(DeviceComponentWithTrackColorViewData):
             if parameter.name.startswith("Flt"):
                 adjusting_filter = True
 
-        return {'ActiveStageIndex': active_stage_index, 
-         'AdjustingShaper': adjusting_shaper, 
-         'AdjustingBias': adjusting_bias, 
-         'AdjustingFilter': adjusting_filter}
+        return {
+          'ActiveStageIndex': active_stage_index,
+          'AdjustingShaper': adjusting_shaper,
+          'AdjustingBias': adjusting_bias,
+          'AdjustingFilter': adjusting_filter}
 
     def _set_bank_index(self, bank):
         super(RoarDeviceComponent, self)._set_bank_index(bank)
@@ -118,13 +119,13 @@ class RoarDeviceComponent(DeviceComponentWithTrackColorViewData):
 
     @property
     def _configuration_view_data(self):
-        shaper_left, shaper_right = self._calculate_view_size(self.SHAPER_VISUALISATION_CONFIGURATION_IN_BANKS)
-        filter_left, filter_right = self._calculate_view_size(self.FILTER_VISUALISATION_CONFIGURATION_IN_BANKS)
+        (shaper_left, shaper_right) = self._calculate_view_size(self.SHAPER_VISUALISATION_CONFIGURATION_IN_BANKS)
+        (filter_left, filter_right) = self._calculate_view_size(self.FILTER_VISUALISATION_CONFIGURATION_IN_BANKS)
         return {
-         'ShaperLeft': shaper_left, 
-         'ShaperRight': shaper_right, 
-         'FilterLeft': filter_left, 
-         'FilterRight': filter_right}
+          'ShaperLeft': shaper_left,
+          'ShaperRight': shaper_right,
+          'FilterLeft': filter_left,
+          'FilterRight': filter_right}
 
     def _initial_visualisation_view_data(self):
         view_data = super(RoarDeviceComponent, self)._initial_visualisation_view_data()

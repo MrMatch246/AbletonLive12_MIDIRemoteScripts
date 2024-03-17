@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\SL_MkIII\physical_display.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1762 bytes
@@ -37,7 +37,7 @@ class SpecialPhysicalDisplayElement(PhysicalDisplayElement):
     def _send_message(self):
         if self._message_to_send is None:
             self._message_to_send = self._build_message(list(map(first, self._central_resource.owners)))
-        inner_message = self._message_to_send[len(self._message_header)[:-len(self._message_tail)]]
+        inner_message = self._message_to_send[len(self._message_header):-len(self._message_tail)]
         if not self._is_whitespace(inner_message):
             self.send_midi(self._message_to_send)
 

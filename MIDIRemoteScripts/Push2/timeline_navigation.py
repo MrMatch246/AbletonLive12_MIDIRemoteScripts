@@ -1,248 +1,10 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\timeline_navigation.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 51467 bytes
-
--- Stacks of completed symbols:
-START ::= |- stmts . 
-_ifstmts_jump ::= \e_c_stmts_opt . COME_FROM
-_ifstmts_jump ::= \e_c_stmts_opt . ELSE
-_ifstmts_jump ::= \e_c_stmts_opt . JUMP_ABSOLUTE JUMP_FORWARD \e__come_froms
-_ifstmts_jump ::= \e_c_stmts_opt . JUMP_ABSOLUTE JUMP_FORWARD _come_froms
-_ifstmts_jump ::= \e_c_stmts_opt . come_froms
-and ::= expr . JUMP_IF_FALSE_OR_POP expr \e_come_from_opt
-and ::= expr . JUMP_IF_FALSE_OR_POP expr come_from_opt
-and ::= expr . jifop_come_from expr
-and ::= expr . jmp_false expr
-and ::= expr . jmp_false expr COME_FROM
-and ::= expr . jmp_false expr jmp_false
-and ::= expr JUMP_IF_FALSE_OR_POP . expr \e_come_from_opt
-and ::= expr JUMP_IF_FALSE_OR_POP . expr come_from_opt
-and ::= expr jifop_come_from . expr
-and ::= expr jifop_come_from expr . 
-and_not ::= expr . jmp_false expr POP_JUMP_IF_TRUE
-assert2 ::= expr . jmp_true LOAD_GLOBAL expr CALL_FUNCTION_1 RAISE_VARARGS_1
-assert2 ::= expr jmp_true . LOAD_GLOBAL expr CALL_FUNCTION_1 RAISE_VARARGS_1
-assert_invert ::= testtrue . LOAD_GLOBAL RAISE_VARARGS_1
-assign ::= expr . DUP_TOP designList
-assign ::= expr . store
-assign2 ::= expr . expr ROT_TWO store store
-assign2 ::= expr expr . ROT_TWO store store
-assign3 ::= expr . expr expr ROT_THREE ROT_TWO store store store
-assign3 ::= expr expr . expr ROT_THREE ROT_TWO store store store
-assign3 ::= expr expr expr . ROT_THREE ROT_TWO store store store
-attribute ::= expr . LOAD_ATTR
-attribute ::= expr LOAD_ATTR . 
-attribute37 ::= expr . LOAD_METHOD
-aug_assign1 ::= expr . expr inplace_op ROT_THREE STORE_SUBSCR
-aug_assign1 ::= expr . expr inplace_op store
-aug_assign1 ::= expr expr . inplace_op ROT_THREE STORE_SUBSCR
-aug_assign1 ::= expr expr . inplace_op store
-aug_assign2 ::= expr . DUP_TOP LOAD_ATTR expr inplace_op ROT_TWO STORE_ATTR
-await_expr ::= expr . GET_AWAITABLE LOAD_CONST YIELD_FROM
-bin_op ::= expr . expr binary_operator
-bin_op ::= expr expr . binary_operator
-bin_op ::= expr expr binary_operator . 
-binary_operator ::= BINARY_SUBTRACT . 
-call ::= expr . CALL_METHOD_0
-call ::= expr . pos_arg CALL_FUNCTION_1
-call ::= expr . pos_arg CALL_METHOD_1
-call ::= expr . pos_arg pos_arg CALL_FUNCTION_2
-call ::= expr . pos_arg pos_arg pos_arg CALL_FUNCTION_3
-call ::= expr . pos_arg pos_arg pos_arg pos_arg CALL_FUNCTION_4
-call ::= expr pos_arg . CALL_FUNCTION_1
-call ::= expr pos_arg . CALL_METHOD_1
-call ::= expr pos_arg . pos_arg CALL_FUNCTION_2
-call ::= expr pos_arg . pos_arg pos_arg CALL_FUNCTION_3
-call ::= expr pos_arg . pos_arg pos_arg pos_arg CALL_FUNCTION_4
-call ::= expr pos_arg CALL_FUNCTION_1 . 
-call ::= expr pos_arg pos_arg . CALL_FUNCTION_2
-call ::= expr pos_arg pos_arg . pos_arg CALL_FUNCTION_3
-call ::= expr pos_arg pos_arg . pos_arg pos_arg CALL_FUNCTION_4
-call ::= expr pos_arg pos_arg CALL_FUNCTION_2 . 
-call_stmt ::= expr . POP_TOP
-classdefdeco1 ::= expr . classdefdeco1 CALL_FUNCTION_1
-classdefdeco1 ::= expr . classdefdeco2 CALL_FUNCTION_1
-come_froms ::= COME_FROM . 
-come_froms ::= come_froms . COME_FROM
-compare ::= compare_single . 
-compare_chained ::= expr . compared_chained_middle ROT_TWO POP_TOP \e__come_froms
-compare_chained ::= expr . compared_chained_middle ROT_TWO POP_TOP _come_froms
-compare_chained37 ::= expr . compared_chained_middlea_37
-compare_chained37 ::= expr . compared_chained_middlec_37
-compare_chained37_false ::= expr . compare_chained_right_false_37
-compare_chained37_false ::= expr . compared_chained_middle_false_37
-compare_chained37_false ::= expr . compared_chained_middleb_false_37
-compare_chained_right_false_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_righta_false_37 POP_TOP JUMP_BACK COME_FROM
-compare_single ::= expr . expr COMPARE_OP
-compare_single ::= expr expr . COMPARE_OP
-compare_single ::= expr expr COMPARE_OP . 
-compared_chained_middle ::= expr . DUP_TOP ROT_THREE COMPARE_OP JUMP_IF_FALSE_OR_POP compare_chained_right COME_FROM
-compared_chained_middle ::= expr . DUP_TOP ROT_THREE COMPARE_OP JUMP_IF_FALSE_OR_POP compared_chained_middle COME_FROM
-compared_chained_middle_false_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_rightb_false_37 POP_TOP _jump COME_FROM
-compared_chained_middle_false_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_rightc_37 POP_TOP JUMP_FORWARD COME_FROM
-compared_chained_middlea_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE
-compared_chained_middlea_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_righta_37 COME_FROM POP_TOP COME_FROM
-compared_chained_middleb_false_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_rightb_false_37 POP_TOP _jump COME_FROM
-compared_chained_middlec_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_righta_37 POP_TOP
-expr ::= LOAD_FAST . 
-expr ::= LOAD_GLOBAL . 
-expr ::= and . 
-expr ::= attribute . 
-expr ::= bin_op . 
-expr ::= call . 
-expr ::= compare . 
-expr ::= or . 
-expr ::= tuple . 
-expr_jit ::= expr . JUMP_IF_TRUE
-expr_jitop ::= expr . JUMP_IF_TRUE_OR_POP
-expr_jt ::= expr . jmp_true
-expr_jt ::= expr jmp_true . 
-expr_pjit ::= expr . POP_JUMP_IF_TRUE
-expr_pjit ::= expr POP_JUMP_IF_TRUE . 
-expr_pjit_come_from ::= expr . POP_JUMP_IF_TRUE COME_FROM
-expr_pjit_come_from ::= expr POP_JUMP_IF_TRUE . COME_FROM
-expr_stmt ::= expr . POP_TOP
-if_exp ::= expr . jmp_false expr jf_cf expr COME_FROM
-if_exp ::= expr . jmp_false expr jump_absolute_else expr
-if_exp37 ::= expr . expr jf_cfs expr COME_FROM
-if_exp37 ::= expr expr . jf_cfs expr COME_FROM
-if_exp_37b ::= expr . jmp_false expr POP_JUMP_IF_FALSE jump_forward_else expr
-if_exp_lambda ::= expr . jmp_false expr return_if_lambda return_stmt_lambda LAMBDA_MARKER
-if_exp_not ::= expr . jmp_true expr jump_forward_else expr COME_FROM
-if_exp_not ::= expr jmp_true . expr jump_forward_else expr COME_FROM
-if_exp_not ::= expr jmp_true expr . jump_forward_else expr COME_FROM
-if_exp_not_lambda ::= expr . jmp_true expr return_if_lambda return_stmt_lambda LAMBDA_MARKER
-if_exp_not_lambda ::= expr jmp_true . expr return_if_lambda return_stmt_lambda LAMBDA_MARKER
-if_exp_not_lambda ::= expr jmp_true expr . return_if_lambda return_stmt_lambda LAMBDA_MARKER
-if_exp_true ::= expr . JUMP_FORWARD expr COME_FROM
-ifelsestmt ::= testexpr . c_stmts come_froms else_suite come_froms
-ifelsestmt ::= testexpr . c_stmts_opt JUMP_FORWARD else_suite \e__come_froms
-ifelsestmt ::= testexpr . c_stmts_opt JUMP_FORWARD else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr . c_stmts_opt JUMP_FORWARD else_suite _come_froms
-ifelsestmt ::= testexpr . c_stmts_opt JUMP_FORWARD else_suite opt_come_from_except
-ifelsestmt ::= testexpr . c_stmts_opt jf_cfs else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr . c_stmts_opt jf_cfs else_suite opt_come_from_except
-ifelsestmt ::= testexpr . c_stmts_opt jump_forward_else else_suite \e__come_froms
-ifelsestmt ::= testexpr . c_stmts_opt jump_forward_else else_suite _come_froms
-ifelsestmt ::= testexpr . stmts jf_cfs \e_else_suite_opt \e_opt_come_from_except
-ifelsestmt ::= testexpr . stmts jf_cfs \e_else_suite_opt opt_come_from_except
-ifelsestmt ::= testexpr . stmts jf_cfs else_suite_opt \e_opt_come_from_except
-ifelsestmt ::= testexpr . stmts jf_cfs else_suite_opt opt_come_from_except
-ifelsestmt ::= testexpr \e_c_stmts_opt . JUMP_FORWARD else_suite \e__come_froms
-ifelsestmt ::= testexpr \e_c_stmts_opt . JUMP_FORWARD else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr \e_c_stmts_opt . JUMP_FORWARD else_suite _come_froms
-ifelsestmt ::= testexpr \e_c_stmts_opt . JUMP_FORWARD else_suite opt_come_from_except
-ifelsestmt ::= testexpr \e_c_stmts_opt . jf_cfs else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr \e_c_stmts_opt . jf_cfs else_suite opt_come_from_except
-ifelsestmt ::= testexpr \e_c_stmts_opt . jump_forward_else else_suite \e__come_froms
-ifelsestmt ::= testexpr \e_c_stmts_opt . jump_forward_else else_suite _come_froms
-ifelsestmtc ::= testexpr . c_stmts_opt JUMP_ABSOLUTE else_suitec
-ifelsestmtc ::= testexpr . c_stmts_opt JUMP_FORWARD else_suitec
-ifelsestmtc ::= testexpr . c_stmts_opt jump_absolute_else else_suitec
-ifelsestmtc ::= testexpr \e_c_stmts_opt . JUMP_ABSOLUTE else_suitec
-ifelsestmtc ::= testexpr \e_c_stmts_opt . JUMP_FORWARD else_suitec
-ifelsestmtc ::= testexpr \e_c_stmts_opt . jump_absolute_else else_suitec
-ifelsestmtl ::= testexpr . c_stmts_opt cf_jf_else else_suitel
-ifelsestmtl ::= testexpr . c_stmts_opt cf_jump_back else_suitel
-ifelsestmtl ::= testexpr . c_stmts_opt jb_cfs else_suitel
-ifelsestmtl ::= testexpr . c_stmts_opt jb_else else_suitel
-ifelsestmtl ::= testexpr . c_stmts_opt jump_forward_else else_suitec
-ifelsestmtl ::= testexpr \e_c_stmts_opt . cf_jf_else else_suitel
-ifelsestmtl ::= testexpr \e_c_stmts_opt . cf_jump_back else_suitel
-ifelsestmtl ::= testexpr \e_c_stmts_opt . jb_cfs else_suitel
-ifelsestmtl ::= testexpr \e_c_stmts_opt . jb_else else_suitel
-ifelsestmtl ::= testexpr \e_c_stmts_opt . jump_forward_else else_suitec
-ifelsestmtr ::= testexpr . return_if_stmts returns
-iflaststmt ::= testexpr . c_stmts
-iflaststmt ::= testexpr . c_stmts JUMP_ABSOLUTE
-iflaststmt ::= testexpr . c_stmts_opt JUMP_FORWARD
-iflaststmt ::= testexpr \e_c_stmts_opt . JUMP_FORWARD
-iflaststmtl ::= testexpr . c_stmts
-iflaststmtl ::= testexpr . c_stmts JUMP_BACK
-iflaststmtl ::= testexpr . c_stmts JUMP_BACK COME_FROM_LOOP
-iflaststmtl ::= testexpr . c_stmts JUMP_BACK POP_BLOCK
-iflaststmtl ::= testexprl . c_stmts JUMP_BACK
-iflaststmtl ::= testexprl . c_stmts JUMP_BACK COME_FROM_LOOP
-iflaststmtl ::= testexprl . c_stmts JUMP_BACK POP_BLOCK
-ifstmt ::= testexpr . _ifstmts_jump
-ifstmtl ::= testexpr . _ifstmts_jumpl
-jb_cfs ::= \e_come_from_opt . JUMP_BACK come_froms
-jifop_come_from ::= JUMP_IF_FALSE_OR_POP . come_froms
-jifop_come_from ::= JUMP_IF_FALSE_OR_POP come_froms . 
-jmp_true ::= POP_JUMP_IF_TRUE . 
-list ::= expr . expr BUILD_LIST_2
-list ::= expr expr . BUILD_LIST_2
-mkfuncdeco ::= expr . mkfuncdeco CALL_FUNCTION_1
-mkfuncdeco ::= expr . mkfuncdeco0 CALL_FUNCTION_1
-or ::= and . jitop_come_from_expr COME_FROM
-or ::= expr_jt . expr
-or ::= expr_jt . expr COME_FROM
-or ::= expr_jt expr . 
-or ::= expr_jt expr . COME_FROM
-or ::= expr_jt expr COME_FROM . 
-or ::= expr_pjit . expr POP_JUMP_IF_FALSE COME_FROM
-or ::= expr_pjit expr . POP_JUMP_IF_FALSE COME_FROM
-pos_arg ::= expr . 
-ret_and ::= expr . JUMP_IF_FALSE_OR_POP return_expr_or_cond COME_FROM
-ret_and ::= expr JUMP_IF_FALSE_OR_POP . return_expr_or_cond COME_FROM
-ret_or ::= expr . JUMP_IF_TRUE_OR_POP return_expr_or_cond COME_FROM
-return ::= return_expr . RETURN_END_IF
-return ::= return_expr . RETURN_VALUE
-return ::= return_expr . RETURN_VALUE COME_FROM
-return ::= return_expr RETURN_VALUE . 
-return ::= return_expr RETURN_VALUE . COME_FROM
-return_expr ::= expr . 
-return_expr_lambda ::= return_expr . RETURN_VALUE_LAMBDA
-return_expr_lambda ::= return_expr . RETURN_VALUE_LAMBDA LAMBDA_MARKER
-return_if_stmt ::= return_expr . RETURN_END_IF
-return_if_stmt ::= return_expr . RETURN_END_IF POP_BLOCK
-sstmt ::= return . RETURN_LAST
-sstmt ::= return RETURN_LAST . 
-sstmt ::= sstmt . RETURN_LAST
-sstmt ::= sstmt RETURN_LAST . 
-sstmt ::= stmt . 
-stmt ::= return . 
-stmts ::= sstmt . 
-stmts ::= stmts . sstmt
-store ::= expr . STORE_ATTR
-store_subscript ::= expr . expr STORE_SUBSCR
-store_subscript ::= expr expr . STORE_SUBSCR
-subscript ::= expr . expr BINARY_SUBSCR
-subscript ::= expr expr . BINARY_SUBSCR
-subscript2 ::= expr . expr DUP_TOP_TWO BINARY_SUBSCR
-subscript2 ::= expr expr . DUP_TOP_TWO BINARY_SUBSCR
-testexpr ::= testtrue . 
-testexpr_cf ::= testexpr . come_froms
-testexprl ::= testfalsel . 
-testfalse ::= expr . jmp_false
-testfalse ::= or . jmp_false COME_FROM
-testfalse_not_and ::= and . jmp_true come_froms
-testfalse_not_and ::= and jmp_true . come_froms
-testfalse_not_and ::= expr . jmp_false expr jmp_true COME_FROM
-testfalse_not_or ::= expr . jmp_false expr jmp_false COME_FROM
-testfalsel ::= expr . jmp_true
-testfalsel ::= expr jmp_true . 
-testtrue ::= expr . jmp_true
-testtrue ::= expr jmp_true . 
-tuple ::= expr . expr BUILD_TUPLE_2
-tuple ::= expr expr . BUILD_TUPLE_2
-tuple ::= expr expr BUILD_TUPLE_2 . 
-unary_not ::= expr . UNARY_NOT
-unary_op ::= expr . unary_operator
-yield ::= expr . YIELD_VALUE
-yield_from ::= expr . GET_YIELD_FROM_ITER LOAD_CONST YIELD_FROM
-Instruction context:
-   
- L. 128        52  LOAD_FAST                'outer'
-                  54  LOAD_FAST                'self'
-                  56  COMPARE_OP               !=
-                58_0  COME_FROM            50  '50'
-->              58_1  COME_FROM            24  '24'
-                  58  RETURN_VALUE     
 from __future__ import absolute_import, division, print_function, unicode_literals
 from builtins import filter, map, object, range
 from past.utils import old_div
@@ -306,7 +68,9 @@ class Region(namedtuple("Region", ["start", "end"])):
     def length(self):
         return self.end - self.start
 
-    def insideParse error at or near `COME_FROM' instruction at offset 58_1
+    def inside(self, outer):
+        if not (isclose(self.start, outer.start) or self.start > outer.start and isclose(self.end, outer.end)):
+            return self.end < outer.end and outer != self
 
     def clamp_position(self, position):
         return clamp(position, self.start, self.end)
@@ -355,7 +119,7 @@ class ObjectDescription(object):
 
 
 class MarginType(object):
-    NONE, START, END = list(range(3))
+    (NONE, START, END) = list(range(3))
 
 
 class TimelineNavigation(EventObject):
@@ -478,7 +242,7 @@ class TimelineNavigation(EventObject):
         source = self._source_roi.region_with_margin
         target = self._target_roi.region_with_margin
         easing_degree = calc_easing_degree_for_proportion(float(target.length) / float(source.length))
-        focused_region, focus_marker, margin_type = self._get_zoom_info_for_focused_object()
+        (focused_region, focus_marker, margin_type) = self._get_zoom_info_for_focused_object()
         t = inverse_interpolate_region(source,
           target,
           (self.visible_region),
@@ -505,14 +269,14 @@ class TimelineNavigation(EventObject):
             is_start = roi.start_identifier == identifier
             if is_start and region.start < margin:
                 margin_type = MarginType.START
-            else:
-                if not is_start:
-                    if region.end > self.timeline_region.end - margin:
-                        margin_type = MarginType.END
+            elif not is_start:
+                if region.end > self.timeline_region.end - margin:
+                    margin_type = MarginType.END
             obj_description = self.focusable_object_descriptions.get(identifier, None)
             if obj_description is not None:
                 focus_marker = FocusMarker(obj_description.focus_name, region.end if roi.end_identifier == identifier else region.start)
-        return (region, focus_marker, margin_type)
+            return (
+             region, focus_marker, margin_type)
 
     def _add_margin_to_zoomed_region(self, zoom_region, focused_region, margin_type):
         if focused_region is not None:
@@ -526,7 +290,7 @@ class TimelineNavigation(EventObject):
                 else:
                     logger.warning("Focused object not visible. Couldn't add margin to zoomed region. %d not in %r" % (
                      position, zoom_region))
-        return zoom_region
+            return zoom_region
 
     def _add_margin_to_zoomed_region_start(self, region, focused_position):
         p = focused_position - self.timeline_region.start
@@ -567,14 +331,12 @@ class TimelineNavigation(EventObject):
     def _try_lock_region(self):
         if self.visible_region == self._timeline_region:
             self._locked_roi = None
+        elif self.visible_region == self._target_roi.region_with_margin:
+            self._locked_roi = self._target_roi
+        elif self.visible_region == self._source_roi.region_with_margin:
+            self._locked_roi = self._source_roi
         else:
-            if self.visible_region == self._target_roi.region_with_margin:
-                self._locked_roi = self._target_roi
-            else:
-                if self.visible_region == self._source_roi.region_with_margin:
-                    self._locked_roi = self._source_roi
-                else:
-                    self._locked_roi = None
+            self._locked_roi = None
 
     @property
     def is_snapped(self):
@@ -597,7 +359,7 @@ class TimelineNavigation(EventObject):
                     self._focused_identifier = identifier
                     self._focus_object_by_identifier(identifier, animate=animate)
                 return True
-        return False
+            return False
 
     def object_changed(self, identifier1, identifier2):
         return identifier1 != identifier2
@@ -616,12 +378,10 @@ class TimelineNavigation(EventObject):
         new_region = None
         if source_region.inside(target_region):
             new_region = target_region
-        else:
-            if target_region.start < source_region.start:
-                new_region = Region(target_region.start, max(target_region.start + source_region.length, target_region.end))
-            else:
-                if target_region.end > source_region.end:
-                    new_region = Region(min(target_region.end - source_region.length, target_region.start), target_region.end)
+        elif target_region.start < source_region.start:
+            new_region = Region(target_region.start, max(target_region.start + source_region.length, target_region.end))
+        elif target_region.end > source_region.end:
+            new_region = Region(min(target_region.end - source_region.length, target_region.start), target_region.end)
         return new_region
 
     def _show_all_objects(self, identifiers):
@@ -650,17 +410,16 @@ class TimelineNavigation(EventObject):
             if region.start < self.timeline_region.start:
                 start = self.timeline_region.start
                 new_visible_region = Region(start, start + self.visible_region.length)
+            elif region.end > self.timeline_region.end:
+                end = self.timeline_region.end
+                new_visible_region = Region(end - self.visible_region.length, end)
             else:
-                if region.end > self.timeline_region.end:
-                    end = self.timeline_region.end
-                    new_visible_region = Region(end - self.visible_region.length, end)
-                else:
-                    new_visible_region = self._add_margin_to_region(region)
+                new_visible_region = self._add_margin_to_region(region)
             self.set_visible_region(new_visible_region, force_animate=animate)
         else:
             visible_length = self.visible_region.length
             visible_margin = visible_length * self.RELATIVE_FOCUS_MARGIN
-            timeline_start, timeline_end = self._timeline_region
+            (timeline_start, timeline_end) = self._timeline_region
             if roi.end_identifier == identifier:
                 start = min(region.start - visible_margin, self.visible_region.start)
                 right = max(region.end + visible_margin, start + visible_length)
@@ -679,9 +438,9 @@ class TimelineNavigation(EventObject):
         if is_zoom_object:
             if self.is_snapped:
                 self._request_select_region = True
-        self._touched_identifiers.add(self.get_object_identifier(obj))
-        if self.focus_object(obj) or is_zoom_object:
-            self.show_focus = True
+            self._touched_identifiers.add(self.get_object_identifier(obj))
+            if self.focus_object(obj) or is_zoom_object:
+                self.show_focus = True
 
     def release_object(self, obj):
         identifier = self.get_object_identifier(obj)
@@ -760,7 +519,7 @@ class TimelineNavigation(EventObject):
             return tasks.add(task.sequence(task.wait(EncoderControl.TOUCH_TIME), task.run(self.try_hide_focus)))
 
     def _add_margin_to_region(self, region):
-        start, end = region
+        (start, end) = region
         margin = self.RELATIVE_FOCUS_MARGIN
         start1 = old_div(margin * start + end * margin - start, 2 * margin - 1)
         start1 = self._timeline_region.clamp_position(start1)
@@ -805,7 +564,7 @@ class TimelineNavigation(EventObject):
 
     def _select_region_around_visible_region(self):
         regions_of_interest = self._get_unique_regions_of_interest()
-        source_roi = find_if((lambda roi: self.visible_region.inside(roi.region_with_margin)), reversed(regions_of_interest[None[:-1]]))
+        source_roi = find_if((lambda roi: self.visible_region.inside(roi.region_with_margin)), reversed(regions_of_interest[:-1]))
         if source_roi is not None:
             self._set_source_and_target_roi(source_roi, regions_of_interest[regions_of_interest.index(source_roi) + 1])
 
@@ -836,9 +595,11 @@ class TimelineNavigation(EventObject):
     def _report_current_source_and_target_roi(self):
         source_roi_name = ""
         target_roi_name = ""
-        for name, roi in self.regions_of_interest.items():
+        for (name, roi) in self.regions_of_interest.items():
             if roi == self._source_roi:
                 source_roi_name = name
+            if roi == self._target_roi:
+                target_roi_name = name
 
         logger.debug('Zooming between roi "%s" and "%s"' % (source_roi_name, target_roi_name))
 
@@ -878,7 +639,7 @@ class SimplerWaveformNavigation(TimelineNavigation, WaveformNavigation):
         if liveobj_valid(sample):
             if sample.warping:
                 return Region(sample.beat_to_sample_time(region.start), sample.beat_to_sample_time(region.end))
-        return region
+            return region
 
     def get_min_visible_length(self):
         sample = self._simpler.sample
@@ -935,11 +696,10 @@ class SimplerWaveformNavigation(TimelineNavigation, WaveformNavigation):
         min_visible_length = self.get_min_visible_length()
         if slice_index == -1:
             next_pos = positions.selected_slice.time + min_visible_length
+        elif slice_index + 1 < len(positions.slices):
+            next_pos = max(positions.slices[slice_index + 1].time, positions.selected_slice.time + min_visible_length)
         else:
-            if slice_index + 1 < len(positions.slices):
-                next_pos = max(positions.slices[slice_index + 1].time, positions.selected_slice.time + min_visible_length)
-            else:
-                next_pos = max(positions.end_marker, positions.selected_slice.time + min_visible_length)
+            next_pos = max(positions.end_marker, positions.selected_slice.time + min_visible_length)
         return next_pos
 
     def object_changed(self, identifier1, identifier2):
@@ -947,7 +707,7 @@ class SimplerWaveformNavigation(TimelineNavigation, WaveformNavigation):
             if self._get_selected_slice_index() == 0:
                 if "Start" in (identifier1, identifier2):
                     return False
-        return identifier1 != identifier2
+            return identifier1 != identifier2
 
     def focus_object(self, obj):
         if self._enable_focus_objects:
@@ -1064,8 +824,8 @@ class ClipTimelineNavigation(TimelineNavigation):
     def additional_focusable_object_descriptions(self):
         return {(self.start_marker_focus): (ObjectDescription(('start_end', 'start_end_marker'), "start_marker")), 
          
-         (self.loop_start_focus): (ObjectDescription(('start_end', 'loop'), (lambda:                                   if self._clip.looping:
-"position" # Avoid dead code: "start_marker"))), 
+         (self.loop_start_focus): (ObjectDescription(('start_end', 'loop'), (lambda: "position" if self._clip.looping else "start_marker"))), 
+         
          (self.loop_end_focus): (ObjectDescription(('start_end', ), "end_marker"))}
 
     def get_object_identifier(self, obj):
@@ -1079,7 +839,7 @@ class ClipTimelineNavigation(TimelineNavigation):
             if self.loop_start_focus in (identfier1, identifier2):
                 if self._clip.positions.start_marker == self._clip.positions.loop_start:
                     return False
-        return identfier1 != identifier2
+            return identfier1 != identifier2
 
     def change_object(self, obj):
         if self._process_object_changes:
@@ -1169,3 +929,5 @@ class AudioClipTimelineNavigation(ClipTimelineNavigation, WaveformNavigation):
         if self._clip.warping:
             region = Region(self._clip.sample_to_beat_time(region.start), self._clip.sample_to_beat_time(region.end))
         self.set_visible_region(region)
+
+# okay decompiling ./MIDIRemoteScripts/Push2/timeline_navigation.pyc

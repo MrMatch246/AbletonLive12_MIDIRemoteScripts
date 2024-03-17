@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\APC64\settings.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4339 bytes
@@ -12,12 +12,12 @@ from ableton.v3.control_surface import Component, EnumWrappingParameter, Notifyi
 from ableton.v3.control_surface.controls import ButtonControl, MappedSensitivitySettingControl
 from ableton.v3.live import get_bar_length, liveobj_valid
 LENGTH_OPTIONS = {
- '1 Bar': 1, 
- '2 Bars': 2, 
- '4 Bars': 4, 
- '8 Bars': 8, 
- '16 Bars': 16, 
- '32 Bars': 32}
+  '1 Bar': 1,
+  '2 Bars': 2,
+  '4 Bars': 4,
+  '8 Bars': 8,
+  '16 Bars': 16,
+  '32 Bars': 32}
 QUANTIZATION_OPTIONS = {'1/4':RecordingQuantization.rec_q_quarter, 
  '1/8':RecordingQuantization.rec_q_eight, 
  '1/8T':RecordingQuantization.rec_q_eight_triplet, 

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchkey_MK3\launchkey_mk3.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 18591 bytes
@@ -113,7 +113,7 @@ class Launchkey_MK3(InstrumentControlMixin, NovationBase):
           layer=Layer(secondary_up_button="secondary_up_button",
           secondary_down_button="secondary_down_button",
           device_select_button="device_select_button",
-          unused_matrix=(self._elements.device_select_matrix.submatrix[(None[:None], 1[:None])]),
+          unused_matrix=(self._elements.device_select_matrix.submatrix[:, 1:]),
           pot_parameter_name_displays="pot_parameter_name_displays",
           pot_parameter_value_displays="pot_parameter_value_displays",
           fader_parameter_name_displays="fader_parameter_name_displays",
@@ -238,7 +238,7 @@ class Launchkey_MK3(InstrumentControlMixin, NovationBase):
         self._stop_solo_mute_modes = ModesComponent(name="Stop_Solo_Mute_Modes",
           is_enabled=False,
           support_momentary_mode_cycling=False)
-        lower_matrix_row = self._elements.clip_launch_matrix.submatrix[(None[:None], 1[:None])]
+        lower_matrix_row = self._elements.clip_launch_matrix.submatrix[:, 1:]
         self._stop_solo_mute_modes.add_mode("launch",
           None, cycle_mode_button_color="Mode.Launch.On")
         self._stop_solo_mute_modes.add_mode("stop",
@@ -271,7 +271,7 @@ class Launchkey_MK3(InstrumentControlMixin, NovationBase):
         for i in range(6):
             self._pad_modes.add_mode("custom{}".format(i), suppress_all_buttons_around_pads)
 
-        upper_matrix_row = self._elements.device_select_matrix.submatrix[(None[:None], None[:1])]
+        upper_matrix_row = self._elements.device_select_matrix.submatrix[:, :1]
         self._pad_modes.add_mode("device_select", (
          suppress_scene_launch_buttons,
          self._device.show_device_name_and_bank,
@@ -328,11 +328,11 @@ class Launchkey_MK3(InstrumentControlMixin, NovationBase):
         id_bytes = super(Launchkey_MK3, self)._extract_product_id_bytes(midi_bytes)
         model_id_byte = id_bytes[3]
         self._elements.init_display_elements(model_id_byte == midi.LK_MK3_88_ID_BYTE)
-        if id_bytes[None[:3]] == sysex.NOVATION_MANUFACTURER_ID:
+        if id_bytes[:3] == sysex.NOVATION_MANUFACTURER_ID:
             if model_id_byte in midi.MODEL_ID_BYTES:
-                if id_bytes[4[:None]] == midi.MODEL_ID_BYTE_SUFFIX:
+                if id_bytes[4:] == midi.MODEL_ID_BYTE_SUFFIX:
                     self._is_small_model = model_id_byte in midi.SMALL_MODEL_ID_BYTES
-                    self._product_id_bytes = sysex.NOVATION_MANUFACTURER_ID + id_bytes[3[:None]]
-        return id_bytes
+                    self._product_id_bytes = sysex.NOVATION_MANUFACTURER_ID + id_bytes[3:]
+            return id_bytes
 
 # okay decompiling ./MIDIRemoteScripts/Launchkey_MK3/launchkey_mk3.pyc

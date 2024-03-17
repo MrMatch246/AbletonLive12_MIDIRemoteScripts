@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\BLOCKS\target_track_provider.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2567 bytes
@@ -31,7 +31,7 @@ class TargetTrackProvider(Component):
 
     @listens("tracks")
     def __on_tracks_changed(self):
-        tracks = [t for t in self.song.tracks if t.can_be_armed if t.has_midi_input]
+        tracks = [t for t in self.song.tracks if t.can_be_armed if t.has_midi_input if t.can_be_armed if t.has_midi_input]
         self._TargetTrackProvider__on_arm_changed.replace_subjects(tracks)
         self._TargetTrackProvider__on_frozen_state_changed.replace_subjects(tracks)
         self._update_tracks(tracks)
@@ -40,7 +40,7 @@ class TargetTrackProvider(Component):
     def __on_arm_changed(self, track):
         if track in self._armed_tracks:
             self._armed_tracks.remove(track)
-        elif track.arm:
+        if track.arm:
             self._armed_tracks.append(track)
             self._set_target_track(track)
         else:
@@ -59,8 +59,9 @@ class TargetTrackProvider(Component):
                 self._armed_tracks.remove(track)
 
         for track in all_tracks:
-            if track.arm and track not in self._armed_tracks:
-                self._armed_tracks.append(track)
+            if track.arm:
+                if track not in self._armed_tracks:
+                    self._armed_tracks.append(track)
 
         self._update_target_track()
 
@@ -69,9 +70,8 @@ class TargetTrackProvider(Component):
         selected_track = self.song.view.selected_track
         if self._armed_tracks:
             target_track = self._armed_tracks[-1]
-        else:
-            if not selected_track.is_frozen:
-                target_track = selected_track
+        elif not selected_track.is_frozen:
+            target_track = selected_track
         self._set_target_track(target_track)
 
     def _set_target_track(self, track):

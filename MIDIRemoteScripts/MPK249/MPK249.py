@@ -1,19 +1,19 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\MPK249\MPK249.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3024 bytes
 from __future__ import absolute_import, print_function, unicode_literals
-import _Framework.ControlSurface as ControlSurface
-import _Framework.DrumRackComponent as DrumRackComponent
+from _Framework.ControlSurface import ControlSurface as ControlSurface
+from _Framework.DrumRackComponent import DrumRackComponent as DrumRackComponent
 from _Framework.InputControlElement import MIDI_CC_TYPE, MIDI_NOTE_TYPE
-import _Framework.Layer as Layer
+from _Framework.Layer import Layer as Layer
 from _Framework.MidiMap import MidiMap as MidiMapBase
 from _Framework.MidiMap import make_button, make_encoder, make_slider
-import _Framework.MixerComponent as MixerComponent
-import _Framework.TransportComponent as TransportComponent
+from _Framework.MixerComponent import MixerComponent as MixerComponent
+from _Framework.TransportComponent import TransportComponent as TransportComponent
 
 class MidiMap(MidiMapBase):
 
@@ -25,11 +25,11 @@ class MidiMap(MidiMapBase):
         self.add_button("Loop", 0, 114, MIDI_CC_TYPE)
         self.add_button("Forward", 0, 116, MIDI_CC_TYPE)
         self.add_button("Backward", 0, 115, MIDI_CC_TYPE)
-        self.add_matrix("Sliders", make_slider, 0, [[12, 13, 14, 15, 16, 17, 18, 19]], MIDI_CC_TYPE)
-        self.add_matrix("Encoders", make_encoder, 0, [[22, 23, 24, 25, 26, 27, 28, 29]], MIDI_CC_TYPE)
+        self.add_matrix("Sliders", make_slider, 0, [[12,13,14,15,16,17,18,19]], MIDI_CC_TYPE)
+        self.add_matrix("Encoders", make_encoder, 0, [[22,23,24,25,26,27,28,29]], MIDI_CC_TYPE)
         self.add_matrix("Arm_Buttons", make_button, 0, [
          [
-          32, 33, 34, 35, 36, 37, 38, 39]], MIDI_CC_TYPE)
+          32,33,34,35,36,37,38,39]], MIDI_CC_TYPE)
         self.add_matrix("Drum_Pads", make_button, 1, [
          [
           81, 83, 84, 86], [74, 76, 77, 79], [67, 69, 71, 72], [60, 62, 64, 65]], MIDI_NOTE_TYPE)

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\SL_MkIII\mode.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4149 bytes
@@ -62,7 +62,7 @@ class DisplayingNavigatableModesComponent(NavigatableModesComponent):
     def _update_mode_displays(self):
         if self.selected_mode:
             for display, color_field, name in zip_longest((self.display_1, self.display_2), (
-             self.color_field_1, self.color_field_2), self.selected_mode.split("_")[None[:2]]):
+             self.color_field_1, self.color_field_2), self.selected_mode.split("_")[:2]):
                 display[0] = name.capitalize() if name else ""
                 color_field.color = "Mode.{}.On".format(name.capitalize()) if name else "DefaultButton.Disabled"
 

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\model\declaration.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6911 bytes
@@ -149,8 +149,8 @@ class ModelVisitor(object):
         self.visit_class_declarations(class_)
 
     def visit_class_declarations(self, class_):
-        view_properties = ((name, decl) for name, decl in iteritems(class_.__dict__) if isinstance(decl, property_declaration))
-        for name, decl in sorted(view_properties, key=(lambda item: item[1].order)):
+        view_properties = ((name, decl) for (name, decl) in iteritems(class_.__dict__))
+        for (name, decl) in sorted(view_properties, key=(lambda item: item[1].order)):
             decl.visit(name, self)
 
     def visit_id_property(self, name, decl):
@@ -159,20 +159,16 @@ class ModelVisitor(object):
     def visit_view_property(self, name, decl):
         if is_reference_property_decl(decl):
             self.visit_reference_property(name, decl)
+        elif is_binding_property_decl(decl):
+            self.visit_binding_property(name, decl)
+        elif is_value_property_type(decl):
+            self.visit_value_property(name, decl)
+        elif is_view_model_property_decl(decl):
+            self.visit_view_model_property(name, decl)
+        elif is_list_property_decl(decl):
+            self.visit_list_property(name, decl)
         else:
-            if is_binding_property_decl(decl):
-                self.visit_binding_property(name, decl)
-            else:
-                if is_value_property_type(decl):
-                    self.visit_value_property(name, decl)
-                else:
-                    if is_view_model_property_decl(decl):
-                        self.visit_view_model_property(name, decl)
-                    else:
-                        if is_list_property_decl(decl):
-                            self.visit_list_property(name, decl)
-                        else:
-                            raise Exception("Invalid property declaration")
+            raise Exception("Invalid property declaration")
 
     def visit_reference_property(self, name, decl):
         pass
@@ -189,17 +185,14 @@ class ModelVisitor(object):
     def visit_list_property(self, name, decl):
         if is_reference_property_decl(decl.property_type):
             self.visit_reference_list_property(name, decl, decl.property_type.property_type)
+        elif is_value_property_type(decl.property_type):
+            self.visit_value_list_property(name, decl, decl.property_type.property_type)
+        elif is_list_model_property_decl(decl):
+            self.visit_list_model_property(name, decl, decl.property_type.property_type)
+        elif is_view_model_property_decl(decl.property_type):
+            self.visit_complex_list_property(name, decl, decl.property_type.property_type)
         else:
-            if is_value_property_type(decl.property_type):
-                self.visit_value_list_property(name, decl, decl.property_type.property_type)
-            else:
-                if is_list_model_property_decl(decl):
-                    self.visit_list_model_property(name, decl, decl.property_type.property_type)
-                else:
-                    if is_view_model_property_decl(decl.property_type):
-                        self.visit_complex_list_property(name, decl, decl.property_type.property_type)
-                    else:
-                        raise Exception("Invalid property declaration")
+            raise Exception("Invalid property declaration")
 
     def visit_value_list_property(self, name, decl, value_type):
         pass

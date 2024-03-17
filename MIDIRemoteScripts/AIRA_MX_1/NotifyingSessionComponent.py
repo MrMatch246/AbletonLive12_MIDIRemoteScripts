@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\AIRA_MX_1\NotifyingSessionComponent.py
 # Compiled at: 2024-02-20 00:55:13
 # Size of source mod 2**32: 4593 bytes
@@ -46,12 +46,11 @@ class SpecialSceneComponent(SceneComponent):
                 if self._scene:
                     if self._has_fired_slots():
                         value_to_send = self._triggered_value
+                    elif self._has_playing_slots():
+                        value_to_send = self._playing_value
                     else:
-                        if self._has_playing_slots():
-                            value_to_send = self._playing_value
-                        else:
-                            value_to_send = self._scene_value
-                elif value_to_send is None:
+                        value_to_send = self._scene_value
+                if value_to_send is None:
                     self._launch_button.turn_off()
                 else:
                     self._launch_button.set_light(value_to_send)
@@ -81,7 +80,7 @@ class NotifyingSessionComponent(SessionComponent):
 
     def set_clip_launch_buttons(self, buttons):
         first_scene = self.scene(0)
-        for track_index, button in zip_longest(range(self._num_tracks), buttons or []):
+        for (track_index, button) in zip_longest(range(self._num_tracks), buttons or []):
             slot = first_scene.clip_slot(track_index)
             slot.set_launch_button(button)
 

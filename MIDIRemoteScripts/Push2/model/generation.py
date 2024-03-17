@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\model\generation.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 19859 bytes
@@ -146,7 +146,7 @@ class BoundObjectWrapper(EventObject, SimpleWrapper):
         if self._value is not None:
             if self._value.is_valid():
                 res = {}
-                for name, wrapper in iteritems(self.values):
+                for (name, wrapper) in iteritems(self.values):
                     res[name] = wrapper.to_json()
 
                 return res
@@ -259,11 +259,11 @@ class ModelMixin(WrapperBase):
     def __init__(self, *a, **k):
         (super(ModelMixin, self).__init__)(*a, **k)
         self.data = {}
-        for name, wrapper in iteritems(self.wrappers):
+        for (name, wrapper) in iteritems(self.wrappers):
             value = self.default_data[name]
             self.data[name] = wrapper(value, notifier=(self._notifier.step(name)))
 
-        for name, child in iteritems(self.children):
+        for (name, child) in iteritems(self.children):
             self.data[name] = child(notifier=(self._notifier.step(name)))
 
     def disconnect(self):
@@ -272,7 +272,7 @@ class ModelMixin(WrapperBase):
             child.disconnect()
 
     def to_json(self):
-        return dict(((name, obj.to_json()) for name, obj in iteritems(self.data)))
+        return dict(((name, obj.to_json()) for (name, obj) in iteritems(self.data)))
 
     def get(self):
         return self
@@ -286,7 +286,7 @@ def make_bound_child_wrapper(name=None, wrapper=None):
     return partial(apply_wrapper, name=name, wrapper=wrapper)
 
 
-ClassInfo = namedtuple("ClassInfo", ['class_', 'd', 'default_data', 'wrappers', 'children'])
+ClassInfo = namedtuple("ClassInfo", ["class_","d","default_data","wrappers","children"])
 
 @contextmanager
 def pushpop(collection, item):
@@ -475,7 +475,7 @@ class ModelFingerprintVisitor(ModelVisitor):
     @property
     def fingerprint(self):
         if self._fingerprint is None:
-            self._fingerprint = ";".join(("%s(%s)" % (classname, ",".join(property_prints)) for classname, property_prints in sorted((iteritems(self._class2proplist)),
+            self._fingerprint = ";".join(("%s(%s)" % (classname, ",".join(property_prints)) for (classname, property_prints) in sorted((iteritems(self._class2proplist)),
               key=(lambda item: item[0]))))
         return self._fingerprint
 

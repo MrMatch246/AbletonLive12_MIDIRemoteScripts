@@ -1,19 +1,19 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ZERO8\config.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4589 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from .consts import *
 TRANSPORT_CONTROLS = {
- 'STOP': GENERIC_STOP, 
- 'PLAY': GENERIC_PLAY, 
- 'REC': GENERIC_REC, 
- 'LOOP': GENERIC_LOOP, 
- 'RWD': GENERIC_RWD, 
- 'FFWD': GENERIC_FFWD}
+  'STOP': GENERIC_STOP,
+  'PLAY': GENERIC_PLAY,
+  'REC': GENERIC_REC,
+  'LOOP': GENERIC_LOOP,
+  'RWD': GENERIC_RWD,
+  'FFWD': GENERIC_FFWD}
 DEVICE_CONTROLS = (
  GENERIC_ENC1,
  GENERIC_ENC2,
@@ -50,26 +50,26 @@ TRACKARM_CONTROLS = (
  GENERIC_BUT7,
  GENERIC_BUT8)
 BANK_CONTROLS = {
- 'TOGGLELOCK': GENERIC_BUT9, 
- 'BANKDIAL': -1, 
- 'NEXTBANK': GENERIC_PAD5, 
- 'PREVBANK': GENERIC_PAD1, 
- 'BANK1': 80, 
- 'BANK2': 81, 
- 'BANK3': 82, 
- 'BANK4': 83, 
- 'BANK5': 84, 
- 'BANK6': 85, 
- 'BANK7': 86, 
- 'BANK8': 87}
+  'TOGGLELOCK': GENERIC_BUT9,
+  'BANKDIAL': -1,
+  'NEXTBANK': GENERIC_PAD5,
+  'PREVBANK': GENERIC_PAD1,
+  'BANK1': 80,
+  'BANK2': 81,
+  'BANK3': 82,
+  'BANK4': 83,
+  'BANK5': 84,
+  'BANK6': 85,
+  'BANK7': 86,
+  'BANK8': 87}
 CONTROLLER_DESCRIPTION = {'INPUTPORT':"ZERO8 MIDI IN 2", 
  'OUTPUTPORT':"ZERO8 MIDI OUT 2", 
  'CHANNEL':0}
 MIXER_OPTIONS = {
- 'NUMSENDS': 2, 
- 'SEND1': ((5, 0), (5, 1), (5, 2), (5, 3), (5, 4), (5, 5), (5, 6), (5, 7)), 
- 'SEND2': ((6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7)), 
- 'PANS': ((4, 0), (4, 1), (4, 2), (4, 3), (4, 4), (4, 5), (4, 6), (4, 7)), 
- 'MASTERVOLUME': -1}
+  'NUMSENDS': 2,
+  'SEND1': ((5, 0), (5, 1), (5, 2), (5, 3), (5, 4), (5, 5), (5, 6), (5, 7)),
+  'SEND2': ((6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7)),
+  'PANS': ((4, 0), (4, 1), (4, 2), (4, 3), (4, 4), (4, 5), (4, 6), (4, 7)),
+  'MASTERVOLUME': -1}
 
 # okay decompiling ./MIDIRemoteScripts/ZERO8/config.pyc

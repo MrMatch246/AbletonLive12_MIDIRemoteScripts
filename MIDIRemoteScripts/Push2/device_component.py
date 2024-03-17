@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\device_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 10751 bytes
@@ -36,7 +36,7 @@ def parameter_sensitivities(device_class, parameter):
     except KeyError:
         pass
 
-    for key, getter in (
+    for (key, getter) in (
      (
       DEFAULT_SENSITIVITY_KEY, parameter_mapping_sensitivity),
      (
@@ -122,7 +122,7 @@ class GenericDeviceComponent(DeviceComponentBase):
         visualisation = self._visualisation_real_time_data.device_visualisation()
         if liveobj_valid(visualisation):
             visualisation_view_data = visualisation.get_view_data()
-            for key, value in view_data.items():
+            for (key, value) in view_data.items():
                 visualisation_view_data[key] = value
 
             visualisation.set_view_data(visualisation_view_data)
@@ -171,7 +171,8 @@ class GenericDeviceComponent(DeviceComponentBase):
 
     @property
     def _shrink_parameters(self):
-        return [False] * 8
+        return [
+         False] * 8
 
     @listens("options")
     def __on_options_changed(self):
@@ -211,7 +212,7 @@ class DeviceComponentWithTrackColorViewData(GenericDeviceComponent):
                 if parent_track == self.song.master_track:
                     return device.is_active
                 return device.is_active and not parent_track.mute and not parent_track.muted_via_solo
-        return False
+            return False
 
     def _track_color_for_visualisation(self):
         device = self._decorated_device
@@ -248,7 +249,7 @@ class DeviceComponentWithTrackColorViewData(GenericDeviceComponent):
 ENVELOPE_FEATURES_FOR_PARAMETER = {'Attack':set(["AttackLine", "AttackNode", "DecayLine"]), 
  'Decay':set(["DecayLine", "DecayNode", "SustainLine"]), 
  'Sustain':set([
-  'DecayLine', 'DecayNode', 'SustainLine', 'SustainNode', 'ReleaseLine']), 
+  "DecayLine","DecayNode","SustainLine","SustainNode","ReleaseLine"]), 
  'Release':set(["ReleaseLine", "ReleaseNode"]), 
  'Init':set(["InitNode", "AttackLine"]), 
  'Initial':set(["InitNode", "AttackLine"]), 

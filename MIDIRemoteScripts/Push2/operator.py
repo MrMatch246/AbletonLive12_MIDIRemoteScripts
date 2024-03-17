@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\operator.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9474 bytes
@@ -89,7 +89,8 @@ class OperatorDeviceDecorator(EventObject, LiveObjectDecorator):
 
     @property
     def options(self):
-        return (self.filter_slope_option,)
+        return (
+         self.filter_slope_option,)
 
     @listens("parameters")
     def __on_parameters_changed(self):
@@ -110,7 +111,7 @@ class OperatorDeviceComponent(DeviceComponentWithTrackColorViewData):
     FILTER_BANK = 2
     LARGE_PARAMETERS_LIST = [False] * 8
     ENVELOPE_PREFIXES = [
-     'Ae', 'Be', 'Ce', 'De', 'Fe', 'Le', 'Pe']
+     "Ae","Be","Ce","De","Fe","Le","Pe"]
 
     def __init__(self, *a, **k):
         (super(OperatorDeviceComponent, self).__init__)(*a, **k)

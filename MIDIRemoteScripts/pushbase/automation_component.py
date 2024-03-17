@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\automation_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7109 bytes
@@ -59,8 +59,7 @@ class AutomationComponent(DeviceParameterComponent):
         return self._parameter_infos_to_use()
 
     def _parameter_infos_to_use(self):
-        return list(map((lambda info:         if self.parameter_is_automateable(info.parameter if info else None):
-info # Avoid dead code: None), self._parameter_provider.parameters))
+        return list(map((lambda info: info if self.parameter_is_automateable(info.parameter if info else None) else None), self._parameter_provider.parameters))
 
     @property
     def can_automate_parameters(self):
@@ -94,7 +93,7 @@ info # Avoid dead code: None), self._parameter_provider.parameters))
                     if liveobj_valid(envelope):
                         return self._value_at_time(envelope, self.selected_time[0])
                     return parameter.value
-        return 0.0
+            return 0.0
 
     def _value_at_time(self, envelope, time_range):
         return envelope.value_at_time(old_div(time_range[0] + time_range[1], 2))
@@ -118,7 +117,7 @@ info # Avoid dead code: None), self._parameter_provider.parameters))
             if liveobj_valid(envelope):
                 if param.automation_state == AutomationState.overridden:
                     param.re_enable_automation()
-                for time_index, time_range in enumerate(self.selected_time):
+                for (time_index, time_range) in enumerate(self.selected_time):
                     self._insert_step(time_range, time_index, index, envelope, value)
 
             self._update_parameter_values()
@@ -138,7 +137,7 @@ info # Avoid dead code: None), self._parameter_provider.parameters))
                 parameters = self.parameters
                 for step in self.selected_time:
                     step_parameter_floats = []
-                    for index, param in enumerate(parameters):
+                    for (index, param) in enumerate(parameters):
                         if param is None:
                             value = 0.0
                         else:

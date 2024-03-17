@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\fixed_length.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9141 bytes
@@ -41,7 +41,8 @@ class FixedLengthSetting(EventObject):
         quant = LENGTH_OPTIONS[index]
         if index > 1:
             length = old_div(length * song.signature_numerator, song.signature_denominator)
-        return (length, quant)
+        return (
+         length, quant)
 
 
 class FixedLengthSettingComponent(Component):
@@ -70,7 +71,7 @@ class FixedLengthSettingComponent(Component):
         self._update_option_display()
 
     def _update_option_display(self):
-        for index, option_name in enumerate(LENGTH_OPTION_NAMES):
+        for (index, option_name) in enumerate(LENGTH_OPTION_NAMES):
             prefix = consts.CHAR_SELECT if index == self._fixed_length_setting.selected_index else " "
             self.option_display_line[index] = prefix + option_name
 
@@ -122,46 +123,44 @@ class FixedLengthComponent(Component, Messenger):
         slot = song.view.highlighted_clip_slot
         if slot is None:
             return
-            clip = slot.clip
-            loop_set = False
-            if self._length_press_state is not None:
-                press_slot, press_position = self._length_press_state
-                if press_slot == slot and slot.is_recording:
-                    length, _ = clip.is_overdubbing or self._fixed_length_setting.get_selected_length(song)
-                    one_bar = old_div(4.0 * song.signature_numerator, song.signature_denominator)
-                    loop_start = int(old_div(press_position, length)) * length
-                    loop_end = loop_start + length
-                    clip.loop_end = loop_end
-                    clip.end_marker = loop_end
-                    clip.loop_start = loop_start
-                    clip.start_marker = loop_start
-                    progress = old_div(press_position - loop_start, loop_end - loop_start)
-                    if progress < 0.5 and loop_start - length >= 0:
-                        launch_quantization = Quantization.q_no_q
-                        self.song.overdub = False
-        else:
-            duration_needed_to_finish_recording_bar = old_div(loop_end - press_position, one_bar)
-            launch_quantization = Quantization.q_no_q
-            if duration_needed_to_finish_recording_bar < 0.5:
-                launch_quantization = Quantization.q_half
-            else:
-                if duration_needed_to_finish_recording_bar < 1:
-                    launch_quantization = Quantization.q_bar
-                else:
-                    if duration_needed_to_finish_recording_bar < 2:
-                        launch_quantization = Quantization.q_2_bars
-                    else:
-                        if duration_needed_to_finish_recording_bar < 4:
-                            launch_quantization = Quantization.q_4_bars
+        clip = slot.clip
+        loop_set = False
+        if self._length_press_state is not None:
+            (press_slot, press_position) = self._length_press_state
+            if press_slot == slot:
+                if slot.is_recording:
+                    if not clip.is_overdubbing:
+                        (length, _) = self._fixed_length_setting.get_selected_length(song)
+                        one_bar = old_div(4.0 * song.signature_numerator, song.signature_denominator)
+                        loop_start = int(old_div(press_position, length)) * length
+                        loop_end = loop_start + length
+                        clip.loop_end = loop_end
+                        clip.end_marker = loop_end
+                        clip.loop_start = loop_start
+                        clip.start_marker = loop_start
+                        progress = old_div(press_position - loop_start, loop_end - loop_start)
+                        if progress < 0.5 and loop_start - length >= 0:
+                            launch_quantization = Quantization.q_no_q
+                            self.song.overdub = False
                         else:
-                            if duration_needed_to_finish_recording_bar < 8:
+                            duration_needed_to_finish_recording_bar = old_div(loop_end - press_position, one_bar)
+                            launch_quantization = Quantization.q_no_q
+                            if duration_needed_to_finish_recording_bar < 0.5:
+                                launch_quantization = Quantization.q_half
+                            elif duration_needed_to_finish_recording_bar < 1:
+                                launch_quantization = Quantization.q_bar
+                            elif duration_needed_to_finish_recording_bar < 2:
+                                launch_quantization = Quantization.q_2_bars
+                            elif duration_needed_to_finish_recording_bar < 4:
+                                launch_quantization = Quantization.q_4_bars
+                            elif duration_needed_to_finish_recording_bar < 8:
                                 launch_quantization = Quantization.q_8_bars
-                            self._tasks.add(task.sequence(task.delay(0), task.run(partial((slot.fire),
-                              force_legato=True,
-                              launch_quantization=launch_quantization))))
-            loop_set = True
-        self._length_press_state = None
-        return loop_set
+                        self._tasks.add(task.sequence(task.delay(0), task.run(partial((slot.fire),
+                          force_legato=True,
+                          launch_quantization=launch_quantization))))
+                        loop_set = True
+            self._length_press_state = None
+            return loop_set
 
     @listens("enabled")
     def __on_setting_enabled_changes(self, enabled):

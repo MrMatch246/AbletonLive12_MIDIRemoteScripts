@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\elements\encoder.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 10512 bytes
@@ -106,9 +106,8 @@ class EncoderElement(EncoderElementBase, Renderable):
         (super().install_connections)(*a, **k)
         if self.is_mapped_manually():
             self.mapped_object = None
-        else:
-            if self.mapped_object is None:
-                self.reset()
+        elif self.mapped_object is None:
+            self.reset()
         self._clear_parameter_listeners()
         self._update_listeners_task.restart()
 
@@ -139,7 +138,7 @@ class EncoderElement(EncoderElementBase, Renderable):
                     midi_value = self._feedback_values[midi_value]
                     if isinstance(midi_value, tuple):
                         midi_value = midi_value[0] + (midi_value[1] << 7)
-                self.send_value(midi_value)
+                    self.send_value(midi_value)
 
     def _clear_parameter_listeners(self):
         self._EncoderElement__on_parameter_name_changed.subject = None

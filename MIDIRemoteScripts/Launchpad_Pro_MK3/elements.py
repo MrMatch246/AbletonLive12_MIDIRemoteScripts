@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_Pro_MK3\elements.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7238 bytes
@@ -48,7 +48,7 @@ class Elements(LaunchpadElements):
         self.track_select_buttons = ButtonMatrixElement(rows=[
          self.track_select_buttons_raw],
           name="Track_Select_Buttons")
-        for bank, bank_name in enumerate(FADER_MODES):
+        for (bank, bank_name) in enumerate(FADER_MODES):
             capitalized_name = bank_name.capitalize()
             control_elements_name = "{}_button_faders".format(bank_name)
             setattr(self, control_elements_name, ButtonMatrixElement(rows=[

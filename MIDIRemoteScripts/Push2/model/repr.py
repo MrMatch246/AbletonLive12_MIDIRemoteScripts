@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\model\repr.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 27107 bytes
@@ -13,15 +13,15 @@ from functools import partial
 from ableton.v2.base import EventError, EventObject, Slot, find_if, listenable_property, listens, liveobj_valid, old_hasattr
 from ..device_parameter_icons import get_image_filenames, get_image_filenames_from_ids
 DEVICE_TYPES_WITH_PRESET_NAME = [
- 'InstrumentGroupDevice', 
- 'DrumGroupDevice', 
- 'AudioEffectGroupDevice', 
- 'MidiEffectGroupDevice', 
- 'ProxyInstrumentDevice', 
- 'ProxyAudioEffectDevice', 
- 'MxDeviceInstrument', 
- 'MxDeviceAudioEffect', 
- 'MxDeviceMidiEffect']
+ "InstrumentGroupDevice",
+ "DrumGroupDevice",
+ "AudioEffectGroupDevice",
+ "MidiEffectGroupDevice",
+ "ProxyInstrumentDevice",
+ "ProxyAudioEffectDevice",
+ "MxDeviceInstrument",
+ "MxDeviceAudioEffect",
+ "MxDeviceMidiEffect"]
 
 def _get_parameter_by_name(device, name):
     parameters = device.parameters if liveobj_valid(device) else []
@@ -41,7 +41,7 @@ def _try_to_round_number(parameter_string):
         except ValueError:
             pass
 
-    return value_as_number
+        return value_as_number
 
 
 note_pattern = re.compile("^([CDEFGAB].?)((?:-[1-2])|[0-8])$")
@@ -53,7 +53,7 @@ def get_parameter_display_large(parameter):
     if note_pattern.search(parameter_string) is not None:
         return parameter_string
     if hybrid_rate_pattern.search(parameter_string) is not None:
-        return parameter_string[0[:-2]]
+        return parameter_string[0:-2]
     large_string = "".join(large_pattern.findall(parameter_string))
     if large_string in ('inf', '-inf'):
         return large_string
@@ -179,9 +179,9 @@ class DeviceParameterAdapter(ModelAdapter):
             except (AttributeError, RuntimeError):
                 pass
 
-        if custom_images is not None:
-            return get_image_filenames_from_ids(custom_images, small_images)
-        return get_image_filenames(self.original_name, device.class_name, small_images)
+            if custom_images is not None:
+                return get_image_filenames_from_ids(custom_images, small_images)
+            return get_image_filenames(self.original_name, device.class_name, small_images)
 
     @listenable_property
     def valueItemImages(self):
@@ -262,7 +262,7 @@ class SimplerDeviceAdapter(ModelAdapter):
                 except RuntimeError:
                     pass
 
-        return slice_times
+            return slice_times
 
     @listens("sample")
     def __on_sample_changed(self):
@@ -292,35 +292,35 @@ class SimplerDeviceAdapter(ModelAdapter):
         if liveobj_valid(self._adaptee):
             if liveobj_valid(self._adaptee.sample):
                 return self._adaptee.sample.start_marker
-        return 0
+            return 0
 
     @listenable_property
     def end_marker(self):
         if liveobj_valid(self._adaptee):
             if liveobj_valid(self._adaptee.sample):
                 return self._adaptee.sample.end_marker
-        return 0
+            return 0
 
     @listenable_property
     def slicing_sensitivity(self):
         if liveobj_valid(self._adaptee):
             if liveobj_valid(self._adaptee.sample):
                 return self._adaptee.sample.slicing_sensitivity
-        return 0.0
+            return 0.0
 
     @listenable_property
     def gain(self):
         if liveobj_valid(self._adaptee):
             if liveobj_valid(self._adaptee.sample):
                 return self._adaptee.sample.gain
-        return 0.0
+            return 0.0
 
     @listenable_property
     def warping(self):
         if liveobj_valid(self._adaptee):
             if liveobj_valid(self._adaptee.sample):
                 return self._adaptee.sample.warping
-        return False
+            return False
 
 
 class VisibleAdapter(ModelAdapter):
@@ -419,11 +419,10 @@ class DeviceAdapter(ModelAdapter):
         class_name = getattr(item, "class_name", None)
         if class_name not in DEVICE_TYPES_WITH_PRESET_NAME:
             name = getattr(item, "class_display_name", name)
-        elif is_bank_rack_2(item):
+        if is_bank_rack_2(item):
             name = "••" + name
-        else:
-            if is_rack_with_bank_2(item):
-                name = "•" + name
+        elif is_rack_with_bank_2(item):
+            name = "•" + name
         return name
 
     @property
@@ -553,7 +552,7 @@ class TrackAdapter(ModelAdapter):
     @property
     def activated(self):
         try:
-            return not (self._adaptee.muted_via_solo or self._adaptee.mute and not self._adaptee.solo)
+            return not (self._adaptee.muted_via_solo) or ((self._adaptee.mute) and (not self._adaptee.solo))
         except (RuntimeError, AttributeError):
             return True
 

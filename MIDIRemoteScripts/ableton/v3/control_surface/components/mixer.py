@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\mixer.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 13028 bytes
@@ -137,7 +137,7 @@ class MixerComponent(Component):
 
     def set_send_controls(self, controls):
         self._send_controls = controls
-        for strip, control in zip_longest(self._channel_strips, controls or []):
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
             if self._send_index_manager.send_index is None:
                 strip.send_controls.set_control_element((control,))
             else:
@@ -147,15 +147,16 @@ class MixerComponent(Component):
     def __getattr__(self, name):
         if name.startswith("set_master_track"):
             return partial(self._set_master_or_target_strip_control, self._master_strip, name.replace("set_master_track_", ""))
-        elif name.startswith("set_target_track"):
+        if name.startswith("set_target_track"):
             if "send" in name:
                 if not name.endswith("send_controls"):
                     return partial(self._set_target_strip_indexed_send_control, send_letter_to_index(name.split("_")[-2]))
-            return partial(self._set_master_or_target_strip_control, self._target_strip, name.replace("set_target_track_", ""))
-        if "send" in name:
-            return name.endswith("send_controls") or partial(self._set_indexed_send_controls, send_letter_to_index(name.split("_")[-2]))
-        if name.startswith("set"):
-            return partial(self._set_strip_controls, name[4[:-1]])
+                return partial(self._set_master_or_target_strip_control, self._target_strip, name.replace("set_target_track_", ""))
+            if "send" in name:
+                if not name.endswith("send_controls"):
+                    return partial(self._set_indexed_send_controls, send_letter_to_index(name.split("_")[-2]))
+            if name.startswith("set"):
+                return partial(self._set_strip_controls, name[4:-1])
         raise AttributeError
 
     @staticmethod
@@ -166,11 +167,11 @@ class MixerComponent(Component):
         self._target_strip.set_indexed_send_control(control, send_index)
 
     def _set_indexed_send_controls(self, send_index, controls):
-        for strip, control in zip_longest(self._channel_strips, controls or []):
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
             strip.set_indexed_send_control(control, send_index)
 
     def _set_strip_controls(self, name, controls):
-        for strip, control in zip_longest(self._channel_strips, controls or []):
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
             getattr(strip, name).set_control_element(control)
 
     @cycle_send_index_button.pressed
@@ -188,7 +189,7 @@ class MixerComponent(Component):
         self._reassign_tracks()
 
     def _reassign_tracks(self):
-        for track, channel_strip in zip(self._provider.tracks, self._channel_strips):
+        for (track, channel_strip) in zip(self._provider.tracks, self._channel_strips):
             channel_strip.set_track(track)
 
     @listens("target_track")

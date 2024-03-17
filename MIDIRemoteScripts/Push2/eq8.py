@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\eq8.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4717 bytes
@@ -79,9 +79,8 @@ class Eq8DeviceComponent(DeviceComponentWithTrackColorViewData):
             if liveobj_valid(parameter):
                 if self.FILTER_BAND_PARAMETER_NAMES.match(parameter.name):
                     self._update_visualisation_view_data({"AdjustingSelectedBand": True})
-                else:
-                    if parameter.name == "Band":
-                        self._update_visualisation_view_data({"ChangingSelectedBand": True})
+                elif parameter.name == "Band":
+                    self._update_visualisation_view_data({"ChangingSelectedBand": True})
 
     def _parameter_released(self, parameter):
         if liveobj_valid(self._decorated_device):
@@ -107,6 +106,7 @@ class Eq8DeviceComponent(DeviceComponentWithTrackColorViewData):
 
     @property
     def _shrink_parameters(self):
-        return [True] * 8
+        return [
+         True] * 8
 
 # okay decompiling ./MIDIRemoteScripts/Push2/eq8.pyc

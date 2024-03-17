@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push\special_mixer_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7053 bytes
@@ -125,10 +125,9 @@ class SpecialMixerComponent(components.MixerComponent):
 
     @listens("value")
     def _on_pan_send_value(self, value):
-        if not self._pan_send_toggle_skip:
-            if self.is_enabled():
-                value or self._pan_send_toggle.is_momentary() or self._pan_send_index += 1
-                self._update_pan_sends()
+        if self._pan_send_toggle_skip or self.is_enabled() and not value or self._pan_send_toggle.is_momentary():
+            self._pan_send_index += 1
+            self._update_pan_sends()
         self._pan_send_toggle_skip = False
 
     def _update_pan_sends(self):

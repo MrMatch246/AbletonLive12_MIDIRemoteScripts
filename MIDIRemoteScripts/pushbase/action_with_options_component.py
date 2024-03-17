@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\action_with_options_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7618 bytes
@@ -115,7 +115,7 @@ class OptionsComponent(Component):
         return [segment.display_string() for segment in self._label_data_sources]
 
     def _set_labels(self, labels):
-        for segment, label in zip_longest(self._label_data_sources, labels or []):
+        for (segment, label) in zip_longest(self._label_data_sources, labels or []):
             segment.set_display_string(label)
 
     labels = property(_get_labels, _set_labels)
@@ -140,11 +140,11 @@ class OptionsComponent(Component):
             self.notify_selected_option(self.selected_option)
 
     def _update_select_buttons(self):
-        for index, button in enumerate(self.select_buttons):
+        for (index, button) in enumerate(self.select_buttons):
             button.color = self.selected_color if index == self._selected_option else self.unselected_color
 
     def _update_data_sources(self):
-        for index, (source, name) in enumerate(zip_longest(self._data_sources, self.option_names)):
+        for (index, (source, name)) in enumerate(zip_longest(self._data_sources, self.option_names)):
             if name:
                 source.set_display_string((consts.CHAR_SELECT if index == self._selected_option else " ") + name)
             else:

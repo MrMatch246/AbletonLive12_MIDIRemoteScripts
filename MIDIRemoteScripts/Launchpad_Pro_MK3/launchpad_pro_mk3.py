@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_Pro_MK3\launchpad_pro_mk3.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 20820 bytes
@@ -355,7 +355,7 @@ class Launchpad_Pro_MK3(InstrumentControlMixin, NovationBase):
             self._layout_to_restore = value
             if self._mixer_modes.selected_mode in FADER_MODES:
                 self._mixer_modes.selected_mode = "track_select"
-            elif value in LAYOUT_BYTES_TO_MODE_NAMES_MAP:
+            if value in LAYOUT_BYTES_TO_MODE_NAMES_MAP:
                 self._main_modes.selected_mode = LAYOUT_BYTES_TO_MODE_NAMES_MAP[value]
             else:
                 self._main_modes.selected_mode = "none"

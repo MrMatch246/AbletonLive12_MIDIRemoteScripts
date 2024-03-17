@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\SL_MkIII\device_navigation.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5182 bytes
@@ -103,6 +103,6 @@ class DisplayingDeviceNavigationComponent(DeviceNavigationComponent):
             if item_bank_names:
                 bank = self._device_bank_registry.get_device_bank(item)
                 bank_name = item_bank_names[bank]
-        return bank_name
+            return bank_name
 
 # okay decompiling ./MIDIRemoteScripts/SL_MkIII/device_navigation.pyc

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_Pro\consts.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1983 bytes
@@ -39,21 +39,21 @@ ACTION_BUTTON_COLORS = dict(color="DefaultButton.Off",
 USER_MODE_CHANNELS = (5, 6, 7, 13, 14, 15)
 USER_MATRIX_IDENTIFIERS = [
  [
-  64, 65, 66, 67, 96, 97, 98, 99],
+  64,65,66,67,96,97,98,99],
  [
-  60, 61, 62, 63, 92, 93, 94, 95],
+  60,61,62,63,92,93,94,95],
  [
-  56, 57, 58, 59, 88, 89, 90, 91],
+  56,57,58,59,88,89,90,91],
  [
-  52, 53, 54, 55, 84, 85, 86, 87],
+  52,53,54,55,84,85,86,87],
  [
-  48, 49, 50, 51, 80, 81, 82, 83],
+  48,49,50,51,80,81,82,83],
  [
-  44, 45, 46, 47, 76, 77, 78, 79],
+  44,45,46,47,76,77,78,79],
  [
-  40, 41, 42, 43, 72, 73, 74, 75],
+  40,41,42,43,72,73,74,75],
  [
-  36, 37, 38, 39, 68, 69, 70, 71]]
+  36,37,38,39,68,69,70,71]]
 CHROM_MAP_CHANNEL = 3
 DEVICE_MAP_CHANNEL = 4
 VOLUME_MAP_CHANNEL = 8

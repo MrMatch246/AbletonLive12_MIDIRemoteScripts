@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Akai_Force_MPC\device_parameters.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7759 bytes
@@ -99,12 +99,12 @@ class DeviceParameterComponent(DeviceParameterComponentBase):
 
     def _update_parameter_names(self):
         super(DeviceParameterComponent, self)._update_parameter_names()
-        for info, name_data_source in zip_longest(self.parameter_provider.parameters, self._physical_display_parameter_name_data_sources):
+        for (info, name_data_source) in zip_longest(self.parameter_provider.parameters, self._physical_display_parameter_name_data_sources):
             name_data_source.set_display_string(self.info_to_name(info))
 
     def _update_parameter_values(self):
         super(DeviceParameterComponent, self)._update_parameter_values()
-        for parameter, data_source, control, absolute_control in zip_longest(self.parameters, self._physical_display_parameter_value_data_sources, self.controls, self.absolute_controls):
+        for (parameter, data_source, control, absolute_control) in zip_longest(self.parameters, self._physical_display_parameter_value_data_sources, self.controls, self.absolute_controls):
             data_source.set_display_string(self.parameter_to_string(parameter))
             if is_internal_parameter(parameter):
                 value_to_send = convert_parameter_value_to_midi_value(parameter)
@@ -112,7 +112,7 @@ class DeviceParameterComponent(DeviceParameterComponentBase):
                 absolute_control.value = value_to_send
 
     def _connect_parameters(self):
-        for control, absolute_control, display_style_control, parameter_info in zip_longest(self.controls, self.absolute_controls, self.display_style_controls, self._parameter_provider.parameters[None[:NUM_PARAM_CONTROLS]]):
+        for (control, absolute_control, display_style_control, parameter_info) in zip_longest(self.controls, self.absolute_controls, self.display_style_controls, self._parameter_provider.parameters[:NUM_PARAM_CONTROLS]):
             parameter = parameter_info.parameter if parameter_info else None
             control.mapped_parameter = parameter
             absolute_control.mapped_parameter = parameter
@@ -137,14 +137,15 @@ class DeviceParameterComponent(DeviceParameterComponentBase):
 
     def _update_device_enable_button(self):
         on_off = self.device_on_off_parameter
-        self.device_enable_button.color = "DefaultButton.On" if (liveobj_valid(on_off) and on_off.value) else "DefaultButton.Off"
+        self.device_enable_button.color = "DefaultButton.On" if (liveobj_valid(on_off)) and (on_off.value) else "DefaultButton.Off"
 
     def _update_parameter_enable_controls(self):
-        for control, parameter_info in zip_longest(self.parameter_enable_controls, self._parameter_provider.parameters[None[:self.controls.control_count]]):
-            control.value = ON_VALUE if (parameter_info and parameter_info.parameter) else OFF_VALUE
+        for (control, parameter_info) in zip_longest(self.parameter_enable_controls, self._parameter_provider.parameters[:self.controls.control_count]):
+            if parameter_info:
+                control.value = ON_VALUE if parameter_info.parameter else OFF_VALUE
 
     def _update_parameter_name_or_value_displays(self):
-        for display, control, name_data_source, value_data_source in zip(self.parameter_name_or_value_displays, self.touch_controls, self._physical_display_parameter_name_data_sources, self._physical_display_parameter_value_data_sources):
+        for (display, control, name_data_source, value_data_source) in zip(self.parameter_name_or_value_displays, self.touch_controls, self._physical_display_parameter_name_data_sources, self._physical_display_parameter_value_data_sources):
             display.set_data_sources([
              value_data_source if control.is_pressed else name_data_source])
 

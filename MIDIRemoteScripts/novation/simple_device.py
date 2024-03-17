@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\novation\simple_device.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6020 bytes
@@ -139,7 +139,7 @@ class SimpleDeviceParameterComponent(Component):
             self._empty_control_slots.register_slot(control, nop, "value")
 
     def _connect_parameters(self):
-        for control, parameter in zip_longest(self._parameter_controls or [], self.selected_bank):
+        for (control, parameter) in zip_longest(self._parameter_controls or [], self.selected_bank):
             if liveobj_valid(control):
                 if liveobj_valid(parameter):
                     control.connect_to(parameter)

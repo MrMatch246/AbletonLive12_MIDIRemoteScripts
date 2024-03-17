@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\SessionZoomingComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 14612 bytes
@@ -130,19 +130,21 @@ class SessionZoomingComponent(CompoundComponent):
                                             if scene in range(len(scenes)):
                                                 if slots_registry[scene] == None:
                                                     slots_registry[scene] = scenes[scene].clip_slots
-                                            slot = slots_registry[scene][track] if len(slots_registry[scene]) > track else None
-                                            if slot != None and slot.has_clip and slot.clip.is_playing:
-                                                value_to_send = self._playing_value
-                                                playing = True
-                                                break
+                                                slot = slots_registry[scene][track] if len(slots_registry[scene]) > track else None
+                                                if slot != None:
+                                                    if slot.has_clip:
+                                                        if slot.clip.is_playing:
+                                                            value_to_send = self._playing_value
+                                                            playing = True
+                                                            break
 
                                     if playing:
                                         break
 
                         if in_range(value_to_send, 0, 128):
                             self._buttons.send_value(x, y, value_to_send)
-                    else:
-                        self._buttons.set_light(x, y, value_to_send)
+                        else:
+                            self._buttons.set_light(x, y, value_to_send)
 
     def _update_scene_bank_buttens(self):
         if self._scene_bank_buttons != None:
@@ -157,24 +159,22 @@ class SessionZoomingComponent(CompoundComponent):
 
     @subject_slot("value")
     def _on_matrix_value(self, value, x, y, is_momentary):
-        if self.is_enabled():
-            if not (value != 0 or is_momentary):
-                track_offset = x * self._session.width()
-                scene_offset = (y + self._scene_bank_index * self._buttons.height()) * self._session.height()
-                if track_offset in range(len(self._session.tracks_to_use())):
-                    if scene_offset in range(len(self.song().scenes)):
-                        self._session.set_offsets(track_offset, scene_offset)
+        if not (self.is_enabled() and value != 0 or is_momentary):
+            track_offset = x * self._session.width()
+            scene_offset = (y + self._scene_bank_index * self._buttons.height()) * self._session.height()
+            if track_offset in range(len(self._session.tracks_to_use())):
+                if scene_offset in range(len(self.song().scenes)):
+                    self._session.set_offsets(track_offset, scene_offset)
 
     @subject_slot_group("value")
     def _on_scene_bank_value(self, value, sender):
         if self.is_enabled():
-            if self._buttons:
-                if not (value != 0 or sender.is_momentary()):
-                    button_offset = list(self._scene_bank_buttons).index(sender)
-                    scene_offset = button_offset * self._buttons.height() * self._session.height()
-                    if scene_offset in range(len(self.song().scenes)):
-                        self._scene_bank_index = button_offset
-                        self.update()
+            if not (self._buttons and value != 0 or sender.is_momentary()):
+                button_offset = list(self._scene_bank_buttons).index(sender)
+                scene_offset = button_offset * self._buttons.height() * self._session.height()
+                if scene_offset in range(len(self.song().scenes)):
+                    self._scene_bank_index = button_offset
+                    self.update()
 
     def _can_scroll_up(self):
         return self._session._can_bank_up()

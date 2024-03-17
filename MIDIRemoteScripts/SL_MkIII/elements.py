@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\SL_MkIII\elements.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 14307 bytes
@@ -132,7 +132,7 @@ class Elements:
                                                                                                                                                                                                          112))]
         self.pads = ButtonMatrixElement(rows=pads_raw, name="Pads")
         self.pads_quadratic = ButtonMatrixElement(rows=[
-         pads_raw[0][4[:None]], pads_raw[1][4[:None]], pads_raw[0][None[:4]], pads_raw[1][None[:4]]],
+         pads_raw[0][4:], pads_raw[1][4:], pads_raw[0][:4], pads_raw[1][:4]],
           name="Pads_Quadratic")
         self.pads_flattened = ButtonMatrixElement(rows=[
          pads_raw[0] + pads_raw[1]],
@@ -209,18 +209,18 @@ class Elements:
          self.text_display_line_2,
          self.text_display_line_3,
          self.text_display_line_5]
-        color_field_line_0_raw, self.color_field_line_0 = create_display_color_element_line(0)
-        color_field_line_1_raw, _ = create_display_color_element_line(1)
-        self.color_field_line_2_raw, self.color_field_line_2 = create_display_color_element_line(2)
+        (color_field_line_0_raw, self.color_field_line_0) = create_display_color_element_line(0)
+        (color_field_line_1_raw, _) = create_display_color_element_line(1)
+        (self.color_field_line_2_raw, self.color_field_line_2) = create_display_color_element_line(2)
         self.color_field_lines_0_1_flattened = ButtonMatrixElement(rows=[
          color_field_line_0_raw + color_field_line_1_raw],
           name="Color_Field_Lines_0_1_Flattened")
         self.color_field_line_2_with_shift = ButtonMatrixElement(rows=[
          [with_shift(color_field) for color_field in self.color_field_line_2_raw]],
           name="Color_Field_Line_2_With_Shift")
-        selection_field_line_0_raw, _ = create_selection_field_line(0)
-        self.selection_field_line_1_raw, self.selection_field_line_1 = create_selection_field_line(1)
-        self.selection_field_line_2_raw, self.selection_field_line_2 = create_selection_field_line(2)
+        (selection_field_line_0_raw, _) = create_selection_field_line(0)
+        (self.selection_field_line_1_raw, self.selection_field_line_1) = create_selection_field_line(1)
+        (self.selection_field_line_2_raw, self.selection_field_line_2) = create_selection_field_line(2)
         self.selection_field_lines_0_1_flattened = ButtonMatrixElement(rows=[
          selection_field_line_0_raw + self.selection_field_line_1_raw],
           name="Selection_Field_Lines_0_1_Flattened")

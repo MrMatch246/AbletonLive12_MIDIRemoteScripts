@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\mixer_control_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 12593 bytes
@@ -24,25 +24,25 @@ from .item_lister import IconItemSlot
 from .real_time_channel import RealTimeDataComponent
 MIXER_SECTIONS = ('Volumes', 'Pans')
 SEND_SECTIONS = [
- 'A Sends', 
- 'B Sends', 
- 'C Sends', 
- 'D Sends', 
- 'E Sends', 
- 'F Sends', 
- 'G Sends', 
- 'H Sends', 
- 'I Sends', 
- 'J Sends', 
- 'K Sends', 
- 'L Sends']
+ "A Sends",
+ "B Sends",
+ "C Sends",
+ "D Sends",
+ "E Sends",
+ "F Sends",
+ "G Sends",
+ "H Sends",
+ "I Sends",
+ "J Sends",
+ "K Sends",
+ "L Sends"]
 SEND_LIST_LENGTH = 5
 SEND_MODE_NAMES = [
- 'send_slot_one', 
- 'send_slot_two', 
- 'send_slot_three', 
- 'send_slot_four', 
- 'send_slot_five']
+ "send_slot_one",
+ "send_slot_two",
+ "send_slot_three",
+ "send_slot_four",
+ "send_slot_five"]
 
 class MixerSectionDescription(NamedTuple):
     view = None
@@ -52,11 +52,13 @@ class MixerSectionDescription(NamedTuple):
 def assign_parameters(controls, parameters):
     for control, parameter in zip_longest(controls, parameters):
         if control:
-            if not liveobj_valid(parameter) or isinstance(parameter.canonical_parent, Live.MixerDevice.MixerDevice):
-                control.mapped_parameter = parameter
-            else:
-                track = find_parent_track(parameter)
-                control.mapped_parameter = parameter if liveobj_valid(track) and not track.is_frozen else None
+            if liveobj_valid(parameter):
+                if isinstance(parameter.canonical_parent, Live.MixerDevice.MixerDevice):
+                    control.mapped_parameter = parameter
+                else:
+                    track = find_parent_track(parameter)
+        if liveobj_valid(track):
+            control.mapped_parameter = parameter if (not track.is_frozen) else None
 
 
 class MixerControlComponent(ModesComponent):
@@ -97,12 +99,10 @@ class MixerControlComponent(ModesComponent):
           (view_model.volumeControlListView),
           (lambda mixer: mixer.volume),
           additional_mode_contents=(self.real_time_meter_handlers))
-        self._add_mode("panning", view_model.panControlListView, lambda mixer:         if is_set_to_split_stereo(mixer):
-ConstantParameter(original_parameter=(mixer.panning)) # Avoid dead code: mixer.panning)
+        self._add_mode("panning", view_model.panControlListView, lambda mixer: ConstantParameter(original_parameter=(mixer.panning)) if is_set_to_split_stereo(mixer) else mixer.panning)
 
         def add_send_mode(index):
-            self._add_mode(SEND_MODE_NAMES[index], view_model.sendControlListView, lambda mixer:             if len(mixer.sends) > self._send_offset + index:
-mixer.sends[self._send_offset + index] # Avoid dead code: None)
+            self._add_mode(SEND_MODE_NAMES[index], view_model.sendControlListView, lambda mixer: mixer.sends[self._send_offset + index] if len(mixer.sends) > self._send_offset + index else None)
 
         for i in range(SEND_LIST_LENGTH):
             add_send_mode(i)
@@ -184,16 +184,15 @@ mixer.sends[self._send_offset + index] # Avoid dead code: None)
             index = SEND_MODE_NAMES.index(self.selected_mode)
             if index + self._send_offset >= number_sends and number_sends > 0:
                 self.selected_mode = SEND_MODE_NAMES[number_sends % SEND_LIST_LENGTH - 1]
-            else:
-                if index == 0:
-                    if number_sends == 0:
-                        self.selected_mode = "panning"
+            elif index == 0:
+                if number_sends == 0:
+                    self.selected_mode = "panning"
 
     def _update_mixer_sections(self):
         if self.is_enabled():
             position = max(self._send_offset, 0)
             pos_range = min(self.number_sends - position, SEND_LIST_LENGTH)
-            mixer_section_names = list(MIXER_SECTIONS) + SEND_SECTIONS[position[:position + pos_range]]
+            mixer_section_names = list(MIXER_SECTIONS) + SEND_SECTIONS[position:position + pos_range]
             self._mixer_sections = [IconItemSlot(name=name) for name in mixer_section_names]
             if self.number_sends > SEND_LIST_LENGTH:
                 self._mixer_sections.extend([
@@ -222,7 +221,7 @@ mixer.sends[self._send_offset + index] # Avoid dead code: None)
 
     def _update_realtime_ids(self):
         mixables = self._track_provider.items
-        for handler, mixable in zip(self.real_time_meter_handlers, mixables):
+        for (handler, mixable) in zip(self.real_time_meter_handlers, mixables):
             handler.set_data(mixable.mixer_device if liveobj_valid(mixable) else None)
 
     def _get_parameter_for_tracks(self, parameter_getter):

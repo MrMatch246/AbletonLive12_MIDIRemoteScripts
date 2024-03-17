@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\components\item_lister.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9325 bytes
@@ -113,7 +113,7 @@ class ItemListerComponentBase(Component):
         return self.item_offset > 0
 
     def can_scroll_right(self):
-        items = self._item_provider.items[self.item_offset[:None]]
+        items = self._item_provider.items[self.item_offset:]
         return len(items) > self._num_visible_items
 
     def scroll_left(self):
@@ -137,11 +137,11 @@ class ItemListerComponentBase(Component):
         self.notify_items()
 
     def _create_slots(self):
-        items = self._item_provider.items[self.item_offset[:None]]
+        items = self._item_provider.items[self.item_offset:]
         num_slots = min(self._num_visible_items, len(items))
         new_items = []
         if num_slots > 0:
-            new_items = [(self._create_slot)(index, *item) for index, item in enumerate(items[None[:num_slots]]) if liveobj_valid(item[0])]
+            new_items = [(self._create_slot)(index, *item) for index, item in enumerate(items[:num_slots]) if liveobj_valid(item[0])]
         return new_items
 
     def _create_slot(self, index, item, nesting_level):
@@ -169,7 +169,7 @@ class ScrollOverlayComponent(Component):
 
     def __init__(self, *a, **k):
         (super(ScrollOverlayComponent, self).__init__)(*a, **k)
-        self._scroll_left_component, self._scroll_right_component = self.add_children(ScrollComponent(is_enabled=False), ScrollComponent(is_enabled=False))
+        (self._scroll_left_component, self._scroll_right_component) = self.add_children(ScrollComponent(is_enabled=False), ScrollComponent(is_enabled=False))
         self._ScrollOverlayComponent__on_scroll_left.subject = self._scroll_left_component
         self._ScrollOverlayComponent__on_scroll_right.subject = self._scroll_right_component
 
@@ -243,7 +243,7 @@ class ItemListerComponent(ItemListerComponentBase):
 
     def _update_button_colors(self):
         selected_item = self._item_provider.selected_item
-        for button, item in zip(self.select_buttons, self.items):
+        for (button, item) in zip(self.select_buttons, self.items):
             button.color = self._color_for_button(button.index, self._items_equal(item, selected_item))
 
     def _color_for_button(self, button_index, is_selected):

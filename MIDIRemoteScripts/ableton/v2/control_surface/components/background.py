@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\components\background.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2380 bytes
@@ -21,8 +21,8 @@ class BackgroundComponent(Component):
 
     def __getattr__(self, name):
         if len(name) > 4:
-            if name[None[:4]] == "set_":
-                return partial(self._clear_control, name[4[:None]])
+            if name[:4] == "set_":
+                return partial(self._clear_control, name[4:])
         raise AttributeError(name)
 
     def _clear_control(self, name, control):
@@ -30,7 +30,7 @@ class BackgroundComponent(Component):
         if slot:
             del self._control_slots[name]
             self.disconnect_disconnectable(slot)
-        elif control:
+        if control:
             self._reset_control(control)
             self._control_map[name] = control
             if self._add_nop_listeners:

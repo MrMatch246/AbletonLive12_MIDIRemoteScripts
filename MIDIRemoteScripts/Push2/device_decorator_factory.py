@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\device_decorator_factory.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3611 bytes
@@ -44,42 +44,42 @@ from .wavetable import WavetableDeviceDecorator
 
 class DeviceDecoratorFactory(DeviceDecoratorFactoryBase):
     DECORATOR_CLASSES = {
-     'Amp': AmpDeviceDecorator, 
-     'AutoFilter': AutoFilterDeviceDecorator, 
-     'BeatRepeat': BeatRepeatDeviceDecorator, 
-     'Chorus2': Chorus2DeviceDecorator, 
-     'Collision': CollisionDeviceDecorator, 
-     'Compressor2': CompressorDeviceDecorator, 
-     'Corpus': CorpusDeviceDecorator, 
-     'Delay': DelayDeviceDecorator, 
-     'Drift': DriftDeviceDecorator, 
-     'DrumBuss': DrumBussDeviceDecorator, 
-     'DrumCell': DrumCellDeviceDecorator, 
-     'Echo': EchoDeviceDecorator, 
-     'Eq8': Eq8DeviceDecorator, 
-     'FilterDelay': FilterDelayDeviceDecorator, 
-     'FilterEQ3': EqThreeDeviceDecorator, 
-     'GrainDelay': GrainDelayDeviceDecorator, 
-     'Hybrid': HybridReverbDeviceDecorator, 
-     'InstrumentVector': WavetableDeviceDecorator, 
-     'InstrumentMeld': MeldDeviceDecorator, 
-     'MidiCcControl': CcControlDeviceDecorator, 
-     'MultiSampler': SamplerDeviceDecorator, 
-     'OriginalSimpler': SimplerDeviceDecorator, 
-     'Operator': OperatorDeviceDecorator, 
-     'Pedal': PedalDeviceDecorator, 
-     'PhaserNew': PhaserNewDeviceDecorator, 
-     'Redux2': Redux2DeviceDecorator, 
-     'Resonator': ResonatorDeviceDecorator, 
-     'Reverb': ReverbDeviceDecorator, 
-     'Roar': RoarDeviceDecorator, 
-     'Saturator': SaturatorDeviceDecorator, 
-     'Spectral': SpectralDeviceDecorator, 
-     'StereoGain': UtilityDeviceDecorator, 
-     'StringStudio': TensionDeviceDecorator, 
-     'Shifter': ShifterDeviceDecorator, 
-     'Transmute': TransmuteDeviceDecorator, 
-     'UltraAnalog': AnalogDeviceDecorator, 
-     'Vinyl': VinylDistortionDecorator}
+      'Amp': AmpDeviceDecorator,
+      'AutoFilter': AutoFilterDeviceDecorator,
+      'BeatRepeat': BeatRepeatDeviceDecorator,
+      'Chorus2': Chorus2DeviceDecorator,
+      'Collision': CollisionDeviceDecorator,
+      'Compressor2': CompressorDeviceDecorator,
+      'Corpus': CorpusDeviceDecorator,
+      'Delay': DelayDeviceDecorator,
+      'Drift': DriftDeviceDecorator,
+      'DrumBuss': DrumBussDeviceDecorator,
+      'DrumCell': DrumCellDeviceDecorator,
+      'Echo': EchoDeviceDecorator,
+      'Eq8': Eq8DeviceDecorator,
+      'FilterDelay': FilterDelayDeviceDecorator,
+      'FilterEQ3': EqThreeDeviceDecorator,
+      'GrainDelay': GrainDelayDeviceDecorator,
+      'Hybrid': HybridReverbDeviceDecorator,
+      'InstrumentVector': WavetableDeviceDecorator,
+      'InstrumentMeld': MeldDeviceDecorator,
+      'MidiCcControl': CcControlDeviceDecorator,
+      'MultiSampler': SamplerDeviceDecorator,
+      'OriginalSimpler': SimplerDeviceDecorator,
+      'Operator': OperatorDeviceDecorator,
+      'Pedal': PedalDeviceDecorator,
+      'PhaserNew': PhaserNewDeviceDecorator,
+      'Redux2': Redux2DeviceDecorator,
+      'Resonator': ResonatorDeviceDecorator,
+      'Reverb': ReverbDeviceDecorator,
+      'Roar': RoarDeviceDecorator,
+      'Saturator': SaturatorDeviceDecorator,
+      'Spectral': SpectralDeviceDecorator,
+      'StereoGain': UtilityDeviceDecorator,
+      'StringStudio': TensionDeviceDecorator,
+      'Shifter': ShifterDeviceDecorator,
+      'Transmute': TransmuteDeviceDecorator,
+      'UltraAnalog': AnalogDeviceDecorator,
+      'Vinyl': VinylDistortionDecorator}
 
 # okay decompiling ./MIDIRemoteScripts/Push2/device_decorator_factory.pyc

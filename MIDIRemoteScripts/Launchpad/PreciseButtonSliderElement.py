@@ -1,14 +1,14 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad\PreciseButtonSliderElement.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7493 bytes
 from __future__ import absolute_import, division, print_function, unicode_literals
 from builtins import range
 from past.utils import old_div
-import _Framework.ButtonSliderElement as ButtonSliderElement
+from _Framework.ButtonSliderElement import ButtonSliderElement as ButtonSliderElement
 from _Framework.InputControlElement import *
 SLIDER_MODE_SINGLE = 0
 SLIDER_MODE_VOLUME = 1
@@ -38,14 +38,13 @@ class PreciseButtonSliderElement(ButtonSliderElement):
             if value != self._last_sent_value:
                 if self._mode == SLIDER_MODE_SINGLE:
                     ButtonSliderElement.send_value(self, value)
+                elif self._mode == SLIDER_MODE_VOLUME:
+                    self._send_value_volume(value)
+                elif self._mode == SLIDER_MODE_PAN:
+                    self._send_value_pan(value)
                 else:
-                    if self._mode == SLIDER_MODE_VOLUME:
-                        self._send_value_volume(value)
-                    else:
-                        if self._mode == SLIDER_MODE_PAN:
-                            self._send_value_pan(value)
-                        else:
-                            self._last_sent_value = value
+                    pass
+                self._last_sent_value = value
 
     def connect_to(self, parameter):
         ButtonSliderElement.connect_to(self, parameter)
@@ -91,17 +90,16 @@ class PreciseButtonSliderElement(ButtonSliderElement):
                 if self._value_map[index] >= 0:
                     break
 
-        else:
-            if normalised_value > 0.0:
-                for index in range(len(self._buttons)):
-                    r_index = len(self._buttons) - 1 - index
-                    button_bits[r_index] = self._value_map[r_index] <= normalised_value
-                    if self._value_map[r_index] <= 0:
-                        break
+        elif normalised_value > 0.0:
+            for index in range(len(self._buttons)):
+                r_index = len(self._buttons) - 1 - index
+                button_bits[r_index] = self._value_map[r_index] <= normalised_value
+                if self._value_map[r_index] <= 0:
+                    break
 
-            else:
-                for index in range(len(self._buttons)):
-                    button_bits[index] = self._value_map[index] == normalised_value
+        else:
+            for index in range(len(self._buttons)):
+                button_bits[index] = self._value_map[index] == normalised_value
 
         self._send_mask(tuple(button_bits))
 
@@ -114,12 +112,11 @@ class PreciseButtonSliderElement(ButtonSliderElement):
 
     def _button_value(self, value, sender):
         self._last_sent_value = -1
-        if not value != 0:
-            index_of_sender = sender.is_momentary() or list(self._buttons).index(sender)
+        if not (value != 0 or sender.is_momentary()):
+            index_of_sender = list(self._buttons).index(sender)
             if self._parameter_to_map_to != None:
                 if self._parameter_to_map_to.is_enabled:
                     self._parameter_to_map_to.value = self._value_map[index_of_sender]
-        else:
             self.notify_value(value)
 
     def _on_parameter_changed(self):

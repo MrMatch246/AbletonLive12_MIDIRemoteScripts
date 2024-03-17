@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_Mini_MK3\launchpad_mini_mk3.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5622 bytes
@@ -50,7 +50,7 @@ class Launchpad_Mini_MK3(NovationBase):
           is_enabled=False,
           support_momentary_mode_cycling=False,
           layer=Layer(cycle_mode_button=(self._elements.scene_launch_buttons_raw[7])))
-        bottom_row = self._elements.clip_launch_matrix.submatrix[(None[:None], 7[:8])]
+        bottom_row = self._elements.clip_launch_matrix.submatrix[:, 7:8]
         self._stop_solo_mute_modes.add_mode("launch",
           None, cycle_mode_button_color="Mode.Launch.On")
         self._stop_solo_mute_modes.add_mode("stop",

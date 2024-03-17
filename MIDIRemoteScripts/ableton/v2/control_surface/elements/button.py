@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\elements\button.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4323 bytes
@@ -72,14 +72,12 @@ class ButtonElement(InputControlElement, ButtonElementMixin):
     def set_light(self, value):
         if old_hasattr(value, "draw"):
             value.draw(self)
+        elif type(value) in (int, long) and in_range(value, 0, 128):
+            self.send_value(value)
+        elif isinstance(value, bool):
+            self._set_skin_light("DefaultButton.On" if value else "DefaultButton.Off")
         else:
-            if type(value) in (int, long) and in_range(value, 0, 128):
-                self.send_value(value)
-            else:
-                if isinstance(value, bool):
-                    self._set_skin_light("DefaultButton.On" if value else "DefaultButton.Off")
-                else:
-                    self._set_skin_light(value)
+            self._set_skin_light(value)
 
     def _set_skin_light(self, value):
         color = None

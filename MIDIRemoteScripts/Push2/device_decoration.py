@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\device_decoration.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 17096 bytes
@@ -89,7 +89,7 @@ class WaveformNavigationParameter(InternalParameter):
         if self._waveform_navigation is not None:
             self.unregister_disconnectable(self._waveform_navigation)
             self._waveform_navigation.disconnect()
-        elif liveobj_valid(sample):
+        if liveobj_valid(sample):
             self._waveform_navigation = self.register_disconnectable(SimplerWaveformNavigation(simpler=(self._simpler)))
         else:
             self._waveform_navigation = None
@@ -156,7 +156,7 @@ class SimplerPositions(EventObject):
         if liveobj_valid(sample):
             if sample.warping:
                 return sample.sample_to_beat_time(sample_time)
-        return sample_time
+            return sample_time
 
     @listens("start_marker")
     def __on_start_marker_changed(self):
@@ -253,7 +253,8 @@ class SamplerDeviceDecorator(EventObject, LiveObjectDecorator):
 
     @property
     def options(self):
-        return (self.filter_slope_option,)
+        return (
+         self.filter_slope_option,)
 
     @listens("parameters")
     def __on_parameters_changed(self):
@@ -270,7 +271,8 @@ class PedalDeviceDecorator(LiveObjectDecorator):
 
     @property
     def options(self):
-        return (self.mid_freq_option,)
+        return (
+         self.mid_freq_option,)
 
 
 class DrumBussDeviceDecorator(LiveObjectDecorator):
@@ -283,7 +285,8 @@ class DrumBussDeviceDecorator(LiveObjectDecorator):
 
     @property
     def options(self):
-        return (self.compressor_option,)
+        return (
+         self.compressor_option,)
 
 
 class ModMatrixParameter(InternalParameter):
@@ -359,7 +362,8 @@ class UtilityDeviceDecorator(LiveObjectDecorator, EventObject):
 
     @property
     def options(self):
-        return (self.mono_option, self.bass_mono_option, self.dc_filter_option)
+        return (
+         self.mono_option, self.bass_mono_option, self.dc_filter_option)
 
     @listens("parameters")
     def __on_parameters_changed(self):
@@ -381,7 +385,7 @@ class SimplerDecoratedPropertiesCopier(object):
         self.copy_properties({(self.ADDITIONAL_PROPERTIES[0]): None, (self.ADDITIONAL_PROPERTIES[1]): None})
 
     def copy_properties(self, properties):
-        for prop, getter in properties.items():
+        for (prop, getter) in properties.items():
             if getter:
                 self._nested_properties[prop] = getter(self._decorated_object)
             else:

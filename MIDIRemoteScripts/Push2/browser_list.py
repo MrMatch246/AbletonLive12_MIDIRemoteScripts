@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\browser_list.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3854 bytes
@@ -55,24 +55,22 @@ class BrowserList(EventObject, UniqueIdMixin):
     @listenable_property
     def items(self):
         if self.limit > 0:
-            return self._items[None[:self.limit]]
-        else:
-            return self._access_all or self._items[None[:self.LAZY_ACCESS_COUNT]]
+            return self._items[:self.limit]
+        if not self._access_all:
+            return self._items[:self.LAZY_ACCESS_COUNT]
         return self._items
 
     def _update_items(self):
         if isinstance(self._item_iterator, Live.Browser.BrowserItemIterator):
             if self.limit > 0 and len(self._items) < self.limit:
                 next_slice = islice(self._item_iterator, self.limit)
+            elif not self._access_all or len(self._items) < self.LAZY_ACCESS_COUNT:
+                next_slice = islice(self._item_iterator, self.LAZY_ACCESS_COUNT - len(self._items))
             else:
-                if (self._access_all or len(self._items)) < self.LAZY_ACCESS_COUNT:
-                    next_slice = islice(self._item_iterator, self.LAZY_ACCESS_COUNT - len(self._items))
-                else:
-                    next_slice = self._item_iterator
+                next_slice = self._item_iterator
             self._items.extend(list(map(self._item_wrapper, next_slice)))
-        else:
-            if len(self._items) < len(self._item_iterator):
-                self._items = list(map(self._item_wrapper, self._item_iterator))
+        elif len(self._items) < len(self._item_iterator):
+            self._items = list(map(self._item_wrapper, self._item_iterator))
 
     @property
     def selected_item(self):

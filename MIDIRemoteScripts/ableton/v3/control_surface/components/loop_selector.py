@@ -1,441 +1,10 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\loop_selector.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 8035 bytes
-
--- Stacks of completed symbols:
-START ::= |- stmts . 
-_come_froms ::= \e__come_froms . COME_FROM
-_come_froms ::= \e__come_froms . COME_FROM_LOOP
-_ifstmts_jump ::= \e_c_stmts_opt . COME_FROM
-_ifstmts_jump ::= \e_c_stmts_opt . ELSE
-_ifstmts_jump ::= \e_c_stmts_opt . JUMP_ABSOLUTE JUMP_FORWARD \e__come_froms
-_ifstmts_jump ::= \e_c_stmts_opt . JUMP_ABSOLUTE JUMP_FORWARD _come_froms
-_ifstmts_jump ::= \e_c_stmts_opt . come_froms
-_ifstmts_jump ::= c_stmts_opt . COME_FROM
-_ifstmts_jump ::= c_stmts_opt . ELSE
-_ifstmts_jump ::= c_stmts_opt . JUMP_ABSOLUTE JUMP_FORWARD \e__come_froms
-_ifstmts_jump ::= c_stmts_opt . JUMP_ABSOLUTE JUMP_FORWARD _come_froms
-_ifstmts_jump ::= c_stmts_opt . come_froms
-_ifstmts_jumpl ::= c_stmts . JUMP_BACK
-_stmts ::= _stmts . stmt
-_stmts ::= _stmts stmt . 
-_stmts ::= stmt . 
-and ::= expr . JUMP_IF_FALSE_OR_POP expr \e_come_from_opt
-and ::= expr . JUMP_IF_FALSE_OR_POP expr come_from_opt
-and ::= expr . jifop_come_from expr
-and ::= expr . jmp_false expr
-and ::= expr . jmp_false expr COME_FROM
-and ::= expr . jmp_false expr jmp_false
-and ::= expr JUMP_IF_FALSE_OR_POP . expr \e_come_from_opt
-and ::= expr JUMP_IF_FALSE_OR_POP . expr come_from_opt
-and ::= expr JUMP_IF_FALSE_OR_POP expr . come_from_opt
-and ::= expr JUMP_IF_FALSE_OR_POP expr \e_come_from_opt . 
-and ::= expr JUMP_IF_FALSE_OR_POP expr come_from_opt . 
-and ::= expr jifop_come_from . expr
-and ::= expr jifop_come_from expr . 
-and ::= expr jmp_false . expr
-and ::= expr jmp_false . expr COME_FROM
-and ::= expr jmp_false . expr jmp_false
-and ::= expr jmp_false expr . 
-and ::= expr jmp_false expr . COME_FROM
-and ::= expr jmp_false expr . jmp_false
-and_not ::= expr . jmp_false expr POP_JUMP_IF_TRUE
-and_not ::= expr jmp_false . expr POP_JUMP_IF_TRUE
-and_not ::= expr jmp_false expr . POP_JUMP_IF_TRUE
-assert2 ::= expr . jmp_true LOAD_GLOBAL expr CALL_FUNCTION_1 RAISE_VARARGS_1
-assign ::= expr . DUP_TOP designList
-assign ::= expr . store
-assign ::= expr store . 
-assign2 ::= expr . expr ROT_TWO store store
-assign2 ::= expr expr . ROT_TWO store store
-assign3 ::= expr . expr expr ROT_THREE ROT_TWO store store store
-assign3 ::= expr expr . expr ROT_THREE ROT_TWO store store store
-assign3 ::= expr expr expr . ROT_THREE ROT_TWO store store store
-async_for_stmt ::= setup_loop . expr GET_AITER LOAD_CONST YIELD_FROM SETUP_EXCEPT GET_ANEXT LOAD_CONST YIELD_FROM store POP_BLOCK JUMP_FORWARD COME_FROM_EXCEPT DUP_TOP LOAD_GLOBAL COMPARE_OP POP_JUMP_IF_FALSE POP_TOP POP_TOP POP_TOP POP_EXCEPT POP_BLOCK JUMP_ABSOLUTE END_FINALLY COME_FROM for_block POP_BLOCK COME_FROM_LOOP
-async_for_stmt ::= setup_loop . expr GET_AITER SETUP_EXCEPT GET_ANEXT LOAD_CONST YIELD_FROM store POP_BLOCK JUMP_FORWARD COME_FROM_EXCEPT DUP_TOP LOAD_GLOBAL COMPARE_OP POP_JUMP_IF_TRUE END_FINALLY COME_FROM for_block COME_FROM POP_TOP POP_TOP POP_TOP POP_EXCEPT POP_TOP POP_BLOCK COME_FROM_LOOP
-async_for_stmt ::= setup_loop expr . GET_AITER LOAD_CONST YIELD_FROM SETUP_EXCEPT GET_ANEXT LOAD_CONST YIELD_FROM store POP_BLOCK JUMP_FORWARD COME_FROM_EXCEPT DUP_TOP LOAD_GLOBAL COMPARE_OP POP_JUMP_IF_FALSE POP_TOP POP_TOP POP_TOP POP_EXCEPT POP_BLOCK JUMP_ABSOLUTE END_FINALLY COME_FROM for_block POP_BLOCK COME_FROM_LOOP
-async_for_stmt ::= setup_loop expr . GET_AITER SETUP_EXCEPT GET_ANEXT LOAD_CONST YIELD_FROM store POP_BLOCK JUMP_FORWARD COME_FROM_EXCEPT DUP_TOP LOAD_GLOBAL COMPARE_OP POP_JUMP_IF_TRUE END_FINALLY COME_FROM for_block COME_FROM POP_TOP POP_TOP POP_TOP POP_EXCEPT POP_TOP POP_BLOCK COME_FROM_LOOP
-async_for_stmt37 ::= setup_loop . expr GET_AITER \e__come_froms SETUP_EXCEPT GET_ANEXT LOAD_CONST YIELD_FROM store POP_BLOCK JUMP_BACK COME_FROM_EXCEPT DUP_TOP LOAD_GLOBAL COMPARE_OP POP_JUMP_IF_TRUE END_FINALLY for_block COME_FROM POP_TOP POP_TOP POP_TOP POP_EXCEPT POP_TOP POP_BLOCK COME_FROM_LOOP
-async_for_stmt37 ::= setup_loop . expr GET_AITER _come_froms SETUP_EXCEPT GET_ANEXT LOAD_CONST YIELD_FROM store POP_BLOCK JUMP_BACK COME_FROM_EXCEPT DUP_TOP LOAD_GLOBAL COMPARE_OP POP_JUMP_IF_TRUE END_FINALLY for_block COME_FROM POP_TOP POP_TOP POP_TOP POP_EXCEPT POP_TOP POP_BLOCK COME_FROM_LOOP
-async_for_stmt37 ::= setup_loop expr . GET_AITER \e__come_froms SETUP_EXCEPT GET_ANEXT LOAD_CONST YIELD_FROM store POP_BLOCK JUMP_BACK COME_FROM_EXCEPT DUP_TOP LOAD_GLOBAL COMPARE_OP POP_JUMP_IF_TRUE END_FINALLY for_block COME_FROM POP_TOP POP_TOP POP_TOP POP_EXCEPT POP_TOP POP_BLOCK COME_FROM_LOOP
-async_for_stmt37 ::= setup_loop expr . GET_AITER _come_froms SETUP_EXCEPT GET_ANEXT LOAD_CONST YIELD_FROM store POP_BLOCK JUMP_BACK COME_FROM_EXCEPT DUP_TOP LOAD_GLOBAL COMPARE_OP POP_JUMP_IF_TRUE END_FINALLY for_block COME_FROM POP_TOP POP_TOP POP_TOP POP_EXCEPT POP_TOP POP_BLOCK COME_FROM_LOOP
-async_forelse_stmt ::= setup_loop . expr GET_AITER \e__come_froms SETUP_EXCEPT GET_ANEXT LOAD_CONST YIELD_FROM store POP_BLOCK JUMP_FORWARD COME_FROM_EXCEPT DUP_TOP LOAD_GLOBAL COMPARE_OP POP_JUMP_IF_TRUE END_FINALLY COME_FROM for_block COME_FROM POP_TOP POP_TOP POP_TOP POP_EXCEPT POP_TOP POP_BLOCK else_suite COME_FROM_LOOP
-async_forelse_stmt ::= setup_loop . expr GET_AITER _come_froms SETUP_EXCEPT GET_ANEXT LOAD_CONST YIELD_FROM store POP_BLOCK JUMP_FORWARD COME_FROM_EXCEPT DUP_TOP LOAD_GLOBAL COMPARE_OP POP_JUMP_IF_TRUE END_FINALLY COME_FROM for_block COME_FROM POP_TOP POP_TOP POP_TOP POP_EXCEPT POP_TOP POP_BLOCK else_suite COME_FROM_LOOP
-async_forelse_stmt ::= setup_loop expr . GET_AITER \e__come_froms SETUP_EXCEPT GET_ANEXT LOAD_CONST YIELD_FROM store POP_BLOCK JUMP_FORWARD COME_FROM_EXCEPT DUP_TOP LOAD_GLOBAL COMPARE_OP POP_JUMP_IF_TRUE END_FINALLY COME_FROM for_block COME_FROM POP_TOP POP_TOP POP_TOP POP_EXCEPT POP_TOP POP_BLOCK else_suite COME_FROM_LOOP
-async_forelse_stmt ::= setup_loop expr . GET_AITER _come_froms SETUP_EXCEPT GET_ANEXT LOAD_CONST YIELD_FROM store POP_BLOCK JUMP_FORWARD COME_FROM_EXCEPT DUP_TOP LOAD_GLOBAL COMPARE_OP POP_JUMP_IF_TRUE END_FINALLY COME_FROM for_block COME_FROM POP_TOP POP_TOP POP_TOP POP_EXCEPT POP_TOP POP_BLOCK else_suite COME_FROM_LOOP
-attribute ::= expr . LOAD_ATTR
-attribute ::= expr LOAD_ATTR . 
-attribute37 ::= expr . LOAD_METHOD
-attribute37 ::= expr LOAD_METHOD . 
-aug_assign1 ::= expr . expr inplace_op ROT_THREE STORE_SUBSCR
-aug_assign1 ::= expr . expr inplace_op store
-aug_assign1 ::= expr expr . inplace_op ROT_THREE STORE_SUBSCR
-aug_assign1 ::= expr expr . inplace_op store
-aug_assign2 ::= expr . DUP_TOP LOAD_ATTR expr inplace_op ROT_TWO STORE_ATTR
-await_expr ::= expr . GET_AWAITABLE LOAD_CONST YIELD_FROM
-bin_op ::= expr . expr binary_operator
-bin_op ::= expr expr . binary_operator
-bin_op ::= expr expr binary_operator . 
-binary_operator ::= BINARY_TRUE_DIVIDE . 
-build_map_unpack_with_call ::= expr . expr BUILD_MAP_UNPACK_WITH_CALL_2
-build_map_unpack_with_call ::= expr expr . BUILD_MAP_UNPACK_WITH_CALL_2
-c_stmts ::= _stmts . 
-c_stmts ::= _stmts . lastc_stmt
-c_stmts_opt ::= c_stmts . 
-call ::= expr . CALL_FUNCTION_0
-call ::= expr . CALL_METHOD_0
-call ::= expr . pos_arg CALL_FUNCTION_1
-call ::= expr . pos_arg CALL_METHOD_1
-call ::= expr . pos_arg pos_arg CALL_FUNCTION_2
-call ::= expr . pos_arg pos_arg pos_arg CALL_METHOD_3
-call ::= expr . pos_arg pos_arg pos_arg pos_arg CALL_FUNCTION_4
-call ::= expr . pos_arg pos_arg pos_arg pos_arg CALL_METHOD_4
-call ::= expr CALL_METHOD_0 . 
-call ::= expr pos_arg . CALL_FUNCTION_1
-call ::= expr pos_arg . CALL_METHOD_1
-call ::= expr pos_arg . pos_arg CALL_FUNCTION_2
-call ::= expr pos_arg . pos_arg pos_arg CALL_METHOD_3
-call ::= expr pos_arg . pos_arg pos_arg pos_arg CALL_FUNCTION_4
-call ::= expr pos_arg . pos_arg pos_arg pos_arg CALL_METHOD_4
-call ::= expr pos_arg CALL_FUNCTION_1 . 
-call ::= expr pos_arg pos_arg . CALL_FUNCTION_2
-call ::= expr pos_arg pos_arg . pos_arg CALL_METHOD_3
-call ::= expr pos_arg pos_arg . pos_arg pos_arg CALL_FUNCTION_4
-call ::= expr pos_arg pos_arg . pos_arg pos_arg CALL_METHOD_4
-call ::= expr pos_arg pos_arg pos_arg . CALL_METHOD_3
-call ::= expr pos_arg pos_arg pos_arg . pos_arg CALL_FUNCTION_4
-call ::= expr pos_arg pos_arg pos_arg . pos_arg CALL_METHOD_4
-call ::= expr pos_arg pos_arg pos_arg pos_arg . CALL_FUNCTION_4
-call ::= expr pos_arg pos_arg pos_arg pos_arg . CALL_METHOD_4
-call_ex_kw ::= expr . expr build_map_unpack_with_call CALL_FUNCTION_EX_KW
-call_ex_kw ::= expr expr . build_map_unpack_with_call CALL_FUNCTION_EX_KW
-call_ex_kw4 ::= expr . expr expr CALL_FUNCTION_EX_KW
-call_ex_kw4 ::= expr expr . expr CALL_FUNCTION_EX_KW
-call_ex_kw4 ::= expr expr expr . CALL_FUNCTION_EX_KW
-call_kw36 ::= expr . expr LOAD_CONST CALL_FUNCTION_KW_1
-call_kw36 ::= expr . expr expr LOAD_CONST CALL_FUNCTION_KW_2
-call_kw36 ::= expr expr . LOAD_CONST CALL_FUNCTION_KW_1
-call_kw36 ::= expr expr . expr LOAD_CONST CALL_FUNCTION_KW_2
-call_kw36 ::= expr expr expr . LOAD_CONST CALL_FUNCTION_KW_2
-call_stmt ::= expr . POP_TOP
-classdefdeco1 ::= expr . classdefdeco1 CALL_FUNCTION_1
-classdefdeco1 ::= expr . classdefdeco2 CALL_FUNCTION_1
-come_from_loops ::= \e_come_from_loops . COME_FROM_LOOP
-come_from_opt ::= COME_FROM . 
-come_froms ::= COME_FROM . 
-come_froms ::= come_froms . COME_FROM
-compare ::= compare_single . 
-compare_chained ::= expr . compared_chained_middle ROT_TWO POP_TOP \e__come_froms
-compare_chained ::= expr . compared_chained_middle ROT_TWO POP_TOP _come_froms
-compare_chained37 ::= expr . compared_chained_middlea_37
-compare_chained37 ::= expr . compared_chained_middlec_37
-compare_chained37_false ::= expr . compare_chained_right_false_37
-compare_chained37_false ::= expr . compared_chained_middle_false_37
-compare_chained37_false ::= expr . compared_chained_middleb_false_37
-compare_chained_right_false_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_righta_false_37 POP_TOP JUMP_BACK COME_FROM
-compare_single ::= expr . expr COMPARE_OP
-compare_single ::= expr expr . COMPARE_OP
-compare_single ::= expr expr COMPARE_OP . 
-compared_chained_middle ::= expr . DUP_TOP ROT_THREE COMPARE_OP JUMP_IF_FALSE_OR_POP compare_chained_right COME_FROM
-compared_chained_middle ::= expr . DUP_TOP ROT_THREE COMPARE_OP JUMP_IF_FALSE_OR_POP compared_chained_middle COME_FROM
-compared_chained_middle_false_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_rightb_false_37 POP_TOP _jump COME_FROM
-compared_chained_middle_false_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_rightc_37 POP_TOP JUMP_FORWARD COME_FROM
-compared_chained_middlea_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE
-compared_chained_middlea_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_righta_37 COME_FROM POP_TOP COME_FROM
-compared_chained_middleb_false_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_rightb_false_37 POP_TOP _jump COME_FROM
-compared_chained_middlec_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_righta_37 POP_TOP
-continues ::= _stmts . lastl_stmt continue
-expr ::= LOAD_FAST . 
-expr ::= LOAD_GLOBAL . 
-expr ::= and . 
-expr ::= attribute . 
-expr ::= attribute37 . 
-expr ::= bin_op . 
-expr ::= call . 
-expr ::= compare . 
-expr ::= get_iter . 
-expr ::= or . 
-expr_jit ::= expr . JUMP_IF_TRUE
-expr_jitop ::= expr . JUMP_IF_TRUE_OR_POP
-expr_jt ::= expr . jmp_true
-expr_jt ::= expr jmp_true . 
-expr_pjit ::= expr . POP_JUMP_IF_TRUE
-expr_pjit ::= expr POP_JUMP_IF_TRUE . 
-expr_pjit_come_from ::= expr . POP_JUMP_IF_TRUE COME_FROM
-expr_pjit_come_from ::= expr POP_JUMP_IF_TRUE . COME_FROM
-expr_stmt ::= expr . POP_TOP
-for ::= setup_loop . expr get_for_iter store for_block POP_BLOCK
-for ::= setup_loop . expr get_for_iter store for_block POP_BLOCK COME_FROM_LOOP
-for ::= setup_loop . expr get_for_iter store for_block POP_BLOCK NOP COME_FROM_LOOP
-for ::= setup_loop expr . get_for_iter store for_block POP_BLOCK
-for ::= setup_loop expr . get_for_iter store for_block POP_BLOCK COME_FROM_LOOP
-for ::= setup_loop expr . get_for_iter store for_block POP_BLOCK NOP COME_FROM_LOOP
-for ::= setup_loop expr get_for_iter . store for_block POP_BLOCK
-for ::= setup_loop expr get_for_iter . store for_block POP_BLOCK COME_FROM_LOOP
-for ::= setup_loop expr get_for_iter . store for_block POP_BLOCK NOP COME_FROM_LOOP
-for ::= setup_loop expr get_for_iter store . for_block POP_BLOCK
-for ::= setup_loop expr get_for_iter store . for_block POP_BLOCK COME_FROM_LOOP
-for ::= setup_loop expr get_for_iter store . for_block POP_BLOCK NOP COME_FROM_LOOP
-for ::= setup_loop expr get_for_iter store for_block . POP_BLOCK
-for ::= setup_loop expr get_for_iter store for_block . POP_BLOCK COME_FROM_LOOP
-for ::= setup_loop expr get_for_iter store for_block . POP_BLOCK NOP COME_FROM_LOOP
-for ::= setup_loop expr get_for_iter store for_block POP_BLOCK . 
-for ::= setup_loop expr get_for_iter store for_block POP_BLOCK . COME_FROM_LOOP
-for ::= setup_loop expr get_for_iter store for_block POP_BLOCK . NOP COME_FROM_LOOP
-for ::= setup_loop expr get_for_iter store for_block POP_BLOCK COME_FROM_LOOP . 
-for_block ::= \e_l_stmts_opt . COME_FROM_LOOP JUMP_BACK
-for_block ::= \e_l_stmts_opt . _come_froms JUMP_BACK
-for_block ::= \e_l_stmts_opt . come_from_loops JUMP_BACK
-for_block ::= \e_l_stmts_opt \e__come_froms . JUMP_BACK
-for_block ::= \e_l_stmts_opt \e_come_from_loops . JUMP_BACK
-for_block ::= l_stmts . 
-for_block ::= l_stmts . JUMP_BACK
-for_block ::= l_stmts JUMP_BACK . 
-for_block ::= l_stmts_opt . COME_FROM_LOOP JUMP_BACK
-for_block ::= l_stmts_opt . _come_froms JUMP_BACK
-for_block ::= l_stmts_opt . come_from_loops JUMP_BACK
-for_block ::= l_stmts_opt \e__come_froms . JUMP_BACK
-for_block ::= l_stmts_opt \e__come_froms JUMP_BACK . 
-for_block ::= l_stmts_opt \e_come_from_loops . JUMP_BACK
-for_block ::= l_stmts_opt \e_come_from_loops JUMP_BACK . 
-forelselaststmt ::= SETUP_LOOP . expr get_for_iter store for_block POP_BLOCK else_suitec \e__come_froms
-forelselaststmt ::= SETUP_LOOP . expr get_for_iter store for_block POP_BLOCK else_suitec _come_froms
-forelselaststmt ::= SETUP_LOOP expr . get_for_iter store for_block POP_BLOCK else_suitec \e__come_froms
-forelselaststmt ::= SETUP_LOOP expr . get_for_iter store for_block POP_BLOCK else_suitec _come_froms
-forelselaststmt ::= SETUP_LOOP expr get_for_iter . store for_block POP_BLOCK else_suitec \e__come_froms
-forelselaststmt ::= SETUP_LOOP expr get_for_iter . store for_block POP_BLOCK else_suitec _come_froms
-forelselaststmt ::= SETUP_LOOP expr get_for_iter store . for_block POP_BLOCK else_suitec \e__come_froms
-forelselaststmt ::= SETUP_LOOP expr get_for_iter store . for_block POP_BLOCK else_suitec _come_froms
-forelselaststmt ::= setup_loop . expr get_for_iter store for_block POP_BLOCK else_suitec COME_FROM_LOOP
-forelselaststmt ::= setup_loop expr . get_for_iter store for_block POP_BLOCK else_suitec COME_FROM_LOOP
-forelselaststmt ::= setup_loop expr get_for_iter . store for_block POP_BLOCK else_suitec COME_FROM_LOOP
-forelselaststmt ::= setup_loop expr get_for_iter store . for_block POP_BLOCK else_suitec COME_FROM_LOOP
-forelselaststmtl ::= SETUP_LOOP . expr get_for_iter store for_block POP_BLOCK else_suitel \e__come_froms
-forelselaststmtl ::= SETUP_LOOP . expr get_for_iter store for_block POP_BLOCK else_suitel _come_froms
-forelselaststmtl ::= SETUP_LOOP expr . get_for_iter store for_block POP_BLOCK else_suitel \e__come_froms
-forelselaststmtl ::= SETUP_LOOP expr . get_for_iter store for_block POP_BLOCK else_suitel _come_froms
-forelselaststmtl ::= SETUP_LOOP expr get_for_iter . store for_block POP_BLOCK else_suitel \e__come_froms
-forelselaststmtl ::= SETUP_LOOP expr get_for_iter . store for_block POP_BLOCK else_suitel _come_froms
-forelselaststmtl ::= SETUP_LOOP expr get_for_iter store . for_block POP_BLOCK else_suitel \e__come_froms
-forelselaststmtl ::= SETUP_LOOP expr get_for_iter store . for_block POP_BLOCK else_suitel _come_froms
-forelselaststmtl ::= setup_loop . expr get_for_iter store for_block POP_BLOCK else_suitel COME_FROM_LOOP
-forelselaststmtl ::= setup_loop expr . get_for_iter store for_block POP_BLOCK else_suitel COME_FROM_LOOP
-forelselaststmtl ::= setup_loop expr get_for_iter . store for_block POP_BLOCK else_suitel COME_FROM_LOOP
-forelselaststmtl ::= setup_loop expr get_for_iter store . for_block POP_BLOCK else_suitel COME_FROM_LOOP
-forelsestmt ::= SETUP_LOOP . expr get_for_iter store for_block POP_BLOCK else_suite \e__come_froms
-forelsestmt ::= SETUP_LOOP . expr get_for_iter store for_block POP_BLOCK else_suite _come_froms
-forelsestmt ::= SETUP_LOOP expr . get_for_iter store for_block POP_BLOCK else_suite \e__come_froms
-forelsestmt ::= SETUP_LOOP expr . get_for_iter store for_block POP_BLOCK else_suite _come_froms
-forelsestmt ::= SETUP_LOOP expr get_for_iter . store for_block POP_BLOCK else_suite \e__come_froms
-forelsestmt ::= SETUP_LOOP expr get_for_iter . store for_block POP_BLOCK else_suite _come_froms
-forelsestmt ::= SETUP_LOOP expr get_for_iter store . for_block POP_BLOCK else_suite \e__come_froms
-forelsestmt ::= SETUP_LOOP expr get_for_iter store . for_block POP_BLOCK else_suite _come_froms
-forelsestmt ::= SETUP_LOOP expr get_for_iter store for_block . POP_BLOCK else_suite \e__come_froms
-forelsestmt ::= SETUP_LOOP expr get_for_iter store for_block . POP_BLOCK else_suite _come_froms
-forelsestmt ::= SETUP_LOOP expr get_for_iter store for_block POP_BLOCK . else_suite \e__come_froms
-forelsestmt ::= SETUP_LOOP expr get_for_iter store for_block POP_BLOCK . else_suite _come_froms
-forelsestmt ::= setup_loop . expr get_for_iter store for_block POP_BLOCK else_suite COME_FROM_LOOP
-forelsestmt ::= setup_loop expr . get_for_iter store for_block POP_BLOCK else_suite COME_FROM_LOOP
-forelsestmt ::= setup_loop expr get_for_iter . store for_block POP_BLOCK else_suite COME_FROM_LOOP
-forelsestmt ::= setup_loop expr get_for_iter store . for_block POP_BLOCK else_suite COME_FROM_LOOP
-forelsestmt ::= setup_loop expr get_for_iter store for_block . POP_BLOCK else_suite COME_FROM_LOOP
-forelsestmt ::= setup_loop expr get_for_iter store for_block POP_BLOCK . else_suite COME_FROM_LOOP
-get_for_iter ::= GET_ITER . _come_froms FOR_ITER
-get_for_iter ::= GET_ITER \e__come_froms . FOR_ITER
-get_for_iter ::= GET_ITER \e__come_froms FOR_ITER . 
-get_iter ::= expr . GET_ITER
-get_iter ::= expr GET_ITER . 
-if_exp ::= expr . jmp_false expr jf_cf expr COME_FROM
-if_exp ::= expr . jmp_false expr jump_absolute_else expr
-if_exp ::= expr jmp_false . expr jf_cf expr COME_FROM
-if_exp ::= expr jmp_false . expr jump_absolute_else expr
-if_exp ::= expr jmp_false expr . jf_cf expr COME_FROM
-if_exp ::= expr jmp_false expr . jump_absolute_else expr
-if_exp37 ::= expr . expr jf_cfs expr COME_FROM
-if_exp37 ::= expr expr . jf_cfs expr COME_FROM
-if_exp_37b ::= expr . jmp_false expr POP_JUMP_IF_FALSE jump_forward_else expr
-if_exp_37b ::= expr jmp_false . expr POP_JUMP_IF_FALSE jump_forward_else expr
-if_exp_37b ::= expr jmp_false expr . POP_JUMP_IF_FALSE jump_forward_else expr
-if_exp_lambda ::= expr . jmp_false expr return_if_lambda return_stmt_lambda LAMBDA_MARKER
-if_exp_lambda ::= expr jmp_false . expr return_if_lambda return_stmt_lambda LAMBDA_MARKER
-if_exp_lambda ::= expr jmp_false expr . return_if_lambda return_stmt_lambda LAMBDA_MARKER
-if_exp_not ::= expr . jmp_true expr jump_forward_else expr COME_FROM
-if_exp_not ::= expr jmp_true . expr jump_forward_else expr COME_FROM
-if_exp_not ::= expr jmp_true expr . jump_forward_else expr COME_FROM
-if_exp_not_lambda ::= expr . jmp_true expr return_if_lambda return_stmt_lambda LAMBDA_MARKER
-if_exp_true ::= expr . JUMP_FORWARD expr COME_FROM
-ifelsestmt ::= testexpr . c_stmts come_froms else_suite come_froms
-ifelsestmt ::= testexpr . c_stmts_opt JUMP_FORWARD else_suite \e__come_froms
-ifelsestmt ::= testexpr . c_stmts_opt JUMP_FORWARD else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr . c_stmts_opt JUMP_FORWARD else_suite _come_froms
-ifelsestmt ::= testexpr . c_stmts_opt JUMP_FORWARD else_suite opt_come_from_except
-ifelsestmt ::= testexpr . c_stmts_opt jf_cfs else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr . c_stmts_opt jf_cfs else_suite opt_come_from_except
-ifelsestmt ::= testexpr . c_stmts_opt jump_forward_else else_suite \e__come_froms
-ifelsestmt ::= testexpr . c_stmts_opt jump_forward_else else_suite _come_froms
-ifelsestmt ::= testexpr . stmts jf_cfs \e_else_suite_opt \e_opt_come_from_except
-ifelsestmt ::= testexpr . stmts jf_cfs \e_else_suite_opt opt_come_from_except
-ifelsestmt ::= testexpr . stmts jf_cfs else_suite_opt \e_opt_come_from_except
-ifelsestmt ::= testexpr . stmts jf_cfs else_suite_opt opt_come_from_except
-ifelsestmt ::= testexpr \e_c_stmts_opt . JUMP_FORWARD else_suite \e__come_froms
-ifelsestmt ::= testexpr \e_c_stmts_opt . JUMP_FORWARD else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr \e_c_stmts_opt . JUMP_FORWARD else_suite _come_froms
-ifelsestmt ::= testexpr \e_c_stmts_opt . JUMP_FORWARD else_suite opt_come_from_except
-ifelsestmt ::= testexpr \e_c_stmts_opt . jf_cfs else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr \e_c_stmts_opt . jf_cfs else_suite opt_come_from_except
-ifelsestmt ::= testexpr \e_c_stmts_opt . jump_forward_else else_suite \e__come_froms
-ifelsestmt ::= testexpr \e_c_stmts_opt . jump_forward_else else_suite _come_froms
-ifelsestmt ::= testexpr c_stmts . come_froms else_suite come_froms
-ifelsestmt ::= testexpr c_stmts_opt . JUMP_FORWARD else_suite \e__come_froms
-ifelsestmt ::= testexpr c_stmts_opt . JUMP_FORWARD else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr c_stmts_opt . JUMP_FORWARD else_suite _come_froms
-ifelsestmt ::= testexpr c_stmts_opt . JUMP_FORWARD else_suite opt_come_from_except
-ifelsestmt ::= testexpr c_stmts_opt . jf_cfs else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr c_stmts_opt . jf_cfs else_suite opt_come_from_except
-ifelsestmt ::= testexpr c_stmts_opt . jump_forward_else else_suite \e__come_froms
-ifelsestmt ::= testexpr c_stmts_opt . jump_forward_else else_suite _come_froms
-ifelsestmt ::= testexpr stmts . jf_cfs \e_else_suite_opt \e_opt_come_from_except
-ifelsestmt ::= testexpr stmts . jf_cfs \e_else_suite_opt opt_come_from_except
-ifelsestmt ::= testexpr stmts . jf_cfs else_suite_opt \e_opt_come_from_except
-ifelsestmt ::= testexpr stmts . jf_cfs else_suite_opt opt_come_from_except
-ifelsestmtr ::= testexpr . return_if_stmts returns
-ifstmt ::= testexpr . _ifstmts_jump
-ifstmtl ::= testexpr . _ifstmts_jumpl
-jifop_come_from ::= JUMP_IF_FALSE_OR_POP . come_froms
-jifop_come_from ::= JUMP_IF_FALSE_OR_POP come_froms . 
-jmp_false ::= POP_JUMP_IF_FALSE . 
-jmp_true ::= POP_JUMP_IF_TRUE . 
-kvlist_1 ::= expr . expr BUILD_MAP_1
-kvlist_1 ::= expr expr . BUILD_MAP_1
-l_stmts ::= _stmts . 
-l_stmts ::= _stmts . lastl_stmt
-l_stmts ::= l_stmts . lstmt
-l_stmts ::= lstmt . 
-l_stmts_opt ::= l_stmts . 
-lambda_body ::= expr . load_closure BUILD_TUPLE_1 LOAD_LAMBDA LOAD_STR MAKE_FUNCTION_9
-lstmt ::= stmt . 
-mkfunc ::= expr . load_closure LOAD_CODE LOAD_STR MAKE_FUNCTION_9
-mkfuncdeco ::= expr . mkfuncdeco CALL_FUNCTION_1
-mkfuncdeco ::= expr . mkfuncdeco0 CALL_FUNCTION_1
-or ::= and . jitop_come_from_expr COME_FROM
-or ::= expr_jt . expr
-or ::= expr_jt . expr COME_FROM
-or ::= expr_jt expr . 
-or ::= expr_jt expr . COME_FROM
-or ::= expr_jt expr COME_FROM . 
-or ::= expr_pjit . expr POP_JUMP_IF_FALSE COME_FROM
-or ::= expr_pjit expr . POP_JUMP_IF_FALSE COME_FROM
-pos_arg ::= expr . 
-ret_and ::= expr . JUMP_IF_FALSE_OR_POP return_expr_or_cond COME_FROM
-ret_or ::= expr . JUMP_IF_TRUE_OR_POP return_expr_or_cond COME_FROM
-return ::= return_expr . RETURN_END_IF
-return ::= return_expr . RETURN_VALUE
-return ::= return_expr . RETURN_VALUE COME_FROM
-return_expr ::= expr . 
-return_expr_lambda ::= return_expr . RETURN_VALUE_LAMBDA
-return_expr_lambda ::= return_expr . RETURN_VALUE_LAMBDA LAMBDA_MARKER
-return_if_stmt ::= return_expr . RETURN_END_IF
-return_if_stmt ::= return_expr . RETURN_END_IF POP_BLOCK
-return_if_stmts ::= _stmts . return_if_stmt \e__come_froms
-return_if_stmts ::= _stmts . return_if_stmt _come_froms
-returns ::= _stmts . return
-returns ::= _stmts . return_if_stmt
-setup_loop ::= SETUP_LOOP . _come_froms
-setup_loop ::= SETUP_LOOP \e__come_froms . 
-sstmt ::= sstmt . RETURN_LAST
-sstmt ::= stmt . 
-stmt ::= assign . 
-stmt ::= for . 
-stmts ::= sstmt . 
-stmts ::= stmts . sstmt
-stmts ::= stmts sstmt . 
-store ::= STORE_FAST . 
-store ::= expr . STORE_ATTR
-store ::= expr STORE_ATTR . 
-store ::= unpack . 
-store_subscript ::= expr . expr STORE_SUBSCR
-store_subscript ::= expr expr . STORE_SUBSCR
-subscript ::= expr . expr BINARY_SUBSCR
-subscript ::= expr expr . BINARY_SUBSCR
-subscript2 ::= expr . expr DUP_TOP_TWO BINARY_SUBSCR
-subscript2 ::= expr expr . DUP_TOP_TWO BINARY_SUBSCR
-testexpr ::= testfalse . 
-testfalse ::= expr . jmp_false
-testfalse ::= expr jmp_false . 
-testfalse_not_and ::= expr . jmp_false expr jmp_true COME_FROM
-testfalse_not_and ::= expr jmp_false . expr jmp_true COME_FROM
-testfalse_not_and ::= expr jmp_false expr . jmp_true COME_FROM
-testfalse_not_or ::= expr . jmp_false expr jmp_false COME_FROM
-testfalse_not_or ::= expr jmp_false . expr jmp_false COME_FROM
-testfalse_not_or ::= expr jmp_false expr . jmp_false COME_FROM
-testfalsel ::= expr . jmp_true
-testtrue ::= expr . jmp_true
-unary_not ::= expr . UNARY_NOT
-unary_op ::= expr . unary_operator
-unpack ::= UNPACK_SEQUENCE_2 . store store
-unpack ::= UNPACK_SEQUENCE_2 store . store
-unpack ::= UNPACK_SEQUENCE_2 store store . 
-while1elsestmt ::= setup_loop . l_stmts JUMP_BACK POP_BLOCK else_suite COME_FROM_LOOP
-while1elsestmt ::= setup_loop . l_stmts JUMP_BACK \e__come_froms POP_BLOCK else_suitel COME_FROM_LOOP
-while1elsestmt ::= setup_loop . l_stmts JUMP_BACK _come_froms POP_BLOCK else_suitel COME_FROM_LOOP
-while1elsestmt ::= setup_loop . l_stmts JUMP_BACK else_suite COME_FROM_LOOP
-while1elsestmt ::= setup_loop . l_stmts JUMP_BACK else_suitel
-while1stmt ::= setup_loop . l_stmts COME_FROM JUMP_BACK COME_FROM_LOOP
-while1stmt ::= setup_loop . l_stmts COME_FROM JUMP_BACK POP_BLOCK COME_FROM_LOOP
-while1stmt ::= setup_loop . l_stmts COME_FROM_LOOP
-while1stmt ::= setup_loop . l_stmts COME_FROM_LOOP JUMP_BACK POP_BLOCK COME_FROM_LOOP
-while1stmt ::= setup_loop . l_stmts POP_BLOCK COME_FROM_LOOP
-whileTruestmt ::= SETUP_LOOP . l_stmts_opt JUMP_BACK COME_FROM_LOOP
-whileTruestmt ::= SETUP_LOOP \e_l_stmts_opt . JUMP_BACK COME_FROM_LOOP
-whileTruestmt ::= setup_loop . l_stmts_opt JUMP_BACK POP_BLOCK \e__come_froms
-whileTruestmt ::= setup_loop . l_stmts_opt JUMP_BACK POP_BLOCK _come_froms
-whileTruestmt ::= setup_loop \e_l_stmts_opt . JUMP_BACK POP_BLOCK \e__come_froms
-whileTruestmt ::= setup_loop \e_l_stmts_opt . JUMP_BACK POP_BLOCK _come_froms
-whileelsestmt ::= setup_loop . testexpr \e_l_stmts_opt JUMP_BACK POP_BLOCK else_suitel COME_FROM
-whileelsestmt ::= setup_loop . testexpr \e_l_stmts_opt JUMP_BACK POP_BLOCK else_suitel COME_FROM_LOOP
-whileelsestmt ::= setup_loop . testexpr l_stmts_opt JUMP_BACK POP_BLOCK else_suitel COME_FROM
-whileelsestmt ::= setup_loop . testexpr l_stmts_opt JUMP_BACK POP_BLOCK else_suitel COME_FROM_LOOP
-whilestmt ::= setup_loop . testexpr \e_l_stmts_opt COME_FROM JUMP_BACK POP_BLOCK COME_FROM_LOOP
-whilestmt ::= setup_loop . testexpr \e_l_stmts_opt JUMP_BACK POP_BLOCK COME_FROM_LOOP
-whilestmt ::= setup_loop . testexpr \e_l_stmts_opt JUMP_BACK come_froms POP_BLOCK
-whilestmt ::= setup_loop . testexpr \e_l_stmts_opt JUMP_BACK come_froms POP_BLOCK COME_FROM_LOOP
-whilestmt ::= setup_loop . testexpr \e_l_stmts_opt come_froms JUMP_BACK come_froms POP_BLOCK COME_FROM_LOOP
-whilestmt ::= setup_loop . testexpr l_stmts_opt COME_FROM JUMP_BACK POP_BLOCK COME_FROM_LOOP
-whilestmt ::= setup_loop . testexpr l_stmts_opt JUMP_BACK POP_BLOCK COME_FROM_LOOP
-whilestmt ::= setup_loop . testexpr l_stmts_opt JUMP_BACK come_froms POP_BLOCK
-whilestmt ::= setup_loop . testexpr l_stmts_opt JUMP_BACK come_froms POP_BLOCK COME_FROM_LOOP
-whilestmt ::= setup_loop . testexpr l_stmts_opt come_froms JUMP_BACK come_froms POP_BLOCK COME_FROM_LOOP
-whilestmt ::= setup_loop . testexpr returns POP_BLOCK COME_FROM_LOOP
-whilestmt ::= setup_loop . testexpr returns come_froms POP_BLOCK COME_FROM_LOOP
-yield ::= expr . YIELD_VALUE
-yield_from ::= expr . GET_YIELD_FROM_ITER LOAD_CONST YIELD_FROM
-Instruction context:
--> 
- L. 189       150  LOAD_FAST                'loop_start'
-                 152  LOAD_FAST                'button'
-                 154  LOAD_ATTR                index
-                 156  LOAD_FAST                'bar_length'
-                 158  BINARY_MULTIPLY  
-                 160  DUP_TOP          
-                 162  ROT_THREE        
-                 164  COMPARE_OP               <=
-                 166  JUMP_IF_FALSE_OR_POP   174  'to 174'
-                 168  LOAD_FAST                'loop_end'
-                 170  COMPARE_OP               <
-                 172  JUMP_FORWARD        178  'to 178'
-               174_0  COME_FROM           166  '166'
-                 174  ROT_TWO          
-                 176  POP_TOP          
-               178_0  COME_FROM           172  '172'
-                 178  CALL_METHOD_4         4  '4 positional arguments'
-                 180  POP_TOP          
-                 182  JUMP_BACK           100  'to 100'
-                 184  POP_BLOCK        
-               186_0  COME_FROM_LOOP       88  '88'
 from __future__ import absolute_import, print_function, unicode_literals
 from ...base import depends, listens
 from ...live import action, get_bar_length, liveobj_changed, liveobj_valid
@@ -492,7 +61,7 @@ class LoopSelectorComponent(Component, Renderable):
             if clip:
                 if self._paginator.can_change_page:
                     self._paginator.page_time = clip.loop_start
-            self.update()
+                self.update()
 
     @matrix.pressed
     def matrix(self, button):
@@ -544,18 +113,28 @@ class LoopSelectorComponent(Component, Renderable):
         self._update_matrix()
         self._update_page_buttons()
 
-    def _update_matrixParse error at or near `LOAD_FAST' instruction at offset 150
+    def _update_matrix(self):
+        has_clip = self._has_clip()
+        for button in self.matrix:
+            button.enabled = has_clip
+
+        if has_clip:
+            bar_length = self.bar_length
+            loop_start = self._clip.loop_start
+            loop_end = self._clip.loop_end
+            playing_page = int(self._clip.playing_position / bar_length)
+            editing_page = int(self._paginator.page_time / bar_length)
+            for (index, button) in enumerate(self.matrix):
+                self._update_matrix_button(button, index == editing_page, self._clip.is_playing or self._clip.is_triggered and self.song.is_playing and index == playing_page, loop_start <= button.index * bar_length < loop_end)
 
     def _update_matrix_button(self, button, selected, playing, inside_loop):
         color = "OutsideLoop"
         if playing:
             color = "PlayheadRecord" if self.song.session_record else "Playhead"
-        else:
-            if inside_loop:
-                color = "InsideLoopSelected" if selected else "InsideLoop"
-            else:
-                if selected:
-                    color = "OutsideLoopSelected"
+        elif inside_loop:
+            color = "InsideLoopSelected" if selected else "InsideLoop"
+        elif selected:
+            color = "OutsideLoopSelected"
         button.color = LiveObjSkinEntry("LoopSelector.{}".format(color), self._target_track.target_track)
 
     def _update_page_buttons(self):
@@ -578,3 +157,5 @@ class LoopSelectorComponent(Component, Renderable):
     @listens("target_track.color")
     def __on_target_track_color_changed(self):
         self._update_matrix()
+
+# okay decompiling ./MIDIRemoteScripts/ableton/v3/control_surface/components/loop_selector.pyc

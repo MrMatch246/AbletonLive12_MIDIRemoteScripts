@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\melodic_component.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 14270 bytes
@@ -150,7 +150,7 @@ class MelodicComponent(MessengerModesComponent):
 
     def set_note_editor_matrices(self, matrices):
         self._matrices = matrices
-        for editor, matrix in zip_longest(self._note_editors, matrices or []):
+        for (editor, matrix) in zip_longest(self._note_editors, matrices or []):
             if editor:
                 editor.set_matrix(matrix)
 
@@ -169,13 +169,14 @@ class MelodicComponent(MessengerModesComponent):
     def _on_detail_clip_changed(self):
         if self.is_enabled():
             clip = self.song.view.detail_clip
-            clip = clip if (liveobj_valid(clip) and clip.is_midi_clip) else None
-            for note_editor in self._note_editors:
-                note_editor.set_detail_clip(clip)
+            if liveobj_valid(clip):
+                clip = clip if clip.is_midi_clip else None
+                for note_editor in self._note_editors:
+                    note_editor.set_detail_clip(clip)
 
-            self._loop_selector.set_detail_clip(clip)
-            self._playhead_component.set_clip(clip)
-            self.instrument.set_detail_clip(clip)
+                self._loop_selector.set_detail_clip(clip)
+                self._playhead_component.set_clip(clip)
+                self.instrument.set_detail_clip(clip)
 
     @listens("activated")
     def __on_accent_activated_changed(self):
@@ -211,7 +212,7 @@ class MelodicComponent(MessengerModesComponent):
 
     @listenable_property
     def editable_pitches(self):
-        note_editor_range = self._note_editors if self.sequence_modes.selected_mode == "sequence" else self._note_editors[0[:7]]
+        note_editor_range = self._note_editors if self.sequence_modes.selected_mode == "sequence" else self._note_editors[0:7]
         return [editor.editing_notes[0] for editor in note_editor_range if len(editor.editing_notes) > 0]
 
     @listenable_property
@@ -262,7 +263,7 @@ class MelodicComponent(MessengerModesComponent):
         self._update_note_editors()
 
     def _update_note_editors(self, *a):
-        for row, note_editor in enumerate(self._note_editors):
+        for (row, note_editor) in enumerate(self._note_editors):
             note_info = self.instrument.pattern[row]
             note_editor.background_color = "NoteEditor." + note_info.color
             note_editor.editing_notes = [note_info.index] if note_info.index != None else []
@@ -276,9 +277,9 @@ class MelodicComponent(MessengerModesComponent):
         if self.is_enabled():
             if self._matrices is not None:
                 pattern = self.instrument.pattern
-                for matrix, (y, _) in self._matrices.iterbuttons():
+                for (matrix, (y, _)) in self._matrices.iterbuttons():
                     if matrix:
-                        for x, button in enumerate(matrix):
+                        for (x, button) in enumerate(matrix):
                             if button:
                                 if pattern[y].index is not None:
                                     button.set_identifier(x)
@@ -305,7 +306,7 @@ class MelodicComponent(MessengerModesComponent):
             if self.show_notifications:
                 if mode is None:
                     mode = self.selected_mode
-                elif mode == "sequence":
+                if mode == "sequence":
                     message = "Sequence %s to %s"
                     start_note = self._note_editors[0].editing_notes[0]
                     end_editor = find_if((lambda editor: len(editor.editing_notes) > 0), reversed(self._note_editors))

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\background.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4615 bytes
@@ -29,13 +29,13 @@ class BackgroundComponent(Component):
 
     def __getattr__(self, name):
         if name.startswith("set_"):
-            return partial(self._set_element_for_control, name[4[:None]])
+            return partial(self._set_element_for_control, name[4:])
         raise AttributeError(name)
 
     def _set_element_for_control(self, name, element):
         if element:
             element.reset()
-        elif name in self.__dict__:
+        if name in self.__dict__:
             self.__dict__[name].set_control_element(element)
         else:
             control = self._control_type()

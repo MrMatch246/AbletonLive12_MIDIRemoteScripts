@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\display\util.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1957 bytes
@@ -11,7 +11,7 @@ from ...base import BooleanContext
 updating_display = BooleanContext()
 
 def auto_break_lines(text: str, max_width: int, max_lines: int, pad_lines: bool=True) -> List[str]:
-    words = [truncate_with_ellipses(word[None[:max_width]]) if len(word) > max_width else word for word in text.split(" ")]
+    words = [truncate_with_ellipses(word[:max_width]) if len(word) > max_width else word for word in text.split(" ")]
     lines = [
      ""]
     current_width = 0
@@ -25,17 +25,17 @@ def auto_break_lines(text: str, max_width: int, max_lines: int, pad_lines: bool=
             current_width = len(word)
 
     if len(lines) > max_lines:
-        lines = lines[None[:max_lines]]
+        lines = lines[:max_lines]
         lines[-1] = truncate_with_ellipses(lines[-1])
     if pad_lines:
         if len(lines) < max_lines:
             lines += [""] * (max_lines - len(lines))
-    return lines
+        return lines
 
 
 def truncate_with_ellipses(string: str):
     if len(string) > 3:
-        return string[None[:len(string) - 3]] + "..."
+        return string[:len(string) - 3] + "..."
     return "." * len(string)
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v3/control_surface/display/util.pyc

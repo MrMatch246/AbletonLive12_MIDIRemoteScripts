@@ -1,559 +1,21 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_Pro\Launchpad_Pro.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 48219 bytes
-
--- Stacks of completed symbols:
-START ::= |- stmts . 
-_come_froms ::= \e__come_froms . COME_FROM
-_come_froms ::= \e__come_froms . COME_FROM_LOOP
-_come_froms ::= \e__come_froms COME_FROM . 
-_come_froms ::= _come_froms . COME_FROM
-_come_froms ::= _come_froms . COME_FROM_LOOP
-_ifstmts_jump ::= COME_FROM . c_stmts come_froms
-_ifstmts_jump ::= \e_c_stmts_opt . COME_FROM
-_ifstmts_jump ::= \e_c_stmts_opt . ELSE
-_ifstmts_jump ::= \e_c_stmts_opt . JUMP_ABSOLUTE JUMP_FORWARD \e__come_froms
-_ifstmts_jump ::= \e_c_stmts_opt . JUMP_ABSOLUTE JUMP_FORWARD _come_froms
-_ifstmts_jump ::= \e_c_stmts_opt . come_froms
-_ifstmts_jump ::= \e_c_stmts_opt COME_FROM . 
-_ifstmts_jump ::= \e_c_stmts_opt come_froms . 
-_ifstmts_jump ::= c_stmts_opt . COME_FROM
-_ifstmts_jump ::= c_stmts_opt . ELSE
-_ifstmts_jump ::= c_stmts_opt . JUMP_ABSOLUTE JUMP_FORWARD \e__come_froms
-_ifstmts_jump ::= c_stmts_opt . JUMP_ABSOLUTE JUMP_FORWARD _come_froms
-_ifstmts_jump ::= c_stmts_opt . come_froms
-_ifstmts_jump ::= c_stmts_opt COME_FROM . 
-_ifstmts_jump ::= c_stmts_opt come_froms . 
-_ifstmts_jumpl ::= COME_FROM . c_stmts JUMP_BACK
-_ifstmts_jumpl ::= COME_FROM . c_stmts JUMP_FORWARD
-_ifstmts_jumpl ::= _ifstmts_jump . 
-_ifstmts_jumpl ::= c_stmts . JUMP_BACK
-_stmts ::= _stmts . stmt
-_stmts ::= _stmts stmt . 
-_stmts ::= stmt . 
-and ::= expr . JUMP_IF_FALSE_OR_POP expr \e_come_from_opt
-and ::= expr . JUMP_IF_FALSE_OR_POP expr come_from_opt
-and ::= expr . jifop_come_from expr
-and ::= expr . jmp_false expr
-and ::= expr . jmp_false expr COME_FROM
-and ::= expr . jmp_false expr jmp_false
-and ::= expr jmp_false . expr
-and ::= expr jmp_false . expr COME_FROM
-and ::= expr jmp_false . expr jmp_false
-and ::= expr jmp_false expr . 
-and ::= expr jmp_false expr . COME_FROM
-and ::= expr jmp_false expr . jmp_false
-and_not ::= expr . jmp_false expr POP_JUMP_IF_TRUE
-and_not ::= expr jmp_false . expr POP_JUMP_IF_TRUE
-and_not ::= expr jmp_false expr . POP_JUMP_IF_TRUE
-assert2 ::= expr . jmp_true LOAD_GLOBAL expr CALL_FUNCTION_1 RAISE_VARARGS_1
-assert2 ::= expr jmp_true . LOAD_GLOBAL expr CALL_FUNCTION_1 RAISE_VARARGS_1
-assert_invert ::= testtrue . LOAD_GLOBAL RAISE_VARARGS_1
-assign ::= expr . DUP_TOP designList
-assign ::= expr . store
-assign ::= expr store . 
-assign2 ::= expr . expr ROT_TWO store store
-assign2 ::= expr expr . ROT_TWO store store
-assign3 ::= expr . expr expr ROT_THREE ROT_TWO store store store
-assign3 ::= expr expr . expr ROT_THREE ROT_TWO store store store
-assign3 ::= expr expr expr . ROT_THREE ROT_TWO store store store
-attribute ::= expr . LOAD_ATTR
-attribute ::= expr LOAD_ATTR . 
-attribute37 ::= expr . LOAD_METHOD
-attribute37 ::= expr LOAD_METHOD . 
-aug_assign1 ::= expr . expr inplace_op ROT_THREE STORE_SUBSCR
-aug_assign1 ::= expr . expr inplace_op store
-aug_assign1 ::= expr expr . inplace_op ROT_THREE STORE_SUBSCR
-aug_assign1 ::= expr expr . inplace_op store
-aug_assign2 ::= expr . DUP_TOP LOAD_ATTR expr inplace_op ROT_TWO STORE_ATTR
-await_expr ::= expr . GET_AWAITABLE LOAD_CONST YIELD_FROM
-bin_op ::= expr . expr binary_operator
-bin_op ::= expr expr . binary_operator
-build_map_unpack_with_call ::= expr . expr BUILD_MAP_UNPACK_WITH_CALL_2
-build_map_unpack_with_call ::= expr expr . BUILD_MAP_UNPACK_WITH_CALL_2
-c_stmts ::= _stmts . 
-c_stmts ::= _stmts . lastc_stmt
-c_stmts_opt ::= c_stmts . 
-call ::= expr . CALL_FUNCTION_0
-call ::= expr . CALL_METHOD_0
-call ::= expr . pos_arg CALL_FUNCTION_1
-call ::= expr . pos_arg CALL_METHOD_1
-call ::= expr . pos_arg pos_arg CALL_FUNCTION_2
-call ::= expr . pos_arg pos_arg CALL_METHOD_2
-call ::= expr . pos_arg pos_arg pos_arg CALL_FUNCTION_3
-call ::= expr . pos_arg pos_arg pos_arg CALL_METHOD_3
-call ::= expr . pos_arg pos_arg pos_arg pos_arg CALL_FUNCTION_4
-call ::= expr . pos_arg pos_arg pos_arg pos_arg pos_arg CALL_METHOD_5
-call ::= expr CALL_METHOD_0 . 
-call ::= expr pos_arg . CALL_FUNCTION_1
-call ::= expr pos_arg . CALL_METHOD_1
-call ::= expr pos_arg . pos_arg CALL_FUNCTION_2
-call ::= expr pos_arg . pos_arg CALL_METHOD_2
-call ::= expr pos_arg . pos_arg pos_arg CALL_FUNCTION_3
-call ::= expr pos_arg . pos_arg pos_arg CALL_METHOD_3
-call ::= expr pos_arg . pos_arg pos_arg pos_arg CALL_FUNCTION_4
-call ::= expr pos_arg . pos_arg pos_arg pos_arg pos_arg CALL_METHOD_5
-call ::= expr pos_arg CALL_METHOD_1 . 
-call ::= expr pos_arg pos_arg . CALL_FUNCTION_2
-call ::= expr pos_arg pos_arg . CALL_METHOD_2
-call ::= expr pos_arg pos_arg . pos_arg CALL_FUNCTION_3
-call ::= expr pos_arg pos_arg . pos_arg CALL_METHOD_3
-call ::= expr pos_arg pos_arg . pos_arg pos_arg CALL_FUNCTION_4
-call ::= expr pos_arg pos_arg . pos_arg pos_arg pos_arg CALL_METHOD_5
-call ::= expr pos_arg pos_arg pos_arg . CALL_FUNCTION_3
-call ::= expr pos_arg pos_arg pos_arg . CALL_METHOD_3
-call ::= expr pos_arg pos_arg pos_arg . pos_arg CALL_FUNCTION_4
-call ::= expr pos_arg pos_arg pos_arg . pos_arg pos_arg CALL_METHOD_5
-call ::= expr pos_arg pos_arg pos_arg pos_arg . CALL_FUNCTION_4
-call ::= expr pos_arg pos_arg pos_arg pos_arg . pos_arg CALL_METHOD_5
-call ::= expr pos_arg pos_arg pos_arg pos_arg pos_arg . CALL_METHOD_5
-call_ex_kw ::= expr . expr build_map_unpack_with_call CALL_FUNCTION_EX_KW
-call_ex_kw ::= expr expr . build_map_unpack_with_call CALL_FUNCTION_EX_KW
-call_ex_kw4 ::= expr . expr expr CALL_FUNCTION_EX_KW
-call_ex_kw4 ::= expr expr . expr CALL_FUNCTION_EX_KW
-call_ex_kw4 ::= expr expr expr . CALL_FUNCTION_EX_KW
-call_kw36 ::= expr . expr LOAD_CONST CALL_FUNCTION_KW_1
-call_kw36 ::= expr . expr expr LOAD_CONST CALL_FUNCTION_KW_2
-call_kw36 ::= expr . expr expr expr LOAD_CONST CALL_FUNCTION_KW_3
-call_kw36 ::= expr . expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_4
-call_kw36 ::= expr . expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_5
-call_kw36 ::= expr . expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_6
-call_kw36 ::= expr . expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_7
-call_kw36 ::= expr . expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_12
-call_kw36 ::= expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr . LOAD_CONST CALL_FUNCTION_KW_1
-call_kw36 ::= expr expr . expr LOAD_CONST CALL_FUNCTION_KW_2
-call_kw36 ::= expr expr . expr expr LOAD_CONST CALL_FUNCTION_KW_3
-call_kw36 ::= expr expr . expr expr expr LOAD_CONST CALL_FUNCTION_KW_4
-call_kw36 ::= expr expr . expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_5
-call_kw36 ::= expr expr . expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_6
-call_kw36 ::= expr expr . expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_7
-call_kw36 ::= expr expr . expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_12
-call_kw36 ::= expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr LOAD_CONST . CALL_FUNCTION_KW_1
-call_kw36 ::= expr expr expr . LOAD_CONST CALL_FUNCTION_KW_2
-call_kw36 ::= expr expr expr . expr LOAD_CONST CALL_FUNCTION_KW_3
-call_kw36 ::= expr expr expr . expr expr LOAD_CONST CALL_FUNCTION_KW_4
-call_kw36 ::= expr expr expr . expr expr expr LOAD_CONST CALL_FUNCTION_KW_5
-call_kw36 ::= expr expr expr . expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_6
-call_kw36 ::= expr expr expr . expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_7
-call_kw36 ::= expr expr expr . expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_12
-call_kw36 ::= expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr LOAD_CONST . CALL_FUNCTION_KW_2
-call_kw36 ::= expr expr expr expr . LOAD_CONST CALL_FUNCTION_KW_3
-call_kw36 ::= expr expr expr expr . expr LOAD_CONST CALL_FUNCTION_KW_4
-call_kw36 ::= expr expr expr expr . expr expr LOAD_CONST CALL_FUNCTION_KW_5
-call_kw36 ::= expr expr expr expr . expr expr expr LOAD_CONST CALL_FUNCTION_KW_6
-call_kw36 ::= expr expr expr expr . expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_7
-call_kw36 ::= expr expr expr expr . expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_12
-call_kw36 ::= expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr LOAD_CONST . CALL_FUNCTION_KW_3
-call_kw36 ::= expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_3 . 
-call_kw36 ::= expr expr expr expr expr . LOAD_CONST CALL_FUNCTION_KW_4
-call_kw36 ::= expr expr expr expr expr . expr LOAD_CONST CALL_FUNCTION_KW_5
-call_kw36 ::= expr expr expr expr expr . expr expr LOAD_CONST CALL_FUNCTION_KW_6
-call_kw36 ::= expr expr expr expr expr . expr expr expr LOAD_CONST CALL_FUNCTION_KW_7
-call_kw36 ::= expr expr expr expr expr . expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_12
-call_kw36 ::= expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr LOAD_CONST . CALL_FUNCTION_KW_4
-call_kw36 ::= expr expr expr expr expr expr . LOAD_CONST CALL_FUNCTION_KW_5
-call_kw36 ::= expr expr expr expr expr expr . expr LOAD_CONST CALL_FUNCTION_KW_6
-call_kw36 ::= expr expr expr expr expr expr . expr expr LOAD_CONST CALL_FUNCTION_KW_7
-call_kw36 ::= expr expr expr expr expr expr . expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_12
-call_kw36 ::= expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr LOAD_CONST . CALL_FUNCTION_KW_5
-call_kw36 ::= expr expr expr expr expr expr expr . LOAD_CONST CALL_FUNCTION_KW_6
-call_kw36 ::= expr expr expr expr expr expr expr . expr LOAD_CONST CALL_FUNCTION_KW_7
-call_kw36 ::= expr expr expr expr expr expr expr . expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_12
-call_kw36 ::= expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr LOAD_CONST . CALL_FUNCTION_KW_6
-call_kw36 ::= expr expr expr expr expr expr expr expr . LOAD_CONST CALL_FUNCTION_KW_7
-call_kw36 ::= expr expr expr expr expr expr expr expr . expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_12
-call_kw36 ::= expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr LOAD_CONST . CALL_FUNCTION_KW_7
-call_kw36 ::= expr expr expr expr expr expr expr expr expr . expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_12
-call_kw36 ::= expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr . expr expr expr LOAD_CONST CALL_FUNCTION_KW_12
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr . expr expr LOAD_CONST CALL_FUNCTION_KW_12
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr . expr LOAD_CONST CALL_FUNCTION_KW_12
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr . LOAD_CONST CALL_FUNCTION_KW_12
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST . CALL_FUNCTION_KW_12
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . expr LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr . LOAD_CONST CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST . CALL_FUNCTION_KW_30
-call_kw36 ::= expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr expr LOAD_CONST CALL_FUNCTION_KW_30 . 
-call_stmt ::= expr . POP_TOP
-call_stmt ::= expr POP_TOP . 
-cf_jf_else ::= come_froms . JUMP_FORWARD ELSE
-cf_jump_back ::= COME_FROM . JUMP_BACK
-classdefdeco1 ::= expr . classdefdeco1 CALL_FUNCTION_1
-classdefdeco1 ::= expr . classdefdeco2 CALL_FUNCTION_1
-come_from_opt ::= COME_FROM . 
-come_froms ::= COME_FROM . 
-come_froms ::= come_froms . COME_FROM
-come_froms ::= come_froms COME_FROM . 
-compare ::= compare_single . 
-compare_chained ::= expr . compared_chained_middle ROT_TWO POP_TOP \e__come_froms
-compare_chained ::= expr . compared_chained_middle ROT_TWO POP_TOP _come_froms
-compare_chained37 ::= expr . compared_chained_middlea_37
-compare_chained37 ::= expr . compared_chained_middlec_37
-compare_chained37_false ::= expr . compare_chained_right_false_37
-compare_chained37_false ::= expr . compared_chained_middle_false_37
-compare_chained37_false ::= expr . compared_chained_middleb_false_37
-compare_chained_right_false_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_righta_false_37 POP_TOP JUMP_BACK COME_FROM
-compare_single ::= expr . expr COMPARE_OP
-compare_single ::= expr expr . COMPARE_OP
-compare_single ::= expr expr COMPARE_OP . 
-compared_chained_middle ::= expr . DUP_TOP ROT_THREE COMPARE_OP JUMP_IF_FALSE_OR_POP compare_chained_right COME_FROM
-compared_chained_middle ::= expr . DUP_TOP ROT_THREE COMPARE_OP JUMP_IF_FALSE_OR_POP compared_chained_middle COME_FROM
-compared_chained_middle_false_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_rightb_false_37 POP_TOP _jump COME_FROM
-compared_chained_middle_false_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_rightc_37 POP_TOP JUMP_FORWARD COME_FROM
-compared_chained_middlea_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE
-compared_chained_middlea_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_righta_37 COME_FROM POP_TOP COME_FROM
-compared_chained_middleb_false_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_rightb_false_37 POP_TOP _jump COME_FROM
-compared_chained_middlec_37 ::= expr . DUP_TOP ROT_THREE COMPARE_OP POP_JUMP_IF_FALSE compare_chained_righta_37 POP_TOP
-continues ::= _stmts . lastl_stmt continue
-continues ::= lastl_stmt . continue
-dict ::= expr . expr LOAD_CONST BUILD_CONST_KEY_MAP_2
-dict ::= expr expr . LOAD_CONST BUILD_CONST_KEY_MAP_2
-dict ::= expr expr LOAD_CONST . BUILD_CONST_KEY_MAP_2
-else_suite ::= suite_stmts . 
-else_suite_opt ::= else_suite . 
-else_suitec ::= c_stmts . 
-expr ::= LOAD_CONST . 
-expr ::= LOAD_FAST . 
-expr ::= LOAD_GLOBAL . 
-expr ::= LOAD_STR . 
-expr ::= attribute . 
-expr ::= attribute37 . 
-expr ::= call . 
-expr ::= call_kw36 . 
-expr ::= compare . 
-expr ::= or . 
-expr ::= subscript . 
-expr_jit ::= expr . JUMP_IF_TRUE
-expr_jitop ::= expr . JUMP_IF_TRUE_OR_POP
-expr_jt ::= expr . jmp_true
-expr_jt ::= expr jmp_true . 
-expr_pjit ::= expr . POP_JUMP_IF_TRUE
-expr_pjit ::= expr POP_JUMP_IF_TRUE . 
-expr_pjit_come_from ::= expr . POP_JUMP_IF_TRUE COME_FROM
-expr_pjit_come_from ::= expr POP_JUMP_IF_TRUE . COME_FROM
-expr_stmt ::= expr . POP_TOP
-expr_stmt ::= expr POP_TOP . 
-get_iter ::= expr . GET_ITER
-if_exp ::= expr . jmp_false expr jf_cf expr COME_FROM
-if_exp ::= expr . jmp_false expr jump_absolute_else expr
-if_exp ::= expr jmp_false . expr jf_cf expr COME_FROM
-if_exp ::= expr jmp_false . expr jump_absolute_else expr
-if_exp ::= expr jmp_false expr . jf_cf expr COME_FROM
-if_exp ::= expr jmp_false expr . jump_absolute_else expr
-if_exp37 ::= expr . expr jf_cfs expr COME_FROM
-if_exp37 ::= expr expr . jf_cfs expr COME_FROM
-if_exp_37b ::= expr . jmp_false expr POP_JUMP_IF_FALSE jump_forward_else expr
-if_exp_37b ::= expr jmp_false . expr POP_JUMP_IF_FALSE jump_forward_else expr
-if_exp_37b ::= expr jmp_false expr . POP_JUMP_IF_FALSE jump_forward_else expr
-if_exp_lambda ::= expr . jmp_false expr return_if_lambda return_stmt_lambda LAMBDA_MARKER
-if_exp_lambda ::= expr jmp_false . expr return_if_lambda return_stmt_lambda LAMBDA_MARKER
-if_exp_lambda ::= expr jmp_false expr . return_if_lambda return_stmt_lambda LAMBDA_MARKER
-if_exp_not ::= expr . jmp_true expr jump_forward_else expr COME_FROM
-if_exp_not ::= expr jmp_true . expr jump_forward_else expr COME_FROM
-if_exp_not ::= expr jmp_true expr . jump_forward_else expr COME_FROM
-if_exp_not_lambda ::= expr . jmp_true expr return_if_lambda return_stmt_lambda LAMBDA_MARKER
-if_exp_not_lambda ::= expr jmp_true . expr return_if_lambda return_stmt_lambda LAMBDA_MARKER
-if_exp_not_lambda ::= expr jmp_true expr . return_if_lambda return_stmt_lambda LAMBDA_MARKER
-if_exp_true ::= expr . JUMP_FORWARD expr COME_FROM
-ifelsestmt ::= testexpr . c_stmts come_froms else_suite come_froms
-ifelsestmt ::= testexpr . c_stmts_opt JUMP_FORWARD else_suite \e__come_froms
-ifelsestmt ::= testexpr . c_stmts_opt JUMP_FORWARD else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr . c_stmts_opt JUMP_FORWARD else_suite _come_froms
-ifelsestmt ::= testexpr . c_stmts_opt JUMP_FORWARD else_suite opt_come_from_except
-ifelsestmt ::= testexpr . c_stmts_opt jf_cfs else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr . c_stmts_opt jf_cfs else_suite opt_come_from_except
-ifelsestmt ::= testexpr . c_stmts_opt jump_forward_else else_suite \e__come_froms
-ifelsestmt ::= testexpr . c_stmts_opt jump_forward_else else_suite _come_froms
-ifelsestmt ::= testexpr . stmts jf_cfs \e_else_suite_opt \e_opt_come_from_except
-ifelsestmt ::= testexpr . stmts jf_cfs \e_else_suite_opt opt_come_from_except
-ifelsestmt ::= testexpr . stmts jf_cfs else_suite_opt \e_opt_come_from_except
-ifelsestmt ::= testexpr . stmts jf_cfs else_suite_opt opt_come_from_except
-ifelsestmt ::= testexpr \e_c_stmts_opt . JUMP_FORWARD else_suite \e__come_froms
-ifelsestmt ::= testexpr \e_c_stmts_opt . JUMP_FORWARD else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr \e_c_stmts_opt . JUMP_FORWARD else_suite _come_froms
-ifelsestmt ::= testexpr \e_c_stmts_opt . JUMP_FORWARD else_suite opt_come_from_except
-ifelsestmt ::= testexpr \e_c_stmts_opt . jf_cfs else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr \e_c_stmts_opt . jf_cfs else_suite opt_come_from_except
-ifelsestmt ::= testexpr \e_c_stmts_opt . jump_forward_else else_suite \e__come_froms
-ifelsestmt ::= testexpr \e_c_stmts_opt . jump_forward_else else_suite _come_froms
-ifelsestmt ::= testexpr c_stmts . come_froms else_suite come_froms
-ifelsestmt ::= testexpr c_stmts come_froms . else_suite come_froms
-ifelsestmt ::= testexpr c_stmts come_froms else_suite . come_froms
-ifelsestmt ::= testexpr c_stmts come_froms else_suite come_froms . 
-ifelsestmt ::= testexpr c_stmts_opt . JUMP_FORWARD else_suite \e__come_froms
-ifelsestmt ::= testexpr c_stmts_opt . JUMP_FORWARD else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr c_stmts_opt . JUMP_FORWARD else_suite _come_froms
-ifelsestmt ::= testexpr c_stmts_opt . JUMP_FORWARD else_suite opt_come_from_except
-ifelsestmt ::= testexpr c_stmts_opt . jf_cfs else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr c_stmts_opt . jf_cfs else_suite opt_come_from_except
-ifelsestmt ::= testexpr c_stmts_opt . jump_forward_else else_suite \e__come_froms
-ifelsestmt ::= testexpr c_stmts_opt . jump_forward_else else_suite _come_froms
-ifelsestmt ::= testexpr c_stmts_opt JUMP_FORWARD . else_suite \e__come_froms
-ifelsestmt ::= testexpr c_stmts_opt JUMP_FORWARD . else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr c_stmts_opt JUMP_FORWARD . else_suite _come_froms
-ifelsestmt ::= testexpr c_stmts_opt JUMP_FORWARD . else_suite opt_come_from_except
-ifelsestmt ::= testexpr c_stmts_opt jf_cfs . else_suite \e_opt_come_from_except
-ifelsestmt ::= testexpr c_stmts_opt jf_cfs . else_suite opt_come_from_except
-ifelsestmt ::= testexpr c_stmts_opt jf_cfs else_suite . opt_come_from_except
-ifelsestmt ::= testexpr c_stmts_opt jf_cfs else_suite \e_opt_come_from_except . 
-ifelsestmt ::= testexpr c_stmts_opt jf_cfs else_suite opt_come_from_except . 
-ifelsestmt ::= testexpr c_stmts_opt jump_forward_else . else_suite \e__come_froms
-ifelsestmt ::= testexpr c_stmts_opt jump_forward_else . else_suite _come_froms
-ifelsestmt ::= testexpr c_stmts_opt jump_forward_else else_suite . _come_froms
-ifelsestmt ::= testexpr c_stmts_opt jump_forward_else else_suite \e__come_froms . 
-ifelsestmt ::= testexpr c_stmts_opt jump_forward_else else_suite _come_froms . 
-ifelsestmt ::= testexpr stmts . jf_cfs \e_else_suite_opt \e_opt_come_from_except
-ifelsestmt ::= testexpr stmts . jf_cfs \e_else_suite_opt opt_come_from_except
-ifelsestmt ::= testexpr stmts . jf_cfs else_suite_opt \e_opt_come_from_except
-ifelsestmt ::= testexpr stmts . jf_cfs else_suite_opt opt_come_from_except
-ifelsestmt ::= testexpr stmts jf_cfs . else_suite_opt \e_opt_come_from_except
-ifelsestmt ::= testexpr stmts jf_cfs . else_suite_opt opt_come_from_except
-ifelsestmt ::= testexpr stmts jf_cfs \e_else_suite_opt . opt_come_from_except
-ifelsestmt ::= testexpr stmts jf_cfs \e_else_suite_opt \e_opt_come_from_except . 
-ifelsestmt ::= testexpr stmts jf_cfs \e_else_suite_opt opt_come_from_except . 
-ifelsestmt ::= testexpr stmts jf_cfs else_suite_opt . opt_come_from_except
-ifelsestmt ::= testexpr stmts jf_cfs else_suite_opt \e_opt_come_from_except . 
-ifelsestmt ::= testexpr stmts jf_cfs else_suite_opt opt_come_from_except . 
-ifelsestmtc ::= testexpr . c_stmts_opt JUMP_ABSOLUTE else_suitec
-ifelsestmtc ::= testexpr . c_stmts_opt JUMP_FORWARD else_suitec
-ifelsestmtc ::= testexpr . c_stmts_opt jump_absolute_else else_suitec
-ifelsestmtc ::= testexpr \e_c_stmts_opt . JUMP_ABSOLUTE else_suitec
-ifelsestmtc ::= testexpr \e_c_stmts_opt . JUMP_FORWARD else_suitec
-ifelsestmtc ::= testexpr \e_c_stmts_opt . jump_absolute_else else_suitec
-ifelsestmtl ::= testexpr . c_stmts_opt cf_jf_else else_suitel
-ifelsestmtl ::= testexpr . c_stmts_opt cf_jump_back else_suitel
-ifelsestmtl ::= testexpr . c_stmts_opt jb_cfs else_suitel
-ifelsestmtl ::= testexpr . c_stmts_opt jb_else else_suitel
-ifelsestmtl ::= testexpr . c_stmts_opt jump_forward_else else_suitec
-ifelsestmtl ::= testexpr \e_c_stmts_opt . cf_jf_else else_suitel
-ifelsestmtl ::= testexpr \e_c_stmts_opt . cf_jump_back else_suitel
-ifelsestmtl ::= testexpr \e_c_stmts_opt . jb_cfs else_suitel
-ifelsestmtl ::= testexpr \e_c_stmts_opt . jb_else else_suitel
-ifelsestmtl ::= testexpr \e_c_stmts_opt . jump_forward_else else_suitec
-ifelsestmtl ::= testexpr c_stmts_opt . cf_jf_else else_suitel
-ifelsestmtl ::= testexpr c_stmts_opt . cf_jump_back else_suitel
-ifelsestmtl ::= testexpr c_stmts_opt . jb_cfs else_suitel
-ifelsestmtl ::= testexpr c_stmts_opt . jb_else else_suitel
-ifelsestmtl ::= testexpr c_stmts_opt . jump_forward_else else_suitec
-ifelsestmtl ::= testexpr c_stmts_opt jump_forward_else . else_suitec
-ifelsestmtl ::= testexpr c_stmts_opt jump_forward_else else_suitec . 
-ifelsestmtl ::= testexpr_cf . c_stmts_opt jb_else else_suitel
-ifelsestmtl ::= testexpr_cf \e_c_stmts_opt . jb_else else_suitel
-ifelsestmtl ::= testexpr_cf c_stmts_opt . jb_else else_suitel
-ifelsestmtr ::= testexpr . return_if_stmts returns
-iflaststmt ::= testexpr . c_stmts
-iflaststmt ::= testexpr . c_stmts JUMP_ABSOLUTE
-iflaststmt ::= testexpr . c_stmts_opt JUMP_FORWARD
-iflaststmt ::= testexpr \e_c_stmts_opt . JUMP_FORWARD
-iflaststmtl ::= testexpr . c_stmts
-iflaststmtl ::= testexpr . c_stmts JUMP_BACK
-iflaststmtl ::= testexpr . c_stmts JUMP_BACK COME_FROM_LOOP
-iflaststmtl ::= testexpr . c_stmts JUMP_BACK POP_BLOCK
-iflaststmtl ::= testexpr c_stmts . 
-iflaststmtl ::= testexpr c_stmts . JUMP_BACK
-iflaststmtl ::= testexpr c_stmts . JUMP_BACK COME_FROM_LOOP
-iflaststmtl ::= testexpr c_stmts . JUMP_BACK POP_BLOCK
-iflaststmtl ::= testexprl . c_stmts JUMP_BACK
-iflaststmtl ::= testexprl . c_stmts JUMP_BACK COME_FROM_LOOP
-iflaststmtl ::= testexprl . c_stmts JUMP_BACK POP_BLOCK
-ifstmt ::= testexpr . _ifstmts_jump
-ifstmt ::= testexpr _ifstmts_jump . 
-ifstmtl ::= testexpr . _ifstmts_jumpl
-ifstmtl ::= testexpr _ifstmts_jumpl . 
-jb_cfs ::= \e_come_from_opt . JUMP_BACK come_froms
-jb_cfs ::= come_from_opt . JUMP_BACK come_froms
-jf_cfs ::= JUMP_FORWARD . _come_froms
-jf_cfs ::= JUMP_FORWARD \e__come_froms . 
-jf_cfs ::= JUMP_FORWARD _come_froms . 
-jmp_false ::= POP_JUMP_IF_FALSE . 
-jmp_true ::= POP_JUMP_IF_TRUE . 
-jump_absolute_else ::= come_froms . _jump COME_FROM
-jump_forward_else ::= JUMP_FORWARD . 
-jump_forward_else ::= JUMP_FORWARD . COME_FROM
-jump_forward_else ::= JUMP_FORWARD . ELSE
-jump_forward_else ::= JUMP_FORWARD COME_FROM . 
-lambda_body ::= expr . LOAD_LAMBDA LOAD_STR MAKE_FUNCTION_1
-lastl_stmt ::= ifelsestmtl . 
-lastl_stmt ::= iflaststmtl . 
-list ::= expr . BUILD_LIST_1
-list ::= expr . expr BUILD_LIST_2
-list ::= expr . expr expr BUILD_LIST_3
-list ::= expr . expr expr expr BUILD_LIST_4
-list ::= expr . expr expr expr expr expr BUILD_LIST_6
-list ::= expr . expr expr expr expr expr expr BUILD_LIST_7
-list ::= expr . expr expr expr expr expr expr expr expr expr BUILD_LIST_10
-list ::= expr expr . BUILD_LIST_2
-list ::= expr expr . expr BUILD_LIST_3
-list ::= expr expr . expr expr BUILD_LIST_4
-list ::= expr expr . expr expr expr expr BUILD_LIST_6
-list ::= expr expr . expr expr expr expr expr BUILD_LIST_7
-list ::= expr expr . expr expr expr expr expr expr expr expr BUILD_LIST_10
-list ::= expr expr expr . BUILD_LIST_3
-list ::= expr expr expr . expr BUILD_LIST_4
-list ::= expr expr expr . expr expr expr BUILD_LIST_6
-list ::= expr expr expr . expr expr expr expr BUILD_LIST_7
-list ::= expr expr expr . expr expr expr expr expr expr expr BUILD_LIST_10
-list ::= expr expr expr expr . BUILD_LIST_4
-list ::= expr expr expr expr . expr expr BUILD_LIST_6
-list ::= expr expr expr expr . expr expr expr BUILD_LIST_7
-list ::= expr expr expr expr . expr expr expr expr expr expr BUILD_LIST_10
-list ::= expr expr expr expr expr . expr BUILD_LIST_6
-list ::= expr expr expr expr expr . expr expr BUILD_LIST_7
-list ::= expr expr expr expr expr . expr expr expr expr expr BUILD_LIST_10
-list ::= expr expr expr expr expr expr . BUILD_LIST_6
-list ::= expr expr expr expr expr expr . expr BUILD_LIST_7
-list ::= expr expr expr expr expr expr . expr expr expr expr BUILD_LIST_10
-list ::= expr expr expr expr expr expr expr . BUILD_LIST_7
-list ::= expr expr expr expr expr expr expr . expr expr expr BUILD_LIST_10
-list ::= expr expr expr expr expr expr expr expr . expr expr BUILD_LIST_10
-list ::= expr expr expr expr expr expr expr expr expr . expr BUILD_LIST_10
-list ::= expr expr expr expr expr expr expr expr expr expr . BUILD_LIST_10
-mkfunc ::= expr . LOAD_CODE LOAD_STR MAKE_FUNCTION_1
-mkfuncdeco ::= expr . mkfuncdeco CALL_FUNCTION_1
-mkfuncdeco ::= expr . mkfuncdeco0 CALL_FUNCTION_1
-opt_come_from_except ::= _come_froms . 
-or ::= expr_jt . expr
-or ::= expr_jt . expr COME_FROM
-or ::= expr_jt expr . 
-or ::= expr_jt expr . COME_FROM
-or ::= expr_jt expr COME_FROM . 
-or ::= expr_pjit . expr POP_JUMP_IF_FALSE COME_FROM
-or ::= expr_pjit expr . POP_JUMP_IF_FALSE COME_FROM
-or ::= expr_pjit expr POP_JUMP_IF_FALSE . COME_FROM
-or ::= expr_pjit expr POP_JUMP_IF_FALSE COME_FROM . 
-pos_arg ::= expr . 
-ret_and ::= expr . JUMP_IF_FALSE_OR_POP return_expr_or_cond COME_FROM
-ret_or ::= expr . JUMP_IF_TRUE_OR_POP return_expr_or_cond COME_FROM
-return ::= return_expr . RETURN_END_IF
-return ::= return_expr . RETURN_VALUE
-return ::= return_expr . RETURN_VALUE COME_FROM
-return_expr ::= expr . 
-return_expr_lambda ::= return_expr . RETURN_VALUE_LAMBDA
-return_expr_lambda ::= return_expr . RETURN_VALUE_LAMBDA LAMBDA_MARKER
-return_if_stmt ::= return_expr . RETURN_END_IF
-return_if_stmt ::= return_expr . RETURN_END_IF POP_BLOCK
-return_if_stmts ::= _stmts . return_if_stmt \e__come_froms
-return_if_stmts ::= _stmts . return_if_stmt _come_froms
-returns ::= _stmts . return
-returns ::= _stmts . return_if_stmt
-slice2 ::= expr . expr BUILD_SLICE_2
-slice2 ::= expr expr . BUILD_SLICE_2
-sstmt ::= sstmt . RETURN_LAST
-sstmt ::= stmt . 
-stmt ::= assign . 
-stmt ::= call_stmt . 
-stmt ::= expr_stmt . 
-stmt ::= ifelsestmt . 
-stmt ::= ifstmt . 
-stmt ::= ifstmtl . 
-stmts ::= sstmt . 
-stmts ::= stmts . sstmt
-stmts ::= stmts sstmt . 
-store ::= STORE_FAST . 
-store ::= expr . STORE_ATTR
-store ::= expr STORE_ATTR . 
-store_subscript ::= expr . expr STORE_SUBSCR
-store_subscript ::= expr expr . STORE_SUBSCR
-subscript ::= expr . expr BINARY_SUBSCR
-subscript ::= expr expr . BINARY_SUBSCR
-subscript ::= expr expr BINARY_SUBSCR . 
-subscript2 ::= expr . expr DUP_TOP_TWO BINARY_SUBSCR
-subscript2 ::= expr expr . DUP_TOP_TWO BINARY_SUBSCR
-suite_stmts ::= _stmts . 
-testexpr ::= testfalse . 
-testexpr ::= testtrue . 
-testexpr_cf ::= testexpr . come_froms
-testexpr_cf ::= testexpr come_froms . 
-testexprl ::= testfalsel . 
-testfalse ::= expr . jmp_false
-testfalse ::= expr jmp_false . 
-testfalse ::= or . jmp_false COME_FROM
-testfalse ::= or jmp_false . COME_FROM
-testfalse ::= or jmp_false COME_FROM . 
-testfalse_not_and ::= expr . jmp_false expr jmp_true COME_FROM
-testfalse_not_and ::= expr jmp_false . expr jmp_true COME_FROM
-testfalse_not_and ::= expr jmp_false expr . jmp_true COME_FROM
-testfalse_not_or ::= expr . jmp_false expr jmp_false COME_FROM
-testfalse_not_or ::= expr jmp_false . expr jmp_false COME_FROM
-testfalse_not_or ::= expr jmp_false expr . jmp_false COME_FROM
-testfalsel ::= expr . jmp_true
-testfalsel ::= expr jmp_true . 
-testtrue ::= expr . jmp_true
-testtrue ::= expr jmp_true . 
-tuple ::= expr . BUILD_TUPLE_1
-tuple ::= expr . expr BUILD_TUPLE_2
-tuple ::= expr expr . BUILD_TUPLE_2
-unary_not ::= expr . UNARY_NOT
-unary_op ::= expr . unary_operator
-with ::= expr . SETUP_WITH POP_TOP \e_suite_stmts_opt COME_FROM_WITH WITH_CLEANUP_START WITH_CLEANUP_FINISH END_FINALLY
-with ::= expr . SETUP_WITH POP_TOP \e_suite_stmts_opt COME_FROM_WITH with_suffix
-with ::= expr . SETUP_WITH POP_TOP \e_suite_stmts_opt POP_BLOCK LOAD_CONST COME_FROM_WITH with_suffix
-with ::= expr . SETUP_WITH POP_TOP \e_suite_stmts_opt POP_BLOCK LOAD_CONST WITH_CLEANUP_START WITH_CLEANUP_FINISH END_FINALLY
-with ::= expr . SETUP_WITH POP_TOP \e_suite_stmts_opt POP_BLOCK LOAD_CONST with_suffix
-with ::= expr . SETUP_WITH POP_TOP suite_stmts_opt COME_FROM_WITH WITH_CLEANUP_START WITH_CLEANUP_FINISH END_FINALLY
-with ::= expr . SETUP_WITH POP_TOP suite_stmts_opt COME_FROM_WITH with_suffix
-with ::= expr . SETUP_WITH POP_TOP suite_stmts_opt POP_BLOCK LOAD_CONST COME_FROM_WITH with_suffix
-with ::= expr . SETUP_WITH POP_TOP suite_stmts_opt POP_BLOCK LOAD_CONST WITH_CLEANUP_START WITH_CLEANUP_FINISH END_FINALLY
-with ::= expr . SETUP_WITH POP_TOP suite_stmts_opt POP_BLOCK LOAD_CONST with_suffix
-with_as ::= expr . SETUP_WITH store \e_suite_stmts_opt COME_FROM_WITH WITH_CLEANUP_START WITH_CLEANUP_FINISH END_FINALLY
-with_as ::= expr . SETUP_WITH store \e_suite_stmts_opt COME_FROM_WITH with_suffix
-with_as ::= expr . SETUP_WITH store \e_suite_stmts_opt POP_BLOCK LOAD_CONST COME_FROM_WITH with_suffix
-with_as ::= expr . SETUP_WITH store suite_stmts_opt COME_FROM_WITH WITH_CLEANUP_START WITH_CLEANUP_FINISH END_FINALLY
-with_as ::= expr . SETUP_WITH store suite_stmts_opt COME_FROM_WITH with_suffix
-with_as ::= expr . SETUP_WITH store suite_stmts_opt POP_BLOCK LOAD_CONST COME_FROM_WITH with_suffix
-yield ::= expr . YIELD_VALUE
-yield_from ::= expr . GET_YIELD_FROM_ITER LOAD_CONST YIELD_FROM
-Instruction context:
-   
- L.1159        70  LOAD_STR                 'audio_mode'
-                  72  LOAD_FAST                'self'
-                  74  LOAD_ATTR                _note_modes
-                  76  STORE_ATTR               selected_mode
-->                78  JUMP_FORWARD        102  'to 102'
-                80_0  COME_FROM            68  '68'
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range, str
 from functools import partial
 import Live
-import _Framework.ButtonMatrixElement as ButtonMatrixElement
-import _Framework.ComboElement as ComboElement
+from _Framework.ButtonMatrixElement import ButtonMatrixElement as ButtonMatrixElement
+from _Framework.ComboElement import ComboElement as ComboElement
 from _Framework.ControlSurface import OptimizedControlSurface
 from _Framework.Dependency import inject
-import _Framework.IdentifiableControlSurface as IdentifiableControlSurface
+from _Framework.IdentifiableControlSurface import IdentifiableControlSurface as IdentifiableControlSurface
 from _Framework.InputControlElement import MIDI_CC_TYPE, MIDI_NOTE_TYPE
-import _Framework.Layer as Layer
+from _Framework.Layer import Layer as Layer
 from _Framework.ModesComponent import AddLayerMode, LayerMode, ModesComponent, ReenterBehaviour
 from _Framework.SubjectSlot import subject_slot
 from _Framework.Util import const
@@ -662,10 +124,10 @@ class MidiMap(SpecialMidiMap):
          "Arrow_Left_Button",
          "Arrow_Right_Button"]
         arrow_button_states = {
-         'Pressed': '"DefaultButton.On"', 
-         'Enabled': '"DefaultButton.Off"', 
-         True: '"DefaultButton.On"', 
-         False: '"DefaultButton.Disabled"'}
+          'Pressed': "DefaultButton.On",
+          'Enabled': "DefaultButton.Off",
+          True: "DefaultButton.On",
+          False: "DefaultButton.Disabled"}
         for index, val in enumerate(self._arrow_button_names):
             self.add_button(val,
               0, (index + 91), MIDI_CC_TYPE, default_states=arrow_button_states)
@@ -696,12 +158,12 @@ class MidiMap(SpecialMidiMap):
           color_slaves=True)
         self.add_matrix("Scene_Launch_Button_Matrix", make_button, 0, [
          [identifier for identifier in range(89, 18, -10)]], MIDI_CC_TYPE)
-        self["Scene_Stop_Button_Matrix"] = self["Scene_Launch_Button_Matrix"].submatrix[(
-         None[:7], None[:None])]
+        self["Scene_Stop_Button_Matrix"] = self["Scene_Launch_Button_Matrix"].submatrix[
+         :7, :]
         self["Scene_Stop_Button_Matrix"].name = "Scene_Stop_Button_Matrix"
         self["Stop_All_Clips_Button"] = self["Scene_Launch_Button_Matrix_Raw"][0][7]
         self.add_matrix("Main_Button_Matrix", make_button, 0, [[identifier for identifier in range(start, start + NUM_TRACKS)] for start in range(81, 10, -10)], MIDI_NOTE_TYPE)
-        self["Mixer_Button_Matrix"] = self["Main_Button_Matrix"].submatrix[(None[:None], 7[:None])]
+        self["Mixer_Button_Matrix"] = self["Main_Button_Matrix"].submatrix[:, 7:]
         self["Mixer_Button_Matrix"].name = "Mixer_Button_Matrix"
         matrix_rows_with_session_button_raw = [[self.with_session_button(self["Main_Button_Matrix_Raw"][row][column]) for column in range(8)] for row in range(8)]
         self["Main_Button_Matrix_With_Session_Button"] = ButtonMatrixElement(rows=matrix_rows_with_session_button_raw,
@@ -740,7 +202,7 @@ class MidiMap(SpecialMidiMap):
           name="Drum_Button_Matrix")
         self.add_matrix("Slider_Button_Matrix", make_slider, 0, [
          [identifier for identifier in range(21, 29)]], MIDI_CC_TYPE)
-        for index, slider in enumerate(self["Slider_Button_Matrix_Raw"][0]):
+        for (index, slider) in enumerate(self["Slider_Button_Matrix_Raw"][0]):
             slider.set_index(index)
 
         self.create_user_mode_controls()
@@ -1224,13 +686,26 @@ class Launchpad_Pro(IdentifiableControlSurface, OptimizedControlSurface):
     def _on_drum_group_changed(self):
         if self._note_modes.selected_mode == "drum_mode":
             self._drum_group.set_drum_group_device(self._drum_group_finder.drum_group)
-        elif self._modes.selected_mode == "note_mode":
+        if self._modes.selected_mode == "note_mode":
             self._select_note_mode()
         else:
             self.release_controlled_track()
         self._update_note_mode_button(self._drum_group_finder.drum_group is not None)
 
-    def _select_note_modeParse error at or near `JUMP_FORWARD' instruction at offset 78
+    def _select_note_mode(self):
+        track = self._target_track_component.target_track
+        drum_device = self._drum_group_finder.drum_group
+        if track is None or track.is_foldable or track in self.song().return_tracks or track == self.song().master_track or track.is_frozen or track.has_audio_input:
+            self._note_modes.selected_mode = "audio_mode"
+        elif drum_device:
+            self._note_modes.selected_mode = "drum_mode"
+        else:
+            self._note_modes.selected_mode = "chromatic_mode"
+        self._modes.update()
+        if self._note_modes.selected_mode == "audio_mode":
+            self.release_controlled_track()
+        else:
+            self.set_controlled_track(self._target_track_component.target_track)
 
     def _select_target_track(self):
         track = self._target_track_component.target_track
@@ -1342,7 +817,7 @@ class Launchpad_Pro(IdentifiableControlSurface, OptimizedControlSurface):
         self.update()
 
     def _is_challenge_response(self, midi_bytes):
-        return len(midi_bytes) == 10 and midi_bytes[None[:7]] == consts.SYSEX_STANDARD_PREFIX + consts.SYSEX_CHALLENGE_RESPONSE_BYTE
+        return len(midi_bytes) == 10 and midi_bytes[:7] == consts.SYSEX_STANDARD_PREFIX + consts.SYSEX_CHALLENGE_RESPONSE_BYTE
 
     def _is_response_valid(self, midi_bytes):
         response = int(midi_bytes[7])
@@ -1354,13 +829,13 @@ class Launchpad_Pro(IdentifiableControlSurface, OptimizedControlSurface):
             pass
         elif self._is_challenge_response(midi_bytes) and self._is_response_valid(midi_bytes):
             self._on_handshake_successful()
+        elif midi_bytes[6] == consts.SYSEX_STATUS_BYTE_LAYOUT and midi_bytes[7] == consts.NOTE_LAYOUT_SYSEX_BYTE[0]:
+            self._update_hardware()
+        elif midi_bytes[6] in (
+         consts.SYSEX_STATUS_BYTE_MODE,
+         consts.SYSEX_STATUS_BYTE_LAYOUT):
+            pass
         else:
-            if midi_bytes[6] == consts.SYSEX_STATUS_BYTE_LAYOUT and midi_bytes[7] == consts.NOTE_LAYOUT_SYSEX_BYTE[0]:
-                self._update_hardware()
-            else:
-                if midi_bytes[6] in (
-                 consts.SYSEX_STATUS_BYTE_MODE,
-                 consts.SYSEX_STATUS_BYTE_LAYOUT):
-                    pass
-                else:
-                    super(Launchpad_Pro, self).handle_sysex(midi_bytes)
+            super(Launchpad_Pro, self).handle_sysex(midi_bytes)
+
+# okay decompiling ./MIDIRemoteScripts/Launchpad_Pro/Launchpad_Pro.pyc

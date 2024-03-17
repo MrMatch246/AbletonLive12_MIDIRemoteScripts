@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Akai_Force_MPC\channel_strip.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 16307 bytes
@@ -156,7 +156,7 @@ class ChannelStripComponent(ChannelStripComponentBase):
 
     def _update_output_meter_listeners(self):
         track = self.track
-        subject = track if (liveobj_valid(track) and track.has_audio_output) else None
+        subject = track if (liveobj_valid(track)) and (track.has_audio_output) else None
         self._ChannelStripComponent__on_output_meter_left_changed.subject = subject
         self._ChannelStripComponent__on_output_meter_right_changed.subject = subject
         if liveobj_valid(subject):
@@ -201,14 +201,14 @@ class ChannelStripComponent(ChannelStripComponentBase):
     @listens("value")
     def __on_volume_changed(self):
         track = self.track
-        value_string = format_volume_value_string(str(track.mixer_device.volume) if (liveobj_valid(track) and track.has_audio_output) else "")
+        value_string = format_volume_value_string(str(track.mixer_device.volume) if (liveobj_valid(track)) and (track.has_audio_output) else "")
         self._oled_display_volume_value_data_source.set_display_string(value_string)
         self.volume_value_display[0] = value_string
 
     @listens("value")
     def __on_pan_changed(self):
         track = self.track
-        self.pan_value_display[0] = str(track.mixer_device.panning) if (liveobj_valid(track) and track.has_audio_output) else ""
+        self.pan_value_display[0] = str(track.mixer_device.panning) if (liveobj_valid(track)) and (track.has_audio_output) else ""
 
     @listens_group("value")
     def __on_send_value_changed(self, send_index):
@@ -221,7 +221,7 @@ class ChannelStripComponent(ChannelStripComponentBase):
 
     @listens("muted_via_solo")
     def __on_muted_via_solo_changed(self):
-        self.solo_mute_button.color = "DefaultButton.On" if (liveobj_valid(self.track) and self.track != self.song.master_track and self.track.muted_via_solo) else "DefaultButton.Off"
+        self.solo_mute_button.color = "DefaultButton.On" if liveobj_valid(self.track) and self.track != self.song.master_track and (self.track.muted_via_solo) else "DefaultButton.Off"
 
     @listens("instrument")
     def __on_drum_group_found(self):
@@ -254,22 +254,19 @@ class ChannelStripComponent(ChannelStripComponentBase):
         if liveobj_valid(track):
             if track == self.song.master_track:
                 track_type = MASTER_TRACK
-            else:
-                if track in self.song.return_tracks:
-                    track_type = RETURN_TRACK
+            elif track in self.song.return_tracks:
+                track_type = RETURN_TRACK
+            elif track.is_foldable:
+                track_type = GROUP_TRACK
+            elif track.has_midi_input:
+                if self._drum_group_finder is not None and liveobj_valid(self._drum_group_finder.drum_group):
+                    track_type = DRUM_TRACK
+                elif track.has_audio_output:
+                    track_type = MELODIC_TRACK
                 else:
-                    if track.is_foldable:
-                        track_type = GROUP_TRACK
-                    else:
-                        if track.has_midi_input:
-                            if self._drum_group_finder is not None and liveobj_valid(self._drum_group_finder.drum_group):
-                                track_type = DRUM_TRACK
-                            elif track.has_audio_output:
-                                track_type = MELODIC_TRACK
-                            else:
-                                track_type = EMPTY_MIDI_TRACK
-                        elif track.has_audio_output:
-                            track_type = AUDIO_TRACK
+                    track_type = EMPTY_MIDI_TRACK
+            elif track.has_audio_output:
+                track_type = AUDIO_TRACK
         self.track_type_control.value = track_type
 
     def _update_crossfade_assignment_control(self):
@@ -306,12 +303,13 @@ class ChannelStripComponent(ChannelStripComponentBase):
         mute_button_color = "Mixer.MuteOn"
         track = self.track
         if liveobj_valid(track):
-            mute_color_control_color = track == self.song.master_track or track.mute or "Mixer.MuteOn"
-            mute_button_color = "Mixer.MuteOff"
-        self.mute_color_control.color = mute_color_control_color
-        self.mpc_mute_button.color = mute_color_control_color
-        if self._mute_button:
-            self._mute_button.set_light(mute_button_color)
+            if not (track == self.song.master_track or track.mute):
+                mute_color_control_color = "Mixer.MuteOn"
+                mute_button_color = "Mixer.MuteOff"
+            self.mute_color_control.color = mute_color_control_color
+            self.mpc_mute_button.color = mute_color_control_color
+            if self._mute_button:
+                self._mute_button.set_light(mute_button_color)
 
     def _update_solo_color_control(self):
         color = "Mixer.SoloOff"
@@ -355,7 +353,7 @@ class ChannelStripComponent(ChannelStripComponentBase):
                 sends = track.mixer_device.sends
                 if index < len(sends):
                     value_to_send = str(sends[index])
-            self.send_value_displays[index][0] = value_to_send
+                self.send_value_displays[index][0] = value_to_send
 
     def _reset_output_meter_controls(self):
         self.output_meter_left_control.value = 0

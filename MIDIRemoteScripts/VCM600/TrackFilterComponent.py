@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\VCM600\TrackFilterComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3926 bytes
@@ -9,8 +9,8 @@ from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 import Live
 from _Generic.Devices import get_parameter_by_name
-import _Framework.ControlSurfaceComponent as ControlSurfaceComponent
-import _Framework.EncoderElement as EncoderElement
+from _Framework.ControlSurfaceComponent import ControlSurfaceComponent as ControlSurfaceComponent
+from _Framework.EncoderElement import EncoderElement as EncoderElement
 FILTER_DEVICES = {'AutoFilter':{'Frequency':"Frequency", 
   'Resonance':"Resonance"}, 
  'Operator':{'Frequency':"Filter Freq", 
@@ -56,9 +56,9 @@ class TrackFilterComponent(ControlSurfaceComponent):
                     self._freq_control.release_parameter()
                 if self._reso_control != None:
                     self._reso_control.release_parameter()
-        self._track = track
-        if self._track != None:
-            self._track.add_devices_listener(self._on_devices_changed)
+            self._track = track
+            if self._track != None:
+                self._track.add_devices_listener(self._on_devices_changed)
         self._on_devices_changed()
 
     def set_filter_controls(self, freq, reso):
@@ -81,11 +81,11 @@ class TrackFilterComponent(ControlSurfaceComponent):
                     parameter = get_parameter_by_name(self._device, device_dict["Frequency"])
                     if parameter != None:
                         self._freq_control.connect_to(parameter)
-                if self._reso_control != None:
-                    self._reso_control.release_parameter()
-                    parameter = get_parameter_by_name(self._device, device_dict["Resonance"])
-                    if parameter != None:
-                        self._reso_control.connect_to(parameter)
+                    if self._reso_control != None:
+                        self._reso_control.release_parameter()
+                        parameter = get_parameter_by_name(self._device, device_dict["Resonance"])
+                        if parameter != None:
+                            self._reso_control.connect_to(parameter)
 
     def _on_devices_changed(self):
         self._device = None

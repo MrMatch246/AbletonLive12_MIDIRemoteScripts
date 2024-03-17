@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ATOMSQ\display.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2407 bytes
@@ -11,10 +11,10 @@ from typing import Optional, Tuple
 from ableton.v3.control_surface.display import DefaultNotifications, DisplaySpecification, view
 from ableton.v3.live import liveobj_name
 BUTTON_LABELS_MAP = {
- 'song': ('Solo', 'Mute', 'Arm', 'Clip', 'Scene', 'Stop'), 
- 'instrument': ('-', '-', '-', '-', '-', '-'), 
- 'editor': ('Lock', '< Device', 'Device >', 'On/Off', '< Bank', 'Bank >'), 
- 'user': ('User 1', 'User 2', 'User 3', 'User 4', 'User 5', 'User 6')}
+  'song': ('Solo', 'Mute', 'Arm', 'Clip', 'Scene', 'Stop'),
+  'instrument': ('-', '-', '-', '-', '-', '-'),
+  'editor': ('Lock', '< Device', 'Device >', 'On/Off', '< Bank', 'Bank >'),
+  'user': ('User 1', 'User 2', 'User 3', 'User 4', 'User 5', 'User 6')}
 
 @dataclass
 class Content:
@@ -60,7 +60,7 @@ def protocol(elements):
 
     def display_button_labels(content):
         if content.button_labels:
-            for i, text in enumerate(content.button_labels):
+            for (i, text) in enumerate(content.button_labels):
                 getattr(elements, "button_label_display_{}".format(i)).display_message(text)
 
     return display

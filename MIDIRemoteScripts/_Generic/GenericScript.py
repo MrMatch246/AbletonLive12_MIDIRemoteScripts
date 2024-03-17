@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Generic\GenericScript.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 16711 bytes
@@ -10,14 +10,14 @@ from builtins import range
 from future.utils import iteritems
 from functools import partial
 import Live
-import _Framework.ButtonElement as ButtonElement
-import _Framework.ButtonMatrixElement as ButtonMatrixElement
-import _Framework.ControlSurface as ControlSurface
-import _Framework.DeviceComponent as DeviceComponent
-import _Framework.EncoderElement as EncoderElement
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.ButtonMatrixElement import ButtonMatrixElement as ButtonMatrixElement
+from _Framework.ControlSurface import ControlSurface as ControlSurface
+from _Framework.DeviceComponent import DeviceComponent as DeviceComponent
+from _Framework.EncoderElement import EncoderElement as EncoderElement
 from _Framework.InputControlElement import MIDI_CC_TYPE
-import _Framework.Layer as Layer
-import _Framework.TransportComponent as TransportComponent
+from _Framework.Layer import Layer as Layer
+from _Framework.TransportComponent import TransportComponent as TransportComponent
 from _Framework.Util import NamedTuple
 from .SpecialMixerComponent import SpecialMixerComponent
 
@@ -64,12 +64,13 @@ class GenericScript(ControlSurface):
             if descriptions:
                 if "INPUTPORT" in descriptions:
                     self._suggested_input_port = descriptions["INPUTPORT"]
-                elif "OUTPUTPORT" in descriptions:
+                if "OUTPUTPORT" in descriptions:
                     self._suggested_output_port = descriptions["OUTPUTPORT"]
-                if "CHANNEL" in descriptions and is_valid_midi_channel(descriptions["CHANNEL"]):
-                    global_channel = descriptions["CHANNEL"]
-                if "PAD_TRANSLATION" in descriptions:
-                    self.set_pad_translations(descriptions["PAD_TRANSLATION"])
+                if "CHANNEL" in descriptions:
+                    if is_valid_midi_channel(descriptions["CHANNEL"]):
+                        global_channel = descriptions["CHANNEL"]
+                    if "PAD_TRANSLATION" in descriptions:
+                        self.set_pad_translations(descriptions["PAD_TRANSLATION"])
             self._init_mixer_component(volume_controls, trackarm_controls, mixer_options, global_channel, volume_map_mode)
             self._init_device_component(device_controls, bank_controls, global_channel, macro_map_mode, device_component_class)
             self._init_transport_component(transport_controls, global_channel)
@@ -83,7 +84,6 @@ class GenericScript(ControlSurface):
         if mixer_options:
             if "SENDMAPMODE" in mixer_options:
                 sends_map_mode = mixer_options["SENDMAPMODE"]
-        else:
             MixerButton = partial(ButtonElement, momentary_buttons, MIDI_CC_TYPE, global_channel)
 
             def make_mixer_encoder(cc, channel, name, map_mode=volume_map_mode):
@@ -97,8 +97,8 @@ class GenericScript(ControlSurface):
                     if channel_spec in mixer_options:
                         if is_valid_midi_channel(mixer_options[channel_spec]):
                             channel = mixer_options[channel_spec]
-                    return make_mixer_encoder(
-                     (mixer_options[identifier_spec]), channel, control_name, **k)
+                        return make_mixer_encoder(
+                         (mixer_options[identifier_spec]), channel, control_name, **k)
 
             def make_mixer_button(control, name):
                 return MixerButton((mixer_options[control]), name=name)
@@ -109,92 +109,94 @@ class GenericScript(ControlSurface):
                         return MixerButton((control_list[index]),
                           name=("{}_{}_Button".format(index, name)))
 
-            if volume_controls is not None and trackarm_controls is not None:
-                num_strips = max(len(volume_controls), len(trackarm_controls))
-                send_info = []
-                mute_controls = []
-                solo_controls = []
-                select_controls = []
-                mixer = SpecialMixerComponent(num_strips,
-                  name="Mixer",
-                  invert_mute_feedback=(mixer_options and mixer_options.get("INVERTMUTELEDS", True)))
-                mixer.master_strip().name = "Master_Channel_Strip"
-                mixer.selected_strip().name = "Selected_Channel_Strip"
-                if mixer_options is not None:
-                    master_volume = make_global_mixer_encoder("MASTERVOLUME", "MASTERVOLUMECHANNEL", "Master_Volume_Control")
-                    if master_volume:
-                        mixer.master_strip().layer = Layer(volume_control=master_volume)
-                    for send in range(mixer_options.get("NUMSENDS", 0)):
-                        send_info.append(mixer_options["SEND{}".format(send + 1)])
+            if volume_controls is not None:
+                if trackarm_controls is not None:
+                    num_strips = max(len(volume_controls), len(trackarm_controls))
+                    send_info = []
+                    mute_controls = []
+                    solo_controls = []
+                    select_controls = []
+                    mixer = SpecialMixerComponent(num_strips,
+                      name="Mixer",
+                      invert_mute_feedback=(mixer_options and mixer_options.get("INVERTMUTELEDS", True)))
+                    mixer.master_strip().name = "Master_Channel_Strip"
+                    mixer.selected_strip().name = "Selected_Channel_Strip"
+                    if mixer_options is not None:
+                        master_volume = make_global_mixer_encoder("MASTERVOLUME", "MASTERVOLUMECHANNEL", "Master_Volume_Control")
+                        if master_volume:
+                            mixer.master_strip().layer = Layer(volume_control=master_volume)
+                        for send in range(mixer_options.get("NUMSENDS", 0)):
+                            send_info.append(mixer_options["SEND{}".format(send + 1)])
 
-                    layer_specs = {}
-                    cue_volume = make_global_mixer_encoder("CUEVOLUME", "CUEVOLUMECHANNEL", "Cue_Volume_Control")
-                    if cue_volume:
-                        layer_specs["prehear_volume_control"] = cue_volume
-                    crossfader_map_mode = Live.MidiMap.MapMode.absolute
-                    if "CROSSFADERMAPMODE" in mixer_options:
-                        crossfader_map_mode = mixer_options["CROSSFADERMAPMODE"]
-                    crossfader = make_global_mixer_encoder("CROSSFADER",
-                      "CROSSFADERCHANNEL",
-                      "Crossfader_Control",
-                      map_mode=crossfader_map_mode)
-                    if crossfader:
-                        layer_specs["crossfader_control"] = crossfader
-                        crossfader.set_needs_takeover(False)
-                    if has_specification_for("NEXTBANK", mixer_options):
-                        layer_specs["bank_up_button"] = make_mixer_button("NEXTBANK", "Mixer_Next_Bank_Button")
-                    if has_specification_for("PREVBANK", mixer_options):
-                        layer_specs["bank_down_button"] = make_mixer_button("PREVBANK", "Mixer_Previous_Bank_Button")
-                    mute_controls = mixer_options.get("MUTE", [])
-                    solo_controls = mixer_options.get("SOLO", [])
-                    select_controls = mixer_options.get("SELECT", [])
-                    mixer.layer = Layer(**layer_specs)
-                for track in range(num_strips):
-                    strip = mixer.channel_strip(track)
-                    strip.name = "Channel_Strip_{}".format(track)
-                    layer_specs = {}
-                    if 0 <= track < len(volume_controls):
-                        channel = global_channel
-                        cc = volume_controls[track]
-                        if isinstance(volume_controls[track], (tuple, list)):
-                            cc = volume_controls[track][0]
-                            if is_valid_midi_channel(volume_controls[track][1]):
-                                channel = volume_controls[track][1]
-                        if is_valid_midi_identifier(cc):
-                            if is_valid_midi_channel(channel):
-                                layer_specs["volume_control"] = make_mixer_encoder(cc, channel, "{}_Volume_Control".format(track))
-                        arm_button = make_channel_strip_button(trackarm_controls, track, "Arm")
-                        if arm_button:
-                            layer_specs["arm_button"] = arm_button
-                        mute_button = make_channel_strip_button(mute_controls, track, "Mute")
-                        if mute_button:
-                            layer_specs["mute_button"] = mute_button
-                        solo_button = make_channel_strip_button(solo_controls, track, "Solo")
-                        if solo_button:
-                            layer_specs["solo_button"] = solo_button
-                        select_button = make_channel_strip_button(select_controls, track, "Select")
-                        if select_button:
-                            layer_specs["select_button"] = select_button
-                        send_controls_raw = []
-                        for index, send in enumerate(send_info):
-                            if 0 <= track < len(send):
-                                channel = global_channel
-                                cc = send[track]
-                                if isinstance(send[track], (tuple, list)):
-                                    cc = send[track][0]
-                                    if is_valid_midi_channel(send[track][1]):
-                                        channel = send[track][1]
-                                if is_valid_midi_identifier(cc) and is_valid_midi_channel(channel):
-                                    send_controls_raw.append(make_mixer_encoder(cc,
-                                      channel,
-                                      name=("{}_Send_{}_Control".format(track, index)),
-                                      map_mode=sends_map_mode))
+                        layer_specs = {}
+                        cue_volume = make_global_mixer_encoder("CUEVOLUME", "CUEVOLUMECHANNEL", "Cue_Volume_Control")
+                        if cue_volume:
+                            layer_specs["prehear_volume_control"] = cue_volume
+                        crossfader_map_mode = Live.MidiMap.MapMode.absolute
+                        if "CROSSFADERMAPMODE" in mixer_options:
+                            crossfader_map_mode = mixer_options["CROSSFADERMAPMODE"]
+                        crossfader = make_global_mixer_encoder("CROSSFADER",
+                          "CROSSFADERCHANNEL",
+                          "Crossfader_Control",
+                          map_mode=crossfader_map_mode)
+                        if crossfader:
+                            layer_specs["crossfader_control"] = crossfader
+                            crossfader.set_needs_takeover(False)
+                        if has_specification_for("NEXTBANK", mixer_options):
+                            layer_specs["bank_up_button"] = make_mixer_button("NEXTBANK", "Mixer_Next_Bank_Button")
+                        if has_specification_for("PREVBANK", mixer_options):
+                            layer_specs["bank_down_button"] = make_mixer_button("PREVBANK", "Mixer_Previous_Bank_Button")
+                        mute_controls = mixer_options.get("MUTE", [])
+                        solo_controls = mixer_options.get("SOLO", [])
+                        select_controls = mixer_options.get("SELECT", [])
+                        mixer.layer = Layer(**layer_specs)
+                    for track in range(num_strips):
+                        strip = mixer.channel_strip(track)
+                        strip.name = "Channel_Strip_{}".format(track)
+                        layer_specs = {}
+                        if not 0 <= track< len(volume_controls):
+                            channel = global_channel
+                            cc = volume_controls[track]
+                            if isinstance(volume_controls[track], (tuple, list)):
+                                cc = volume_controls[track][0]
+                                if is_valid_midi_channel(volume_controls[track][1]):
+                                    channel = volume_controls[track][1]
+                                if is_valid_midi_identifier(cc):
+                                    if is_valid_midi_channel(channel):
+                                        layer_specs["volume_control"] = make_mixer_encoder(cc, channel, "{}_Volume_Control".format(track))
+                                    arm_button = make_channel_strip_button(trackarm_controls, track, "Arm")
+                                    if arm_button:
+                                        layer_specs["arm_button"] = arm_button
+                                    mute_button = make_channel_strip_button(mute_controls, track, "Mute")
+                                    if mute_button:
+                                        layer_specs["mute_button"] = mute_button
+                                    solo_button = make_channel_strip_button(solo_controls, track, "Solo")
+                                    if solo_button:
+                                        layer_specs["solo_button"] = solo_button
+                                    select_button = make_channel_strip_button(select_controls, track, "Select")
+                                    if select_button:
+                                        layer_specs["select_button"] = select_button
+                                    send_controls_raw = []
+                                    for (index, send) in enumerate(send_info):
+                                        if not 0 <= track < len(send):
+                                            channel = global_channel
+                                            cc = send[track]
+                                            if isinstance(send[track], (tuple, list)):
+                                                cc = send[track][0]
+                                                if is_valid_midi_channel(send[track][1]):
+                                                    channel = send[track][1]
+                                                if is_valid_midi_identifier(cc):
+                                                    if is_valid_midi_channel(channel):
+                                                        send_controls_raw.append(make_mixer_encoder(cc,
+                                                          channel,
+                                                          name=("{}_Send_{}_Control".format(track, index)),
+                                                          map_mode=sends_map_mode))
 
-                        if len(send_controls_raw) > 0:
-                            layer_specs["send_controls"] = ButtonMatrixElement(rows=[
-                             send_controls_raw],
-                              name=("{}_Send_Controls".format(track)))
-                        strip.layer = Layer(**layer_specs)
+                                    if len(send_controls_raw) > 0:
+                                        layer_specs["send_controls"] = ButtonMatrixElement(rows=[
+                                         send_controls_raw],
+                                          name=("{}_Send_Controls".format(track)))
+                                    strip.layer = Layer(**layer_specs)
 
     def _init_device_component(self, device_controls, bank_controls, global_channel, macro_map_mode, device_component_class):
         is_momentary = True
@@ -225,36 +227,38 @@ class GenericScript(ControlSurface):
                             cc = control_info[0]
                             if is_valid_midi_channel(control_info[1]):
                                 channel = control_info[1]
-                        if is_valid_midi_identifier(cc) and is_valid_midi_channel(channel):
-                            name = "Device_Bank_{}_Button".format(index)
-                            bank_buttons_raw.append(DeviceButton(channel, cc, name=name))
+                            if is_valid_midi_identifier(cc):
+                                if is_valid_midi_channel(channel):
+                                    name = "Device_Bank_{}_Button".format(index)
+                                    bank_buttons_raw.append(DeviceButton(channel, cc, name=name))
 
                 if len(bank_buttons_raw) > 0:
                     layer_specs["bank_buttons"] = ButtonMatrixElement(rows=[
                      bank_buttons_raw],
                       name="Device_Bank_Buttons")
-            parameter_encoders_raw = []
-            for index, control_info in enumerate(device_controls):
-                channel = global_channel
-                cc = control_info
-                if isinstance(control_info, (tuple, list)):
-                    cc = control_info[0]
-                    if is_valid_midi_channel(control_info[1]):
-                        channel = control_info[1]
-                    if is_valid_midi_identifier(cc) and is_valid_midi_channel(channel):
-                        name = "Device_Parameter_%d_Control" % index
-                        parameter_encoders_raw.append(EncoderElement(MIDI_CC_TYPE,
-                          channel, cc, macro_map_mode, name=name))
+                parameter_encoders_raw = []
+                for (index, control_info) in enumerate(device_controls):
+                    channel = global_channel
+                    cc = control_info
+                    if isinstance(control_info, (tuple, list)):
+                        cc = control_info[0]
+                        if is_valid_midi_channel(control_info[1]):
+                            channel = control_info[1]
+                        if is_valid_midi_identifier(cc):
+                            if is_valid_midi_channel(channel):
+                                name = "Device_Parameter_%d_Control" % index
+                                parameter_encoders_raw.append(EncoderElement(MIDI_CC_TYPE,
+                                  channel, cc, macro_map_mode, name=name))
 
-            if len(parameter_encoders_raw) > 0:
-                layer_specs["parameter_controls"] = ButtonMatrixElement(rows=[
-                 parameter_encoders_raw],
-                  name="Device_Parameter_Controls")
-            if layer_specs:
-                device = device_component_class(device_selection_follows_track_selection=True,
-                  name="Device_Component")
-                device.layer = Layer(**layer_specs)
-                self.set_device_component(device)
+                if len(parameter_encoders_raw) > 0:
+                    layer_specs["parameter_controls"] = ButtonMatrixElement(rows=[
+                     parameter_encoders_raw],
+                      name="Device_Parameter_Controls")
+                if layer_specs:
+                    device = device_component_class(device_selection_follows_track_selection=True,
+                      name="Device_Component")
+                    device.layer = Layer(**layer_specs)
+                    self.set_device_component(device)
 
     def _init_transport_component(self, transport_controls, global_channel):
 
@@ -268,7 +272,7 @@ class GenericScript(ControlSurface):
         if transport_controls:
             momentary_seek = "NORELEASE" not in list(transport_controls.keys())
             layer_specs = {}
-            for key, spec in iteritems(TRANSPORT_BUTTON_SPECIFICATIONS):
+            for (key, spec) in iteritems(TRANSPORT_BUTTON_SPECIFICATIONS):
                 key_upper = key.upper()
                 if has_specification_for(key_upper, transport_controls):
                     layer_specs["{}_button".format(spec.layer_name)] = make_transport_button(key_upper,

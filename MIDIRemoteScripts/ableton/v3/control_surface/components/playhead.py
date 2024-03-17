@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\playhead.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3810 bytes
@@ -38,12 +38,12 @@ class PlayheadComponent(Component):
                 if self.song.is_playing:
                     if sequencer_clip.is_arrangement_clip or sequencer_clip.is_playing:
                         playhead_clip = sequencer_clip
-        self._playhead.clip = playhead_clip
-        self._playhead.set_feedback_channels(self._channels)
-        if playhead_clip:
-            self._update_playhead_notes()
-            self._playhead.start_time = self._paginator.page_time
-            self._playhead.step_length = self._grid_resolution.step_length
+            self._playhead.clip = playhead_clip
+            self._playhead.set_feedback_channels(self._channels)
+            if playhead_clip:
+                self._update_playhead_notes()
+                self._playhead.start_time = self._paginator.page_time
+                self._playhead.step_length = self._grid_resolution.step_length
 
     def _update_playhead_notes(self):
         self._playhead.notes = list(self._triplet_notes if self._grid_resolution.is_triplet else self._notes)

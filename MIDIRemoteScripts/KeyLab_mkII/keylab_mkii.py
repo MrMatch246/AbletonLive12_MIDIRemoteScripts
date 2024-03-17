@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\KeyLab_mkII\keylab_mkii.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 8668 bytes
@@ -25,10 +25,10 @@ from .view_control import ViewControlComponent
 PAD_IDS = ((36, 37, 38, 39, 44, 45, 46, 47), (40, 41, 42, 43, 48, 49, 50, 51))
 PAD_LED_IDS = ((112, 113, 114, 115, 120, 121, 122, 123), (116, 117, 118, 119, 124, 125, 126, 127))
 ENCODER_MODE_TO_COLOR = {
- 'pan_mode': (127, 127, 127), 
- 'sends_a_mode': (0, 127, 0), 
- 'sends_b_mode': (0, 100, 0), 
- 'device_mode': (0, 0, 100)}
+  'pan_mode': (127, 127, 127),
+  'sends_a_mode': (0, 127, 0),
+  'sends_b_mode': (0, 100, 0),
+  'device_mode': (0, 0, 100)}
 DISPLAY_LINE_WIDTH = 16
 
 class InputOnlyButton(ButtonElement):

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchkey_Mini_MK3\launchkey_mini_mk3.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9544 bytes
@@ -135,7 +135,7 @@ class Launchkey_Mini_MK3(InstrumentControlMixin, NovationBase):
         self._stop_solo_mute_modes = ModesComponent(name="Stop_Solo_Mute_Modes",
           is_enabled=False,
           support_momentary_mode_cycling=False)
-        bottom_row = self._elements.clip_launch_matrix.submatrix[(None[:None], 1[:None])]
+        bottom_row = self._elements.clip_launch_matrix.submatrix[:, 1:]
         self._stop_solo_mute_modes.add_mode("launch",
           None, cycle_mode_button_color="Mode.Launch.On")
         self._stop_solo_mute_modes.add_mode("stop",

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\SL_MkIII\session_ring_selection_linking.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3134 bytes
@@ -58,7 +58,7 @@ class SessionRingSelectionLinking(SessionRingSelectionLinkingBase):
         if liveobj_valid(self._currently_selected_track):
             if liveobj_valid(self._previously_selected_track):
                 delta = self._track_index(self._currently_selected_track) - self._track_index(self._previously_selected_track)
-        return delta
+            return delta
 
     def _track_index(self, track):
         return index_if((lambda t: t == track), self._session_ring.tracks_to_use())

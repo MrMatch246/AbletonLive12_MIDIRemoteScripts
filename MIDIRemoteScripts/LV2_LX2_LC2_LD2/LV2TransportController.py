@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\LV2_LX2_LC2_LD2\LV2TransportController.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6106 bytes
@@ -61,15 +61,14 @@ class LV2TransportController(FaderfoxTransportController):
         note_no = 0
         if clip_idx > 7:
             channel = CHANNEL_SETUP2
+        if clip_idx < 6:
+            note_no = SLOT_LAUNCH_NOTES1[track_idx][clip_idx]
         else:
-            if clip_idx < 6:
-                note_no = SLOT_LAUNCH_NOTES1[track_idx][clip_idx]
-            else:
-                note_no = SLOT_LAUNCH_NOTES2[track_idx][clip_idx - 6]
-            if playing:
-                self.parent.send_midi((NOTEON_STATUS + channel, note_no, 127))
-            else:
-                self.parent.send_midi((NOTEOFF_STATUS + channel, note_no, 0))
+            note_no = SLOT_LAUNCH_NOTES2[track_idx][clip_idx - 6]
+        if playing:
+            self.parent.send_midi((NOTEON_STATUS + channel, note_no, 127))
+        else:
+            self.parent.send_midi((NOTEOFF_STATUS + channel, note_no, 0))
 
     def on_slot_clip_changed(self, slot, track_idx, slot_idx):
         if slot.has_clip and slot.clip.is_playing:
@@ -89,13 +88,14 @@ class LV2TransportController(FaderfoxTransportController):
         for track in self.parent.song().tracks:
             if i > 11:
                 return
-            elif self.helper.is_track_playing(track):
-                self.parent.send_midi((
-                 NOTEON_STATUS + TRACK_CHANNEL_SETUP2, LAUNCH_NOTES[i], 127))
             else:
-                self.parent.send_midi((
-                 NOTEOFF_STATUS + TRACK_CHANNEL_SETUP2, LAUNCH_NOTES[i], 0))
-            i += 1
+                if self.helper.is_track_playing(track):
+                    self.parent.send_midi((
+                     NOTEON_STATUS + TRACK_CHANNEL_SETUP2, LAUNCH_NOTES[i], 127))
+                else:
+                    self.parent.send_midi((
+                     NOTEOFF_STATUS + TRACK_CHANNEL_SETUP2, LAUNCH_NOTES[i], 0))
+                i += 1
 
     def clip_add_callback(self, clip, track_idx, clip_idx):
         callback = lambda: self.on_clip_playing_changed(clip, track_idx, clip_idx)
@@ -114,14 +114,15 @@ class LV2TransportController(FaderfoxTransportController):
         for track in self.parent.song().tracks:
             if i > 11:
                 return
-            sloti = 0
-            for slot in track.clip_slots:
-                if slot.has_clip:
-                    self.slot_add_callback(slot, i, sloti)
-                    self.clip_add_callback(slot.clip, i, sloti)
-                sloti += 1
+            else:
+                sloti = 0
+                for slot in track.clip_slots:
+                    if slot.has_clip:
+                        self.slot_add_callback(slot, i, sloti)
+                        self.clip_add_callback(slot.clip, i, sloti)
+                    sloti += 1
 
-            i += 1
+                i += 1
 
     def remove_slot_listeners(self):
         for i in range(0, len(self.slots_with_listener)):

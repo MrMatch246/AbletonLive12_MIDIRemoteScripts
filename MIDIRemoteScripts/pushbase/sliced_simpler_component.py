@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\sliced_simpler_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9133 bytes
@@ -110,13 +110,14 @@ class SlicedSimplerComponent(PlayableComponent, SlideableTouchStripComponent, Sl
         if liveobj_valid(self._simpler):
             if liveobj_valid(self._simpler.sample):
                 return self._simpler.sample.slices
-        return []
+            return []
 
     def _get_selected_note(self):
         slices = list(self._slices())
         selected_slice = self._selected_slice()
         index = slices.index(selected_slice) if selected_slice in slices else 0
-        return [BASE_SLICING_NOTE + index]
+        return [
+         BASE_SLICING_NOTE + index]
 
     @listenable_property
     def selected_target_note(self):
@@ -130,7 +131,7 @@ class SlicedSimplerComponent(PlayableComponent, SlideableTouchStripComponent, Sl
         if liveobj_valid(self._simpler):
             if liveobj_valid(self._simpler.sample):
                 return self._simpler.view.selected_slice
-        return -1
+            return -1
 
     @listens("sample")
     def __on_file_changed(self):
@@ -139,7 +140,7 @@ class SlicedSimplerComponent(PlayableComponent, SlideableTouchStripComponent, Sl
         self.notify_selected_target_note()
 
     def _coordinate_to_slice_index(self, coordinate):
-        y, x = coordinate
+        (y, x) = coordinate
         y = self.height - y - 1
         y += self._position
         y += self.height if x >= 4 else 0
@@ -151,11 +152,10 @@ class SlicedSimplerComponent(PlayableComponent, SlideableTouchStripComponent, Sl
         length_of_slices = len(slices)
         if index < length_of_slices:
             button.color = "SlicedSimpler.SliceSelected" if slices[index] == self._selected_slice() else "SlicedSimpler.SliceUnselected"
+        elif self._should_show_next_slice(index, length_of_slices):
+            button.color = self._next_slice_color()
         else:
-            if self._should_show_next_slice(index, length_of_slices):
-                button.color = self._next_slice_color()
-            else:
-                button.color = "SlicedSimpler.NoSlice"
+            button.color = "SlicedSimpler.NoSlice"
 
     def _note_translation_for_button(self, button):
         identifier = BASE_SLICING_NOTE + self._coordinate_to_slice_index(button.coordinate)
@@ -214,13 +214,12 @@ class SlicedSimplerComponent(PlayableComponent, SlideableTouchStripComponent, Sl
             if liveobj_valid(self._simpler.sample):
                 slice_index = self._coordinate_to_slice_index(button.coordinate)
                 if self.delete_button.is_pressed:
-                    self._try_delete_notes_for_slice(slice_index) or self._try_delete_slice_at_index(slice_index)
-                else:
-                    if self.quantize_button.is_pressed:
-                        self._try_quantize_notes_for_slice(slice_index)
-                    else:
-                        if self.select_button.is_pressed:
-                            self._try_select_slice_at_index(slice_index)
+                    if not self._try_delete_notes_for_slice(slice_index):
+                        self._try_delete_slice_at_index(slice_index)
+                elif self.quantize_button.is_pressed:
+                    self._try_quantize_notes_for_slice(slice_index)
+                elif self.select_button.is_pressed:
+                    self._try_select_slice_at_index(slice_index)
         super(SlicedSimplerComponent, self)._on_matrix_pressed(button)
 
 # okay decompiling ./MIDIRemoteScripts/pushbase/sliced_simpler_component.pyc

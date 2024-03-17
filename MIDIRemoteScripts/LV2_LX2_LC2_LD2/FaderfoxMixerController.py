@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\LV2_LX2_LC2_LD2\FaderfoxMixerController.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9491 bytes
@@ -48,47 +48,44 @@ class FaderfoxMixerController(FaderfoxComponent):
                 track = tracks[idx]
                 if attr == "solo":
                     self.helper.solo_track(track)
+                elif attr == "arm":
+                    self.helper.arm_track(track)
+                elif attr == "monitor":
+                    self.helper.switch_monitor_track(track)
+                elif attr == "cross_ab":
+                    self.helper.switch_crossfader_ab(track)
                 else:
-                    if attr == "arm":
-                        self.helper.arm_track(track)
-                    else:
-                        if attr == "monitor":
-                            self.helper.switch_monitor_track(track)
-                        else:
-                            if attr == "cross_ab":
-                                self.helper.switch_crossfader_ab(track)
-                            else:
-                                self.helper.toggle_track_attribute(track, attr)
+                    self.helper.toggle_track_attribute(track, attr)
 
     def receive_midi_note(self, channel, status, note_no, note_vel):
         if status == NOTEOFF_STATUS:
             return
-            if channel == CHANNEL_SETUP2:
-                self.log("received note %s" % note_no)
-            if channel == CHANNEL_SETUP2:
-                if note_no in TRACK_SELECT_NOTES:
-                    idx = note_no - TRACK_SELECT_NOTES[0]
-                    self.lv1_track_idx = note_no
-                    tracks = tuple(self.parent.song().tracks) + tuple(self.parent.song().return_tracks)
-                    if idx < len(tracks):
-                        track = tracks[idx]
-                    else:
-                        if self.helper.is_master_track_selected():
-                            track = tracks[-1]
-                        else:
-                            track = self.parent.song().master_track
-                    self.set_selected_track(track)
-        elif channel == CHANNEL_SETUP2:
-            if note_no == MASTER_TRACK_SELECT_NOTE:
+        if channel == CHANNEL_SETUP2:
+            self.log("received note %s" % note_no)
+        if channel == CHANNEL_SETUP2:
+            if note_no in TRACK_SELECT_NOTES:
+                idx = note_no - TRACK_SELECT_NOTES[0]
                 self.lv1_track_idx = note_no
-                self.log("select master track")
-                self.set_selected_track(self.parent.song().master_track)
-        if channel == TRACK_CHANNEL_SETUP2 and status == NOTEON_STATUS:
-            self.handle_status_note(note_no, MUTE_NOTES, "mute")
-            self.handle_status_note(note_no, ARM_NOTES, "arm")
-            self.handle_status_note(note_no, SOLO_NOTES, "solo")
-            self.handle_status_note(note_no, MONITOR_NOTES, "monitor")
-            self.handle_status_note(note_no, CROSS_AB_NOTES, "cross_ab")
+                tracks = tuple(self.parent.song().tracks) + tuple(self.parent.song().return_tracks)
+                if idx < len(tracks):
+                    track = tracks[idx]
+                elif self.helper.is_master_track_selected():
+                    track = tracks[-1]
+                else:
+                    track = self.parent.song().master_track
+                self.set_selected_track(track)
+            if channel == CHANNEL_SETUP2:
+                if note_no == MASTER_TRACK_SELECT_NOTE:
+                    self.lv1_track_idx = note_no
+                    self.log("select master track")
+                    self.set_selected_track(self.parent.song().master_track)
+            if channel == TRACK_CHANNEL_SETUP2:
+                if status == NOTEON_STATUS:
+                    self.handle_status_note(note_no, MUTE_NOTES, "mute")
+                    self.handle_status_note(note_no, ARM_NOTES, "arm")
+                    self.handle_status_note(note_no, SOLO_NOTES, "solo")
+                    self.handle_status_note(note_no, MONITOR_NOTES, "monitor")
+                    self.handle_status_note(note_no, CROSS_AB_NOTES, "cross_ab")
 
     def set_selected_track(self, track):
         if track:

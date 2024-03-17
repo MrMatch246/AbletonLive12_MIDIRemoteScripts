@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_MK2\Launchpad_MK2.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 18547 bytes
@@ -9,12 +9,12 @@ from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 from functools import partial
 import Live
-import _Framework.ButtonMatrixElement as ButtonMatrixElement
+from _Framework.ButtonMatrixElement import ButtonMatrixElement as ButtonMatrixElement
 from _Framework.ControlSurface import OptimizedControlSurface
 from _Framework.Dependency import inject
-import _Framework.IdentifiableControlSurface as IdentifiableControlSurface
+from _Framework.IdentifiableControlSurface import IdentifiableControlSurface as IdentifiableControlSurface
 from _Framework.InputControlElement import MIDI_CC_TYPE
-import _Framework.Layer as Layer
+from _Framework.Layer import Layer as Layer
 from _Framework.ModesComponent import AddLayerMode, ImmediateBehaviour, LayerMode
 from _Framework.Util import const, mixin, recursive_map
 from . import consts
@@ -29,21 +29,21 @@ from .Skin import make_default_skin
 from .SliderElement import SliderElement
 USER_1_MATRIX_IDENTIFIERS = [
  [
-  64, 65, 66, 67, 96, 97, 98, 99],
+  64,65,66,67,96,97,98,99],
  [
-  60, 61, 62, 63, 92, 93, 94, 95],
+  60,61,62,63,92,93,94,95],
  [
-  56, 57, 58, 59, 88, 89, 90, 91],
+  56,57,58,59,88,89,90,91],
  [
-  52, 53, 54, 55, 84, 85, 86, 87],
+  52,53,54,55,84,85,86,87],
  [
-  48, 49, 50, 51, 80, 81, 82, 83],
+  48,49,50,51,80,81,82,83],
  [
-  44, 45, 46, 47, 76, 77, 78, 79],
+  44,45,46,47,76,77,78,79],
  [
-  40, 41, 42, 43, 72, 73, 74, 75],
+  40,41,42,43,72,73,74,75],
  [
-  36, 37, 38, 39, 68, 69, 70, 71]]
+  36,37,38,39,68,69,70,71]]
 USER_1_CHANNEL = 5
 USER_2_CHANNEL = 13
 
@@ -93,14 +93,14 @@ class Launchpad_MK2(IdentifiableControlSurface, OptimizedControlSurface):
          self._scene_launch_matrix_raw],
           name="Scene_Launch_Buttons")
         self._session_zoom_matrix = ButtonMatrixElement(rows=(recursive_map(partial(with_modifier, self._session_button_single), self._session_matrix_raw)))
-        self._volume_reset_buttons = self._session_matrix.submatrix[(None[:None], None[:1])]
-        self._pan_reset_buttons = self._session_matrix.submatrix[(None[:None], 1[:2])]
-        self._send_a_reset_buttons = self._session_matrix.submatrix[(None[:None], 2[:3])]
-        self._send_b_reset_buttons = self._session_matrix.submatrix[(None[:None], 3[:4])]
-        self._stop_clip_buttons = self._session_matrix.submatrix[(None[:None], 4[:5])]
-        self._mute_buttons = self._session_matrix.submatrix[(None[:None], 5[:6])]
-        self._solo_buttons = self._session_matrix.submatrix[(None[:None], 6[:7])]
-        self._arm_buttons = self._session_matrix.submatrix[(None[:None], 7[:None])]
+        self._volume_reset_buttons = self._session_matrix.submatrix[:, :1]
+        self._pan_reset_buttons = self._session_matrix.submatrix[:, 1:2]
+        self._send_a_reset_buttons = self._session_matrix.submatrix[:, 2:3]
+        self._send_b_reset_buttons = self._session_matrix.submatrix[:, 3:4]
+        self._stop_clip_buttons = self._session_matrix.submatrix[:, 4:5]
+        self._mute_buttons = self._session_matrix.submatrix[:, 5:6]
+        self._solo_buttons = self._session_matrix.submatrix[:, 6:7]
+        self._arm_buttons = self._session_matrix.submatrix[:, 7:]
         self._volume_button = self._scene_launch_matrix_raw[0]
         self._pan_button = self._scene_launch_matrix_raw[1]
         self._send_a_button = self._scene_launch_matrix_raw[2]
@@ -265,7 +265,7 @@ class Launchpad_MK2(IdentifiableControlSurface, OptimizedControlSurface):
             super(Launchpad_MK2, self).handle_sysex(midi_bytes)
 
     def _is_challenge_response(self, midi_bytes):
-        return len(midi_bytes) == 10 and midi_bytes[None[:7]] == consts.STANDARD_SYSEX_PREFIX + consts.CHALLENGE_RESPONSE_BYTE
+        return len(midi_bytes) == 10 and midi_bytes[:7] == consts.STANDARD_SYSEX_PREFIX + consts.CHALLENGE_RESPONSE_BYTE
 
     def _is_response_valid(self, midi_bytes):
         response = int(midi_bytes[7])

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\sliced_simpler.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9600 bytes
@@ -155,9 +155,8 @@ class SlicedSimplerComponent(PlayableComponent, PageComponent, Pageable, PitchPr
         color = "SlicedSimpler.NoSlice"
         if index < length_of_slices:
             color = "SlicedSimpler.SliceSelected" if slices[index] == self._selected_slice() else "SlicedSimpler.SliceNotSelected"
-        else:
-            if self._should_show_next_slice(index, length_of_slices):
-                color = "SlicedSimpler.NextSlice"
+        elif self._should_show_next_slice(index, length_of_slices):
+            color = "SlicedSimpler.NextSlice"
         button.color = LiveObjSkinEntry(color, self._target_track.target_track)
 
     def _note_translation_for_button(self, button):
@@ -166,7 +165,7 @@ class SlicedSimplerComponent(PlayableComponent, PageComponent, Pageable, PitchPr
          identifier, self._translation_channel)
 
     def _coordinate_to_slice_index(self, coordinate):
-        y, x = coordinate
+        (y, x) = coordinate
         y = self.height - y - 1
         y += self._position
         y += self.height if x >= 4 else 0

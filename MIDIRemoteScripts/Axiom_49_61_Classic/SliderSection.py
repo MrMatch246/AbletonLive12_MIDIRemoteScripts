@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Axiom_49_61_Classic\SliderSection.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4574 bytes
@@ -46,25 +46,26 @@ class SliderSection(object):
             button_index = list(AXIOM_BUTTONS).index(cc_no)
             if cc_no == AXIOM_BUT9:
                 self._SliderSection__mod_pressed = cc_value == 127
-            else:
-                if button_index in range(8):
-                    tracks = self._SliderSection__parent.song().visible_tracks
-                    track_index = button_index + 8 * channel
-                    if len(tracks) > track_index:
-                        track = tracks[track_index]
-                        if track:
-                            if track.can_be_armed:
-                                if not self._SliderSection__mod_pressed:
-                                    track.mute = not track.mute
-                                else:
-                                    track.arm = not track.arm
-                                    if self._SliderSection__parent.song().exclusive_arm:
-                                        for t in tracks:
-                                            if t.can_be_armed and t.arm:
-                                                t.arm = t == track or False
+            elif button_index in range(8):
+                tracks = self._SliderSection__parent.song().visible_tracks
+                track_index = button_index + 8 * channel
+                if len(tracks) > track_index:
+                    track = tracks[track_index]
+                    if track:
+                        if track.can_be_armed:
+                            if not self._SliderSection__mod_pressed:
+                                track.mute = not track.mute
+                            else:
+                                track.arm = not track.arm
+                                if self._SliderSection__parent.song().exclusive_arm:
+                                    for t in tracks:
+                                        if t.can_be_armed:
+                                            if t.arm:
+                                                if not t == track:
+                                                    t.arm = False
 
-                                    if track.arm:
-                                        if track.view.select_instrument():
-                                            self._SliderSection__parent.song().view.selected_track = track
+                                if track.arm:
+                                    if track.view.select_instrument():
+                                        self._SliderSection__parent.song().view.selected_track = track
 
 # okay decompiling ./MIDIRemoteScripts/Axiom_49_61_Classic/SliderSection.pyc

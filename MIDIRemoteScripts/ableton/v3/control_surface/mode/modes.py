@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\mode\modes.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 12552 bytes
@@ -81,11 +81,10 @@ class ModesComponent(Component, Renderable):
         self._cancel_push_mode_task(mode)
         if mode in self._pop_mode_tasks:
             self._cancel_pop_mode_task(mode)
+        elif not delay:
+            self._do_push_mode(mode)
         else:
-            if not delay:
-                self._do_push_mode(mode)
-            else:
-                self._push_mode_tasks[mode] = self._tasks.add(task.sequence(task.wait(delay), task.run(partial(self._do_push_mode, mode))))
+            self._push_mode_tasks[mode] = self._tasks.add(task.sequence(task.wait(delay), task.run(partial(self._do_push_mode, mode))))
 
     def _do_push_mode(self, mode):
         self._cancel_push_mode_task(mode)
@@ -101,11 +100,10 @@ class ModesComponent(Component, Renderable):
         self._cancel_pop_mode_task(mode)
         if mode in self._push_mode_tasks:
             self._cancel_push_mode_task(mode)
+        elif not delay:
+            self._do_pop_mode(mode)
         else:
-            if not delay:
-                self._do_pop_mode(mode)
-            else:
-                self._pop_mode_tasks[mode] = self._tasks.add(task.sequence(task.wait(delay), task.run(partial(self._do_pop_mode, mode))))
+            self._pop_mode_tasks[mode] = self._tasks.add(task.sequence(task.wait(delay), task.run(partial(self._do_pop_mode, mode))))
 
     def _do_pop_mode(self, mode):
         self._cancel_pop_mode_task(mode)
@@ -202,9 +200,8 @@ class ModesComponent(Component, Renderable):
         if not self.is_enabled():
             self._last_selected_mode = self.selected_mode
             self._mode_stack.release_all()
-        else:
-            if self._last_selected_mode:
-                self.push_mode(self._last_selected_mode)
+        elif self._last_selected_mode:
+            self.push_mode(self._last_selected_mode)
 
     def _update_mode_buttons(self, selected):
         if self.is_enabled():

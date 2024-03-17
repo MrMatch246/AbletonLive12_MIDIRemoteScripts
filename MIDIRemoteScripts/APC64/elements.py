@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\APC64\elements.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5981 bytes
@@ -90,14 +90,14 @@ class Elements(ElementsBase):
  identifier, encoder=self.touch_strips_raw[identifier - 82], **k)))
         self.add_element("Firmware_Mode_Element",
           FirmwareModeElement,
-          sysex_identifier=(midi.make_message(midi.MODE_MESSAGE_ID, 0)[None[:-2]]),
+          sysex_identifier=(midi.make_message(midi.MODE_MESSAGE_ID, 0)[:-2]),
           send_message_generator=(lambda v: midi.make_message(midi.MODE_MESSAGE_ID, v)),
           use_first_byte_as_value=True)
-        self.add_sysex_element(midi.make_message(midi.TRACK_TYPE_MESSAGE_ID, 0)[None[:-2]], "Track_Type_Element", lambda v: midi.make_message(midi.TRACK_TYPE_MESSAGE_ID, v))
-        self.add_sysex_element(midi.make_message(midi.RTC_START_MESSAGE_ID, 0)[None[:-4]], "Render_To_Clip_Start_Element")
-        self.add_sysex_element(midi.make_message(midi.RTC_DATA_MESSAGE_ID, 0)[None[:-4]], "Render_To_Clip_Data_Element")
-        self.add_sysex_element(midi.make_message(midi.RTC_END_MESSAGE_ID, 0)[None[:-4]], "Render_To_Clip_End_Element")
-        self.add_sysex_element((midi.make_message(midi.SET_DISPLAY_OWNER_ID, 0)[None[:-2]]),
+        self.add_sysex_element(midi.make_message(midi.TRACK_TYPE_MESSAGE_ID, 0)[:-2], "Track_Type_Element", lambda v: midi.make_message(midi.TRACK_TYPE_MESSAGE_ID, v))
+        self.add_sysex_element(midi.make_message(midi.RTC_START_MESSAGE_ID, 0)[:-4], "Render_To_Clip_Start_Element")
+        self.add_sysex_element(midi.make_message(midi.RTC_DATA_MESSAGE_ID, 0)[:-4], "Render_To_Clip_Data_Element")
+        self.add_sysex_element(midi.make_message(midi.RTC_END_MESSAGE_ID, 0)[:-4], "Render_To_Clip_End_Element")
+        self.add_sysex_element((midi.make_message(midi.SET_DISPLAY_OWNER_ID, 0)[:-2]),
           "Display_Ownership_Command",
           (lambda v: midi.make_message(midi.SET_DISPLAY_OWNER_ID, v)),
           optimized=True,
@@ -107,7 +107,7 @@ class Elements(ElementsBase):
             return (midi.make_message)(midi.DISPLAY_MESSAGE_ID, index, *text + (0, ))
 
         for i in range(3):
-            self.add_sysex_display_line((midi.make_message(midi.DISPLAY_MESSAGE_ID, i)[None[:-1]]),
+            self.add_sysex_display_line((midi.make_message(midi.DISPLAY_MESSAGE_ID, i)[:-1]),
               ("Display_Line_{}".format(i + 1)),
               (partial(generate_display_message, i)),
               default_formatting=Text(max_width=8,

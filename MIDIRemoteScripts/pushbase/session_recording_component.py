@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\session_recording_component.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 9014 bytes
@@ -34,8 +34,9 @@ def have_other_recording_clips(tracks, recording_clip):
         index = track.playing_slot_index
         slot = track.clip_slots[index] if (0 <= index < len(track.clip_slots)) else None
         clip = getattr(slot, "clip", None)
-        if getattr(clip, "is_recording", False) and clip is not recording_clip:
-            return True
+        if getattr(clip, "is_recording", False):
+            if clip is not recording_clip:
+                return True
 
     return False
 
@@ -68,15 +69,14 @@ class FixedLengthRecording(EventObject):
     def stop_recording(self, clip):
         if have_other_recording_clips(self._song.tracks, clip):
             clip.fire()
+        elif self._is_infinite_recording(clip):
+            self._song.session_record = False
         else:
-            if self._is_infinite_recording(clip):
-                self._song.session_record = False
-            else:
-                self._song.overdub = False
+            self._song.overdub = False
 
     def _record_in_slot(self, track, clip_slot):
         if self.should_start_fixed_length_recording(clip_slot):
-            length, quant = self._fixed_length_setting.get_selected_length(self._song)
+            (length, quant) = self._fixed_length_setting.get_selected_length(self._song)
             if self._song.is_playing:
                 quant = self._song.clip_trigger_quantization
             if track_can_overdub(track):
@@ -85,15 +85,16 @@ class FixedLengthRecording(EventObject):
                   launch_quantization=(self._song.clip_trigger_quantization))
             else:
                 clip_slot.fire(record_length=length, launch_quantization=quant)
-        elif clip_slot.is_playing and self._song.is_playing or clip_slot.has_clip:
-            clip_slot.stop()
-            clip_slot.fire(force_legato=True, launch_quantization=(Quantization.q_no_q))
-        else:
-            clip_slot.fire()
+        elif not (clip_slot.is_playing and self._song.is_playing):
+            if clip_slot.has_clip:
+                clip_slot.stop()
+                clip_slot.fire(force_legato=True, launch_quantization=(Quantization.q_no_q))
+            else:
+                clip_slot.fire()
 
     @listens("selected_index")
     def __on_setting_selected_index_changes(self, _):
-        length, _ = self._fixed_length_setting.get_selected_length(self._song)
+        (length, _) = self._fixed_length_setting.get_selected_length(self._song)
         self._clip_creator.fixed_length = length
 
     @listens("legato_launch")
@@ -174,14 +175,15 @@ class FixedLengthSessionRecordingComponent(SessionRecordingComponent, Messenger)
         if self.is_enabled():
             song = self.song
             clip_slot = get_clip_slot_from_index(song, song.view.selected_track, self._clip_slot_index_to_record_into())
-            if liveobj_valid(clip_slot) and clip_slot.is_triggered and song.overdub:
-                self.record_button.color = clip_slot.is_recording or "Recording.Transition"
-            else:
-                if song.record_mode:
-                    self.record_button.color = "Recording.ArrangementRecordingOn"
-                else:
-                    super(FixedLengthSessionRecordingComponent, self)._update_record_button()
-            self.arrangement_record_button.color = self.record_button.color
+            if liveobj_valid(clip_slot):
+                if clip_slot.is_triggered:
+                    if song.overdub and not clip_slot.is_recording:
+                        self.record_button.color = "Recording.Transition"
+                    elif song.record_mode:
+                        self.record_button.color = "Recording.ArrangementRecordingOn"
+                    else:
+                        super(FixedLengthSessionRecordingComponent, self)._update_record_button()
+                self.arrangement_record_button.color = self.record_button.color
 
     @listens("record_mode")
     def __on_record_mode_changed(self):

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\decoration.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 13913 bytes
@@ -64,7 +64,7 @@ class LiveObjectDecorator(CompoundDisconnectable, Proxy):
     def __init__(self, live_object=None, additional_properties={}):
         super().__init__(proxied_object=live_object)
         self._live_object = live_object
-        for name, value in iteritems(additional_properties):
+        for (name, value) in iteritems(additional_properties):
             setattr(self, name, value)
 
         self._LiveObjectDecorator__decorated_options = {}

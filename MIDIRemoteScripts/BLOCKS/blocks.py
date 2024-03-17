@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\BLOCKS\blocks.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 10443 bytes
@@ -25,7 +25,7 @@ from .target_track_provider import TargetTrackProvider
 NUM_TRACKS = 4
 NUM_SCENES = 4
 MODE_MSG_CHANNEL = 15
-MODE_NAMES_TO_IDS = {'session': 60, 'melodic': 61, 'drum': 62, 'disabled': 63}
+MODE_NAMES_TO_IDS = { 'session': 60, 'melodic': 61, 'drum': 62, 'disabled': 63}
 MELODIC_FEEDBACK_CHANNEL = 3
 DRUM_FEEDBACK_CHANNEL = 4
 NON_FEEDBACK_CHANNEL = 0
@@ -180,11 +180,10 @@ class Blocks(SimpleControlSurface):
         drum_device = self._percussion_instrument_finder.drum_group
         if not is_playable(track):
             self._note_modes.selected_mode = "disabled"
+        elif drum_device:
+            self._note_modes.selected_mode = "drum"
         else:
-            if drum_device:
-                self._note_modes.selected_mode = "drum"
-            else:
-                self._note_modes.selected_mode = "melodic"
+            self._note_modes.selected_mode = "melodic"
         if self._note_modes.selected_mode == "disabled":
             self.release_controlled_track()
         else:

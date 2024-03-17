@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Axiom_AIR_25_49_61\consts.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2824 bytes
@@ -46,27 +46,27 @@ PAD_TRANSLATIONS = ((0, 0, 85, 14), (1, 0, 86, 14), (2, 0, 87, 14), (3, 0, 88, 1
                     (0, 2, 85, 15), (1, 2, 86, 15), (2, 2, 87, 15), (3, 2, 88, 15),
                     (0, 3, 81, 15), (1, 3, 82, 15), (2, 3, 83, 15), (3, 3, 84, 15))
 ETCHINGS = [
- 'track', 
- 'inst_fx', 
- 'memory', 
- 'parameter', 
- 'value', 
- 'pan', 
- 'l', 
- 'r', 
- 'program', 
- 'volume', 
- 'edit', 
- 'channel', 
- 'strip', 
- 'hyper', 
- 'page', 
- 'send', 
- 'bank', 
- 'pad', 
- 'knob', 
- 'fader', 
- 'button']
+ "track",
+ "inst_fx",
+ "memory",
+ "parameter",
+ "value",
+ "pan",
+ "l",
+ "r",
+ "program",
+ "volume",
+ "edit",
+ "channel",
+ "strip",
+ "hyper",
+ "page",
+ "send",
+ "bank",
+ "pad",
+ "knob",
+ "fader",
+ "button"]
 LED_OFF = 0
 GRN_LOW = 1
 RED_LOW = 2

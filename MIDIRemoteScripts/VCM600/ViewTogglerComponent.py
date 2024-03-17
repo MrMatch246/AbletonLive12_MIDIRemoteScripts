@@ -1,15 +1,15 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\VCM600\ViewTogglerComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 8466 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 import Live
-import _Framework.ButtonElement as ButtonElement
-import _Framework.ControlSurfaceComponent as ControlSurfaceComponent
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.ControlSurfaceComponent import ControlSurfaceComponent as ControlSurfaceComponent
 
 class ViewTogglerComponent(ControlSurfaceComponent):
 
@@ -96,10 +96,10 @@ class ViewTogglerComponent(ControlSurfaceComponent):
                             self._clip_buttons[index].turn_on()
                         else:
                             self._clip_buttons[index].turn_off()
-            if self._chain_buttons != None:
-                self._chain_buttons[index].turn_off()
-            if self._clip_buttons != None:
-                self._clip_buttons[index].turn_off()
+                    if self._chain_buttons != None:
+                        self._chain_buttons[index].turn_off()
+                    if self._clip_buttons != None:
+                        self._clip_buttons[index].turn_off()
 
     def _chain_value(self, value, sender):
         tracks = self.song().visible_tracks
@@ -109,14 +109,14 @@ class ViewTogglerComponent(ControlSurfaceComponent):
             if len(tracks) > index:
                 if self.song().view.selected_track != tracks[index]:
                     self.song().view.selected_track = tracks[index]
-                    self.application().view.is_view_visible("Detail") and self.application().view.is_view_visible("Detail/DeviceChain") or self.application().view.show_view("Detail")
-                    self.application().view.show_view("Detail/DeviceChain")
-                else:
-                    if self.application().view.is_view_visible("Detail/DeviceChain") and self.application().view.is_view_visible("Detail"):
-                        self.application().view.hide_view("Detail")
-                    else:
+                    if not (self.application().view.is_view_visible("Detail") and self.application().view.is_view_visible("Detail/DeviceChain")):
                         self.application().view.show_view("Detail")
                         self.application().view.show_view("Detail/DeviceChain")
+                elif self.application().view.is_view_visible("Detail/DeviceChain") and self.application().view.is_view_visible("Detail"):
+                    self.application().view.hide_view("Detail")
+                else:
+                    self.application().view.show_view("Detail")
+                    self.application().view.show_view("Detail/DeviceChain")
             self._ignore_track_selection = False
 
     def _clip_value(self, value, sender):
@@ -127,14 +127,14 @@ class ViewTogglerComponent(ControlSurfaceComponent):
             if len(tracks) > index:
                 if self.song().view.selected_track != tracks[index]:
                     self.song().view.selected_track = tracks[index]
-                    self.application().view.is_view_visible("Detail") and self.application().view.is_view_visible("Detail/Clip") or self.application().view.show_view("Detail")
-                    self.application().view.show_view("Detail/Clip")
-                else:
-                    if self.application().view.is_view_visible("Detail/Clip") and self.application().view.is_view_visible("Detail"):
-                        self.application().view.hide_view("Detail")
-                    else:
+                    if not (self.application().view.is_view_visible("Detail") and self.application().view.is_view_visible("Detail/Clip")):
                         self.application().view.show_view("Detail")
                         self.application().view.show_view("Detail/Clip")
+                elif self.application().view.is_view_visible("Detail/Clip") and self.application().view.is_view_visible("Detail"):
+                    self.application().view.hide_view("Detail")
+                else:
+                    self.application().view.show_view("Detail")
+                    self.application().view.show_view("Detail/Clip")
             self._ignore_track_selection = False
 
 # okay decompiling ./MIDIRemoteScripts/VCM600/ViewTogglerComponent.pyc

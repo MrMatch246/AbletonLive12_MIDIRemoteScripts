@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\track_mixer_control_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6751 bytes
@@ -70,7 +70,7 @@ class TrackMixerControlComponent(Component):
 
     def _update_controls(self):
         if self.is_enabled():
-            assign_parameters(self.controls, self.parameters[self.scroll_offset[:None]])
+            assign_parameters(self.controls, self.parameters[self.scroll_offset:])
             self.notify_parameters()
 
     @property
@@ -101,13 +101,12 @@ class TrackMixerControlComponent(Component):
     def _update_scroll_offset(self):
         new_number_return_tracks = self._number_sends()
         max_return_tracks = self._max_return_tracks()
-        if max_return_tracks <= new_number_return_tracks < self._number_return_tracks:
-            if max_return_tracks + self._scroll_offset > new_number_return_tracks:
-                delta = min(new_number_return_tracks - self._number_return_tracks, 0)
-                self._scroll_controls(delta)
-            else:
-                if new_number_return_tracks < max_return_tracks or self._tracks_provider.selected_item == self.song.master_track:
-                    self._scroll_offset = 0
+        if max_return_tracks <= new_number_return_tracks < self._number_return_tracks and max_return_tracks + self._scroll_offset > new_number_return_tracks:
+            delta = min(new_number_return_tracks - self._number_return_tracks, 0)
+            self._scroll_controls(delta)
+        else:
+            if new_number_return_tracks < max_return_tracks or self._tracks_provider.selected_item == self.song.master_track:
+                self._scroll_offset = 0
         self._update_controls()
         self._update_scroll_buttons()
         self._number_return_tracks = new_number_return_tracks

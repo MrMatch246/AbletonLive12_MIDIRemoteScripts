@@ -1,20 +1,20 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_Pro\SpecialSessionComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 14245 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 import Live
-import _Framework.ClipSlotComponent as ClipSlotComponent
+from _Framework.ClipSlotComponent import ClipSlotComponent as ClipSlotComponent
 from _Framework.Control import ButtonControl
-import _Framework.ControlSurfaceComponent as ControlSurfaceComponent
+from _Framework.ControlSurfaceComponent import ControlSurfaceComponent as ControlSurfaceComponent
 from _Framework.Dependency import depends
-import _Framework.SceneComponent as SceneComponent
-import _Framework.SessionComponent as SessionComponent
-import _Framework.SessionZoomingComponent as SessionZoomingComponent
+from _Framework.SceneComponent import SceneComponent as SceneComponent
+from _Framework.SessionComponent import SessionComponent as SessionComponent
+from _Framework.SessionZoomingComponent import SessionZoomingComponent as SessionZoomingComponent
 from _Framework.SubjectSlot import subject_slot, subject_slot_group
 from _Framework.Util import find_if, in_range
 from .ClipActionsComponent import double_clip, duplicate_clip
@@ -50,23 +50,18 @@ class SpecialClipSlotComponent(ClipSlotComponent):
             if self._clip_slot is not None:
                 if self._select_button and self._select_button.is_pressed() and value:
                     self._do_select_clip(self._clip_slot)
-                else:
-                    if self._double_loop_button and self._double_loop_button.is_pressed() and value:
-                        self._do_double_loop(self._clip_slot)
-                    else:
-                        if self._duplicate_button and self._duplicate_button.is_pressed() and value:
-                            self._do_duplicate_clip()
-                        else:
-                            if self._delete_button and self._delete_button.is_pressed() and value:
-                                self._do_delete_clip()
-                            else:
-                                if self._quantize_button and self._quantize_button.is_pressed() and value:
-                                    self._do_quantize_clip(self._clip_slot)
-                                else:
-                                    if self._should_arm():
-                                        if value:
-                                            self._do_track_arm()
-                                    self._do_launch_clip(value)
+                elif self._double_loop_button and self._double_loop_button.is_pressed() and value:
+                    self._do_double_loop(self._clip_slot)
+                elif self._duplicate_button and self._duplicate_button.is_pressed() and value:
+                    self._do_duplicate_clip()
+                elif self._delete_button and self._delete_button.is_pressed() and value:
+                    self._do_delete_clip()
+                elif self._quantize_button and self._quantize_button.is_pressed() and value:
+                    self._do_quantize_clip(self._clip_slot)
+                elif self._should_arm():
+                    if value:
+                        self._do_track_arm()
+                    self._do_launch_clip(value)
 
     @property
     def can_duplicate_loop(self):
@@ -95,15 +90,16 @@ class SpecialClipSlotComponent(ClipSlotComponent):
                 if not track.arm:
                     if self.song().exclusive_arm:
                         for t in self.song().tracks:
-                            if t.can_be_armed and t.arm:
-                                t.arm = False
+                            if t.can_be_armed:
+                                if t.arm:
+                                    t.arm = False
 
                     track.arm = True
                     if self.song().view.selected_track != track:
                         self.song().view.selected_track = track
-            if not self.song().session_record:
-                if self._clip_slot.has_clip:
-                    self.song().session_record = True
+                if not self.song().session_record:
+                    if self._clip_slot.has_clip:
+                        self.song().session_record = True
 
 
 class SpecialSceneComponent(SceneComponent):
@@ -122,14 +118,12 @@ class SpecialSceneComponent(SceneComponent):
             if self._scene != None:
                 if self._select_button and self._select_button.is_pressed() and value:
                     self._do_select_scene(self._scene)
+                elif self._delete_button and self._delete_button.is_pressed() and value:
+                    self._do_delete_scene(self._scene)
+                elif self._duplicate_button and self._duplicate_button.is_pressed() and value:
+                    self._do_duplicate_scene()
                 else:
-                    if self._delete_button and self._delete_button.is_pressed() and value:
-                        self._do_delete_scene(self._scene)
-                    else:
-                        if self._duplicate_button and self._duplicate_button.is_pressed() and value:
-                            self._do_duplicate_scene()
-                        else:
-                            self._do_launch_scene(value)
+                    self._do_launch_scene(value)
 
     def _do_duplicate_scene(self):
         try:
@@ -188,10 +182,14 @@ class SpecialSessionComponent(SessionComponent):
     @subject_slot_group("value")
     def _on_stop_scene_value(self, value, button):
         if self.is_enabled():
-            scene_index = value != 0 or button.is_momentary() or list(self._stop_scene_clip_buttons).index(button) + self.scene_offset()
-            for track in self.tracks_to_use():
-                if not in_range(scene_index, 0, len(track.clip_slots)) or track.playing_slot_index == scene_index or track.fired_slot_index == scene_index:
-                    track.stop_all_clips()
+            if not (value != 0 or button.is_momentary()):
+                scene_index = list(self._stop_scene_clip_buttons).index(button) + self.scene_offset()
+                for track in self.tracks_to_use():
+                    if in_range(scene_index, 0, len(track.clip_slots)):
+                        if not not track.playing_slot_index == scene_index:
+                            if track.fired_slot_index == scene_index:
+                                pass
+                            track.stop_all_clips()
 
     def update_navigation_buttons(self):
         self._vertical_banking.update()
@@ -211,15 +209,13 @@ class SpecialSessionComponent(SessionComponent):
                                 track = tracks_to_use[track_index]
                                 if track.fired_slot_index == -2:
                                     value_to_send = self._stop_clip_triggered_value
+                                elif track.playing_slot_index >= 0:
+                                    value_to_send = self._stop_clip_value
                                 else:
-                                    if track.playing_slot_index >= 0:
-                                        value_to_send = self._stop_clip_value
-                                    else:
-                                        value_to_send = "Session.StoppedClip"
-                        elif value_to_send is None:
-                            button.turn_off()
-                        else:
-                            if in_range(value_to_send, 0, 128):
+                                    value_to_send = "Session.StoppedClip"
+                            if value_to_send is None:
+                                button.turn_off()
+                            elif in_range(value_to_send, 0, 128):
                                 button.send_value(value_to_send)
                             else:
                                 button.set_light(value_to_send)
@@ -243,15 +239,13 @@ class SpecialSessionComponent(SessionComponent):
                                 tracks = self.tracks_to_use()
                                 if find_if((lambda x: x.playing_slot_index == scene_index and x.fired_slot_index != -2), tracks):
                                     value_to_send = self._stop_clip_value
+                                elif find_if((lambda x: x.fired_slot_index == -2 and x.playing_slot_index == scene_index), tracks):
+                                    value_to_send = self._stop_clip_triggered_value
                                 else:
-                                    if find_if((lambda x: x.fired_slot_index == -2 and x.playing_slot_index == scene_index), tracks):
-                                        value_to_send = self._stop_clip_triggered_value
-                                    else:
-                                        value_to_send = "Session.StoppedClip"
-                        elif value_to_send is None:
-                            button.turn_off()
-                        else:
-                            if in_range(value_to_send, 0, 128):
+                                    value_to_send = "Session.StoppedClip"
+                            if value_to_send is None:
+                                button.turn_off()
+                            elif in_range(value_to_send, 0, 128):
                                 button.send_value(value_to_send)
                             else:
                                 button.set_light(value_to_send)
@@ -263,13 +257,12 @@ class SpecialSessionComponent(SessionComponent):
             tracks = self.tracks_to_use()
             if find_if((lambda x: x.playing_slot_index >= 0 and x.fired_slot_index != -2), tracks):
                 value_to_send = self._stop_clip_value
+            elif find_if((lambda x: x.fired_slot_index == -2), tracks):
+                value_to_send = self._stop_clip_triggered_value
+            if value_to_send is None:
+                button.turn_off()
             else:
-                if find_if((lambda x: x.fired_slot_index == -2), tracks):
-                    value_to_send = self._stop_clip_triggered_value
-                elif value_to_send is None:
-                    button.turn_off()
-                else:
-                    button.set_light(value_to_send)
+                button.set_light(value_to_send)
 
     @subject_slot_group("fired_slot_index")
     def _on_fired_slot_index_changed(self, track_index):

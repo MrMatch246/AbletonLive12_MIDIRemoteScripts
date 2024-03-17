@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Akai_Force_MPC\clip_actions.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2029 bytes
@@ -49,6 +49,6 @@ class ClipActionsComponent(ClipActionsComponentBase):
         self._update_quantize_color_control()
 
     def _update_quantize_color_control(self):
-        self.quantize_color_control.color = "Action.QuantizeOn" if (self.quantize_button.is_pressed and self._can_perform_clip_action()) else "Action.QuantizeOff"
+        self.quantize_color_control.color = "Action.QuantizeOn" if (self.quantize_button.is_pressed) and (self._can_perform_clip_action()) else "Action.QuantizeOff"
 
 # okay decompiling ./MIDIRemoteScripts/Akai_Force_MPC/clip_actions.pyc

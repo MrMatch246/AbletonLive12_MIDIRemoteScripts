@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\skin.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2497 bytes
@@ -35,12 +35,13 @@ class Skin(EventObject):
                 self._fill_colors(base, song=song, pathname=pathname)
 
         for k, v in iteritems(colors.__dict__):
-            if k[None[:1]] != "_":
+            if k[:1] != "_":
                 if callable(v):
                     self._fill_colors(v, (pathname + k + "."), song=song)
-                elif is_dynamic_color_factory(v):
-                    v = self._get_dynamic_color(v, song)
-                self._colors[pathname + k] = v
+                else:
+                    if is_dynamic_color_factory(v):
+                        v = self._get_dynamic_color(v, song)
+                    self._colors[pathname + k] = v
 
     def __getitem__(self, key):
         try:

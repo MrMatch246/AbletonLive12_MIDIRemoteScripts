@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\compressor.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 11661 bytes
@@ -189,7 +189,7 @@ class CompressorDeviceComponent(DeviceComponentWithTrackColorViewData):
     @depends(real_time_mapper=None, register_real_time_data=None)
     def __init__(self, real_time_mapper=None, register_real_time_data=None, *a, **k):
         (super(CompressorDeviceComponent, self).__init__)(*a, **k)
-        self._input_channel_router, self._input_type_router = self.register_disconnectables([
+        (self._input_channel_router, self._input_type_router) = self.register_disconnectables([
          mixin(CompressorInputRouterMixin, InputChannelRouter)(song=(self.song)),
          mixin(CompressorInputRouterMixin, InputTypeRouter)(song=(self.song))])
         self._input_router = self.register_disconnectable(InputChannelAndPositionRouter(input_channel_router=(self._input_channel_router),

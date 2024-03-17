@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\identification.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 9099 bytes
@@ -24,9 +24,8 @@ def status_byte_to_msg_type(status_byte):
     msg_type = MIDI_CC_TYPE
     if status_byte == midi.NOTE_ON_STATUS:
         msg_type = MIDI_NOTE_TYPE
-    else:
-        if status_byte == midi.PB_STATUS:
-            msg_type = MIDI_PB_TYPE
+    elif status_byte == midi.PB_STATUS:
+        msg_type = MIDI_PB_TYPE
     return msg_type
 
 
@@ -86,7 +85,7 @@ class StandardResponder(Responder):
         return SysexElement(sysex_identifier=NON_REALTIME_HEADER)
 
     def is_valid_response(self, response_bytes):
-        if response_bytes[1[:PRODUCT_ID_BYTES_START_INDEX]] == STANDARD_RESPONSE_BYTES:
+        if response_bytes[1:PRODUCT_ID_BYTES_START_INDEX] == STANDARD_RESPONSE_BYTES:
             product_id_bytes = self._extract_product_id_bytes(response_bytes)
             if product_id_bytes != self._response_bytes:
                 raise IdentityResponseError(expected_bytes=(self._response_bytes),
@@ -95,7 +94,7 @@ class StandardResponder(Responder):
         return False
 
     def _extract_product_id_bytes(self, midi_bytes):
-        return midi_bytes[PRODUCT_ID_BYTES_START_INDEX[:PRODUCT_ID_BYTES_START_INDEX + len(self._response_bytes)]]
+        return midi_bytes[PRODUCT_ID_BYTES_START_INDEX:PRODUCT_ID_BYTES_START_INDEX + len(self._response_bytes)]
 
 
 class IdentityResponseError(Exception):

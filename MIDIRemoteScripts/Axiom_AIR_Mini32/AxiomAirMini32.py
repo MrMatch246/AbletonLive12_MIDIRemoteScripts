@@ -1,23 +1,23 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Axiom_AIR_Mini32\AxiomAirMini32.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5597 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 import Live
-import _Framework.ButtonElement as ButtonElement
-import _Framework.ChannelStripComponent as ChannelStripComponent
-import _Framework.ControlSurface as ControlSurface
-import _Framework.EncoderElement as EncoderElement
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.ChannelStripComponent import ChannelStripComponent as ChannelStripComponent
+from _Framework.ControlSurface import ControlSurface as ControlSurface
+from _Framework.EncoderElement import EncoderElement as EncoderElement
 from _Framework.InputControlElement import MIDI_CC_TYPE
-import _Framework.MixerComponent as MixerComponent
-import _Framework.ModeSelectorComponent as ModeSelectorComponent
-import _Framework.SessionComponent as SessionComponent
-import _Framework.TransportComponent as TransportComponent
-import Axiom_DirectLink.BestBankDeviceComponent as BestBankDeviceComponent
+from _Framework.MixerComponent import MixerComponent as MixerComponent
+from _Framework.ModeSelectorComponent import ModeSelectorComponent as ModeSelectorComponent
+from _Framework.SessionComponent import SessionComponent as SessionComponent
+from _Framework.TransportComponent import TransportComponent as TransportComponent
+from Axiom_DirectLink.BestBankDeviceComponent import BestBankDeviceComponent as BestBankDeviceComponent
 from .DeviceNavComponent import DeviceNavComponent
 from .EncoderMixerModeSelector import EncoderMixerModeSelector
 from .MixerOrDeviceModeSelector import MixerOrDeviceModeSelector

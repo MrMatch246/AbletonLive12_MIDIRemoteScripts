@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_Pro\SpecialMixerComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6653 bytes
@@ -9,10 +9,10 @@ from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 from future.moves.itertools import zip_longest
 from functools import partial
-import _Framework.ChannelStripComponent as ChannelStripComponent
+from _Framework.ChannelStripComponent import ChannelStripComponent as ChannelStripComponent
 from _Framework.Control import ControlList, RadioButtonControl, RadioButtonGroup
 from _Framework.Dependency import depends
-import _Framework.MixerComponent as MixerComponent
+from _Framework.MixerComponent import MixerComponent as MixerComponent
 from _Framework.Util import clamp
 from .consts import FADER_LAYOUT_SYSEX_BYTE, FADER_TYPE_BIPOLAR, FADER_TYPE_STANDARD, PAN_MAP_CHANNEL, SENDS_MAP_CHANNEL, VOLUME_MAP_CHANNEL
 SEND_COLORS = (('Sends.A', 'Sends.AAvail'), ('Sends.B', 'Sends.BAvail'), ('Sends.C', 'Sends.CAvail'),
@@ -51,14 +51,14 @@ class SpecialMixerComponent(MixerComponent):
         return SpecialChanStripComponent()
 
     def set_volume_controls(self, controls):
-        for strip, control in zip_longest(self._channel_strips, controls or []):
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
             if control:
                 control.set_channel(VOLUME_MAP_CHANNEL)
                 control.set_light_and_type("Mixer.Volume", FADER_TYPE_STANDARD)
             strip.set_volume_control(control)
 
     def set_pan_controls(self, controls):
-        for strip, control in zip_longest(self._channel_strips, controls or []):
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
             if control:
                 control.set_channel(PAN_MAP_CHANNEL)
                 control.set_light_and_type("Mixer.Pan", FADER_TYPE_BIPOLAR)
@@ -66,37 +66,39 @@ class SpecialMixerComponent(MixerComponent):
 
     def set_send_controls(self, controls):
         self._send_controls = controls
-        for strip, control in zip_longest(self._channel_strips, controls or []):
-            if self.send_index is None or self.send_index not in range(8):
-                strip.set_send_controls(None)
-            elif control:
-                control.set_channel(SENDS_MAP_CHANNEL)
-                control.set_light_and_type(SEND_COLORS[self.send_index][0], FADER_TYPE_STANDARD)
-            strip.set_send_controls((None, ) * self._send_index + (control,))
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
+            if not not self.send_index is None:
+                if self.send_index not in range(8):
+                    strip.set_send_controls(None)
+                else:
+                    if control:
+                        control.set_channel(SENDS_MAP_CHANNEL)
+                        control.set_light_and_type(SEND_COLORS[self.send_index][0], FADER_TYPE_STANDARD)
+                    strip.set_send_controls((None, ) * self._send_index + (control,))
 
     def set_arm_buttons(self, buttons):
-        for strip, button in zip_longest(self._channel_strips, buttons or []):
+        for (strip, button) in zip_longest(self._channel_strips, buttons or []):
             if button:
                 button.reset_state()
                 button.set_on_off_values("Mixer.ArmOn", "Mixer.ArmOff")
             strip.set_arm_button(button)
 
     def set_solo_buttons(self, buttons):
-        for strip, button in zip_longest(self._channel_strips, buttons or []):
+        for (strip, button) in zip_longest(self._channel_strips, buttons or []):
             if button:
                 button.reset_state()
                 button.set_on_off_values("Mixer.SoloOn", "Mixer.SoloOff")
             strip.set_solo_button(button)
 
     def set_mute_buttons(self, buttons):
-        for strip, button in zip_longest(self._channel_strips, buttons or []):
+        for (strip, button) in zip_longest(self._channel_strips, buttons or []):
             if button:
                 button.reset_state()
                 button.set_on_off_values("Mixer.MuteOff", "Mixer.MuteOn")
             strip.set_mute_button(button)
 
     def set_track_select_buttons(self, buttons):
-        for strip, button in zip_longest(self._channel_strips, buttons or []):
+        for (strip, button) in zip_longest(self._channel_strips, buttons or []):
             if button:
                 button.reset_state()
                 button.set_on_off_values("Mixer.Selected", "Mixer.Unselected")
@@ -113,17 +115,16 @@ class SpecialMixerComponent(MixerComponent):
         if self._layout_setup is not None:
             if self._send_controls is not None:
                 self._layout_setup(FADER_LAYOUT_SYSEX_BYTE)
-        elif self.send_index is None:
+        if self.send_index is None:
             self.send_select_buttons.control_count = 0
-        else:
-            if self.send_index < self.send_select_buttons.control_count:
-                for slider in self._send_controls:
-                    slider.set_light(SEND_COLORS[self.send_index][0])
+        elif self.send_index < self.send_select_buttons.control_count:
+            for slider in self._send_controls:
+                slider.set_light(SEND_COLORS[self.send_index][0])
 
-                self.send_select_buttons[self.send_index].is_checked = True
-            else:
-                for button in self.send_select_buttons:
-                    button.is_checked = False
+            self.send_select_buttons[self.send_index].is_checked = True
+        else:
+            for button in self.send_select_buttons:
+                button.is_checked = False
 
 
 class SpecialChanStripComponent(ChannelStripComponent):

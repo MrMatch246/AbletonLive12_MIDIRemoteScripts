@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\novation\session_modes.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1879 bytes
@@ -34,9 +34,8 @@ class SessionModesComponent(ModesComponent):
     def cycle_mode_button(self, _):
         if self._last_selected_main_mode and self.selected_mode == "overview":
             self.selected_mode = self._last_selected_main_mode
-        else:
-            if len(self._mode_list) > 2:
-                self.selected_mode = "mixer" if self.selected_mode == "launch" else "launch"
+        elif len(self._mode_list) > 2:
+            self.selected_mode = "mixer" if self.selected_mode == "launch" else "launch"
 
     @cycle_mode_button.double_clicked
     def cycle_mode_button(self, _):

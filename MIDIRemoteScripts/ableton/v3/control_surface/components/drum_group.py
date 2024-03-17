@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\drum_group.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 16628 bytes
@@ -65,7 +65,7 @@ class DrumGroupComponent(PlayableComponent, PitchProvider, Renderable):
         if name.startswith("set_"):
             if "scroll" in name:
                 return getattr(self._drum_group_scroller, name)
-        raise AttributeError
+            raise AttributeError
 
     def set_drum_group_device(self, drum_group_device):
         if liveobj_changed(drum_group_device, self._drum_group_device):
@@ -100,7 +100,8 @@ class DrumGroupComponent(PlayableComponent, PitchProvider, Renderable):
 
     def _on_matrix_pressed(self, button):
         pad = self._pad_for_button(button)
-        return liveobj_valid(self._drum_group_device) and liveobj_valid(pad) or None
+        if not (liveobj_valid(self._drum_group_device) and liveobj_valid(pad)):
+            return
         pad_name = cast(str, pad.name)
         if self.mute_button.is_pressed:
             pad.mute = not pad.mute
@@ -194,17 +195,15 @@ class DrumGroupComponent(PlayableComponent, PitchProvider, Renderable):
         is_selected = pad == self._selected_drum_pad
         if is_selected:
             button_color = "DrumGroup.PadSelected"
-        elif pad.chains:
+        if pad.chains:
             format_str = "Selected" if is_selected else ""
             if pad.mute:
                 button_color = "DrumGroup.PadMuted{}".format(format_str)
-            else:
-                if pad.solo:
-                    button_color = "DrumGroup.PadSoloed{}".format(format_str)
-                else:
-                    if not is_selected:
-                        button_color = self._filled_color(pad)
-        return button_color
+            elif pad.solo:
+                button_color = "DrumGroup.PadSoloed{}".format(format_str)
+            elif not is_selected:
+                button_color = self._filled_color(pad)
+            return button_color
 
     @staticmethod
     def _filled_color(pad):
@@ -222,7 +221,7 @@ class DrumGroupComponent(PlayableComponent, PitchProvider, Renderable):
                     if first_note > 128 - size:
                         size = 128 - first_note
                     offset = clamp(first_note, 0, 128 - len(visible_drum_pads))
-                    assigned_drum_pads = self._all_drum_pads[offset[:offset + size]]
+                    assigned_drum_pads = self._all_drum_pads[offset:offset + size]
         self._assigned_drum_pads = assigned_drum_pads
 
     def _update_drum_pad_listeners(self):
@@ -259,10 +258,11 @@ class DrumGroupComponent(PlayableComponent, PitchProvider, Renderable):
         if self.has_assigned_drum_pads:
             identifier = self._button_coordinates_to_pad_index(first(self._assigned_drum_pads).note, button.coordinate)
             channel = self._translation_channel
-        return (identifier, channel)
+        return (
+         identifier, channel)
 
     def _button_coordinates_to_pad_index(self, first_note, coordinates):
-        y, x = coordinates
+        (y, x) = coordinates
         inverted_y = self.height - y - 1
         index = first_note + 4 * inverted_y + x
         if x >= 4:
@@ -275,8 +275,9 @@ class DrumGroupComponent(PlayableComponent, PitchProvider, Renderable):
     def _create_and_set_pad_translations(self):
 
         def create_translation_entry(button):
-            row, col = button.coordinate
-            return (col, row, button.identifier, button.channel)
+            (row, col) = button.coordinate
+            return (
+             col, row, button.identifier, button.channel)
 
         if self._can_set_pad_translations():
             translations = []

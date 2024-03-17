@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\KeyLab_Essential_mk3\display.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6208 bytes
@@ -89,9 +89,9 @@ def create_root_view() -> view.View[Optional[Content]]:
          Icon(IconType.ARM, IconState.FRAMED if is_track_armed(state.target_track.target_track) else IconState.UNFRAMED),
          Icon(view_based_content(IconType.LEFT_ARROW, IconType.UP_ARROW)),
          Icon(view_based_content(IconType.RIGHT_ARROW, IconType.DOWN_ARROW)))),
-          popup=(None if state.continuous_control_modes.previous_mode is None and not state.device_bank_navigation.has_changed_bank_index else (("Device control", "Page 1" if state.device_bank_navigation.bank_index == 0 else "Page 2") if state.continuous_control_modes.selected_mode == "device" else (
+          popup=None if (state.continuous_control_modes.previous_mode is None) and not (state.device_bank_navigation.has_changed_bank_index) else (("Device control", "Page 1" if state.device_bank_navigation.bank_index == 0 else "Page 2") if state.continuous_control_modes.selected_mode == "device" else (
          "Tracks control",
-         "Page 1" if state.mixer_session_ring.offset[0] == 0 else "Page 2"))))
+         "Page 1" if state.mixer_session_ring.offset[0] == 0 else "Page 2")))
 
     return view.CompoundView(view.DisconnectedView(), view.NotificationView(lambda _, content: content), main_view)
 
@@ -126,12 +126,12 @@ def protocol(elements):
 
     def display_popup(popup):
         if popup:
-            line1, line2 = (popup, None) if isinstance(popup, str) else popup
+            (line1, line2) = (popup, None) if isinstance(popup, str) else popup
             elements.display_popup_command.send_value(line1=(Text(line1).as_ascii()),
               line2=(Text(line2).as_ascii() if line2 else None))
 
     def display_parameters(parameters):
-        for command, parameter in list(list(zip(elements.display_parameter_commands, parameters))):
+        for (command, parameter) in list(list(zip(elements.display_parameter_commands, parameters))):
             if parameter:
                 command.send_value(32, Line1Text(parameter[0]).as_ascii(), Line2Text(parameter[1]).as_ascii())
             else:

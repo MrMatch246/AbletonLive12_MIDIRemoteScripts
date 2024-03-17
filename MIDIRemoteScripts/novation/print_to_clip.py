@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\novation\print_to_clip.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 12346 bytes
@@ -82,29 +82,26 @@ class PrintToClipComponent(Component):
             if packet_id - 1 != self._last_packet_id:
                 self.show_message(PACKET_ERROR_MESSAGE)
                 return
-        else:
-            num_bytes = len(data_bytes)
-            transfer_type = data_bytes[MESSAGE_TYPE_INDEX]
-            if transfer_type == MessageType.begin:
-                self._clip_data = {"notes": []}
-            else:
-                if transfer_type == MessageType.data and num_bytes >= MIN_DATA_PACKET_LENGTH:
-                    self._handle_data_packet(data_bytes)
-                else:
-                    if transfer_type == MessageType.end:
-                        self._print_data_to_clip()
+        num_bytes = len(data_bytes)
+        transfer_type = data_bytes[MESSAGE_TYPE_INDEX]
+        if transfer_type == MessageType.begin:
+            self._clip_data = {"notes": []}
+        elif transfer_type == MessageType.data and num_bytes >= MIN_DATA_PACKET_LENGTH:
+            self._handle_data_packet(data_bytes)
+        elif transfer_type == MessageType.end:
+            self._print_data_to_clip()
         self._last_packet_id = packet_id
 
     def _handle_data_packet(self, data_bytes):
-        payload = data_bytes[PAYLOAD_START_INDEX[:None]]
+        payload = data_bytes[PAYLOAD_START_INDEX:]
         if len(payload) == BYTES_PER_GROUP_OFFSET:
             self._clip_data["length"] = to_absolute_beat_time(payload)
         else:
-            group_offset = to_absolute_beat_time(payload[None[:BYTES_PER_GROUP_OFFSET]])
-            payload = payload[BYTES_PER_GROUP_OFFSET[:None]]
+            group_offset = to_absolute_beat_time(payload[:BYTES_PER_GROUP_OFFSET])
+            payload = payload[BYTES_PER_GROUP_OFFSET:]
             payload_length = len(payload)
             if payload_length % BYTES_PER_NOTE == 0:
-                self._clip_data["notes"].extend([create_note(payload[i[:i + BYTES_PER_NOTE]], group_offset) for i in range(0, payload_length, BYTES_PER_NOTE)])
+                self._clip_data["notes"].extend([create_note(payload[i:i + BYTES_PER_NOTE], group_offset) for i in range(0, payload_length, BYTES_PER_NOTE)])
 
     def _reset_last_packet_id(self):
         self._last_packet_id = -1
@@ -138,7 +135,7 @@ class PrintToClipComponent(Component):
             return
 
     def _wrap_trailing_notes(self):
-        for note in self._clip_data["notes"][None[:None]]:
+        for note in self._clip_data["notes"][:]:
             note_end_position = note[Note.start] + note[Note.length]
             if note_end_position > self._clip_data["length"]:
                 wrapped_note_length = note_end_position - self._clip_data["length"] + WRAPPED_NOTE_OFFSET

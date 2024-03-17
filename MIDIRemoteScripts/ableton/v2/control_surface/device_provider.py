@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\device_provider.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5974 bytes
@@ -18,7 +18,7 @@ def device_to_appoint(device):
                     if liveobj_valid(device.view.selected_chain):
                         if len(device.view.selected_chain.devices) > 0:
                             appointed_device = device_to_appoint(device.view.selected_chain.devices[0])
-    return appointed_device
+        return appointed_device
 
 
 def select_and_appoint_device(song, device_to_select, ignore_unmapped_macros=True):
@@ -72,7 +72,7 @@ class DeviceProvider(EventObject):
         device_to_select = None
         if isinstance(track_or_chain, Live.Track.Track):
             device_to_select = track_or_chain.view.selected_device
-        elif not liveobj_valid(device_to_select):
+        if not liveobj_valid(device_to_select):
             if len(track_or_chain.devices) > 0:
                 device_to_select = track_or_chain.devices[0]
         if liveobj_valid(device_to_select):
@@ -82,7 +82,7 @@ class DeviceProvider(EventObject):
             self.device = appointed_device
         else:
             self.song.appointed_device = None
-        self.device = None
+            self.device = None
 
     def _appoint_device_from_song(self):
         self.device = device_to_appoint(self.song.appointed_device)

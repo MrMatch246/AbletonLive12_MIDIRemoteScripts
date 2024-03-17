@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\actions.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 18611 bytes
@@ -192,7 +192,7 @@ def select_clip_and_get_name_from_slot(clip_slot, song):
         if clip_slot.has_clip:
             if liveobj_changed(song.view.detail_clip, clip_slot.clip):
                 song.view.detail_clip = clip_slot.clip
-    return clip_name_from_clip_slot(clip_slot)
+        return clip_name_from_clip_slot(clip_slot)
 
 
 def get_clip_name(clip):
@@ -211,7 +211,7 @@ def scene_description(scene, song, with_tempo_and_time_sig=True):
         if scene.time_signature_numerator > 0:
             if scene.time_signature_denominator > 0:
                 description += " | {}/{}".format(scene.time_signature_numerator, scene.time_signature_denominator)
-    return description
+        return description
 
 
 def clip_name_from_clip_slot(clip_slot):
@@ -221,7 +221,7 @@ def clip_name_from_clip_slot(clip_slot):
         clip_name = "[empty slot]"
         if liveobj_valid(clip):
             clip_name = get_clip_name(clip)
-    return clip_name
+        return clip_name
 
 
 def select_scene_and_get_description(scene, song):
@@ -262,7 +262,7 @@ class SelectComponent(Component):
 
     def _do_show_time_remaining(self):
         clip = self._selected_clip
-        if not liveobj_valid(clip) or clip.is_triggered or clip.is_playing:
+        if liveobj_valid(clip) and clip.is_triggered or clip.is_playing:
             if clip.is_recording:
                 label = "Record Count:"
                 length = old_div((clip.playing_position - clip.loop_start) * clip.signature_denominator, clip.signature_numerator)
@@ -271,14 +271,13 @@ class SelectComponent(Component):
             else:
                 label = "Time Remaining:"
                 length = clip.loop_end - clip.playing_position
-                if clip.is_audio_clip:
-                    if not clip.warping:
-                        time = convert_length_to_mins_secs(length)
-                    else:
-                        time = convert_beats_to_mins_secs(length, self.song.tempo)
+                if clip.is_audio_clip and not clip.warping:
+                    time = convert_length_to_mins_secs(length)
                 else:
-                    label = " "
-                time = " "
+                    time = convert_beats_to_mins_secs(length, self.song.tempo)
+        else:
+            label = " "
+            time = " "
         self._selection_display.set_display_string(label, 2)
         self._selection_display.set_display_string(time, 3)
 
@@ -344,7 +343,7 @@ class DeleteComponent(Component, Messenger):
             playing_slot_index = selected_track.playing_slot_index
             if playing_slot_index >= 0:
                 playing_clip = selected_track.clip_slots[playing_slot_index].clip
-        return playing_clip
+            return playing_clip
 
 
 class DeleteAndReturnToDefaultComponent(DeleteComponent):
@@ -411,7 +410,7 @@ class StopClipComponent(Component):
     def _update_all_stop_buttons(self):
         tracks = self._track_provider.controlled_tracks()
         self.stop_track_clips_buttons.control_count = len(tracks)
-        for track, button in zip(tracks, self.stop_track_clips_buttons):
+        for (track, button) in zip(tracks, self.stop_track_clips_buttons):
             self._update_stop_button(track, button)
 
     def _update_stop_button_by_index(self, index):
@@ -421,11 +420,10 @@ class StopClipComponent(Component):
     def _color_for_button(self, track):
         if is_clip_stop_pending(track):
             color = "Session.StopClipTriggered"
+        elif track.playing_slot_index >= 0:
+            color = "Session.StopClip"
         else:
-            if track.playing_slot_index >= 0:
-                color = "Session.StopClip"
-            else:
-                color = "Session.StoppedClip"
+            color = "Session.StoppedClip"
         return color
 
     def _update_stop_button(self, track, button):

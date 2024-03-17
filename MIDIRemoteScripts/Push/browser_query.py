@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push\browser_query.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4540 bytes
@@ -46,7 +46,7 @@ class PathBrowserQuery(BrowserQuery):
         if elem:
             if len(path) == 1:
                 return [elem]
-            return self._find_item(path[1[:None]], elem.children)
+            return self._find_item(path[1:], elem.children)
 
 
 class TagBrowserQuery(BrowserQuery):
@@ -64,15 +64,15 @@ class TagBrowserQuery(BrowserQuery):
         if isinstance(path, string_types):
             path = [
              path]
-        elif items is None:
+        if items is None:
             items = [
              getattr(browser, self.root_name)]
         if path:
             name = path[0]
             elem = find_if((lambda x: x.name == name), items)
             if elem:
-                items = self._extract_path(path[1[:None]], elem.children)
-        return tuple(items)
+                items = self._extract_path(path[1:], elem.children)
+            return tuple(items)
 
 
 class SourceBrowserQuery(TagBrowserQuery):

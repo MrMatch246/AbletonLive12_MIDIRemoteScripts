@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Akai_Force_MPC\akai_force_mpc.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 22943 bytes
@@ -71,9 +71,8 @@ class Akai_Force_MPC(ControlSurface):
                 self._product_id = id_byte
                 self._create_elements()
                 self._initialize_task.restart()
-            else:
-                if self._product_id == id_byte:
-                    self._enable_components(True)
+            elif self._product_id == id_byte:
+                self._enable_components(True)
 
     def _initialize(self):
         self._create_components()
@@ -87,12 +86,10 @@ class Akai_Force_MPC(ControlSurface):
                 elements_class = None
                 if self.is_force:
                     elements_class = ForceElements
-                else:
-                    if self._product_id == MPC_X_PRODUCT_ID:
-                        elements_class = MPCXElements
-                    else:
-                        if self._product_id == MPC_LIVE_PRODUCT_ID:
-                            elements_class = MPCLiveElements
+                elif self._product_id == MPC_X_PRODUCT_ID:
+                    elements_class = MPCXElements
+                elif self._product_id == MPC_LIVE_PRODUCT_ID:
+                    elements_class = MPCLiveElements
                 self._elements = elements_class(self._product_id)
         self._element_injector = inject(element_container=(const(self._elements))).everywhere()
 

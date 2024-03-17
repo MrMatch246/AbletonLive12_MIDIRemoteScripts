@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\live\util.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 12478 bytes
@@ -9,11 +9,11 @@ from __future__ import absolute_import, print_function, unicode_literals
 from functools import singledispatch
 from typing import Any, Union
 import Live
-import Live.Clip as Clip
-import Live.ClipSlot as ClipSlot
-import Live.DeviceParameter as DeviceParameter
-import Live.MixerDevice as MixerDevice
-import Live.Scene as Scene
+from Live.Clip import Clip as Clip
+from Live.ClipSlot import ClipSlot as ClipSlot
+from Live.DeviceParameter import DeviceParameter as DeviceParameter
+from Live.MixerDevice import MixerDevice as MixerDevice
+from Live.Scene import Scene as Scene
 from ableton.v2.base import liveobj_valid
 from ableton.v2.control_surface.components import find_nearest_color
 from ableton.v2.control_surface.internal_parameter import InternalParameterBase
@@ -21,20 +21,20 @@ from ..base import clamp, find_if, hex_to_rgb
 TRANSLATED_MIXER_PARAMETER_NAMES = {'Track Volume':"Volume", 
  'Track Panning':"Pan"}
 UNDECLARED_QUANTIZED_PARAMETERS = {
- 'AutoFilter': ('LFO Sync Rate',), 
- 'AutoPan': ('Sync Rate',), 
- 'BeatRepeat': ('Gate', 'Grid', 'Interval', 'Offset', 'Variation'), 
- 'Corpus': ('LFO Sync Rate',), 
- 'Flanger': ('Sync Rate',), 
- 'FrequencyShifter': ('Sync Rate',), 
- 'GlueCompressor': ('Ratio', 'Attack', 'Release'), 
- 'MidiArpeggiator': ('Offset', 'Synced Rate', 'Repeats', 'Ret. Interval', 'Transp. Steps'), 
- 'MidiNoteLength': ('Synced Length',), 
- 'MidiScale': ('Base',), 
- 'MultiSampler': ('L 1 Sync Rate', 'L 2 Sync Rate', 'L 3 Sync Rate'), 
- 'Operator': ('LFO Sync',), 
- 'OriginalSimpler': ('L Sync Rate',), 
- 'Phaser': ('LFO Sync Rate',)}
+  'AutoFilter': ('LFO Sync Rate',),
+  'AutoPan': ('Sync Rate',),
+  'BeatRepeat': ('Gate', 'Grid', 'Interval', 'Offset', 'Variation'),
+  'Corpus': ('LFO Sync Rate',),
+  'Flanger': ('Sync Rate',),
+  'FrequencyShifter': ('Sync Rate',),
+  'GlueCompressor': ('Ratio', 'Attack', 'Release'),
+  'MidiArpeggiator': ('Offset', 'Synced Rate', 'Repeats', 'Ret. Interval', 'Transp. Steps'),
+  'MidiNoteLength': ('Synced Length',),
+  'MidiScale': ('Base',),
+  'MultiSampler': ('L 1 Sync Rate', 'L 2 Sync Rate', 'L 3 Sync Rate'),
+  'Operator': ('LFO Sync',),
+  'OriginalSimpler': ('L Sync Rate',),
+  'Phaser': ('LFO Sync Rate',)}
 _current_song = None
 
 class LiveObjectTypeError(Exception):
@@ -103,7 +103,7 @@ def prepare_new_clip_slot(track, stop=False):
         except Live.Base.LimitationError:
             pass
 
-    return slot
+        return slot
 
 
 def _next_empty_clip_slot_index(track):
@@ -178,7 +178,7 @@ def _(parameter: DeviceParameter, **_):
         except AttributeError:
             return TRANSLATED_MIXER_PARAMETER_NAMES.get(parameter.name, parameter.name)
 
-    return ""
+        return ""
 
 
 @display_name.register
@@ -226,7 +226,7 @@ def is_parameter_quantized(parameter, device):
     is_quantized = False
     if liveobj_valid(parameter):
         device_class = getattr(device, "class_name", None)
-        is_quantized = parameter.is_quantized or device_class in UNDECLARED_QUANTIZED_PARAMETERS and parameter.name in UNDECLARED_QUANTIZED_PARAMETERS[device_class]
+        is_quantized = (parameter.is_quantized) or ((device_class in UNDECLARED_QUANTIZED_PARAMETERS) and (parameter.name in UNDECLARED_QUANTIZED_PARAMETERS[device_class]))
     return is_quantized
 
 
@@ -243,15 +243,17 @@ def liveobj_color_to_value_from_palette(obj, palette=None, fallback_table=None, 
         except (KeyError, IndexError):
             return find_nearest_color(fallback_table, obj.color)
 
-    return default_value
+        return default_value
 
 
 def deduplicate_parameters(parameters):
     param_names = set()
     to_remove = object()
-    for i, parameter in enumerate(parameters):
+    for (i, parameter) in enumerate(parameters):
         if getattr(parameter, "original_name", None) in param_names:
             parameters[i] = to_remove
+        if getattr(parameter, "original_name", None):
+            param_names.add(parameter.original_name)
 
     without_duplicates = [param for param in parameters if param is not to_remove]
     padding_length = len(parameters) - len(without_duplicates)

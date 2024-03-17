@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\device_parameter_bank.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6834 bytes
@@ -70,12 +70,12 @@ class DeviceParameterBank(EventObject):
     def _collect_parameters(self):
         parameters = all_parameters(self._device)
         offset = self._index * self._size
-        params = parameters[offset[:None]]
+        params = parameters[offset:]
         params.extend([None] * (self._size - len(params)))
         return [(param, None) for param in params]
 
     def _update_parameters(self):
-        parameters = self._collect_parameters()[None[:self._size]]
+        parameters = self._collect_parameters()[:self._size]
         if self._parameters != parameters:
             self._parameters = parameters
             self.notify_parameters()
@@ -159,8 +159,7 @@ class MaxDeviceParameterBank(DeviceParameterBank):
 
     def _collect_parameters(self):
         if self.bank_count() == 0:
-            return [
-             (None, None)] * self._size
+            return [(None, None)] * self._size
         parameters = self._device.parameters
         mx_index = self.index - int(self._banking_info.has_main_bank(self._device))
         indices = self.device.get_bank_parameters(mx_index)
@@ -173,11 +172,10 @@ def create_device_bank(device, banking_info):
     if liveobj_valid(device):
         if banking_info.has_bank_count(device):
             bank_class = MaxDeviceParameterBank
+        elif banking_info.device_bank_definition(device) is not None:
+            bank_class = DescribedDeviceParameterBank
         else:
-            if banking_info.device_bank_definition(device) is not None:
-                bank_class = DescribedDeviceParameterBank
-            else:
-                bank_class = DeviceParameterBank
+            bank_class = DeviceParameterBank
         bank = bank_class(device=device, size=8, banking_info=banking_info)
     return bank
 

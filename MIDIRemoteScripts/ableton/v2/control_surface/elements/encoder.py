@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\elements\encoder.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9830 bytes
@@ -43,9 +43,7 @@ def normalize_two_compliment(value):
 
 ENCODER_VALUE_NORMALIZER = {(_map_modes.relative_two_compliment): normalize_two_compliment, 
  (_map_modes.relative_smooth_two_compliment): normalize_two_compliment, 
- (_map_modes.relative_smooth_signed_bit): (lambda v:                                           if v <= 64:
-v # Avoid dead code: 64 - v), 
- 
+ (_map_modes.relative_smooth_signed_bit): (lambda v: v if v <= 64 else 64 - v), 
  (_map_modes.relative_smooth_binary_offset): (lambda v: v - 64), 
  (_map_modes.relative_signed_bit): signed_bit_delta}
 MAX_14_BIT_CC = 95

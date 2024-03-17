@@ -1,26 +1,26 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Oxygen_3rd_Gen\Oxygen_3rd_Gen.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6682 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 import Live
-import _Framework.ButtonElement as ButtonElement
-import _Framework.ChannelStripComponent as ChannelStripComponent
-import _Framework.ClipSlotComponent as ClipSlotComponent
-import _Framework.ControlElement as ControlElement
-import _Framework.ControlSurface as ControlSurface
-import _Framework.DeviceComponent as DeviceComponent
-import _Framework.EncoderElement as EncoderElement
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.ChannelStripComponent import ChannelStripComponent as ChannelStripComponent
+from _Framework.ClipSlotComponent import ClipSlotComponent as ClipSlotComponent
+from _Framework.ControlElement import ControlElement as ControlElement
+from _Framework.ControlSurface import ControlSurface as ControlSurface
+from _Framework.DeviceComponent import DeviceComponent as DeviceComponent
+from _Framework.EncoderElement import EncoderElement as EncoderElement
 from _Framework.InputControlElement import *
-import _Framework.ModeSelectorComponent as ModeSelectorComponent
-import _Framework.SceneComponent as SceneComponent
-import _Framework.SessionComponent as SessionComponent
-import _Framework.SliderElement as SliderElement
-import _Framework.TransportComponent as TransportComponent
+from _Framework.ModeSelectorComponent import ModeSelectorComponent as ModeSelectorComponent
+from _Framework.SceneComponent import SceneComponent as SceneComponent
+from _Framework.SessionComponent import SessionComponent as SessionComponent
+from _Framework.SliderElement import SliderElement as SliderElement
+from _Framework.TransportComponent import TransportComponent as TransportComponent
 from .SpecialMixerComponent import SpecialMixerComponent
 from .TransportViewModeSelector import TransportViewModeSelector
 IDENTITY_REQUEST = (240, 126, 127, 6, 1, 247)
@@ -74,7 +74,7 @@ class Oxygen_3rd_Gen(ControlSurface):
         self.schedule_message(5, self._send_midi, IDENTITY_REQUEST)
 
     def handle_sysex(self, midi_bytes):
-        if midi_bytes[0[:5]] == IDENTITY_RESPONSE:
+        if midi_bytes[0:5] == IDENTITY_RESPONSE:
             if midi_bytes[10] == 38:
                 self._mixer.master_strip().set_volume_control(None)
                 self._mixer.selected_strip().set_volume_control(self._master_slider)

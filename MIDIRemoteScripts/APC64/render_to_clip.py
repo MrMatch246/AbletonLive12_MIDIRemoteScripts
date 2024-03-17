@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\APC64\render_to_clip.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 10060 bytes
@@ -40,7 +40,7 @@ def get_clip_length(data_bytes):
 def get_notes_to_render(note_ons, note_offs, clip_length):
     notes_to_render = []
     for note_on in note_ons:
-        for i, note_off in enumerate(note_offs):
+        for (i, note_off) in enumerate(note_offs):
             if note_off.pitch == note_on.pitch:
                 if note_off.position > note_on.position:
                     if note_off.position <= clip_length:
@@ -51,8 +51,8 @@ def get_notes_to_render(note_ons, note_offs, clip_length):
                           mute=False))
                     else:
                         notes_to_render.extend(wrap_note(note_on, note_off, clip_length))
-                note_offs.pop(i)
-                break
+                    note_offs.pop(i)
+                    break
 
     return notes_to_render
 
@@ -77,7 +77,7 @@ def get_firmware_note_data(data_bytes):
     note_ons = []
     note_offs = []
     for index in range(0, len(data_bytes), NOTE_DATA_LENGTH):
-        spec = get_firmware_note_specification(data_bytes[index[:index + NOTE_DATA_LENGTH]])
+        spec = get_firmware_note_specification(data_bytes[index:index + NOTE_DATA_LENGTH])
         if spec.is_note_on:
             note_ons.append(spec)
         else:
@@ -126,9 +126,9 @@ class RenderToClipComponent(Component, Renderable):
     @data_control.value
     def data_control(self, values, _):
         if len(values) >= PAYLOAD_START_INDEX:
-            payload = values[PAYLOAD_START_INDEX[:None]]
+            payload = values[PAYLOAD_START_INDEX:]
             if len(payload) % NOTE_DATA_LENGTH == 0:
-                note_ons, note_offs = get_firmware_note_data(payload)
+                (note_ons, note_offs) = get_firmware_note_data(payload)
                 self._note_on_events.extend(note_ons)
                 self._note_off_events.extend(note_offs)
 

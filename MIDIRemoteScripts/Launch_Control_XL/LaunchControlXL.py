@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launch_Control_XL\LaunchControlXL.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9674 bytes
@@ -11,14 +11,14 @@ from functools import partial
 from itertools import chain
 import Live
 from _Framework import Task
-import _Framework.ButtonMatrixElement as ButtonMatrixElement
-import _Framework.EncoderElement as EncoderElement
-import _Framework.IdentifiableControlSurface as IdentifiableControlSurface
+from _Framework.ButtonMatrixElement import ButtonMatrixElement as ButtonMatrixElement
+from _Framework.EncoderElement import EncoderElement as EncoderElement
+from _Framework.IdentifiableControlSurface import IdentifiableControlSurface as IdentifiableControlSurface
 from _Framework.InputControlElement import MIDI_CC_TYPE, MIDI_NOTE_TYPE
-import _Framework.Layer as Layer
+from _Framework.Layer import Layer as Layer
 from _Framework.ModesComponent import AddLayerMode, ModeButtonBehaviour, ModesComponent
-import _Framework.SessionComponent as SessionComponent
-import _Framework.SliderElement as SliderElement
+from _Framework.SessionComponent import SessionComponent as SessionComponent
+from _Framework.SliderElement import SliderElement as SliderElement
 from _Framework.SubjectSlot import subject_slot
 from _Framework.Util import nop
 from .ButtonElement import ButtonElement
@@ -94,12 +94,12 @@ class LaunchControlXL(IdentifiableControlSurface):
          make_button_list(chain(range(73, 77), range(89, 93)), "Track_State_%d")])
         self._send_encoder_lights = ButtonMatrixElement(rows=[
          make_button_list([
-          13, 29, 45, 61, 77, 93, 109, 125], "Top_Send_Encoder_Light_%d"),
+          13,29,45,61,77,93,109,125], "Top_Send_Encoder_Light_%d"),
          make_button_list([
-          14, 30, 46, 62, 78, 94, 110, 126], "Bottom_Send_Encoder_Light_%d")])
+          14,30,46,62,78,94,110,126], "Bottom_Send_Encoder_Light_%d")])
         self._pan_device_encoder_lights = ButtonMatrixElement(rows=[
          make_button_list([
-          15, 31, 47, 63, 79, 95, 111, 127], "Pan_Device_Encoder_Light_%d")])
+          15,31,47,63,79,95,111,127], "Pan_Device_Encoder_Light_%d")])
 
     def _create_mixer(self):
         mixer = MixerComponent(NUM_TRACKS, is_enabled=True, auto_name=True)
@@ -181,7 +181,7 @@ class LaunchControlXL(IdentifiableControlSurface):
         self._initialize_task.restart()
 
     def handle_sysex(self, midi_bytes):
-        if midi_bytes[None[:7]] == PREFIX_TEMPLATE_SYSEX:
+        if midi_bytes[:7] == PREFIX_TEMPLATE_SYSEX:
             if midi_bytes[7] == LIVE_CHANNEL:
                 if self._initialize_task.is_running:
                     self._create_components()

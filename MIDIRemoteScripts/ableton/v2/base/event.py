@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\base\event.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 23055 bytes
@@ -75,9 +75,10 @@ def add_event(cls, event_name_or_event):
 def validate_event_interface(obj, event_name):
     if not callable(getattr(obj, "add_" + event_name + "_listener", None)):
         raise EventError('Object %s missing "add" method for event: %s' % (obj, event_name))
-    elif not callable(getattr(obj, "remove_" + event_name + "_listener", None)):
+    if not callable(getattr(obj, "remove_" + event_name + "_listener", None)):
         raise EventError('Object %s missing "remove" method for event: %s' % (obj, event_name))
-    assert callable(getattr(obj, event_name + "_has_listener", None)), 'Object %s missing "has" method for event: %s' % (obj, event_name)
+    if not callable(getattr(obj, event_name + "_has_listener", None)):
+        raise EventError('Object %s missing "has" method for event: %s' % (obj, event_name))
 
 
 def has_event(obj, event_name):
@@ -98,7 +99,7 @@ class EventObjectMeta(type):
 
     def __new__(cls, name, bases, dct):
         listenable_properties = EventObjectMeta.collect_listenable_properties(dct)
-        for property_name, obj in listenable_properties:
+        for (property_name, obj) in listenable_properties:
             obj.set_property_name(property_name)
 
         events = dct.get("__events__", [])
@@ -107,19 +108,20 @@ class EventObjectMeta(type):
         if has_events:
             if "disconnect" not in dct:
                 dct["disconnect"] = lambda self: super(cls, self).disconnect()
-        cls = super(EventObjectMeta, cls).__new__(cls, name, bases, dct)
-        for lst in chain(events, property_events):
-            add_event(cls, lst)
+            cls = super(EventObjectMeta, cls).__new__(cls, name, bases, dct)
+            for lst in chain(events, property_events):
+                add_event(cls, lst)
 
-        return cls
+            return cls
 
 
 class EventObject(with_metaclass(EventObjectMeta, CompoundDisconnectable)):
 
     def register_slot(self, *a, **k):
-        slot = a[0] if (a and isinstance(a[0], Slot)) else (Slot(*a, **k))
-        self.register_disconnectable(slot)
-        return slot
+        if a:
+            slot = a[0] if isinstance(a[0], Slot) else Slot(*a, **k)
+            self.register_disconnectable(slot)
+            return slot
 
 
 class Slot(Disconnectable):
@@ -148,13 +150,14 @@ class Slot(Disconnectable):
 
     def connect(self):
         if not self.is_connected:
-            if self.subject_valid(self._subject) and self._listener is not None:
-                add_method = getattr(self._subject, "add_" + self._event_name + "_listener")
-                all_args = tuple(self._extra_args) + (self._listener,)
-                try:
-                    add_method(*all_args, **self._extra_kws)
-                except RuntimeError:
-                    pass
+            if self.subject_valid(self._subject):
+                if self._listener is not None:
+                    add_method = getattr(self._subject, "add_" + self._event_name + "_listener")
+                    all_args = tuple(self._extra_args) + (self._listener,)
+                    try:
+                        add_method(*all_args, **self._extra_kws)
+                    except RuntimeError:
+                        pass
 
     def soft_disconnect(self):
         if self.is_connected:
@@ -225,7 +228,7 @@ class SlotGroup(EventObject):
 
     def replace_subjects(self, subjects, identifiers=repeat(None)):
         self.disconnect()
-        for subject, identifier in zip(subjects, identifiers):
+        for (subject, identifier) in zip(subjects, identifiers):
             self.add_subject(subject, identifier=identifier)
 
     def add_subject(self, subject, identifier=None):
@@ -260,7 +263,7 @@ class MultiSlot(EventObject, Slot):
           extra_kws=extra_kws,
           extra_args=extra_args)
         if len(event_name_list) > 1:
-            self._nested_slot = self.register_disconnectable(MultiSlot(event_name_list=(event_name_list[1[:None]]),
+            self._nested_slot = self.register_disconnectable(MultiSlot(event_name_list=(event_name_list[1:]),
               listener=listener,
               extra_kws=extra_kws,
               extra_args=extra_args))
@@ -368,11 +371,11 @@ class SerializableListenablePropertiesMeta(EventObjectMeta):
 
         def getstate(self):
             data = super(generated_class, self).__getstate__()
-            data.update(dict(((property_name, getattr(self, property_name)) for property_name, _ in listenable_properties)))
+            data.update(dict(((property_name, getattr(self, property_name)) for (property_name, _) in listenable_properties)))
             return data
 
         def setstate(self, data):
-            for k, v in iteritems(data):
+            for (k, v) in iteritems(data):
                 setattr(self, k, v)
 
         dct["__getstate__"] = getstate

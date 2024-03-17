@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Komplete_Kontrol_S_Mk3\elements.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 4629 bytes
@@ -73,7 +73,7 @@ class Elements(ElementsBase):
           "Pan_Encoders",
           element_factory=create_kk_encoder,
           is_feedback_enabled=True)
-        for name, identifier in (('Track_Mute_Element', 67), ('Track_Solo_Element', 68)):
+        for (name, identifier) in (('Track_Mute_Element', 67), ('Track_Solo_Element', 68)):
             self.add_element(name,
               DiscreteValuesElement,
               identifier,

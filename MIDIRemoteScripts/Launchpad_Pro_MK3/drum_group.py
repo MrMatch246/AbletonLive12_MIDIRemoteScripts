@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_Pro_MK3\drum_group.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3413 bytes
@@ -31,9 +31,8 @@ class DrumGroupComponent(DrumGroupComponentBase):
         self._set_control_pads_from_script(bool(value))
         if value:
             self._can_delete_clip = True
-        else:
-            if self._can_delete_clip:
-                self._clip_actions.delete_clip()
+        elif self._can_delete_clip:
+            self._clip_actions.delete_clip()
 
     def delete_pitch(self, drum_pad):
         self._can_delete_clip = False

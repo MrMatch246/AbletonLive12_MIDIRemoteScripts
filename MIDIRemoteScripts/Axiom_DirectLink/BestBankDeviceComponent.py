@@ -1,15 +1,15 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Axiom_DirectLink\BestBankDeviceComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4429 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 import Live
 from _Generic.Devices import BANK_NAME_DICT, DEVICE_BOB_DICT, DEVICE_DICT, parameter_bank_names, parameter_banks
-import _Framework.DeviceComponent as DeviceComponent
-import _Framework.DisplayDataSource as DisplayDataSource
+from _Framework.DeviceComponent import DeviceComponent as DeviceComponent
+from _Framework.DisplayDataSource import DisplayDataSource as DisplayDataSource
 BOP_BANK_NAME = "Best of Parameters"
 
 class BestBankDeviceComponent(DeviceComponent):
@@ -54,7 +54,7 @@ class BestBankDeviceComponent(DeviceComponent):
                     bank_name = self._bank_name
                     if bank_name in (BOP_BANK_NAME, "Bank 1"):
                         bank_name = "Home"
-            self._bank_name_data_source.set_display_string(bank_name)
+                self._bank_name_data_source.set_display_string(bank_name)
 
     def _is_banking_enabled(self):
         return True

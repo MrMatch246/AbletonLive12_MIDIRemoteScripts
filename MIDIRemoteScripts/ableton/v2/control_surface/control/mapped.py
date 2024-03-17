@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\control\mapped.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6273 bytes
@@ -44,7 +44,7 @@ class MappedControl(InputControl):
                 self._control_element.connect_to(self._direct_mapping)
 
         def _update_value_slot(self):
-            self._value_slot.subject = None if (liveobj_valid(self._direct_mapping) and self._direct_mapping.is_enabled) else (self._control_element)
+            self._value_slot.subject = None if (liveobj_valid(self._direct_mapping)) and (self._direct_mapping.is_enabled) else (self._control_element)
 
         def _notifications_enabled(self):
             return super(MappedControl.State, self)._notifications_enabled() and self._direct_mapping is None
@@ -107,7 +107,7 @@ class MappedSensitivitySettingControl(MappedControl):
         def _control_value(self, value):
             if is_zoom_parameter(self.mapped_parameter):
                 self.mapped_parameter.zoom(value * self._control_element.mapping_sensitivity)
-            elif self.mapped_parameter.is_quantized:
+            if self.mapped_parameter.is_quantized:
                 steps = self._quantized_stepper.advance(value)
                 if steps != 0:
                     self.mapped_parameter.value = self._clamp_value_to_parameter_range(self.mapped_parameter.value + steps)

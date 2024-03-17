@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push\special_chan_strip_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 13437 bytes
@@ -99,7 +99,7 @@ class SpecialChanStripComponent(components.ChannelStripComponent, Messenger):
         self._update_parameter_name_sources()
         self._update_parameter_values()
         self._on_panning_mode_changed.subject = track.mixer_device if track else None
-        arm_subject = track if (track and track.can_be_armed) else None
+        arm_subject = track if track and (track.can_be_armed) else None
         self._on_explicit_arm_changed.subject = arm_subject
         self._on_implicit_arm_changed.subject = arm_subject
 
@@ -131,21 +131,19 @@ class SpecialChanStripComponent(components.ChannelStripComponent, Messenger):
         if self.is_enabled():
             if self._track == None:
                 self.select_button.color = self.empty_color
-            else:
-                if self._track.can_be_armed:
-                    if self._track.arm or self._track.implicit_arm:
-                        if self._track == self.song.view.selected_track:
-                            self.select_button.color = "Mixer.ArmSelected"
-                    else:
-                        self.select_button.color = "Mixer.ArmUnselected"
-                elif self._track == self.song.view.selected_track:
-                    self.select_button.color = "Option.Selected"
+            elif self._track.can_be_armed and self._track.arm or self._track.implicit_arm:
+                if self._track == self.song.view.selected_track:
+                    self.select_button.color = "Mixer.ArmSelected"
                 else:
-                    self.select_button.color = "Option.Unselected"
+                    self.select_button.color = "Mixer.ArmUnselected"
+            elif self._track == self.song.view.selected_track:
+                self.select_button.color = "Option.Selected"
+            else:
+                self.select_button.color = "Option.Unselected"
 
     def _update_track_listeners(self):
         mixer = self._track.mixer_device if self._track else None
-        sends = mixer.sends if (mixer and self._track != self.song.master_track) else ()
+        sends = mixer.sends if mixer and (self._track != self.song.master_track) else ()
         cue_volume = mixer.cue_volume if self._track == self.song.master_track else None
         self._cue_volume_slot.parameter = cue_volume
         self._on_volume_value_changed.subject = mixer and mixer.volume
@@ -154,7 +152,7 @@ class SpecialChanStripComponent(components.ChannelStripComponent, Messenger):
 
     def _update_parameter_name_sources(self):
         num_params = len(self._track.mixer_device.sends) + 2 if self._track else 0
-        for index, source in enumerate(self._track_parameter_name_sources):
+        for (index, source) in enumerate(self._track_parameter_name_sources):
             if index < num_params:
                 track_parameter_names = ('Volume', 'Pan') + SEND_PARAMETER_NAMES
                 source.set_display_string(track_parameter_names[index])
@@ -179,14 +177,12 @@ class SpecialChanStripComponent(components.ChannelStripComponent, Messenger):
             if self._track:
                 if self._duplicate_button and self._duplicate_button.is_pressed():
                     self._do_duplicate_track(self._track)
+                elif self._is_deleting:
+                    self._do_delete_track(self._track)
+                elif self._shift_pressed:
+                    toggle_arm((self._track), (self.song), exclusive=False)
                 else:
-                    if self._is_deleting:
-                        self._do_delete_track(self._track)
-                    else:
-                        if self._shift_pressed:
-                            toggle_arm((self._track), (self.song), exclusive=False)
-                        else:
-                            self._select_value_without_modifier(button)
+                    self._select_value_without_modifier(button)
 
     def _mute_value(self, value):
         if self.is_enabled():
@@ -194,8 +190,8 @@ class SpecialChanStripComponent(components.ChannelStripComponent, Messenger):
                 if not self._mute_button.is_momentary() or value != 0:
                     if self._is_deleting:
                         self._delete_handler.delete_clip_envelope(self._track.mixer_device.track_activator)
-                else:
-                    super(SpecialChanStripComponent, self)._mute_value(value)
+                    else:
+                        super(SpecialChanStripComponent, self)._mute_value(value)
 
     def _select_value_without_modifier(self, button):
         if self.song.view.selected_track == self._track:

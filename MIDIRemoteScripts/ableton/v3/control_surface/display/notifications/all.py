@@ -1,13 +1,13 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\display\notifications\all.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 8711 bytes
 from __future__ import absolute_import, annotations, print_function, unicode_literals
 from typing import NewType
-import Live.ClipSlot as ClipSlot
+from Live.ClipSlot import ClipSlot as ClipSlot
 from ....base import pitch_index_to_string
 from ....live import display_name, major_version
 from .type_decl import Fn, Notification, _DefaultText, _TransformDefaultText
@@ -58,8 +58,7 @@ class Notifications:
     class Transport:
         metronome = toggle_text_generator("Metronome\n{}")
         metronome: "Notification[Fn[bool]]"
-        midi_capture = lambda tempo_set_by_capture, tempo:         if tempo_set_by_capture:
-"Captured\n{} BPM".format(int(tempo)) # Avoid dead code: "Captured"
+        midi_capture = lambda tempo_set_by_capture, tempo: "Captured\n{} BPM".format(int(tempo)) if tempo_set_by_capture else "Captured"
         midi_capture: "Notification[Fn[bool, float]]"
         loop = toggle_text_generator("Loop\n{}")
         loop: "Notification[Fn[bool]]"

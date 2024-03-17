@@ -1,28 +1,28 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Axiom_DirectLink\Axiom_DirectLink.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 19801 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import chr, range, str
 import Live
-import _Framework.ButtonElement as ButtonElement
-import _Framework.ChannelStripComponent as ChannelStripComponent
-import _Framework.ClipSlotComponent as ClipSlotComponent
-import _Framework.ControlElement as ControlElement
-import _Framework.ControlSurface as ControlSurface
-import _Framework.DisplayDataSource as DisplayDataSource
-import _Framework.EncoderElement as EncoderElement
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.ChannelStripComponent import ChannelStripComponent as ChannelStripComponent
+from _Framework.ClipSlotComponent import ClipSlotComponent as ClipSlotComponent
+from _Framework.ControlElement import ControlElement as ControlElement
+from _Framework.ControlSurface import ControlSurface as ControlSurface
+from _Framework.DisplayDataSource import DisplayDataSource as DisplayDataSource
+from _Framework.EncoderElement import EncoderElement as EncoderElement
 from _Framework.InputControlElement import *
-import _Framework.MixerComponent as MixerComponent
-import _Framework.ModeSelectorComponent as ModeSelectorComponent
-import _Framework.PhysicalDisplayElement as PhysicalDisplayElement
-import _Framework.SceneComponent as SceneComponent
-import _Framework.SessionComponent as SessionComponent
-import _Framework.SliderElement as SliderElement
-import _Framework.TransportComponent as TransportComponent
+from _Framework.MixerComponent import MixerComponent as MixerComponent
+from _Framework.ModeSelectorComponent import ModeSelectorComponent as ModeSelectorComponent
+from _Framework.PhysicalDisplayElement import PhysicalDisplayElement as PhysicalDisplayElement
+from _Framework.SceneComponent import SceneComponent as SceneComponent
+from _Framework.SessionComponent import SessionComponent as SessionComponent
+from _Framework.SliderElement import SliderElement as SliderElement
+from _Framework.TransportComponent import TransportComponent as TransportComponent
 from .BestBankDeviceComponent import BestBankDeviceComponent
 from .DetailViewCntrlComponent import DetailViewCntrlComponent
 from .PeekableEncoderElement import PeekableEncoderElement
@@ -76,7 +76,7 @@ class Axiom_DirectLink(ControlSurface):
         self.schedule_message(3, self._send_midi, SYSEX_START + (32, 46, 247))
 
     def handle_sysex(self, midi_bytes):
-        if midi_bytes[0[:-2]] == SYSEX_START + (32, ):
+        if midi_bytes[0:-2] == SYSEX_START + (32, ):
             if midi_bytes[-2] != 0:
                 self._has_sliders = midi_bytes[-2] & 8 != 0
                 if self._waiting_for_first_response:
@@ -281,14 +281,13 @@ class Axiom_DirectLink(ControlSurface):
                     track = self._mixer.channel_strip(self._sliders.index(sender))._track
                 if track == master:
                     display_string = "Ma"
+                elif track in tracks:
+                    display_string = str(list(tracks).index(track) + 1)
+                elif track in returns:
+                    display_string = str(chr(ord("A") + list(returns).index(track)))
                 else:
-                    if track in tracks:
-                        display_string = str(list(tracks).index(track) + 1)
-                    else:
-                        if track in returns:
-                            display_string = str(chr(ord("A") + list(returns).index(track)))
-                        else:
-                            display_string += " Vol"
+                    pass
+                display_string += " Vol"
             self._display_data_source.set_display_string(display_string)
             self._set_display_data_source(self._display_data_source)
             self._display_reset_delay = STANDARD_DISPLAY_DELAY

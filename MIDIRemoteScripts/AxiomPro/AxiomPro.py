@@ -1,29 +1,29 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\AxiomPro\AxiomPro.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 13127 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 import Live
-import _Framework.ButtonElement as ButtonElement
-import _Framework.ChannelStripComponent as ChannelStripComponent
-import _Framework.ClipSlotComponent as ClipSlotComponent
-import _Framework.ControlElement as ControlElement
-import _Framework.ControlSurface as ControlSurface
-import _Framework.DisplayDataSource as DisplayDataSource
-import _Framework.EncoderElement as EncoderElement
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.ChannelStripComponent import ChannelStripComponent as ChannelStripComponent
+from _Framework.ClipSlotComponent import ClipSlotComponent as ClipSlotComponent
+from _Framework.ControlElement import ControlElement as ControlElement
+from _Framework.ControlSurface import ControlSurface as ControlSurface
+from _Framework.DisplayDataSource import DisplayDataSource as DisplayDataSource
+from _Framework.EncoderElement import EncoderElement as EncoderElement
 from _Framework.InputControlElement import *
-import _Framework.LogicalDisplaySegment as LogicalDisplaySegment
-import _Framework.MixerComponent as MixerComponent
-import _Framework.ModeSelectorComponent as ModeSelectorComponent
-import _Framework.PhysicalDisplayElement as PhysicalDisplayElement
-import _Framework.SceneComponent as SceneComponent
-import _Framework.SessionComponent as SessionComponent
-import _Framework.SliderElement as SliderElement
-import _Framework.TransportComponent as TransportComponent
+from _Framework.LogicalDisplaySegment import LogicalDisplaySegment as LogicalDisplaySegment
+from _Framework.MixerComponent import MixerComponent as MixerComponent
+from _Framework.ModeSelectorComponent import ModeSelectorComponent as ModeSelectorComponent
+from _Framework.PhysicalDisplayElement import PhysicalDisplayElement as PhysicalDisplayElement
+from _Framework.SceneComponent import SceneComponent as SceneComponent
+from _Framework.SessionComponent import SessionComponent as SessionComponent
+from _Framework.SliderElement import SliderElement as SliderElement
+from _Framework.TransportComponent import TransportComponent as TransportComponent
 from .DisplayingMixerComponent import DisplayingMixerComponent
 from .EncoderMixerModeSelector import EncoderMixerModeSelector
 from .MixerOrDeviceModeSelector import MixerOrDeviceModeSelector
@@ -101,7 +101,7 @@ class AxiomPro(ControlSurface):
                 pos_id = tuple()
                 if index != 0:
                     pos_id += (0, )
-                elif index > 3:
+                if index > 3:
                     pos_id += (index % 4, 13)
                 else:
                     pos_id += (index % 4, 0)
@@ -117,7 +117,7 @@ class AxiomPro(ControlSurface):
         self.schedule_message(10, self._send_midi, SYSEX_START + (32, 46, 247))
 
     def handle_sysex(self, midi_bytes):
-        if midi_bytes[0[:-2]] == SYSEX_START + (32, ):
+        if midi_bytes[0:-2] == SYSEX_START + (32, ):
             msg_id_byte = midi_bytes[-2]
             is_setup_response = msg_id_byte in (46, 38)
             has_sliders = msg_id_byte == 46
@@ -141,14 +141,13 @@ class AxiomPro(ControlSurface):
                     display.set_block_messages(False)
 
                 self.schedule_message(25, self._refresh_displays)
-            else:
-                if msg_id_byte == 43:
-                    self._send_midi(SYSEX_START + (16, 247))
-                    for display in self._displays:
-                        if display is self._track_display:
-                            display.update()
-                        else:
-                            display.set_block_messages(True)
+            elif msg_id_byte == 43:
+                self._send_midi(SYSEX_START + (16, 247))
+                for display in self._displays:
+                    if display is self._track_display:
+                        display.update()
+                    else:
+                        display.set_block_messages(True)
 
     def disconnect(self):
         ControlSurface.disconnect(self)

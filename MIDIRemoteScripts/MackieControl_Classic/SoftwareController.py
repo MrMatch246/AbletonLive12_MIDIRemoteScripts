@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\MackieControl_Classic\SoftwareController.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 12339 bytes
@@ -46,50 +46,42 @@ class SoftwareController(MackieControlComponent):
     def handle_software_controls_switch_ids(self, switch_id, value):
         if switch_id == SID_MOD_SHIFT:
             self.main_script().set_shift_is_pressed(value == BUTTON_PRESSED)
-        else:
-            if switch_id == SID_MOD_OPTION:
-                self.main_script().set_option_is_pressed(value == BUTTON_PRESSED)
-            else:
-                if switch_id == SID_MOD_CTRL:
-                    self.main_script().set_control_is_pressed(value == BUTTON_PRESSED)
-                else:
-                    if switch_id == SID_MOD_ALT:
-                        self.main_script().set_alt_is_pressed(value == BUTTON_PRESSED)
-                    else:
-                        if switch_id == SID_AUTOMATION_ON:
-                            if value == BUTTON_PRESSED:
-                                self._SoftwareController__toggle_session_arranger_is_visible()
-                        else:
-                            if switch_id == SID_AUTOMATION_RECORD:
-                                if value == BUTTON_PRESSED:
-                                    self._SoftwareController__toggle_detail_sub_view()
-                            else:
-                                if switch_id == SID_AUTOMATION_SNAPSHOT:
-                                    if value == BUTTON_PRESSED:
-                                        self._SoftwareController__toggle_browser_is_visible()
-                                else:
-                                    if switch_id == SID_AUTOMATION_TOUCH:
-                                        if value == BUTTON_PRESSED:
-                                            self._SoftwareController__toggle_detail_is_visible()
-                                    else:
-                                        if switch_id == SID_FUNC_UNDO:
-                                            if value == BUTTON_PRESSED:
-                                                self.song().undo()
-                                        elif switch_id == SID_FUNC_REDO:
-                                            if value == BUTTON_PRESSED:
-                                                self.song().redo()
-                                        elif switch_id == SID_FUNC_CANCEL:
-                                            if value == BUTTON_PRESSED:
-                                                self._SoftwareController__toggle_back_to_arranger()
-                                        elif switch_id == SID_FUNC_ENTER:
-                                            if value == BUTTON_PRESSED:
-                                                self._SoftwareController__toggle_draw_mode()
-                                        elif switch_id == SID_FUNC_MARKER:
-                                            if value == BUTTON_PRESSED:
-                                                self.song().set_or_delete_cue()
-                                        elif switch_id == SID_FUNC_MIXER:
-                                            if value == BUTTON_PRESSED:
-                                                self._SoftwareController__toggle_follow_song()
+        elif switch_id == SID_MOD_OPTION:
+            self.main_script().set_option_is_pressed(value == BUTTON_PRESSED)
+        elif switch_id == SID_MOD_CTRL:
+            self.main_script().set_control_is_pressed(value == BUTTON_PRESSED)
+        elif switch_id == SID_MOD_ALT:
+            self.main_script().set_alt_is_pressed(value == BUTTON_PRESSED)
+        elif switch_id == SID_AUTOMATION_ON:
+            if value == BUTTON_PRESSED:
+                self._SoftwareController__toggle_session_arranger_is_visible()
+        elif switch_id == SID_AUTOMATION_RECORD:
+            if value == BUTTON_PRESSED:
+                self._SoftwareController__toggle_detail_sub_view()
+        elif switch_id == SID_AUTOMATION_SNAPSHOT:
+            if value == BUTTON_PRESSED:
+                self._SoftwareController__toggle_browser_is_visible()
+        elif switch_id == SID_AUTOMATION_TOUCH:
+            if value == BUTTON_PRESSED:
+                self._SoftwareController__toggle_detail_is_visible()
+        elif switch_id == SID_FUNC_UNDO:
+            if value == BUTTON_PRESSED:
+                self.song().undo()
+        elif switch_id == SID_FUNC_REDO:
+            if value == BUTTON_PRESSED:
+                self.song().redo()
+        elif switch_id == SID_FUNC_CANCEL:
+            if value == BUTTON_PRESSED:
+                self._SoftwareController__toggle_back_to_arranger()
+        elif switch_id == SID_FUNC_ENTER:
+            if value == BUTTON_PRESSED:
+                self._SoftwareController__toggle_draw_mode()
+        elif switch_id == SID_FUNC_MARKER:
+            if value == BUTTON_PRESSED:
+                self.song().set_or_delete_cue()
+        elif switch_id == SID_FUNC_MIXER:
+            if value == BUTTON_PRESSED:
+                self._SoftwareController__toggle_follow_song()
 
     def refresh_state(self):
         self.main_script().set_shift_is_pressed(False)

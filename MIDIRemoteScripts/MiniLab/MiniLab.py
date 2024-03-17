@@ -1,22 +1,22 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\MiniLab\MiniLab.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6762 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 import Live
-import _Framework.ButtonElement as ButtonElement
-import _Framework.ButtonMatrixElement as ButtonMatrixElement
-import _Framework.DeviceComponent as DeviceComponent
-import _Framework.EncoderElement as EncoderElement
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.ButtonMatrixElement import ButtonMatrixElement as ButtonMatrixElement
+from _Framework.DeviceComponent import DeviceComponent as DeviceComponent
+from _Framework.EncoderElement import EncoderElement as EncoderElement
 from _Framework.InputControlElement import MIDI_CC_TYPE, MIDI_NOTE_TYPE
-import _Framework.Layer as Layer
-import _Arturia.ArturiaControlSurface as ArturiaControlSurface
-import _Arturia.MixerComponent as MixerComponent
-import _Arturia.SessionComponent as SessionComponent
+from _Framework.Layer import Layer as Layer
+from _Arturia.ArturiaControlSurface import ArturiaControlSurface as ArturiaControlSurface
+from _Arturia.MixerComponent import MixerComponent as MixerComponent
+from _Arturia.SessionComponent import SessionComponent as SessionComponent
 HARDWARE_ENCODER_IDS = (48, 1, 2, 9, 11, 12, 13, 14, 51, 3, 4, 10, 5, 6, 7, 8)
 HARDWARE_BUTTON_IDS = list(range(112, 128))
 PAD_IDENTIFIER_OFFSET = 36
@@ -38,7 +38,7 @@ class MiniLab(ArturiaControlSurface):
 
     def _create_controls(self):
         self._device_controls = ButtonMatrixElement(rows=[[EncoderElement(MIDI_CC_TYPE, (self.encoder_msg_channel), identifier, (Live.MidiMap.MapMode.relative_smooth_two_compliment), name=("Encoder_%d_%d" % (column_index, row_index))) for column_index, identifier in enumerate(row)] for row_index, row in enumerate((
-         self.encoder_msg_ids[None[:4]], self.encoder_msg_ids[8[:12]]))])
+         self.encoder_msg_ids[:4], self.encoder_msg_ids[8:12]))])
         self._horizontal_scroll_encoder = EncoderElement(MIDI_CC_TYPE,
           (self.encoder_msg_channel),
           (self.encoder_msg_ids[7]),

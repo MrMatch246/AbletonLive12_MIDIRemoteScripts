@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ATOMSQ\touch_strip.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2432 bytes
@@ -40,8 +40,7 @@ class TouchStripElement(EncoderElement):
 def map_value_to_led_states(on, off, num_leds, value):
     mid_index = int(math.floor(num_leds / 2))
     active_length = mid_index + 1
-    active_led_states = list(map((lambda i:     if i / active_length <= abs(value):
-on # Avoid dead code: off), map(float, range(active_length))))
+    active_led_states = list(map((lambda i: on if i / active_length <= abs(value) else off), map(float, range(active_length))))
     inactive_led_states = repeat(0, num_leds - active_length)
     if value < 0:
         return chain(reversed(active_led_states), inactive_led_states)

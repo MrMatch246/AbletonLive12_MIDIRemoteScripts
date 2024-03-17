@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\SceneComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7139 bytes
@@ -92,15 +92,17 @@ class SceneComponent(CompoundComponent):
                 if self._track_offset > 0:
                     real_offset = 0
                     visible_tracks = 0
-                    while visible_tracks < self._track_offset and len(tracks) > real_offset:
-                        if tracks[real_offset].is_visible:
-                            visible_tracks += 1
-                        real_offset += 1
+                    while visible_tracks < self._track_offset:
+                        if len(tracks) > real_offset:
+                            if tracks[real_offset].is_visible:
+                                visible_tracks += 1
+                            real_offset += 1
 
                     clip_index = real_offset
                 for slot in self._clip_slots:
                     while len(tracks) > clip_index:
-                        tracks[clip_index].is_visible or clip_index += 1
+                        if not not tracks[clip_index].is_visible:
+                            clip_index += 1
 
                     if len(clip_slots) > clip_index:
                         slot.set_clip_slot(clip_slots[clip_index])
@@ -121,12 +123,11 @@ class SceneComponent(CompoundComponent):
         if self.is_enabled():
             if self._select_button and self._select_button.is_pressed() and value:
                 self._do_select_scene(self._scene)
-            else:
-                if self._scene != None:
-                    if self._delete_button and self._delete_button.is_pressed() and value:
-                        self._do_delete_scene(self._scene)
-                    else:
-                        self._do_launch_scene(value)
+            elif self._scene != None:
+                if self._delete_button and self._delete_button.is_pressed() and value:
+                    self._do_delete_scene(self._scene)
+                else:
+                    self._do_launch_scene(value)
 
     def _do_select_scene(self, scene_for_overrides):
         if self._scene != None:
@@ -147,11 +148,11 @@ class SceneComponent(CompoundComponent):
         if self._launch_button.is_momentary():
             self._scene.set_fire_button_state(value != 0)
             launched = value != 0
-        else:
-            if value != 0:
-                self._scene.fire()
-                launched = True
-            elif launched and self.song().select_on_launch:
+        elif value != 0:
+            self._scene.fire()
+            launched = True
+        if launched:
+            if self.song().select_on_launch:
                 self.song().view.selected_scene = self._scene
 
     @subject_slot("is_triggered")
@@ -169,7 +170,7 @@ class SceneComponent(CompoundComponent):
         if value is None:
             if self._color_table:
                 value = find_nearest_color(self._color_table, color)
-        return value
+            return value
 
     def _update_launch_button(self):
         if self.is_enabled():
@@ -178,18 +179,16 @@ class SceneComponent(CompoundComponent):
                 if self._scene:
                     if self._scene.is_triggered:
                         value_to_send = self._triggered_value
+                    elif self._scene_value is not None:
+                        value_to_send = self._scene_value
                     else:
-                        if self._scene_value is not None:
-                            value_to_send = self._scene_value
-                        else:
-                            value_to_send = self._color_value(self._scene.color)
-                elif value_to_send is None:
+                        value_to_send = self._color_value(self._scene.color)
+                if value_to_send is None:
                     self._launch_button.turn_off()
+                elif in_range(value_to_send, 0, 128):
+                    self._launch_button.send_value(value_to_send)
                 else:
-                    if in_range(value_to_send, 0, 128):
-                        self._launch_button.send_value(value_to_send)
-                    else:
-                        self._launch_button.set_light(value_to_send)
+                    self._launch_button.set_light(value_to_send)
 
     def _create_clip_slot(self):
         return self.clip_slot_component_type()

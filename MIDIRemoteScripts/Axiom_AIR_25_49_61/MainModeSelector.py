@@ -1,12 +1,12 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Axiom_AIR_25_49_61\MainModeSelector.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3124 bytes
 from __future__ import absolute_import, print_function, unicode_literals
-import _Framework.ModeSelectorComponent as ModeSelectorComponent
+from _Framework.ModeSelectorComponent import ModeSelectorComponent as ModeSelectorComponent
 from .consts import *
 
 class MainModeSelector(ModeSelectorComponent):
@@ -55,17 +55,16 @@ class MainModeSelector(ModeSelectorComponent):
                 self._session.set_page_right_button(self._right_button)
                 self._session.set_track_select_buttons(self._down_button, self._up_button)
                 self._mixer.selected_strip().set_arm_button(self._select_button)
-            else:
-                if self._mode_index == 1:
-                    self._modes_buttons[0].send_value(LED_OFF, True)
-                    self._modes_buttons[1].send_value(GRN_FULL, True)
-                    self._session.set_page_left_button(None)
-                    self._session.set_page_right_button(None)
-                    self._session.set_track_select_buttons(None, None)
-                    self._mixer.selected_strip().set_arm_button(None)
-                    self._device_0.set_on_off_button(self._select_button)
-                    self._device_0.set_bank_nav_buttons(self._left_button, self._right_button)
-                    self._device_1.set_bank_nav_buttons(self._left_button, self._right_button)
-                    self._device_nav.set_device_nav_buttons(self._up_button, self._down_button)
+            elif self._mode_index == 1:
+                self._modes_buttons[0].send_value(LED_OFF, True)
+                self._modes_buttons[1].send_value(GRN_FULL, True)
+                self._session.set_page_left_button(None)
+                self._session.set_page_right_button(None)
+                self._session.set_track_select_buttons(None, None)
+                self._mixer.selected_strip().set_arm_button(None)
+                self._device_0.set_on_off_button(self._select_button)
+                self._device_0.set_bank_nav_buttons(self._left_button, self._right_button)
+                self._device_1.set_bank_nav_buttons(self._left_button, self._right_button)
+                self._device_nav.set_device_nav_buttons(self._up_button, self._down_button)
 
 # okay decompiling ./MIDIRemoteScripts/Axiom_AIR_25_49_61/MainModeSelector.pyc

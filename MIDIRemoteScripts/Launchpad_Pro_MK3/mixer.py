@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_Pro_MK3\mixer.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3129 bytes
@@ -44,14 +44,13 @@ class MixerComponent(MixerComponentBase):
     def on_num_sends_changed(self):
         self.send_select_buttons.active_control_count = clamp(self.num_sends, 0, NUM_SENDS)
         self._update_send_control_colors()
-        self._MixerComponent__on_return_track_color_changed.replace_subjects(self.song.return_tracks[None[:NUM_SENDS]])
+        self._MixerComponent__on_return_track_color_changed.replace_subjects(self.song.return_tracks[:NUM_SENDS])
 
     def on_send_index_changed(self):
         if self.send_index is None:
             self.send_select_buttons.active_control_count = 0
-        else:
-            if self.send_index < self.send_select_buttons.active_control_count:
-                self.send_select_buttons[self.send_index].is_checked = True
+        elif self.send_index < self.send_select_buttons.active_control_count:
+            self.send_select_buttons[self.send_index].is_checked = True
         self._update_send_control_colors()
 
     def _update_send_control_colors(self):
@@ -59,7 +58,7 @@ class MixerComponent(MixerComponentBase):
         self._update_return_track_color_controls()
 
     def _update_send_select_button_colors(self):
-        for select_button, track in zip_longest(self.send_select_buttons, self.song.return_tracks[None[:NUM_SENDS]]):
+        for select_button, track in zip_longest(self.send_select_buttons, self.song.return_tracks[:NUM_SENDS]):
             if select_button:
                 select_button.checked_color = get_midi_color_value_for_track(track)
 

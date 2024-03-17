@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\base\util.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 23724 bytes
@@ -71,12 +71,11 @@ def slice_size(slice, width):
 
 def chunks(lst, chunk_size):
     for i in range(0, len(lst), chunk_size):
-        yield lst[i[:i + chunk_size]]
+        yield lst[i:i + chunk_size]
 
 
 def maybe(fn):
-    return (lambda x:     if x is not None:
-fn(x) # Avoid dead code: None)
+    return (lambda x: fn(x) if x is not None else None)
 
 
 def memoize(function):
@@ -109,15 +108,15 @@ def monkeypatch(target, name=None, override=False, doc=None):
         if not override:
             if old_hasattr(target, patchname):
                 raise TypeError("Class %s already has method %s" % (target.__name__, patchname))
-        setattr(target, patchname, func)
-        try:
-            func.__name__ = str(patchname)
-        except AttributeError:
-            pass
+            setattr(target, patchname, func)
+            try:
+                func.__name__ = str(patchname)
+            except AttributeError:
+                pass
 
-        if doc is not None:
-            func.__doc__ = doc
-        return func
+            if doc is not None:
+                func.__doc__ = doc
+            return func
 
     return patcher
 
@@ -140,8 +139,9 @@ def monkeypatch_extend(target, name=None):
 
             newfunc = extended
         else:
-            setattr(target, patchname, newfunc)
-            return func
+            pass
+        setattr(target, patchname, newfunc)
+        return func
 
     return patcher
 
@@ -213,7 +213,7 @@ def flatten(list):
 
 def group(lst, n):
     n = int(n)
-    return list(zip_longest(*[lst[i[None:n]] for i in range(n)]))
+    return list(zip_longest(*[lst[i::n] for i in range(n)]))
 
 
 def find_if(predicate, seq):
@@ -227,7 +227,8 @@ def index_if(predicate, seq):
     for x in seq:
         if predicate(x):
             return idx
-        idx += 1
+        else:
+            idx += 1
 
     return idx
 
@@ -269,7 +270,7 @@ def is_matrix(iterable):
     if is_iterable(iterable):
         if len(iterable) > 0:
             return all(map((lambda x: is_iterable(x) and len(iterable[0]) == len(x) and len(x) > 0), iterable))
-    return False
+        return False
 
 
 def first(seq):
@@ -285,7 +286,7 @@ def third(seq):
 
 
 def compose(*funcs):
-    return (lambda x: reduce((lambda x, f: f(x)), funcs[None[None:-1]], x))
+    return (lambda x: reduce((lambda x, f: f(x)), funcs[::-1], x))
 
 
 def is_contextmanager(value):

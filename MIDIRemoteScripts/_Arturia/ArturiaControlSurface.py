@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Arturia\ArturiaControlSurface.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5870 bytes
@@ -9,7 +9,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 from functools import partial
 from _Framework import Task
-import _Framework.ControlSurface as ControlSurface
+from _Framework.ControlSurface import ControlSurface as ControlSurface
 SETUP_MSG_PREFIX = (240, 0, 32, 107, 127, 66)
 SETUP_MSG_SUFFIX = (247, )
 WRITE_COMMAND = 2
@@ -47,7 +47,7 @@ LIVE_MODE_MSG_HEAD = SETUP_MSG_PREFIX + (
 
 def split_list(l, size):
     for i in range(0, len(l), size):
-        yield l[i[:i + size]]
+        yield l[i:i + size]
 
 
 class ArturiaControlSurface(ControlSurface):
@@ -80,7 +80,7 @@ class ArturiaControlSurface(ControlSurface):
         self._set_momentary_mode(hardware_id, is_momentary)
 
     def _set_encoder_cc_msg_type(self, hardware_id, is_relative=False):
-        self._collect_setup_message(MODE_PROPERTY, hardware_id, ENCODER_CC_MODE if not is_relative else ENCODER_RELATIVE_CC_MODE)
+        self._collect_setup_message(MODE_PROPERTY, hardware_id, ENCODER_CC_MODE if (not is_relative) else ENCODER_RELATIVE_CC_MODE)
 
     def _set_button_msg_type(self, hardware_id, msg_type):
         self._collect_setup_message(MODE_PROPERTY, hardware_id, BUTTON_MSG_TYPES[msg_type])
@@ -119,8 +119,8 @@ class ArturiaControlSurface(ControlSurface):
     def _setup_hardware(self):
         sequence_to_run = [
          None] * (len(self._messages_to_send) * 2)
-        sequence_to_run[None[None:2]] = [Task.run(partial(self._send_midi, msg)) for msg in self._messages_to_send]
-        sequence_to_run[1[None:2]] = [Task.wait(INDIVIDUAL_MESSAGE_DELAY) for _ in self._messages_to_send]
+        sequence_to_run[::2] = [Task.run(partial(self._send_midi, msg)) for msg in self._messages_to_send]
+        sequence_to_run[1::2] = [Task.wait(INDIVIDUAL_MESSAGE_DELAY) for _ in self._messages_to_send]
         for subsequence in split_list(sequence_to_run, 40):
             self._tasks.add((Task.sequence)(*subsequence))
 

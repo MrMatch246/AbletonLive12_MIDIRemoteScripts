@@ -1,14 +1,14 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\APC20\ShiftableSelectorComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 8503 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
-import _Framework.Layer as Layer
-import _Framework.ModeSelectorComponent as ModeSelectorComponent
+from _Framework.Layer import Layer as Layer
+from _Framework.ModeSelectorComponent import ModeSelectorComponent as ModeSelectorComponent
 from .consts import ABLETON_MODE, NOTE_MODE
 
 class ShiftableSelectorComponent(ModeSelectorComponent):
@@ -83,26 +83,26 @@ class ShiftableSelectorComponent(ModeSelectorComponent):
                 if not self._note_mode_active:
                     self._set_session_navigation_controls(self._select_buttons[4], self._select_buttons[5], self._select_buttons[6], self._select_buttons[7])
                 self._on_note_mode_changed()
+            elif self._mode_index == 1:
+                self._set_transport_controls(None, None, None, None)
+                self._set_session_navigation_controls(None, None, None, None)
+                for index in range(len(self._select_buttons)):
+                    strip = self._mixer.channel_strip(index)
+                    strip.set_select_button(self._select_buttons[index])
+
+                self._mixer.master_strip().set_select_button(self._master_button)
             else:
-                if self._mode_index == 1:
-                    self._set_transport_controls(None, None, None, None)
-                    self._set_session_navigation_controls(None, None, None, None)
-                    for index in range(len(self._select_buttons)):
-                        strip = self._mixer.channel_strip(index)
-                        strip.set_select_button(self._select_buttons[index])
+                pass
+            if self._mode_index == int(self._invert_assignment):
+                self._slider_modes.set_mode_buttons(None)
+                for index in range(len(self._select_buttons)):
+                    self._mixer.channel_strip(index).set_arm_button(self._arm_buttons[index])
 
-                    self._mixer.master_strip().set_select_button(self._master_button)
-                else:
-                    if self._mode_index == int(self._invert_assignment):
-                        self._slider_modes.set_mode_buttons(None)
-                        for index in range(len(self._select_buttons)):
-                            self._mixer.channel_strip(index).set_arm_button(self._arm_buttons[index])
+            else:
+                for index in range(len(self._select_buttons)):
+                    self._mixer.channel_strip(index).set_arm_button(None)
 
-                    else:
-                        for index in range(len(self._select_buttons)):
-                            self._mixer.channel_strip(index).set_arm_button(None)
-
-                        self._slider_modes.set_mode_buttons(self._arm_buttons)
+                self._slider_modes.set_mode_buttons(self._arm_buttons)
 
     def _toggle_value(self, value):
         self._toggle_pressed = value > 0

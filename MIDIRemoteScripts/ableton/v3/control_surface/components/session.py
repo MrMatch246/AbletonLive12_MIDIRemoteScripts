@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\session.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 11924 bytes
@@ -52,14 +52,14 @@ class SessionComponent(Component, Renderable):
         return self._selected_scene
 
     def set_clip_launch_buttons(self, buttons):
-        for y, scene in enumerate(self._scenes):
+        for (y, scene) in enumerate(self._scenes):
             for x in range(self._session_ring.num_tracks):
                 button = buttons.get_button(y, x) if buttons else None
                 scene.clip_slot(x).set_launch_button(button)
 
     def set_scene_launch_buttons(self, buttons):
         num_scenes = self._session_ring.num_scenes
-        for scene, button in zip_longest(self._scenes, buttons or []):
+        for (scene, button) in zip_longest(self._scenes, buttons or []):
             scene.set_launch_button(button)
 
     def set_stop_track_clip_buttons(self, buttons):
@@ -96,7 +96,7 @@ class SessionComponent(Component, Renderable):
         if name.startswith("set_scene_"):
             if name.endswith("_launch_button"):
                 return self.scene(int(name.split("_")[-3])).set_launch_button
-        raise AttributeError
+            raise AttributeError
 
     @stop_all_clips_button.pressed
     def stop_all_clips_button(self, _):
@@ -122,7 +122,7 @@ class SessionComponent(Component, Renderable):
 
     def _reassign_scenes(self):
         scenes = self.song.scenes
-        for index, scene in enumerate(self._scenes):
+        for (index, scene) in enumerate(self._scenes):
             scene_index = self._session_ring.scene_offset + index
             scene.set_scene(scenes[scene_index] if len(scenes) > scene_index else None)
 
@@ -179,27 +179,25 @@ class ClipSlotClipboardComponent(ClipboardComponent):
             return
         if obj.is_group_slot:
             self.notify(self.notifications.Clip.CopyPaste.error_copy_from_group_slot)
+        elif not liveobj_valid(obj.clip):
+            self.notify(self.notifications.Clip.CopyPaste.error_copy_from_empty_slot)
+        elif obj.clip.is_recording:
+            self.notify(self.notifications.Clip.CopyPaste.error_copy_recording_clip)
         else:
-            if not liveobj_valid(obj.clip):
-                self.notify(self.notifications.Clip.CopyPaste.error_copy_from_empty_slot)
-            else:
-                if obj.clip.is_recording:
-                    self.notify(self.notifications.Clip.CopyPaste.error_copy_recording_clip)
-                else:
-                    self.notify(self.notifications.Clip.CopyPaste.copy, obj)
-                    return obj
+            self.notify(self.notifications.Clip.CopyPaste.copy, obj)
+            return obj
 
     def _do_paste(self, obj):
         if not liveobj_valid(obj):
             return False
-            if obj.is_group_slot:
-                self.notify(self.notifications.Clip.CopyPaste.error_paste_to_group_slot)
-                return False
-            source_is_audio = self._source_obj.clip.is_audio_clip
-            destination_track = obj.canonical_parent
-            if source_is_audio:
-                destination_track.has_audio_input or self.notify(self.notifications.Clip.CopyPaste.error_paste_audio_to_midi)
-        elif (source_is_audio or destination_track).has_audio_input:
+        if obj.is_group_slot:
+            self.notify(self.notifications.Clip.CopyPaste.error_paste_to_group_slot)
+            return False
+        source_is_audio = self._source_obj.clip.is_audio_clip
+        destination_track = obj.canonical_parent
+        if source_is_audio and not destination_track.has_audio_input:
+            self.notify(self.notifications.Clip.CopyPaste.error_paste_audio_to_midi)
+        elif not source_is_audio or destination_track.has_audio_input:
             self.notify(self.notifications.Clip.CopyPaste.error_paste_midi_to_audio)
         else:
             self._source_obj.duplicate_clip_to(obj)

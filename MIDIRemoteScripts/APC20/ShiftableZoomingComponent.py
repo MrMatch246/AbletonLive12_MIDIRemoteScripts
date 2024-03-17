@@ -1,14 +1,14 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\APC20\ShiftableZoomingComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3851 bytes
 from __future__ import absolute_import, division, print_function, unicode_literals
 from builtins import range
 from past.utils import old_div
-import _Framework.ButtonElement as ButtonElement
+from _Framework.ButtonElement import ButtonElement as ButtonElement
 from _Framework.SessionZoomingComponent import DeprecatedSessionZoomingComponent
 
 class ShiftableZoomingComponent(DeprecatedSessionZoomingComponent):
@@ -35,17 +35,15 @@ class ShiftableZoomingComponent(DeprecatedSessionZoomingComponent):
     def update(self):
         if not self._ignore_buttons:
             super(ShiftableZoomingComponent, self).update()
-        else:
-            if self.is_enabled():
-                if self._scene_bank_buttons != None:
-                    for button in self._scene_bank_buttons:
-                        button.turn_off()
+        elif self.is_enabled():
+            if self._scene_bank_buttons != None:
+                for button in self._scene_bank_buttons:
+                    button.turn_off()
 
     def _stop_value(self, value, sender):
         if self.is_enabled():
-            if not self._ignore_buttons:
-                if self._is_zoomed_out:
-                    value != 0 or sender.is_momentary() or self.song().stop_all_clips()
+            if self._ignore_buttons or self._is_zoomed_out and not value != 0 or sender.is_momentary():
+                self.song().stop_all_clips()
 
     def _zoom_value(self, value):
         if self.is_enabled():

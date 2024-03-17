@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\components\toggle.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2802 bytes
@@ -73,14 +73,13 @@ class ToggleComponent(Component):
 
     @listens("value")
     def __on_button_value(self, value):
-        if self.is_enabled():
-            if not self.read_only:
-                if self.is_momentary:
-                    if value:
-                        self.value = self.model_transform(True)
-                    else:
-                        self.value = self.model_transform(False)
+        if self.is_enabled() and not self.read_only:
+            if self.is_momentary:
+                if value:
+                    self.value = self.model_transform(True)
                 else:
-                    self.value = value or self._property_button.is_momentary() or self.model_transform(not self.value)
+                    self.value = self.model_transform(False)
+        elif not (value or self._property_button.is_momentary()):
+            self.value = self.model_transform(not self.value)
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v2/control_surface/components/toggle.pyc

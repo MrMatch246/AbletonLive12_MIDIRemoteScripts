@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\ModesComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 28051 bytes
@@ -21,29 +21,29 @@ from .Util import NamedTuple, infinite_context_manager, is_contextmanager, is_it
 def tomode(thing):
     if thing == None:
         return Mode()
-        if isinstance(thing, Mode):
-            return thing
-        if isinstance(thing, ControlSurfaceComponent):
-            return ComponentMode(thing)
-    elif isinstance(thing, tuple):
+    if isinstance(thing, Mode):
+        return thing
+    if isinstance(thing, ControlSurfaceComponent):
+        return ComponentMode(thing)
+    if isinstance(thing, tuple):
         if len(thing) == 2:
             if isinstance(thing[0], ControlSurfaceComponent):
                 if isinstance(thing[1], LayerBase):
                     return LayerMode(*thing)
-            if callable(thing[0]):
-                if callable(thing[1]):
-                    mode = Mode()
-                    mode.enter_mode, mode.leave_mode = thing
-                    return mode
-    if is_iterable(thing):
-        return CompoundMode(*thing)
-    if is_contextmanager(thing):
-        return ContextManagerMode(thing)
-    if callable(thing):
-        mode = Mode()
-        mode.enter_mode = thing
-        return mode
-    return thing
+                if callable(thing[0]):
+                    if callable(thing[1]):
+                        mode = Mode()
+                        (mode.enter_mode, mode.leave_mode) = thing
+                        return mode
+                    if is_iterable(thing):
+                        return CompoundMode(*thing)
+                if is_contextmanager(thing):
+                    return ContextManagerMode(thing)
+            if callable(thing):
+                mode = Mode()
+                mode.enter_mode = thing
+                return mode
+        return thing
 
 
 class Mode(object):
@@ -494,9 +494,8 @@ class ModesComponent(CompoundComponent):
         if not self.is_enabled():
             self._last_selected_mode = self.selected_mode
             self._mode_stack.release_all()
-        else:
-            if self._last_selected_mode:
-                self.push_mode(self._last_selected_mode)
+        elif self._last_selected_mode:
+            self.push_mode(self._last_selected_mode)
 
     def update(self):
         super(ModesComponent, self).update()
@@ -556,7 +555,7 @@ class ModesComponent(CompoundComponent):
 
     def _update_buttons(self, selected):
         if self.is_enabled():
-            for name, entry in self._mode_map.items():
+            for (name, entry) in self._mode_map.items():
                 if entry.subject_slot.subject != None:
                     self._get_mode_behaviour(name).update_button(self, name, selected)
 
@@ -597,10 +596,9 @@ class ModesComponent(CompoundComponent):
                     if not self._mode_toggle.is_momentary() or is_press:
                         self.cycle_mode(1)
                         self._mode_toggle_task.restart()
-                    else:
-                        if is_release:
-                            if self.momentary_toggle or can_latch:
-                                self.cycle_mode(-1)
+                    elif is_release:
+                        if self.momentary_toggle or can_latch:
+                            self.cycle_mode(-1)
                     self._last_toggle_value = value
 
     def cycle_mode(self, delta=1):
@@ -629,7 +627,7 @@ class DisplayingModesComponent(ModesComponent):
 
     def _update_data_sources(self, selected):
         if self.is_enabled():
-            for name, (source, string) in self._mode_data_sources.items():
+            for (name, (source, string)) in self._mode_data_sources.items():
                 source.set_display_string("*" + string if name == selected else string)
 
 

@@ -1,31 +1,32 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchkey\SessionNavigationComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4362 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 from _Framework import Task
-import _Framework.CompoundComponent as CompoundComponent
-import _Framework.ScrollComponent as ScrollComponent
+from _Framework.CompoundComponent import CompoundComponent as CompoundComponent
+from _Framework.ScrollComponent import ScrollComponent as ScrollComponent
 from _Framework.ViewControlComponent import BasicSceneScroller, TrackScroller
 
 def is_recording_clip(tracks, check_arrangement):
     found_recording_clip = False
     for track in tracks:
-        if track.can_be_armed and track.arm:
-            if check_arrangement:
-                found_recording_clip = True
-                break
-            else:
+        if track.can_be_armed:
+            if track.arm:
+                if check_arrangement:
+                    found_recording_clip = True
+                    break
                 playing_slot_index = track.playing_slot_index
                 if playing_slot_index in range(len(track.clip_slots)):
                     slot = track.clip_slots[playing_slot_index]
-                    if slot.has_clip and slot.clip.is_recording:
-                        found_recording_clip = True
-                        break
+                    if slot.has_clip:
+                        if slot.clip.is_recording:
+                            found_recording_clip = True
+                            break
 
     return found_recording_clip
 
@@ -68,8 +69,9 @@ class ArmingTrackScrollComponent(ScrollComponent):
             if not is_recording_clip(tracks, check_arrangement):
                 if song.exclusive_arm:
                     for track in tracks:
-                        if track.can_be_armed and track != track_to_arm:
-                            track.arm = False
+                        if track.can_be_armed:
+                            if track != track_to_arm:
+                                track.arm = False
 
                 track_to_arm.arm = True
                 track_to_arm.view.select_instrument()
@@ -88,7 +90,7 @@ class SessionNavigationComponent(CompoundComponent):
 
     def __init__(self, *a, **k):
         (super(SessionNavigationComponent, self).__init__)(*a, **k)
-        self._scroll_tracks, self._scroll_scenes = self.register_components(ArmingTrackScrollComponent(TrackScroller()), ScrollComponent(BasicSceneScroller()))
+        (self._scroll_tracks, self._scroll_scenes) = self.register_components(ArmingTrackScrollComponent(TrackScroller()), ScrollComponent(BasicSceneScroller()))
         song = self.song()
         view = song.view
         self.register_slot(song, self._scroll_tracks.update, "visible_tracks")

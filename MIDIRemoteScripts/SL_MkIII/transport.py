@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\SL_MkIII\transport.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1908 bytes
@@ -12,10 +12,8 @@ class TransportComponent(TransportComponentBase):
 
     def __init__(self, *a, **k):
         (super().__init__)(*a, **k)
-        self._loop_toggle.view_transform = lambda v:         if v:
-"Transport.LoopOn" # Avoid dead code: "Transport.LoopOff"
-        self._record_toggle.view_transform = lambda v:         if v:
-"Recording.On" # Avoid dead code: "Recording.Off"
+        self._loop_toggle.view_transform = lambda v: "Transport.LoopOn" if v else "Transport.LoopOff"
+        self._record_toggle.view_transform = lambda v: "Recording.On" if v else "Recording.Off"
 
     def set_seek_forward_button(self, ffwd_button):
         super().set_seek_forward_button(ffwd_button)

@@ -1,12 +1,12 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_Pro\TargetTrackComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2732 bytes
 from __future__ import absolute_import, print_function, unicode_literals
-import _Framework.ControlSurfaceComponent as ControlSurfaceComponent
+from _Framework.ControlSurfaceComponent import ControlSurfaceComponent as ControlSurfaceComponent
 from _Framework.SubjectSlot import Subject, subject_slot, subject_slot_group
 
 class TargetTrackComponent(ControlSurfaceComponent, Subject):
@@ -29,7 +29,7 @@ class TargetTrackComponent(ControlSurfaceComponent, Subject):
 
     @subject_slot("tracks")
     def _on_tracks_changed(self):
-        tracks = [t for t in self.song().tracks if t.can_be_armed if t.has_midi_input]
+        tracks = [t for t in self.song().tracks if t.can_be_armed if t.has_midi_input if t.can_be_armed if t.has_midi_input]
         self._on_arm_changed.replace_subjects(tracks)
         self._on_frozen_state_changed.replace_subjects(tracks)
         self._refresh_armed_track_stack(tracks)
@@ -38,7 +38,7 @@ class TargetTrackComponent(ControlSurfaceComponent, Subject):
     def _on_arm_changed(self, track):
         if track in self._armed_track_stack:
             self._armed_track_stack.remove(track)
-        elif track.arm:
+        if track.arm:
             self._armed_track_stack.append(track)
             self._set_target_track(track)
         else:
@@ -70,8 +70,9 @@ class TargetTrackComponent(ControlSurfaceComponent, Subject):
                 self._armed_track_stack.remove(track)
 
         for track in all_tracks:
-            if track.arm and track not in self._armed_track_stack:
-                self._armed_track_stack.append(track)
+            if track.arm:
+                if track not in self._armed_track_stack:
+                    self._armed_track_stack.append(track)
 
         self._set_target_track()
 

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\components\session_ring.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5725 bytes
@@ -71,7 +71,7 @@ class SessionRingComponent(Component):
 
     def move(self, tracks, scenes):
         if self._snap_offsets:
-            tracks, scenes = self._snapped_offsets(tracks, scenes)
+            (tracks, scenes) = self._snapped_offsets(tracks, scenes)
         self._session_ring.move(tracks, scenes)
         self._update_highlight()
         self.notify_offset(self._session_ring.track_offset, self._session_ring.scene_offset)
@@ -79,11 +79,12 @@ class SessionRingComponent(Component):
 
     def _snapped_offsets(self, track_offset, scene_offset):
         snapped_track_offset = track_offset - track_offset % self.num_tracks
-        return (snapped_track_offset, scene_offset)
+        return (
+         snapped_track_offset, scene_offset)
 
     def controlled_tracks(self):
         index = self.track_offset
-        return self.tracks_to_use()[index[:index + self.num_tracks]]
+        return self.tracks_to_use()[index:index + self.num_tracks]
 
     @property
     def track_offset(self):

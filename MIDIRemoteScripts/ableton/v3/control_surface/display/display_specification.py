@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\display\display_specification.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 8114 bytes
@@ -77,20 +77,19 @@ class Display(Disconnectable):
         try:
             if self._is_deferring_render_and_update:
                 self._was_updated_in_deferred_context = True
-            else:
-                if self._display_fn:
-                    captured_stdout = StringIO()
-                    with capturing_stdout(captured_stdout):
-                        content = self.render()
-                    if content != self._last_displayed_content:
-                        self.display(content)
-                        self._last_displayed_content = content
-                        self._suppress_stdout_from_render = False
-                    if not self._suppress_stdout_from_render:
-                        last_output = captured_stdout.getvalue()
-                        if last_output:
-                            print(last_output)
-                        self._suppress_stdout_from_render = True
+            elif self._display_fn:
+                captured_stdout = StringIO()
+                with capturing_stdout(captured_stdout):
+                    content = self.render()
+                if content != self._last_displayed_content:
+                    self.display(content)
+                    self._last_displayed_content = content
+                    self._suppress_stdout_from_render = False
+                if not self._suppress_stdout_from_render:
+                    last_output = captured_stdout.getvalue()
+                    if last_output:
+                        print(last_output)
+                    self._suppress_stdout_from_render = True
         except Exception as e:
             try:
                 exception_already_raised = self._exception_raised

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Komplete_Kontrol\clip_launch_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1063 bytes
@@ -26,8 +26,7 @@ class ClipLaunchComponent(Component):
         track = self.song.view.selected_track
         if track == self.song.master_track:
             self.song.stop_all_clips()
-        else:
-            if track in self.song.tracks:
-                track.stop_all_clips()
+        elif track in self.song.tracks:
+            track.stop_all_clips()
 
 # okay decompiling ./MIDIRemoteScripts/_Komplete_Kontrol/clip_launch_component.pyc

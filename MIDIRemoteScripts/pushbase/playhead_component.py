@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\playhead_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3406 bytes
@@ -66,14 +66,14 @@ class PlayheadComponent(Component):
                     if liveobj_valid(self._clip):
                         if self._clip.is_arrangement_clip or self._clip.is_playing:
                             clip = self._clip
-            self._playhead.clip = clip
-            self._playhead.set_feedback_channels(self._feedback_channels)
-            if clip:
-                is_triplet = self._grid_resolution.clip_grid[1]
-                notes = self._triplet_notes if is_triplet else self._notes
-                self._playhead.notes = list(notes)
-                self._playhead.wrap_around = self._follower.is_following and self._paginator.can_change_page
-                self._playhead.start_time = self._paginator.page_length * self._paginator.page_index
-                self._playhead.step_length = old_div(self._paginator.page_length, len(notes))
+                self._playhead.clip = clip
+                self._playhead.set_feedback_channels(self._feedback_channels)
+                if clip:
+                    is_triplet = self._grid_resolution.clip_grid[1]
+                    notes = self._triplet_notes if is_triplet else self._notes
+                    self._playhead.notes = list(notes)
+                    self._playhead.wrap_around = self._follower.is_following and self._paginator.can_change_page
+                    self._playhead.start_time = self._paginator.page_length * self._paginator.page_index
+                    self._playhead.step_length = old_div(self._paginator.page_length, len(notes))
 
 # okay decompiling ./MIDIRemoteScripts/pushbase/playhead_component.pyc

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\LV2_LX2_LC2_LD2\FaderfoxDeviceController.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 16519 bytes
@@ -122,20 +122,20 @@ class FaderfoxDeviceController(FaderfoxComponent):
                 if len(params) >= encoder:
                     if param_bank[encoder] == "":
                         continue
-                    param_name = param_bank[encoder]
-                    parameter = None
-                    parameter = self.helper.get_parameter_by_name(self.device, param_bank[encoder])
+                    else:
+                        param_name = param_bank[encoder]
+                        parameter = None
+                        parameter = self.helper.get_parameter_by_name(self.device, param_bank[encoder])
                     if parameter:
                         mode2 = mode
                         fullname = self.helper.device_name(device) + "." + parameter.name
                         if parameter.is_quantized:
-                            if not self.parent.is_lv1:
+                            if not not self.parent.is_lv1:
                                 if fullname not in INVERT_QUANT_PARAM:
                                     mode2 = Live.MidiMap.MapMode.relative_binary_offset
-                        self.logfmt("parameter %s %s to %s (quant %s)", parameter, parameter.name, ccs[encoder], parameter.is_quantized)
-                        ParamMap.map_with_feedback(midi_map_handle, channel, ccs[encoder], parameter, mode2)
-                    else:
-                        self.log("Could not find parameter %s" % param_bank[encoder])
+                                self.logfmt("parameter %s %s to %s (quant %s)", parameter, parameter.name, ccs[encoder], parameter.is_quantized)
+                                ParamMap.map_with_feedback(midi_map_handle, channel, ccs[encoder], parameter, mode2)
+                            self.log("Could not find parameter %s" % param_bank[encoder])
 
         self.log("map device params %s" % self.device)
         if self.device:
@@ -160,28 +160,27 @@ class FaderfoxDeviceController(FaderfoxComponent):
                         ParamMap.map_with_feedback(midi_map_handle, channel, ccx, param1, Live.MidiMap.MapMode.absolute)
                     if param2:
                         ParamMap.map_with_feedback(midi_map_handle, channel, ccy, param2, Live.MidiMap.MapMode.absolute)
-                if len(xys) > 1:
-                    param1 = self.helper.get_parameter_by_name(self.device, xys[1][0])
-                    param2 = self.helper.get_parameter_by_name(self.device, xys[1][1])
-                    ccx = FX2_JOY_X_CC
-                    ccy = FX2_JOY_Y_CC
-                    channel = CHANNEL_SETUP2
-                    if self.parent.is_lv1:
-                        ccx = LV1_FX2_JOY_X_CC
-                        ccy = LV1_FX2_JOY_Y_CC
-                        channel = TRACK_CHANNEL_SETUP2
-                    ParamMap.map_with_feedback(midi_map_handle, channel, ccx, param1, Live.MidiMap.MapMode.absolute)
-                    ParamMap.map_with_feedback(midi_map_handle, channel, ccy, param2, Live.MidiMap.MapMode.absolute)
-            if device_name in list(DEVICE_BOB_DICT.keys()):
-                param_bank = DEVICE_BOB_DICT[device_name]
-                if device_name == "Compressor2":
-                    if self.helper.get_parameter_by_name(self.device, "S/C Gain"):
-                        param_bank = CP2_BANK1_LIVE7
-                self.log("class %s bank: %s" % (device_name, param_bank))
-                self.show_bank_select("Best of parameters")
-                map_params_by_name(self.device, param_bank)
-            else:
-                if self.helper.device_is_plugin(self.device):
+                    if len(xys) > 1:
+                        param1 = self.helper.get_parameter_by_name(self.device, xys[1][0])
+                        param2 = self.helper.get_parameter_by_name(self.device, xys[1][1])
+                        ccx = FX2_JOY_X_CC
+                        ccy = FX2_JOY_Y_CC
+                        channel = CHANNEL_SETUP2
+                        if self.parent.is_lv1:
+                            ccx = LV1_FX2_JOY_X_CC
+                            ccy = LV1_FX2_JOY_Y_CC
+                            channel = TRACK_CHANNEL_SETUP2
+                        ParamMap.map_with_feedback(midi_map_handle, channel, ccx, param1, Live.MidiMap.MapMode.absolute)
+                        ParamMap.map_with_feedback(midi_map_handle, channel, ccy, param2, Live.MidiMap.MapMode.absolute)
+                if device_name in list(DEVICE_BOB_DICT.keys()):
+                    param_bank = DEVICE_BOB_DICT[device_name]
+                    if device_name == "Compressor2":
+                        if self.helper.get_parameter_by_name(self.device, "S/C Gain"):
+                            param_bank = CP2_BANK1_LIVE7
+                    self.log("class %s bank: %s" % (device_name, param_bank))
+                    self.show_bank_select("Best of parameters")
+                    map_params_by_name(self.device, param_bank)
+                elif self.helper.device_is_plugin(self.device):
                     self.show_bank_select("First eight parameters")
                     map_params_by_number(self.device)
                 else:
@@ -204,8 +203,9 @@ class FaderfoxDeviceController(FaderfoxComponent):
 
         if not self.device:
             return
-            device_name = self.helper.device_name(self.device)
-            if channel == CHANNEL_SETUP2 and status == NOTEON_STATUS:
+        device_name = self.helper.device_name(self.device)
+        if channel == CHANNEL_SETUP2:
+            if status == NOTEON_STATUS:
                 notes = FX3_NOTES + FX4_NOTES
                 if note_no not in notes:
                     return
@@ -214,21 +214,20 @@ class FaderfoxDeviceController(FaderfoxComponent):
                 if device_name in list(DEVICE_BOB_DICT.keys()):
                     param_bank = DEVICE_BOB_DICT[device_name]
                     parameter = self.helper.get_parameter_by_name(self.device, param_bank[idx])
-        else:
-            if self.helper.device_is_plugin(self.device):
-                if len(self.device.parameters) >= idx + 1:
-                    parameter = self.device.parameters[idx + 1]
+                elif self.helper.device_is_plugin(self.device):
+                    if len(self.device.parameters) >= idx + 1:
+                        parameter = self.device.parameters[idx + 1]
                 else:
                     return
-            elif parameter:
-                if parameter.is_quantized:
-                    if parameter.value + 1 > parameter.max:
-                        parameter.value = parameter.min
+                if parameter:
+                    if parameter.is_quantized:
+                        if parameter.value + 1 > parameter.max:
+                            parameter.value = parameter.min
+                        else:
+                            parameter.value += 1
                     else:
-                        parameter.value += 1
-                else:
-                    parameter.value = parameter.default_value
-            self.log("device %s, index %s, parameter %s" % (self.device, idx, parameter.name))
+                        parameter.value = parameter.default_value
+                self.log("device %s, index %s, parameter %s" % (self.device, idx, parameter.name))
 
     def receive_midi_cc(self, chan, cc_no, cc_value):
 
@@ -244,24 +243,22 @@ class FaderfoxDeviceController(FaderfoxComponent):
             if self.selected_clip:
                 if cc_no == CLIP_TRANSPOSE_CC and self.selected_clip.is_audio_clip:
                     self.selected_clip.pitch_coarse = max(-48, min(self.selected_clip.pitch_coarse + rel_to_offs(cc_value), 48))
-                else:
-                    if cc_no == CLIP_LOOP_START_CC:
-                        new_start = self.selected_clip.loop_start + rel_to_offs(cc_value) * self.helper.current_q_step()
-                        new_start = round_to(new_start, self.helper.current_q_step())
-                        if new_start >= self.selected_clip.length or new_start >= self.selected_clip.loop_end:
-                            new_start = self.selected_clip.loop_start
-                        if new_start < 0.0:
-                            new_start = 0.0
-                        self.selected_clip.loop_start = new_start
-                    else:
-                        if cc_no == CLIP_LOOP_END_CC:
-                            new_end = self.selected_clip.loop_end + rel_to_offs(cc_value) * self.helper.current_q_step()
-                            new_end = round_to(new_end, self.helper.current_q_step())
-                            if new_end >= self.selected_clip.length:
-                                new_end = self.selected_clip.length
-                            if new_end <= 0.0 or new_end <= self.selected_clip.loop_start:
-                                new_end = self.selected_clip.loop_end
-                            self.selected_clip.loop_end = new_end
+                elif cc_no == CLIP_LOOP_START_CC:
+                    new_start = self.selected_clip.loop_start + rel_to_offs(cc_value) * self.helper.current_q_step()
+                    new_start = round_to(new_start, self.helper.current_q_step())
+                    if new_start >= self.selected_clip.length or new_start >= self.selected_clip.loop_end:
+                        new_start = self.selected_clip.loop_start
+                    if new_start < 0.0:
+                        new_start = 0.0
+                    self.selected_clip.loop_start = new_start
+                elif cc_no == CLIP_LOOP_END_CC:
+                    new_end = self.selected_clip.loop_end + rel_to_offs(cc_value) * self.helper.current_q_step()
+                    new_end = round_to(new_end, self.helper.current_q_step())
+                    if new_end >= self.selected_clip.length:
+                        new_end = self.selected_clip.length
+                    if new_end <= 0.0 or new_end <= self.selected_clip.loop_start:
+                        new_end = self.selected_clip.loop_end
+                    self.selected_clip.loop_end = new_end
 
     def lock_to_device(self, device):
         if device:
@@ -276,9 +273,9 @@ class FaderfoxDeviceController(FaderfoxComponent):
         if device:
             if device == self.device:
                 self.device_locked = False
-        if old_hasattr(self.parent.song(), "appointed_device"):
-            if not self.parent.song().appointed_device == self.device:
-                self.parent.request_rebuild_midi_map()
+            if old_hasattr(self.parent.song(), "appointed_device"):
+                if not self.parent.song().appointed_device == self.device:
+                    self.parent.request_rebuild_midi_map()
 
     def set_appointed_device(self, device):
         if not self.device_locked:

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\clip_control.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 42233 bytes
@@ -411,7 +411,7 @@ class AudioClipSettingsControllerComponent(AudioClipSettingsControllerComponentB
 def register_matrix_mode(matrix_map, name, modes_component=None, parent_path=None):
 
     def find_leaf(tree, path):
-        key_name, rest = path[0], path[1[:None]]
+        key_name, rest = path[0], path[1:]
         if key_name not in tree:
             tree[key_name] = dict(modes_component=None, children={})
         sub_tree = tree[key_name]["children"]
@@ -432,7 +432,7 @@ class MatrixModeWatcherComponent(Component):
         self._matrix_mode_map = matrix_mode_map
 
         def connect_listeners(dct):
-            for key, value in dct.items():
+            for (key, value) in dct.items():
                 if key == "modes_component":
                     self.register_slot(value, self._MatrixModeWatcherComponent__on_matrix_mode_changed, "selected_mode")
                 else:
@@ -477,112 +477,112 @@ class MatrixModeWatcherComponent(Component):
 
 
 _MATRIX_MODE_PATH_TO_DATA = {'matrix_modes.note.instrument.play':{
-  'Fold': True, 
-  'NumDisplayKeys': 0, 
-  'ShowGridWindow': False, 
-  'ShowScrollbarCursor': False, 
-  'NumPitches': 128, 
-  'PitchOffset': 0, 
-  'ShowStepLengthGrid': False, 
-  'ShowMultipleGridWindows': False}, 
+   'Fold': True,
+   'NumDisplayKeys': 0,
+   'ShowGridWindow': False,
+   'ShowScrollbarCursor': False,
+   'NumPitches': 128,
+   'PitchOffset': 0,
+   'ShowStepLengthGrid': False,
+   'ShowMultipleGridWindows': False}, 
  'matrix_modes.note.instrument.sequence':{
-  'Fold': False, 
-  'NumDisplayKeys': 23, 
-  'ShowGridWindow': True, 
-  'ShowScrollbarCursor': True, 
-  'NumPitches': 128, 
-  'PitchOffset': 0, 
-  'ShowStepLengthGrid': True, 
-  'ShowMultipleGridWindows': False}, 
+   'Fold': False,
+   'NumDisplayKeys': 23,
+   'ShowGridWindow': True,
+   'ShowScrollbarCursor': True,
+   'NumPitches': 128,
+   'PitchOffset': 0,
+   'ShowStepLengthGrid': True,
+   'ShowMultipleGridWindows': False}, 
  'matrix_modes.note.instrument.split_melodic_sequencer':{
-  'Fold': True, 
-  'NumDisplayKeys': 32, 
-  'ShowGridWindow': True, 
-  'ShowScrollbarCursor': True, 
-  'NumPitches': 128, 
-  'PitchOffset': 0, 
-  'ShowStepLengthGrid': True, 
-  'ShowMultipleGridWindows': True}, 
+   'Fold': True,
+   'NumDisplayKeys': 32,
+   'ShowGridWindow': True,
+   'ShowScrollbarCursor': True,
+   'NumPitches': 128,
+   'PitchOffset': 0,
+   'ShowStepLengthGrid': True,
+   'ShowMultipleGridWindows': True}, 
  'matrix_modes.note.drums.64pads':{
-  'Fold': True, 
-  'NumDisplayKeys': 0, 
-  'ShowGridWindow': False, 
-  'ShowScrollbarCursor': False, 
-  'NumPitches': 128, 
-  'PitchOffset': 0, 
-  'ShowStepLengthGrid': False, 
-  'ShowMultipleGridWindows': False}, 
+   'Fold': True,
+   'NumDisplayKeys': 0,
+   'ShowGridWindow': False,
+   'ShowScrollbarCursor': False,
+   'NumPitches': 128,
+   'PitchOffset': 0,
+   'ShowStepLengthGrid': False,
+   'ShowMultipleGridWindows': False}, 
  'matrix_modes.note.drums.sequencer_loop':{
-  'Fold': False, 
-  'NumDisplayKeys': 17, 
-  'ShowGridWindow': True, 
-  'ShowScrollbarCursor': True, 
-  'NumPitches': 128, 
-  'PitchOffset': 0, 
-  'ShowStepLengthGrid': True, 
-  'ShowMultipleGridWindows': False}, 
+   'Fold': False,
+   'NumDisplayKeys': 17,
+   'ShowGridWindow': True,
+   'ShowScrollbarCursor': True,
+   'NumPitches': 128,
+   'PitchOffset': 0,
+   'ShowStepLengthGrid': True,
+   'ShowMultipleGridWindows': False}, 
  'matrix_modes.note.drums.sequencer_velocity_levels':{
-  'Fold': False, 
-  'NumDisplayKeys': 17, 
-  'ShowGridWindow': True, 
-  'ShowScrollbarCursor': True, 
-  'NumPitches': 128, 
-  'PitchOffset': 0, 
-  'ShowStepLengthGrid': True, 
-  'ShowMultipleGridWindows': False}, 
+   'Fold': False,
+   'NumDisplayKeys': 17,
+   'ShowGridWindow': True,
+   'ShowScrollbarCursor': True,
+   'NumPitches': 128,
+   'PitchOffset': 0,
+   'ShowStepLengthGrid': True,
+   'ShowMultipleGridWindows': False}, 
  'matrix_modes.note.slicing.64pads':{
-  'Fold': True, 
-  'NumDisplayKeys': 0, 
-  'ShowGridWindow': False, 
-  'ShowScrollbarCursor': False, 
-  'NumPitches': 64, 
-  'PitchOffset': 36, 
-  'ShowStepLengthGrid': False, 
-  'ShowMultipleGridWindows': False}, 
+   'Fold': True,
+   'NumDisplayKeys': 0,
+   'ShowGridWindow': False,
+   'ShowScrollbarCursor': False,
+   'NumPitches': 64,
+   'PitchOffset': 36,
+   'ShowStepLengthGrid': False,
+   'ShowMultipleGridWindows': False}, 
  'matrix_modes.note.slicing.sequencer_loop':{
-  'Fold': False, 
-  'NumDisplayKeys': 17, 
-  'ShowGridWindow': True, 
-  'ShowScrollbarCursor': True, 
-  'NumPitches': 64, 
-  'PitchOffset': 36, 
-  'ShowStepLengthGrid': True, 
-  'ShowMultipleGridWindows': False}, 
+   'Fold': False,
+   'NumDisplayKeys': 17,
+   'ShowGridWindow': True,
+   'ShowScrollbarCursor': True,
+   'NumPitches': 64,
+   'PitchOffset': 36,
+   'ShowStepLengthGrid': True,
+   'ShowMultipleGridWindows': False}, 
  'matrix_modes.note.slicing.sequencer_velocity_levels':{
-  'Fold': False, 
-  'NumDisplayKeys': 17, 
-  'ShowGridWindow': True, 
-  'ShowScrollbarCursor': True, 
-  'NumPitches': 64, 
-  'PitchOffset': 36, 
-  'ShowStepLengthGrid': True, 
-  'ShowMultipleGridWindows': False}, 
+   'Fold': False,
+   'NumDisplayKeys': 17,
+   'ShowGridWindow': True,
+   'ShowScrollbarCursor': True,
+   'NumPitches': 64,
+   'PitchOffset': 36,
+   'ShowStepLengthGrid': True,
+   'ShowMultipleGridWindows': False}, 
  'matrix_modes.session':{
-  'Fold': True, 
-  'NumDisplayKeys': 0, 
-  'ShowGridWindow': False, 
-  'ShowScrollbarCursor': False, 
-  'NumPitches': 128, 
-  'PitchOffset': 0, 
-  'ShowStepLengthGrid': False, 
-  'ShowMultipleGridWindows': False}}
+   'Fold': True,
+   'NumDisplayKeys': 0,
+   'ShowGridWindow': False,
+   'ShowScrollbarCursor': False,
+   'NumPitches': 128,
+   'PitchOffset': 0,
+   'ShowStepLengthGrid': False,
+   'ShowMultipleGridWindows': False}}
 _DEFAULT_VIEW_DATA = {
- 'Fold': True, 
- 'NumDisplayKeys': 0, 
- 'ShowGridWindow': False, 
- 'ShowScrollbarCursor': False, 
- 'MinPitch': DEFAULT_START_NOTE, 
- 'MaxSequenceablePitch': DEFAULT_START_NOTE, 
- 'MinSequenceablePitch': DEFAULT_START_NOTE, 
- 'PageIndex': 0, 
- 'PageLength': 1.0, 
- 'MinGridWindowPitch': DEFAULT_START_NOTE, 
- 'MaxGridWindowPitch': DEFAULT_START_NOTE, 
- 'NumPitches': 128, 
- 'PitchOffset': 0, 
- 'ShowStepLengthGrid': False, 
- 'IsRecording': False, 
- 'ShowMultipleGridWindows': False}
+  'Fold': True,
+  'NumDisplayKeys': 0,
+  'ShowGridWindow': False,
+  'ShowScrollbarCursor': False,
+  'MinPitch': DEFAULT_START_NOTE,
+  'MaxSequenceablePitch': DEFAULT_START_NOTE,
+  'MinSequenceablePitch': DEFAULT_START_NOTE,
+  'PageIndex': 0,
+  'PageLength': 1.0,
+  'MinGridWindowPitch': DEFAULT_START_NOTE,
+  'MaxGridWindowPitch': DEFAULT_START_NOTE,
+  'NumPitches': 128,
+  'PitchOffset': 0,
+  'ShowStepLengthGrid': False,
+  'IsRecording': False,
+  'ShowMultipleGridWindows': False}
 
 def get_static_view_data(matrix_mode_path):
     return _MATRIX_MODE_PATH_TO_DATA.get(matrix_mode_path, _DEFAULT_VIEW_DATA)
@@ -759,12 +759,11 @@ class MidiClipControllerComponent(Component):
                     lower = self._most_recent_editable_pitches[0]
                     upper = self._most_recent_editable_pitches[-1]
                     self._loose_follow_base_note = (lower + upper) // 2 - num_visible_keys // 2
-                elif static_view_data["ShowGridWindow"]:
+                if static_view_data["ShowGridWindow"]:
                     self._focus_grid_window()
-                else:
-                    if liveobj_valid(self.clip):
-                        nav = self.clip.timeline_navigation
-                        nav.set_focus_marker_without_updating_visible_region("start_marker")
+                elif liveobj_valid(self.clip):
+                    nav = self.clip.timeline_navigation
+                    nav.set_focus_marker_without_updating_visible_region("start_marker")
                 self._configure_visualisation()
                 self._update_notification_mutes()
 
@@ -812,7 +811,7 @@ class MidiClipControllerComponent(Component):
         return get_static_view_data(self._matrix_mode_watcher.matrix_mode_path)
 
     def _add_items_to_view_data(self, view_data):
-        for key, value in self.get_static_view_data().items():
+        for (key, value) in self.get_static_view_data().items():
             view_data[key] = value
 
     def matrix_mode_path(self):
@@ -867,8 +866,9 @@ class MidiClipControllerComponent(Component):
     def _update_note_colors(self):
         matrix_mode = self.matrix_mode_path()
         in_correct_mode = matrix_mode is not None and matrix_mode.startswith("matrix_modes.note.drums") or matrix_mode == "matrix_modes.session"
-        note_colors = self._drum_pad_color_notifier.note_colors if (in_correct_mode and self._drum_pad_color_notifier.has_drum_group) else ([])
-        return make_color_vector(note_colors)
+        if in_correct_mode:
+            note_colors = self._drum_pad_color_notifier.note_colors if self._drum_pad_color_notifier.has_drum_group else []
+            return make_color_vector(note_colors)
 
     def _configure_visualisation(self):
         visualisation = self._visualisation_real_time_data.device_visualisation()
@@ -904,7 +904,7 @@ class MidiClipControllerComponent(Component):
                     view_data = visualisation.get_view_data()
                     if self._matrix_mode_watcher is not None:
                         self._add_items_to_view_data(view_data)
-                    for key, value in new_data.items():
+                    for (key, value) in new_data.items():
                         view_data[key] = value
 
                     visualisation.set_view_data(view_data)

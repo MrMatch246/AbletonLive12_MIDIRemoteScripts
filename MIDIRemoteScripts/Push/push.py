@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push\push.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 41498 bytes
@@ -149,7 +149,7 @@ class Push(PushBase):
           priority=(consts.DIALOG_PRIORITY))
 
     def _init_handshake(self):
-        dongle_message, dongle = make_dongle_message(sysex.DONGLE_ENQUIRY_PREFIX)
+        (dongle_message, dongle) = make_dongle_message(sysex.DONGLE_ENQUIRY_PREFIX)
         identity_control = create_sysex_element(sysex.IDENTITY_PREFIX, sysex.IDENTITY_ENQUIRY)
         dongle_control = create_sysex_element(sysex.DONGLE_PREFIX, dongle_message)
         presentation_control = create_sysex_element(sysex.DONGLE_PREFIX, sysex.make_presentation_message(self.application))
@@ -230,9 +230,8 @@ class Push(PushBase):
         if mode == LIVE_MODE:
             if self._start_handshake_task.is_running:
                 self._start_handshake()
-            else:
-                if self._handshake.handshake_succeeded:
-                    self.update()
+            elif self._handshake.handshake_succeeded:
+                self.update()
 
     def _create_background_layer(self):
         return super(Push, self)._create_background_layer() + Layer(display_line1="display_line1",
@@ -267,12 +266,12 @@ class Push(PushBase):
          self._track_modes, (self._mixer, self._mixer_layer)] + super(Push, self)._create_clip_mode()
 
     def _create_clip_loop_layer(self):
-        return super(Push, self)._create_clip_loop_layer() + Layer(name_display=(self.elements.display_line1.subdisplay[None[:36]]),
-          value_display=(self.elements.display_line2.subdisplay[None[:36]]))
+        return super(Push, self)._create_clip_loop_layer() + Layer(name_display=(self.elements.display_line1.subdisplay[:36]),
+          value_display=(self.elements.display_line2.subdisplay[:36]))
 
     def _create_clip_audio_layer(self):
-        return super(Push, self)._create_clip_audio_layer() + Layer(name_display=(self.elements.display_line1.subdisplay[36[:None]]),
-          value_display=(self.elements.display_line2.subdisplay[36[:None]]))
+        return super(Push, self)._create_clip_audio_layer() + Layer(name_display=(self.elements.display_line1.subdisplay[36:]),
+          value_display=(self.elements.display_line2.subdisplay[36:]))
 
     def _create_clip_name_layer(self):
         return super(Push, self)._create_clip_name_layer() + Layer(display="display_line3")
@@ -357,12 +356,11 @@ class Push(PushBase):
 
     @listens("browse_mode")
     def _on_browse_mode_changed(self):
-        if not self.application.browser.hotswap_target:
-            if self._main_modes.selected_mode == "browse" or self._browser_hotswap_mode.is_entered:
-                self._main_modes.selected_mode = "device"
+        if self.application.browser.hotswap_target or self._main_modes.selected_mode == "browse" or self._browser_hotswap_mode.is_entered:
+            self._main_modes.selected_mode = "device"
 
     def _create_browser(self):
-        state_buttons = self.elements.track_state_buttons.submatrix[(None[:7], None[:None])]
+        state_buttons = self.elements.track_state_buttons.submatrix[:7, :]
         browser = BrowserComponent(name="Browser",
           is_enabled=False,
           layer=Layer(encoder_controls="global_param_controls",
@@ -427,16 +425,16 @@ class Push(PushBase):
           layer=(
          BackgroundLayer("display_line1",
            "display_line2", priority=(consts.DIALOG_PRIORITY)),
-         Layer(scale_line1=(self.elements.display_line1.subdisplay[None[:18]]),
-           scale_line2=(self.elements.display_line2.subdisplay[None[:18]]),
-           scale_line3=(self.elements.display_line3.subdisplay[None[:9]]),
-           scale_line4=(self.elements.display_line4.subdisplay[None[:9]]),
-           top_display_line=(self.elements.display_line3.subdisplay[9[:None]]),
-           bottom_display_line=(self.elements.display_line4.subdisplay[9[:None]]),
+         Layer(scale_line1=(self.elements.display_line1.subdisplay[:18]),
+           scale_line2=(self.elements.display_line2.subdisplay[:18]),
+           scale_line3=(self.elements.display_line3.subdisplay[:9]),
+           scale_line4=(self.elements.display_line4.subdisplay[:9]),
+           top_display_line=(self.elements.display_line3.subdisplay[9:]),
+           bottom_display_line=(self.elements.display_line4.subdisplay[9:]),
            top_buttons="select_buttons",
            bottom_buttons="track_state_buttons",
            encoder_controls="global_param_controls",
-           _notification=(self._notification.use_single_line(0, get_slice[18[:None]], align_right)),
+           _notification=(self._notification.use_single_line(0, get_slice[18:], align_right)),
            priority=(consts.DIALOG_PRIORITY)),
          Layer(presets_toggle_button="shift_button")))
         presets_layer = (
@@ -516,7 +514,7 @@ class Push(PushBase):
     def _init_fixed_length(self):
         super(Push, self)._init_fixed_length()
         self._fixed_length.settings_component.layer = (
-         BackgroundLayer((self.elements.track_state_buttons.submatrix[(None[:7], None[:None])]),
+         BackgroundLayer((self.elements.track_state_buttons.submatrix[:7, :]),
            "display_line1",
            "display_line2",
            priority=(consts.MOMENTARY_DIALOG_PRIORITY)),

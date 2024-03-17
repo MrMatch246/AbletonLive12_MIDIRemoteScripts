@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\SL_MkIII\util.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1118 bytes
@@ -36,6 +36,6 @@ def color_for_track(track):
         except (KeyError, IndexError):
             color_value = find_nearest_color(RGB_COLOR_TABLE, track.color)
 
-    return Color(color_value)
+        return Color(color_value)
 
 # okay decompiling ./MIDIRemoteScripts/SL_MkIII/util.pyc

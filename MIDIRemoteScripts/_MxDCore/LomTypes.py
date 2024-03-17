@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_MxDCore\LomTypes.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 41977 bytes
@@ -11,9 +11,9 @@ from past.builtins import basestring
 import ast, json, types
 from collections import namedtuple
 import Live
-import _Framework.ControlElement as ControlElement
-import _Framework.ControlSurface as ControlSurface
-import _Framework.ControlSurfaceComponent as ControlSurfaceComponent
+from _Framework.ControlElement import ControlElement as ControlElement
+from _Framework.ControlSurface import ControlSurface as ControlSurface
+from _Framework.ControlSurfaceComponent import ControlSurfaceComponent as ControlSurfaceComponent
 from _Framework.Util import is_iterable
 from ableton.v2.base import PY2, old_hasattr
 from _MxDCore.ControlSurfaceWrapper import ControlProxy, ControlSurfaceWrapper, is_real_control_surface
@@ -54,18 +54,15 @@ def verify_routings_available_for_object(obj, prop_name):
         song = obj.canonical_parent
         if obj == song.master_track:
             raise RuntimeError(error_format % (prop_name, "master track"))
-        else:
-            if "input" in prop_name:
-                if obj.is_foldable:
-                    raise RuntimeError(error_format % (prop_name, "group tracks"))
-                else:
-                    if obj in song.return_tracks:
-                        raise RuntimeError(error_format % (prop_name, "return tracks"))
+        elif "input" in prop_name:
+            if obj.is_foldable:
+                raise RuntimeError(error_format % (prop_name, "group tracks"))
+            elif obj in song.return_tracks:
+                raise RuntimeError(error_format % (prop_name, "return tracks"))
 
 
 def routing_object_to_dict(routing_type):
-    return {'display_name':routing_type.display_name, 
-     'identifier':hash(routing_type)}
+    return {'display_name':routing_type.display_name,  'identifier':hash(routing_type)}
 
 
 def available_routing_objects_to_json(obj, property_name):
@@ -967,14 +964,14 @@ def get_exposed_properties_to_document_for_type(lom_type):
     if issubclass(lom_type, Live.Device.Device):
         if lom_type != Live.Device.Device:
             properties -= {prop.name for prop in _DEVICE_BASE_PROPS}
-    if issubclass(lom_type, Live.Chain.Chain):
-        if lom_type != Live.Chain.Chain:
-            properties -= {prop.name for prop in _CHAIN_BASE_PROPS}
-    if issubclass(lom_type, Live.Device.Device.View):
-        if lom_type != Live.Device.Device.View:
-            properties -= {prop.name for prop in _DEVICE_VIEW_BASE_PROPS}
-    properties -= set(PROPERTY_NAMES_EXCLUDED_FROM_DOCUMENTATION)
-    return list(properties)
+        if issubclass(lom_type, Live.Chain.Chain):
+            if lom_type != Live.Chain.Chain:
+                properties -= {prop.name for prop in _CHAIN_BASE_PROPS}
+            if issubclass(lom_type, Live.Device.Device.View):
+                if lom_type != Live.Device.Device.View:
+                    properties -= {prop.name for prop in _DEVICE_VIEW_BASE_PROPS}
+        properties -= set(PROPERTY_NAMES_EXCLUDED_FROM_DOCUMENTATION)
+        return list(properties)
 
 
 def is_class(class_object):
@@ -995,8 +992,8 @@ def get_root_prop(external_device, prop_key):
 
 
 def cs_base_classes():
-    import _Framework.ControlElement as ControlElement
-    import _Framework.ControlSurfaceComponent as ControlSurfaceComponent
+    from _Framework.ControlElement import ControlElement as ControlElement
+    from _Framework.ControlSurfaceComponent import ControlSurfaceComponent as ControlSurfaceComponent
     from ableton.v2.control_surface import Component as ControlSurfaceComponent2
     from ableton.v2.control_surface import ControlElement as ControlElement2
     from ableton.v3.control_surface import Component as ControlSurfaceComponent3
@@ -1029,10 +1026,10 @@ def is_object_iterable(obj):
 def verify_object_property(lom_object, property_name, epii_version):
     raise_error = False
     if isinstance(lom_object, cs_base_classes()):
-        raise_error = old_hasattr(lom_object, property_name) or True
-    else:
-        if not is_property_exposed_for_type(property_name, type(lom_object), epii_version):
+        if not old_hasattr(lom_object, property_name):
             raise_error = True
+    elif not is_property_exposed_for_type(property_name, type(lom_object), epii_version):
+        raise_error = True
     if raise_error:
         raise LomAttributeError("'%s' object has no attribute '%s'" % (
          lom_object.__class__.__name__, property_name))

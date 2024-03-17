@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\CompoundElement.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 10546 bytes
@@ -70,10 +70,9 @@ class CompoundElement(NotifyingControlElement, SlotManager, ControlElementClient
             priority = self.get_control_element_priority(element, self.resource.max_priority)
             nested_client = self._get_nested_client(self.resource.owner)
             element.resource.grab(nested_client, priority=priority)
-        else:
-            if not self._is_resource_based:
-                with self._disable_notify_owner_on_button_ownership_change():
-                    element.notify_ownership_change(self, True)
+        elif not self._is_resource_based:
+            with self._disable_notify_owner_on_button_ownership_change():
+                element.notify_ownership_change(self, True)
         return element
 
     def unregister_control_elements(self, *elements):

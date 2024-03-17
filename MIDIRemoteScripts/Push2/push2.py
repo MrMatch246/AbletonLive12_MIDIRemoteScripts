@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\push2.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 67438 bytes
@@ -218,16 +218,14 @@ class Push2(IdentifiableControlSurface, PushBase):
             if self._initialized:
                 self._setup_component.make_it_go_boom = False
             self._c_instance.launch_external_process()
-        else:
-            if state == StateEnum.connected:
-                with self.component_guard():
-                    self._try_initialize()
-                self._model.commit_changes(send_all=True)
-            else:
-                if state in (
-                 StateEnum.defunct_process_terminated,
-                 StateEnum.defunct_process_killed):
-                    self._tasks.add(task.sequence(task.wait(self.DEFUNCT_EXTERNAL_PROCESS_RELAUNCH_TIMEOUT), task.run(self._c_instance.launch_external_process)))
+        elif state == StateEnum.connected:
+            with self.component_guard():
+                self._try_initialize()
+            self._model.commit_changes(send_all=True)
+        elif state in (
+         StateEnum.defunct_process_terminated,
+         StateEnum.defunct_process_killed):
+            self._tasks.add(task.sequence(task.wait(self.DEFUNCT_EXTERNAL_PROCESS_RELAUNCH_TIMEOUT), task.run(self._c_instance.launch_external_process)))
 
     def on_user_data_arrived(self, message):
         if self._initialized:
@@ -614,7 +612,7 @@ class Push2(IdentifiableControlSurface, PushBase):
            back_button="track_state_buttons_raw[-2]",
            open_button="track_state_buttons_raw[-1]",
            load_button="select_buttons_raw[-1]",
-           scroll_encoders=(self.elements.global_param_controls.submatrix[(None[:-1], None[:None])]),
+           scroll_encoders=(self.elements.global_param_controls.submatrix[:-1, :]),
            scroll_focused_encoder="parameter_controls_raw[-1]",
            close_button="track_state_buttons_raw[0]",
            prehear_button="track_state_buttons_raw[1]",
@@ -654,21 +652,20 @@ class Push2(IdentifiableControlSurface, PushBase):
             if drum_rack:
                 if is_empty_rack(drum_rack):
                     self._device_navigation.request_drum_pad_selection()
-            if drum_rack:
-                if self._device_navigation.is_drum_pad_selected:
-                    if not self._device_navigation.is_drum_pad_unfolded:
-                        self._device_navigation.unfold_current_drum_pad()
-                    self._device_navigation.sync_selection_to_selected_device()
+                if drum_rack:
+                    if self._device_navigation.is_drum_pad_selected:
+                        if not self._device_navigation.is_drum_pad_unfolded:
+                            self._device_navigation.unfold_current_drum_pad()
+                        self._device_navigation.sync_selection_to_selected_device()
 
     @listens_group("close")
     def _on_browser_closed(self, sender):
         if sender.browse_for_audio_clip:
             self._main_modes.selected_mode = "clip"
+        elif self._main_modes.selected_mode == "add_track":
+            self._main_modes.selected_mode = self._main_modes.active_modes[0]
         else:
-            if self._main_modes.selected_mode == "add_track":
-                self._main_modes.selected_mode = self._main_modes.active_modes[0]
-            else:
-                self._main_modes.selected_mode = "device"
+            self._main_modes.selected_mode = "device"
 
     def _is_on_master(self):
         return self.song.view.selected_track == self.song.master_track
@@ -814,8 +811,8 @@ class Push2(IdentifiableControlSurface, PushBase):
           layer=Layer(monitor_state_encoder="parameter_controls_raw[0]",
           input_output_choice_encoder="parameter_controls_raw[1]",
           routing_type_encoder="parameter_controls_raw[2]",
-          routing_channel_encoders=(self.elements.global_param_controls.submatrix[(
-         3[:7], None[:None])]),
+          routing_channel_encoders=(self.elements.global_param_controls.submatrix[
+         3:7, :]),
           routing_channel_position_encoder="parameter_controls_raw[7]"))
         track_mix_or_routing_chooser = TrackOrRoutingControlChooserComponent(tracks_provider=(self._session_ring),
           track_mixer_component=track_mixer_control,
@@ -859,14 +856,14 @@ class Push2(IdentifiableControlSurface, PushBase):
 
     def _create_scales(self):
         root_note_buttons = ButtonMatrixElement(rows=[
-         self.elements.track_state_buttons_raw[1[:-1]],
-         self.elements.select_buttons_raw[1[:-1]]])
+         self.elements.track_state_buttons_raw[1:-1],
+         self.elements.select_buttons_raw[1:-1]])
         scales = ScalesComponent(note_layout=(self._note_layout),
           is_enabled=False,
           layer=make_dialog_layer(root_note_buttons=root_note_buttons,
           in_key_toggle_button="select_buttons_raw[0]",
           fixed_toggle_button="select_buttons_raw[-1]",
-          scale_encoders=(self.elements.global_param_controls.submatrix[(1[:-1], None[:None])]),
+          scale_encoders=(self.elements.global_param_controls.submatrix[1:-1, :]),
           layout_encoder="parameter_controls_raw[0]",
           direction_encoder="parameter_controls_raw[-1]",
           up_button="nav_up_button",
@@ -900,11 +897,11 @@ class Push2(IdentifiableControlSurface, PushBase):
           gain_encoder="parameter_controls_raw[7]",
           shift_button="shift_button")
         self._clip_control.mode_selector.add_mode("midi", [
-         make_freeze_aware(self._clip_control.midi_loop_controller, base_loop_layer + Layer(encoders=(self.elements.global_param_controls.submatrix[(1[:4], None[:None])]),
+         make_freeze_aware(self._clip_control.midi_loop_controller, base_loop_layer + Layer(encoders=(self.elements.global_param_controls.submatrix[1:4, :]),
            zoom_encoder="fine_grain_param_controls_raw[0]")),
          self._clip_control.midi_clip_controller])
         self._clip_control.mode_selector.add_mode("audio", [
-         make_freeze_aware(self._clip_control.audio_loop_controller, base_loop_layer + Layer(encoders=(self.elements.global_param_controls.submatrix[(1[:4], None[:None])]),
+         make_freeze_aware(self._clip_control.audio_loop_controller, base_loop_layer + Layer(encoders=(self.elements.global_param_controls.submatrix[1:4, :]),
            zoom_encoder="fine_grain_param_controls_raw[0]")),
          make_freeze_aware(self._clip_control.audio_clip_controller, audio_clip_layer)])
         self._clip_control.mode_selector.add_mode("no_clip", [])
@@ -994,7 +991,7 @@ class Push2(IdentifiableControlSurface, PushBase):
             with self.component_guard():
                 palette_entry = SysexElement(sysex.make_rgb_palette_entry_message)
                 finalize_palette = SysexElement(sysex.make_reapply_palette_message)
-                for index, hex_color, white_balance in COLOR_TABLE:
+                for (index, hex_color, white_balance) in COLOR_TABLE:
                     palette_entry.send_value(index, hex_color, white_balance)
 
                 finalize_palette.send_value()
@@ -1152,7 +1149,7 @@ class Push2(IdentifiableControlSurface, PushBase):
 
     def on_identified(self, response_bytes):
         try:
-            major, minor, build, sn, board_revision = sysex.extract_identity_response_info(response_bytes)
+            (major, minor, build, sn, board_revision) = sysex.extract_identity_response_info(response_bytes)
             self._firmware_version = FirmwareVersion(major, minor, build)
             self._firmware_version.release_type = self._firmware_collector.get_release_type(self._firmware_version)
             self._model.hardwareInfo.firmwareVersion = self._firmware_version

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\novation\track_recording.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3217 bytes
@@ -27,15 +27,14 @@ class TrackRecordingComponent(SessionRecordingComponentBase):
 
     def _record_to_track(self, track):
         playing_slot = track_playing_slot(track)
-        if (track_is_recording(track) or playing_slot) is not None:
+        if not track_is_recording(track) or playing_slot is not None:
             self.song.overdub = not self.song.overdub
             self.song.is_playing = self.song.is_playing or True
+        elif not self._stop_recording():
+            self._prepare_new_slot(track)
+            self._start_recording()
         else:
-            if not self._stop_recording():
-                self._prepare_new_slot(track)
-                self._start_recording()
-            else:
-                self._TrackRecordingComponent__on_fired_slot_index_changed.subject = track
+            self._TrackRecordingComponent__on_fired_slot_index_changed.subject = track
 
     def _prepare_new_slot(self, track):
         try:

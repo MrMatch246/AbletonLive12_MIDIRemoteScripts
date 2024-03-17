@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\ComboElement.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 14812 bytes
@@ -27,8 +27,8 @@ class WrapperElement(CompoundElement, ProxyBase):
             if PY3:
                 if "_wrapped_control" not in self.outer.__dict__:
                     raise AttributeError()
-            wrapped = self.outer.__dict__["_wrapped_control"]
-            return getattr(wrapped.proxied_interface, name)
+                wrapped = self.outer.__dict__["_wrapped_control"]
+                return getattr(wrapped.proxied_interface, name)
 
     def __init__(self, wrapped_control=None, *a, **k):
         (super(WrapperElement, self).__init__)(*a, **k)
@@ -119,10 +119,10 @@ class ComboElement(WrapperElement):
 
     def _enforce_control_invariant(self):
         if self._combo_is_on():
-            self.has_control_element(self._wrapped_control) or self.register_control_element(self._wrapped_control)
-        else:
-            if self.has_control_element(self._wrapped_control):
-                self.unregister_control_element(self._wrapped_control)
+            if not self.has_control_element(self._wrapped_control):
+                self.register_control_element(self._wrapped_control)
+        elif self.has_control_element(self._wrapped_control):
+            self.unregister_control_element(self._wrapped_control)
 
     def _combo_is_on(self):
         return all(map(self._modifier_is_valid, self._combo_modifiers))
@@ -204,11 +204,10 @@ class DoublePressElement(WrapperElement):
         self.request_listen_nested_control_elements()
 
     def on_nested_control_element_value(self, value, control):
-        if not control.is_momentary() or value:
-            if self._double_press_task.is_killed:
-                self._double_press_context.break_double_press()
-                self._on_break_double_press.subject = self._double_press_context
-                self._double_press_task.restart()
+        if not control.is_momentary() or value and self._double_press_task.is_killed:
+            self._double_press_context.break_double_press()
+            self._on_break_double_press.subject = self._double_press_context
+            self._double_press_task.restart()
         else:
             self.finish_double_press()
             self._double_press_task.kill()

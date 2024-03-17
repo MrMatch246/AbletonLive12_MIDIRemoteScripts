@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\components\scene.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 8199 bytes
@@ -80,7 +80,7 @@ class SceneComponent(Component):
         super(SceneComponent, self).update()
         if liveobj_valid(self._scene) and self.is_enabled():
             clip_slots_to_use = self.build_clip_slot_list()
-            for slot_wrapper, clip_slot in zip(self._clip_slots, clip_slots_to_use):
+            for (slot_wrapper, clip_slot) in zip(self._clip_slots, clip_slots_to_use):
                 slot_wrapper.set_clip_slot(clip_slot)
 
         else:
@@ -100,10 +100,11 @@ class SceneComponent(Component):
         if self._track_offset > 0:
             real_offset = 0
             visible_tracks = 0
-            while visible_tracks < self._track_offset and len(tracks) > real_offset:
-                if tracks[real_offset].is_visible:
-                    visible_tracks += 1
-                real_offset += 1
+            while visible_tracks < self._track_offset:
+                if len(tracks) > real_offset:
+                    if tracks[real_offset].is_visible:
+                        visible_tracks += 1
+                    real_offset += 1
 
             actual_track_offset = real_offset
         return actual_track_offset
@@ -115,7 +116,8 @@ class SceneComponent(Component):
         clip_slots = self._scene.clip_slots
         for _ in self._clip_slots:
             while len(tracks) > track_offset:
-                tracks[track_offset].is_visible or track_offset += 1
+                if not not tracks[track_offset].is_visible:
+                    track_offset += 1
 
             if len(clip_slots) > track_offset:
                 slots_to_use.append(clip_slots[track_offset])
@@ -132,15 +134,13 @@ class SceneComponent(Component):
     def _on_launch_button_pressed(self):
         if is_button_pressed(self._select_button):
             self._do_select_scene(self._scene)
-        else:
-            if liveobj_valid(self._scene):
-                if is_button_pressed(self._duplicate_button):
-                    self._do_duplicate_scene(self._scene)
-                else:
-                    if is_button_pressed(self._delete_button):
-                        self._do_delete_scene(self._scene)
-                    else:
-                        self._do_launch_scene(True)
+        elif liveobj_valid(self._scene):
+            if is_button_pressed(self._duplicate_button):
+                self._do_duplicate_scene(self._scene)
+            elif is_button_pressed(self._delete_button):
+                self._do_delete_scene(self._scene)
+            else:
+                self._do_launch_scene(True)
 
     @launch_button.released
     def launch_button(self, value):
@@ -191,11 +191,11 @@ class SceneComponent(Component):
         if self.launch_button.is_momentary:
             self._scene.set_fire_button_state(value != 0)
             launched = value != 0
-        else:
-            if value != 0:
-                self._scene.fire()
-                launched = True
-            elif launched and self.song.select_on_launch:
+        elif value != 0:
+            self._scene.fire()
+            launched = True
+        if launched:
+            if self.song.select_on_launch:
                 self.song.view.selected_scene = self._scene
 
     @listens("is_triggered")
@@ -213,7 +213,7 @@ class SceneComponent(Component):
         if value is None:
             if self._color_table:
                 value = find_nearest_color(self._color_table, color)
-        return value
+            return value
 
     def _update_launch_button(self):
         if self.is_enabled():
@@ -226,7 +226,7 @@ class SceneComponent(Component):
                     possible_color = self._color_value(self._scene.color)
                     if possible_color:
                         value_to_send = possible_color
-            self.launch_button.color = value_to_send
+                self.launch_button.color = value_to_send
 
     def _create_clip_slot(self):
         return self.clip_slot_component_type(parent=self)

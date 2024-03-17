@@ -1,14 +1,14 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_Pro\DeviceNavigationComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1218 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 import Live
 from _Framework.Control import ButtonControl
-import _Framework.ControlSurfaceComponent as ControlSurfaceComponent
+from _Framework.ControlSurfaceComponent import ControlSurfaceComponent as ControlSurfaceComponent
 NavDirection = Live.Application.Application.View.NavDirection
 
 class DeviceNavigationComponent(ControlSurfaceComponent):
@@ -25,10 +25,9 @@ class DeviceNavigationComponent(ControlSurfaceComponent):
 
     def _scroll_device_chain(self, direction):
         view = self.application().view
-        if view.is_view_visible("Detail"):
-            if not view.is_view_visible("Detail/DeviceChain"):
-                view.show_view("Detail")
-                view.show_view("Detail/DeviceChain")
+        if not (view.is_view_visible("Detail") and view.is_view_visible("Detail/DeviceChain")):
+            view.show_view("Detail")
+            view.show_view("Detail/DeviceChain")
         else:
             view.scroll_view(direction, "Detail/DeviceChain", False)
 

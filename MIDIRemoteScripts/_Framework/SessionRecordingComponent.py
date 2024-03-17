@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\SessionRecordingComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 11723 bytes
@@ -47,7 +47,7 @@ class SessionRecordingComponent(CompoundComponent):
         self._length_press_state = None
         self._new_scene_button = None
         song = self.song()
-        self._automation_toggle, self._re_enable_automation_toggle, self._delete_automation = self.register_components(ToggleComponent("session_automation_record", song), ToggleComponent("re_enable_automation_enabled", song, read_only=True), ToggleComponent("has_envelopes", None, read_only=True))
+        (self._automation_toggle, self._re_enable_automation_toggle, self._delete_automation) = self.register_components(ToggleComponent("session_automation_record", song), ToggleComponent("re_enable_automation_enabled", song, read_only=True), ToggleComponent("has_envelopes", None, read_only=True))
         self._on_tracks_changed_in_live.subject = song
         self._on_is_playing_changed_in_live.subject = song
         self._track_subject_slots = self.register_slot_manager()
@@ -132,11 +132,10 @@ class SessionRecordingComponent(CompoundComponent):
                 status = song.session_record_status
                 if status == Live.Song.SessionRecordStatus.transition:
                     self._record_button.set_light("Recording.Transition")
+                elif status == Live.Song.SessionRecordStatus.on or song.session_record:
+                    self._record_button.turn_on()
                 else:
-                    if status == Live.Song.SessionRecordStatus.on or song.session_record:
-                        self._record_button.turn_on()
-                    else:
-                        self._record_button.turn_off()
+                    self._record_button.turn_off()
 
     @subject_slot("value")
     def _on_re_enable_automation_value(self, value):

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\sysex.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 8706 bytes
@@ -27,7 +27,7 @@ def make_mode_switch_messsage(mode_id):
 
 
 def make_rgb_palette_entry_message(index, hex_color, white_balance):
-    r, g, b = _make_rgb_from_hex(hex_color)
+    (r, g, b) = _make_rgb_from_hex(hex_color)
     return make_message(3, (index,) + to_7L1M(r) + to_7L1M(g) + to_7L1M(b) + to_7L1M(white_balance))
 
 
@@ -47,26 +47,20 @@ def make_touch_strip_mode_message(mode):
     mode_bytes = ()
     if mode == TouchStripModes.CUSTOM_PITCHBEND:
         mode_bytes = int("1111001", 2)
+    elif mode == TouchStripModes.CUSTOM_VOLUME:
+        mode_bytes = int("0000001", 2)
+    elif mode == TouchStripModes.CUSTOM_PAN:
+        mode_bytes = int("0010001", 2)
+    elif mode == TouchStripModes.CUSTOM_DISCRETE:
+        mode_bytes = int("0011001", 2)
+    elif mode == TouchStripModes.CUSTOM_FREE:
+        mode_bytes = int("0001011", 2)
+    elif mode == TouchStripModes.MODWHEEL:
+        mode_bytes = int("0000100", 2)
+    elif mode == TouchStripModes.PITCHBEND:
+        mode_bytes = int("1111000", 2)
     else:
-        if mode == TouchStripModes.CUSTOM_VOLUME:
-            mode_bytes = int("0000001", 2)
-        else:
-            if mode == TouchStripModes.CUSTOM_PAN:
-                mode_bytes = int("0010001", 2)
-            else:
-                if mode == TouchStripModes.CUSTOM_DISCRETE:
-                    mode_bytes = int("0011001", 2)
-                else:
-                    if mode == TouchStripModes.CUSTOM_FREE:
-                        mode_bytes = int("0001011", 2)
-                    else:
-                        if mode == TouchStripModes.MODWHEEL:
-                            mode_bytes = int("0000100", 2)
-                        else:
-                            if mode == TouchStripModes.PITCHBEND:
-                                mode_bytes = int("1111000", 2)
-                            else:
-                                raise RuntimeError("Touch strip mode %i not supported" % mode)
+        raise RuntimeError("Touch strip mode %i not supported" % mode)
     return make_message(23, (mode_bytes,))
 
 
@@ -106,9 +100,10 @@ def extract_identity_response_info(data):
     major = data[12]
     minor = data[13]
     build = from_7L7M(data[14], data[15])
-    sn = from_7L7777M(data[16[:21]])
+    sn = from_7L7777M(data[16:21])
     board_revision = data[21] if len(data) > 22 else 0
-    return (major, minor, build, sn, board_revision)
+    return (
+     major, minor, build, sn, board_revision)
 
 
 def make_pad_setting_message(scene_index, track_index, setting):

@@ -1,16 +1,16 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\MackieControlXT\MackieControlXT.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 8235 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import object, range
 import Live
-import MackieControl.ChannelStrip as ChannelStrip
+from MackieControl.ChannelStrip import ChannelStrip as ChannelStrip
 from MackieControl.consts import *
-import MackieControl.MainDisplay as MainDisplay
+from MackieControl.MainDisplay import MainDisplay as MainDisplay
 
 class MackieControlXT(object):
 
@@ -113,8 +113,8 @@ class MackieControlXT(object):
                     c.refresh_state()
 
                 self.request_firmware_version()
-        for c in self._MackieControlXT__components:
-            c.on_update_display_timer()
+            for c in self._MackieControlXT__components:
+                c.on_update_display_timer()
 
     def send_midi(self, midi_event_bytes):
         self._MackieControlXT__c_instance.send_midi(midi_event_bytes)
@@ -128,22 +128,20 @@ class MackieControlXT(object):
                     for s in self._MackieControlXT__channel_strips:
                         s.handle_channel_strip_switch_ids(note, value)
 
-        else:
-            if midi_bytes[0] & 240 == CC_STATUS:
-                cc_no = midi_bytes[1]
-                cc_value = midi_bytes[2]
-                if cc_no in range(FID_PANNING_BASE, FID_PANNING_BASE + NUM_CHANNEL_STRIPS):
-                    for s in self._MackieControlXT__channel_strips:
-                        s.handle_vpot_rotation(cc_no - FID_PANNING_BASE, cc_value)
+        if midi_bytes[0] & 240 == CC_STATUS:
+            cc_no = midi_bytes[1]
+            cc_value = midi_bytes[2]
+            if cc_no in range(FID_PANNING_BASE, FID_PANNING_BASE + NUM_CHANNEL_STRIPS):
+                for s in self._MackieControlXT__channel_strips:
+                    s.handle_vpot_rotation(cc_no - FID_PANNING_BASE, cc_value)
 
-            else:
-                if midi_bytes[0] == 240:
-                    if len(midi_bytes) == 12:
-                        if midi_bytes[5] == 20:
-                            version_bytes = midi_bytes[6[:-2]]
-                            major_version = version_bytes[1]
-                            self.is_pro_version = major_version > 50
-                            self._received_firmware_version = True
+        elif midi_bytes[0] == 240:
+            if len(midi_bytes) == 12:
+                if midi_bytes[5] == 20:
+                    version_bytes = midi_bytes[6:-2]
+                    major_version = version_bytes[1]
+                    self.is_pro_version = major_version > 50
+                    self._received_firmware_version = True
 
     def can_lock_to_devices(self):
         return False

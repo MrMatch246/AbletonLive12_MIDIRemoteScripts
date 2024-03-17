@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push\browser_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 19768 bytes
@@ -24,7 +24,7 @@ DeviceType = Live.Device.DeviceType
 
 def make_stem_cleaner(stem):
     if stem[-1] == "s":
-        stem = stem[None[:-1]]
+        stem = stem[:-1]
     if len(stem) > 2:
         return _memoized_stem_cleaner(stem)
     return nop
@@ -84,7 +84,7 @@ class BrowserComponent(Component):
         self._last_loaded_item = None
         self._default_item_formatter = DefaultItemFormatter()
         self._list_components = [ListComponent(parent=self) for _ in range(self.NUM_COLUMNS)]
-        for i, component in enumerate(self._list_components):
+        for (i, component) in enumerate(self._list_components):
             component.do_trigger_action = lambda item: self._do_load_item(item)
             component.last_action_item = lambda: self._last_loaded_item
             component.item_formatter = partial(self._item_formatter, i)
@@ -126,7 +126,7 @@ class BrowserComponent(Component):
 
     def set_display_line_with_index(self, display, index):
         if display:
-            sources = self._data_sources[index[None:self.COLUMN_SIZE]]
+            sources = self._data_sources[index::self.COLUMN_SIZE]
             display.set_data_sources(sources)
 
     def set_select_buttons(self, buttons):
@@ -137,10 +137,10 @@ class BrowserComponent(Component):
         self._on_select_matrix_value.subject = buttons or None
         self._select_buttons = buttons
         buttons = buttons or (None, None, None, None, None, None, None, None)
-        for component, button in zip(self._list_components, buttons[1[None:2]]):
+        for (component, button) in zip(self._list_components, buttons[1::2]):
             self._set_button_if_enabled(component, "action_button", button)
 
-        for component, button in zip(self._list_components, buttons[None[None:2]]):
+        for (component, button) in zip(self._list_components, buttons[::2]):
             if self.shift_button.is_pressed:
                 self._set_button_if_enabled(component, "prev_page_button", button)
                 self._set_button_if_enabled(component, "select_prev_button", None)
@@ -156,7 +156,7 @@ class BrowserComponent(Component):
         self._on_state_matrix_value.subject = buttons or None
         self._state_buttons = buttons
         buttons = buttons or (None, None, None, None, None, None, None, None)
-        for component, button in zip(self._list_components, buttons[None[None:2]]):
+        for (component, button) in zip(self._list_components, buttons[::2]):
             if self.shift_button.is_pressed:
                 self._set_button_if_enabled(component, "next_page_button", button)
                 self._set_button_if_enabled(component, "select_next_button", None)
@@ -164,9 +164,10 @@ class BrowserComponent(Component):
                 self._set_button_if_enabled(component, "next_page_button", None)
                 self._set_button_if_enabled(component, "select_next_button", button)
 
-        for button in buttons[1[None:2]]:
-            if button and self.is_enabled():
-                button.set_light("DefaultButton.Disabled")
+        for button in buttons[1::2]:
+            if button:
+                if self.is_enabled():
+                    button.set_light("DefaultButton.Disabled")
 
     @shift_button.value
     def shift_button(self, value, control):
@@ -188,11 +189,11 @@ class BrowserComponent(Component):
             num_active_lists = len(self._browser_model.content_lists) - self._scroll_offset
             num_assignable_lists = min(num_active_lists, old_div(len(encoder_controls), 2))
             index = 0
-            for component in self._list_components[None[:num_assignable_lists - 1]]:
-                component.encoders.set_control_element(encoder_controls[index[:index + 2]])
+            for component in self._list_components[:num_assignable_lists - 1]:
+                component.encoders.set_control_element(encoder_controls[index:index + 2])
                 index += 2
 
-            self._list_components[num_assignable_lists - 1].encoders.set_control_element(encoder_controls[index[:None]])
+            self._list_components[num_assignable_lists - 1].encoders.set_control_element(encoder_controls[index:])
         else:
             for component in self._list_components:
                 component.encoders.set_control_element([])
@@ -250,23 +251,24 @@ class BrowserComponent(Component):
             return len(item_name) <= 9
 
         content_lists = self._browser_model.content_lists
-        parent_lists = reversed(content_lists[max(0, list_index - 3)[:list_index]])
+        parent_lists = reversed(content_lists[max(0, list_index - 3):list_index])
         for content_list in parent_lists:
             if is_short_enough(item_name):
                 break
-            parent_name = str(content_list.selected_item)
-            stems = split_stem(parent_name)
-            for stem in stems:
-                short_name = make_stem_cleaner(stem)(item_name)
-                short_name = full_strip(short_name)
-                item_name = short_name if len(short_name) > 4 else item_name
-                if is_short_enough(item_name):
-                    break
+            else:
+                parent_name = str(content_list.selected_item)
+                stems = split_stem(parent_name)
+                for stem in stems:
+                    short_name = make_stem_cleaner(stem)(item_name)
+                    short_name = full_strip(short_name)
+                    item_name = short_name if len(short_name) > 4 else item_name
+                    if is_short_enough(item_name):
+                        break
 
         if len(item_name) >= shortening_limit:
             if item_name[-1] == consts.CHAR_ELLIPSIS:
-                return item_name[None[:-1]]
-        return item_name
+                return item_name[:-1]
+            return item_name
 
     def _item_formatter(self, depth, index, item, action_in_progress):
         display_string = ""
@@ -274,19 +276,20 @@ class BrowserComponent(Component):
         shortening_limit = 16 - separator_length
         if item:
             item_name = "Loading..." if action_in_progress else self._shorten_item_name(shortening_limit, depth + self._scroll_offset, str(item))
-            display_string = consts.CHAR_SELECT if (item and item.is_selected) else " "
-            display_string += item_name
-            if depth == len(self._list_components) - 1:
-                if item.is_selected:
-                    if self._scroll_offset < self._max_hierarchy:
-                        display_string = str.ljust(display_string, old_div(consts.DISPLAY_LENGTH, 4) - 1)
-                        shortening_limit += 1
-                        display_string = display_string[None[:shortening_limit]] + consts.CHAR_ARROW_RIGHT
-            if depth == 0:
-                if self._scroll_offset > 0:
-                    prefix = consts.CHAR_ARROW_LEFT if index == 0 else " "
-                    display_string = prefix + display_string
-        return display_string[None[:shortening_limit + 1]]
+            if item:
+                display_string = consts.CHAR_SELECT if item.is_selected else " "
+                display_string += item_name
+                if depth == len(self._list_components) - 1:
+                    if item.is_selected:
+                        if self._scroll_offset < self._max_hierarchy:
+                            display_string = str.ljust(display_string, old_div(consts.DISPLAY_LENGTH, 4) - 1)
+                            shortening_limit += 1
+                            display_string = display_string[:shortening_limit] + consts.CHAR_ARROW_RIGHT
+                    if depth == 0:
+                        if self._scroll_offset > 0:
+                            prefix = consts.CHAR_ARROW_LEFT if index == 0 else " "
+                            display_string = prefix + display_string
+            return display_string[:shortening_limit + 1]
 
     @enter_button.pressed
     def enter_button(self, control):
@@ -300,9 +303,8 @@ class BrowserComponent(Component):
     def prehear_button(self, toggled, button):
         if not toggled:
             self._browser.stop_preview()
-        else:
-            if self._last_selected_item is not None:
-                self._last_selected_item.preview()
+        elif self._last_selected_item is not None:
+            self._last_selected_item.preview()
         self._preferences["browser_prehear"] = toggled
 
     @listens("hotswap_target")
@@ -340,12 +342,10 @@ class BrowserComponent(Component):
         filter_type = filter_type_for_browser(self._browser)
         if filter_type != self._last_filter_type:
             self._create_browser_model_of_type(filter_type)
-        else:
-            if self._browser_model_dirty:
-                self._browser_model.update_content()
-            else:
-                if not self._skip_next_preselection:
-                    self._browser_model.update_selection()
+        elif self._browser_model_dirty:
+            self._browser_model.update_content()
+        elif not self._skip_next_preselection:
+            self._browser_model.update_selection()
         self._skip_next_preselection = False
         self._browser_model_dirty = False
 
@@ -373,20 +373,20 @@ class BrowserComponent(Component):
     def _on_content_lists_changed(self):
         self._last_selected_item = None
         components = self._list_components
-        contents = self._browser_model.content_lists[self._scroll_offset[:None]]
+        contents = self._browser_model.content_lists[self._scroll_offset:]
         messages = self._browser_model.empty_list_messages
         scroll_depth = len(self._browser_model.content_lists) - len(self._list_components)
         self._max_scroll_offset = max(0, scroll_depth + 2)
         self._max_hierarchy = max(0, scroll_depth)
-        for component, content, message in zip_longest(components, contents, messages):
+        for (component, content, message) in zip_longest(components, contents, messages):
             if component != None:
                 component.scrollable_list = content
                 component.empty_list_message = message
 
         active_lists = len(contents)
         num_head = clamp(active_lists - 1, 0, self.NUM_COLUMNS - 1)
-        head = components[None[:num_head]]
-        last = components[num_head[:None]]
+        head = components[:num_head]
+        last = components[num_head:]
 
         def set_data_sources_with_separator(component, sources, separator):
             for source in sources:
@@ -395,21 +395,21 @@ class BrowserComponent(Component):
             component.set_data_sources(sources)
             component.set_enabled(True)
 
-        for idx, component in enumerate(head):
+        for (idx, component) in enumerate(head):
             offset = idx * self.COLUMN_SIZE
-            sources = self._data_sources[offset[:offset + self.COLUMN_SIZE]]
+            sources = self._data_sources[offset:offset + self.COLUMN_SIZE]
             set_data_sources_with_separator(component, sources, "|")
 
         if last:
             offset = num_head * self.COLUMN_SIZE
             scrollable_list = last[0].scrollable_list
             if scrollable_list and find_if((lambda item: item.content.is_folder), scrollable_list.items):
-                sources = self._data_sources[offset[:offset + self.COLUMN_SIZE]]
-                list(map(DisplayDataSource.clear, self._data_sources[(offset + self.COLUMN_SIZE)[:None]]))
+                sources = self._data_sources[offset:offset + self.COLUMN_SIZE]
+                list(map(DisplayDataSource.clear, self._data_sources[offset + self.COLUMN_SIZE:]))
             else:
-                sources = self._data_sources[offset[:None]]
+                sources = self._data_sources[offset:]
             set_data_sources_with_separator(last[0], sources, "")
-            for component in last[1[:None]]:
+            for component in last[1:]:
                 component.set_enabled(False)
 
         self.set_select_buttons(self._select_buttons)

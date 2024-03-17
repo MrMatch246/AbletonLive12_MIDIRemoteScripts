@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_MK2\SessionComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2746 bytes
@@ -50,15 +50,13 @@ class SessionComponent(SessionComponentBase):
                                 track = tracks_to_use[track_index]
                                 if track.fired_slot_index == -2:
                                     value_to_send = self._stop_clip_triggered_value
+                                elif track.playing_slot_index >= 0:
+                                    value_to_send = self._stop_clip_value
                                 else:
-                                    if track.playing_slot_index >= 0:
-                                        value_to_send = self._stop_clip_value
-                                    else:
-                                        value_to_send = self._stopped_clip_value
-                        elif value_to_send is None:
-                            button.turn_off()
-                        else:
-                            if in_range(value_to_send, 0, 128):
+                                    value_to_send = self._stopped_clip_value
+                            if value_to_send is None:
+                                button.turn_off()
+                            elif in_range(value_to_send, 0, 128):
                                 button.send_value(value_to_send)
                             else:
                                 button.set_light(value_to_send)

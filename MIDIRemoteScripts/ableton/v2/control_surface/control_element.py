@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\control_element.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6871 bytes
@@ -63,14 +63,13 @@ def get_element(obj, element_container=None):
     if isinstance(obj, string_types):
         if element_container is None:
             raise RuntimeError("Control elements can only be accessed by name, if an element container is available")
+        match = _element_list_access_expr.match(obj)
+        if match:
+            name = match.group(1)
+            index = int(match.group(2))
+            obj = getattr(element_container, name)[index]
         else:
-            match = _element_list_access_expr.match(obj)
-            if match:
-                name = match.group(1)
-                index = int(match.group(2))
-                obj = getattr(element_container, name)[index]
-            else:
-                obj = getattr(element_container, obj)
+            obj = getattr(element_container, obj)
     return obj
 
 

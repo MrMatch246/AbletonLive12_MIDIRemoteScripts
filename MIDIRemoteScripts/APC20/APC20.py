@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\APC20\APC20.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7902 bytes
@@ -10,14 +10,14 @@ from builtins import range
 from functools import partial
 import Live
 MapMode = Live.MidiMap.MapMode
-import _Framework.ButtonMatrixElement as ButtonMatrixElement
-import _Framework.EncoderElement as EncoderElement
+from _Framework.ButtonMatrixElement import ButtonMatrixElement as ButtonMatrixElement
+from _Framework.EncoderElement import EncoderElement as EncoderElement
 from _Framework.InputControlElement import MIDI_CC_TYPE
-import _Framework.TransportComponent as TransportComponent
-import _APC.APC as APC
+from _Framework.TransportComponent import TransportComponent as TransportComponent
+from _APC.APC import APC as APC
 from _APC.ControlElementUtils import make_button, make_pedal_button, make_slider
-import _APC.MixerComponent as MixerComponent
-import _APC.SessionComponent as SessionComponent
+from _APC.MixerComponent import MixerComponent as MixerComponent
+from _APC.SessionComponent import SessionComponent as SessionComponent
 from _APC.SkinDefault import make_biled_skin
 from .BackgroundComponent import BackgroundComponent
 from .ShiftableSelectorComponent import ShiftableSelectorComponent

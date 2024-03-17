@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\SL_MkIII\mixer.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6069 bytes
@@ -42,11 +42,12 @@ class MixerComponent(MixerComponentBase):
         tracks = self.controlled_tracks
         controlled_sends = [None] * len(tracks)
         send_index = self.send_index
-        for index, track in enumerate(tracks):
+        for (index, track) in enumerate(tracks):
             if liveobj_valid(track):
                 sends = track.mixer_device.sends
-                if send_index is not None and send_index < len(sends):
-                    controlled_sends[index] = sends[send_index]
+                if send_index is not None:
+                    if send_index < len(sends):
+                        controlled_sends[index] = sends[send_index]
 
         return controlled_sends
 
@@ -67,23 +68,23 @@ class MixerComponent(MixerComponentBase):
             display.set_data_sources([self._selected_strip.track_name_data_source()])
 
     def set_pan_encoder_color_fields(self, controls):
-        for strip, control in zip_longest(self._channel_strips, controls or []):
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
             strip.pan_encoder_color_field.set_control_element(control)
 
     def set_track_color_fields(self, controls):
-        for strip, control in zip_longest(self._channel_strips, controls or []):
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
             strip.track_color_field.set_control_element(control)
 
     def set_track_selection_fields(self, controls):
-        for strip, control in zip_longest(self._channel_strips, controls or []):
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
             strip.track_selection_field.set_control_element(control)
 
     def set_volume_leds(self, controls):
-        for strip, control in zip_longest(self._channel_strips, controls or []):
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
             strip.volume_led.set_control_element(control)
 
     def set_monitoring_state_buttons(self, controls):
-        for strip, control in zip_longest(self._channel_strips, controls or []):
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
             strip.monitoring_state_button.set_control_element(control)
 
     def on_send_index_changed(self):
@@ -106,11 +107,11 @@ class MixerComponent(MixerComponentBase):
         self.send_index_display[0] = "Send " + chr(send_index + 65) if send_index is not None else ""
 
     def _update_send_value_display(self):
-        for index, send in enumerate(self.controlled_sends):
+        for (index, send) in enumerate(self.controlled_sends):
             self.send_value_display[index] = str(send) if send else ""
 
     def _update_send_encoder_color_fields(self):
-        for index, send in enumerate(self.controlled_sends):
+        for (index, send) in enumerate(self.controlled_sends):
             self.send_encoder_color_fields[index].color = "Mixer.Send" if send else "DefaultButton.Disabled"
 
     def _update_selected_track_color_field(self):

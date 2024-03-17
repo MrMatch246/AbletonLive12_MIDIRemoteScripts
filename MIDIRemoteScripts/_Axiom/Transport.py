@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Axiom\Transport.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4311 bytes
@@ -42,15 +42,14 @@ class Transport(object):
         index = list(self._Transport__parent.song().scenes).index(self._Transport__parent.song().view.selected_scene)
         if cc_no == AXIOM_LOOP:
             self._Transport__parent.song().view.selected_scene.fire_as_selected()
-        else:
-            if cc_no == AXIOM_RWD:
-                if index > 0:
-                    index = index - 1
-                    self._Transport__parent.song().view.selected_scene = self._Transport__parent.song().scenes[index]
-            elif cc_no == AXIOM_FFWD:
-                if index < len(self._Transport__parent.song().scenes) - 1:
-                    index = index + 1
-                    self._Transport__parent.song().view.selected_scene = self._Transport__parent.song().scenes[index]
+        elif cc_no == AXIOM_RWD:
+            if index > 0:
+                index = index - 1
+                self._Transport__parent.song().view.selected_scene = self._Transport__parent.song().scenes[index]
+        elif cc_no == AXIOM_FFWD:
+            if index < len(self._Transport__parent.song().scenes) - 1:
+                index = index + 1
+                self._Transport__parent.song().view.selected_scene = self._Transport__parent.song().scenes[index]
 
     def __cc_in_arranger(self, cc_no, cc_value):
         if cc_no == AXIOM_LOOP:
@@ -78,9 +77,9 @@ class Transport(object):
             self._Transport__delay_counter += 1
             if self._Transport__delay_counter % 5 == 0:
                 self._Transport__parent.song().jump_by(self._Transport__parent.song().signature_denominator)
-        if self._Transport__rwd_held:
-            self._Transport__delay_counter += 1
-            if self._Transport__delay_counter % 5 == 0:
-                self._Transport__parent.song().jump_by(-1 * self._Transport__parent.song().signature_denominator)
+            if self._Transport__rwd_held:
+                self._Transport__delay_counter += 1
+                if self._Transport__delay_counter % 5 == 0:
+                    self._Transport__parent.song().jump_by(-1 * self._Transport__parent.song().signature_denominator)
 
 # okay decompiling ./MIDIRemoteScripts/_Axiom/Transport.pyc

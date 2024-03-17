@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\velocity_levels_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5630 bytes
@@ -113,7 +113,7 @@ class VelocityLevelsComponent(PlayableComponent):
             self._notification_task.restart()
 
     def _button_index(self, button):
-        y, x = button.coordinate
+        (y, x) = button.coordinate
         return (self.height - 1 - y) * self.width + x
 
     def _note_translation_for_button(self, button):
@@ -126,13 +126,12 @@ class VelocityLevelsComponent(PlayableComponent):
         if index < len(levels) and self._played_level == levels[index]:
             color = "SelectedLevel"
         else:
-            y, _ = button.coordinate
+            (y, _) = button.coordinate
             color = "MidLevel"
             if y == 0:
                 color = "HighLevel"
-            else:
-                if y == self.height - 1:
-                    color = "LowLevel"
+            elif y == self.height - 1:
+                color = "LowLevel"
         button.color = self._skin_base_key + "." + color
 
     def update(self):
@@ -140,7 +139,7 @@ class VelocityLevelsComponent(PlayableComponent):
         if liveobj_valid(self.velocity_levels):
             self.velocity_levels.enabled = self.is_enabled()
             self.velocity_levels.source_channel = NON_FEEDBACK_CHANNEL
-            self.velocity_levels.notes = self.SOURCE_NOTES[None[:self.width * self.height]]
+            self.velocity_levels.notes = self.SOURCE_NOTES[:self.width * self.height]
             target_note = self._target_note_provider.selected_target_note
             self.velocity_levels.target_note = target_note.note
             self.velocity_levels.target_channel = target_note.channel

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\track_list.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 17997 bytes
@@ -36,38 +36,35 @@ def mixable_button_color(mixer_track, song, selected_track=None):
         is_frozen_chain = mixer_track_parent_track.is_frozen and not isinstance(mixer_track.proxied_object, Live.Track.Track)
         if can_play_clips(mixer_track) and is_clip_stop_pending(mixer_track):
             color = track_color_with_pending_stop(mixer_track)
+        elif mixer_track.solo:
+            color = "Mixer.SoloOn"
+        elif mixer_track == selected_track and not mixer_track.mute:
+            color = "Mixer.TrackSelected"
+        elif mixer_track.mute or mixer_track.muted_via_solo:
+            color = "Mixer.MutedTrack"
+        elif is_frozen_chain:
+            color = "Mixer.FrozenChain"
         else:
-            if mixer_track.solo:
-                color = "Mixer.SoloOn"
-            else:
-                if mixer_track == selected_track:
-                    color = mixer_track.mute or "Mixer.TrackSelected"
-                else:
-                    if mixer_track.mute or mixer_track.muted_via_solo:
-                        color = "Mixer.MutedTrack"
-                    else:
-                        if is_frozen_chain:
-                            color = "Mixer.FrozenChain"
-                        else:
-                            color = IndexedColor.from_live_index(mixer_track.color_index, DISPLAY_BUTTON_SHADE_LEVEL)
+            color = IndexedColor.from_live_index(mixer_track.color_index, DISPLAY_BUTTON_SHADE_LEVEL)
     return color
 
 
 def stop_clip_button_color(track, song, _):
-    if liveobj_valid(track) and is_chain(track) or bool(track.clip_slots):
-        if is_clip_stop_pending(track):
-            return track_color_with_pending_stop(track)
-        if track.playing_slot_index >= 0:
-            if track.solo:
-                return "StopClips.SoloedTrack"
-            elif track.mute:
-                return "StopClips.MutedTrack"
+    if liveobj_valid(track) and not is_chain(track):
+        if bool(track.clip_slots):
+            if is_clip_stop_pending(track):
+                return track_color_with_pending_stop(track)
+            if track.playing_slot_index >= 0:
+                if track.solo:
+                    return "StopClips.SoloedTrack"
+                if track.mute:
+                    return "StopClips.MutedTrack"
                 if track.clip_slots[track.playing_slot_index].is_recording:
                     pulse_to = RECORDING_COLOR
-            else:
-                pulse_to = UNLIT_COLOR
-            return make_pulsing_track_color(track, pulse_to)
-        return "Session.StoppedClip"
+                else:
+                    pulse_to = UNLIT_COLOR
+                return make_pulsing_track_color(track, pulse_to)
+            return "Session.StoppedClip"
     else:
         return "Mixer.NoTrack"
 
@@ -87,7 +84,7 @@ def toggle_mixable_solo(mixable, song):
                     for track in tracks:
                         track.solo = False
 
-        mixable.solo = not mixable.solo
+            mixable.solo = not mixable.solo
 
 
 def playing_clip(track):
@@ -231,11 +228,11 @@ class TrackListComponent(ModesComponent, Messenger):
 
     def _update_playheads_real_time_data(self):
         if self.song.is_playing:
-            for track, real_time_data in zip(self.tracks, self._playheads_real_time_data):
+            for (track, real_time_data) in zip(self.tracks, self._playheads_real_time_data):
                 real_time_data.set_data(playing_clip(track))
 
         else:
-            for track, real_time_data in zip(self.tracks, self._playheads_real_time_data):
+            for (track, real_time_data) in zip(self.tracks, self._playheads_real_time_data):
                 real_time_data.set_data(None)
 
         self.notify_playhead_real_time_channels()
@@ -256,7 +253,7 @@ class TrackListComponent(ModesComponent, Messenger):
 
     def _update_button_enabled_state(self):
         tracks = self.tracks
-        for track, control in zip(tracks, self.track_action_buttons):
+        for (track, control) in zip(tracks, self.track_action_buttons):
             control.enabled = liveobj_valid(track)
 
     @listens_group("color_index")
@@ -280,7 +277,7 @@ class TrackListComponent(ModesComponent, Messenger):
         self.track_action_buttons[button_index].color = self._button_feedback_provider(mixable, self.song, self.selected_track)
 
     def _update_all_button_colors(self):
-        for index, mixable in enumerate(self.tracks):
+        for (index, mixable) in enumerate(self.tracks):
             self._update_mixable_color(index, mixable)
 
     @track_action_buttons.pressed
@@ -305,16 +302,15 @@ class TrackListComponent(ModesComponent, Messenger):
     def _toggle_track_fold(self, track):
         if old_hasattr(track, "is_foldable") and track.is_foldable:
             track.fold_state = not track.fold_state
+        elif old_hasattr(track, "is_showing_chains") and track.can_show_chains:
+            track.is_showing_chains = not track.is_showing_chains
         else:
-            if old_hasattr(track, "is_showing_chains") and track.can_show_chains:
-                track.is_showing_chains = not track.is_showing_chains
-            else:
-                instruments = list(find_instrument_devices(track))
-                if instruments:
-                    instrument = instruments[0]
-                    if old_hasattr(instrument, "is_showing_chains"):
-                        if instrument.can_show_chains:
-                            instrument.is_showing_chains = not instrument.is_showing_chains
+            instruments = list(find_instrument_devices(track))
+            if instruments:
+                instrument = instruments[0]
+                if old_hasattr(instrument, "is_showing_chains"):
+                    if instrument.can_show_chains:
+                        instrument.is_showing_chains = not instrument.is_showing_chains
 
     def _select_mixable(self, track):
         if liveobj_valid(track):
@@ -327,14 +323,13 @@ class TrackListComponent(ModesComponent, Messenger):
         return isinstance(unwrapped, Live.Track.Track) and unwrapped not in list(return_tracks)
 
     def _delete_mixable(self, track_or_chain):
-        if liveobj_valid(track_or_chain):
-            if not is_chain(track_or_chain):
-                try:
-                    name = track_or_chain.name
-                    delete_track_or_return_track(self.song, track_or_chain)
-                    self.show_notification(MessageBoxText.DELETE_TRACK % name)
-                except RuntimeError:
-                    self.show_notification(MessageBoxText.TRACK_DELETE_FAILED)
+        if liveobj_valid(track_or_chain) and not is_chain(track_or_chain):
+            try:
+                name = track_or_chain.name
+                delete_track_or_return_track(self.song, track_or_chain)
+                self.show_notification(MessageBoxText.DELETE_TRACK % name)
+            except RuntimeError:
+                self.show_notification(MessageBoxText.TRACK_DELETE_FAILED)
 
     def _duplicate_mixable(self, track_or_chain):
         if self.can_duplicate(track_or_chain, self.song.return_tracks):
@@ -377,8 +372,7 @@ class TrackListComponent(ModesComponent, Messenger):
         if not self.is_enabled():
             self.selected_mode = "select"
             self.pop_unselected_modes()
-        else:
-            if self.locked_mode is not None:
-                self.push_mode(self.locked_mode)
+        elif self.locked_mode is not None:
+            self.push_mode(self.locked_mode)
 
 # okay decompiling ./MIDIRemoteScripts/Push2/track_list.pyc

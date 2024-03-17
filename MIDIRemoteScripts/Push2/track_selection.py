@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\track_selection.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 12771 bytes
@@ -24,11 +24,13 @@ def get_chains_recursive(track_or_chain):
             for chain in instruments[0].chains:
                 chains.append(chain)
                 instruments = list(find_instrument_devices(chain))
-                if instruments and old_hasattr(instruments[0], "chains") and instruments[0].is_showing_chains:
-                    nested_chains = get_chains_recursive(chain)
-                    chains.extend(nested_chains)
+                if instruments:
+                    if old_hasattr(instruments[0], "chains"):
+                        if instruments[0].is_showing_chains:
+                            nested_chains = get_chains_recursive(chain)
+                            chains.extend(nested_chains)
 
-    return chains
+        return chains
 
 
 def get_racks_recursive(track_or_chain):
@@ -39,11 +41,13 @@ def get_racks_recursive(track_or_chain):
             racks.append(instruments[0])
             for chain in instruments[0].chains:
                 instruments = list(find_instrument_devices(chain))
-                if instruments and old_hasattr(instruments[0], "chains") and instruments[0].can_have_chains:
-                    nested_racks = get_racks_recursive(chain)
-                    racks.extend(nested_racks)
+                if instruments:
+                    if old_hasattr(instruments[0], "chains"):
+                        if instruments[0].can_have_chains:
+                            nested_racks = get_racks_recursive(chain)
+                            racks.extend(nested_racks)
 
-    return racks
+        return racks
 
 
 def get_flattened_track(track):
@@ -53,7 +57,7 @@ def get_flattened_track(track):
         if track.is_showing_chains:
             all_chains = get_chains_recursive(track)
             flat_track.extend(all_chains)
-    return flat_track
+        return flat_track
 
 
 def get_all_mixer_tracks(song):
@@ -128,9 +132,8 @@ class SessionRingTrackProvider(SessionRingComponent, ItemProvider):
         new_offset = self.track_offset
         if mixable_index >= self.track_offset + self.num_tracks:
             new_offset = mixable_index - self.num_tracks + 1
-        else:
-            if mixable_index < self.track_offset:
-                new_offset = mixable_index
+        elif mixable_index < self.track_offset:
+            new_offset = mixable_index
         self.track_offset = new_offset
 
     def _get_selected_item(self):
@@ -200,7 +203,7 @@ class SessionRingTrackProvider(SessionRingComponent, ItemProvider):
 
         tracks = self.song.tracks
         self._on_devices_changed.replace_subjects(tracks)
-        chain_listenable_tracks = [track for track in tracks if isinstance(track, Live.Track.Track) if track]
+        chain_listenable_tracks = [track for track in tracks if isinstance(track, Live.Track.Track) if track if isinstance(track, Live.Track.Track) if track]
         instruments_with_chains = flattened_list_of_instruments([get_racks_recursive(track) for track in chain_listenable_tracks if track])
         tracks_and_chains = chain_listenable_tracks + instruments_with_chains
         self._on_is_showing_chains_changed.replace_subjects(tracks_and_chains)

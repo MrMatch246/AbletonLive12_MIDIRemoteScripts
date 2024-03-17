@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\SessionComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 26304 bytes
@@ -243,20 +243,20 @@ class SessionComponent(CompoundComponent):
 
     def set_clip_launch_buttons(self, buttons):
         if buttons:
-            for button, (x, y) in buttons.iterbuttons():
+            for (button, (x, y)) in buttons.iterbuttons():
                 scene = self.scene(y)
                 slot = scene.clip_slot(x)
                 slot.set_launch_button(button)
 
         else:
-            for x, y in product(range(self._num_tracks), range(self._num_scenes)):
+            for (x, y) in product(range(self._num_tracks), range(self._num_scenes)):
                 scene = self.scene(y)
                 slot = scene.clip_slot(x)
                 slot.set_launch_button(None)
 
     def set_scene_launch_buttons(self, buttons):
         if buttons:
-            for button, (x, _) in buttons.iterbuttons():
+            for (button, (x, _)) in buttons.iterbuttons():
                 scene = self.scene(x)
                 scene.set_launch_button(button)
 
@@ -361,7 +361,7 @@ class SessionComponent(CompoundComponent):
     def current_tracks(self):
         tracks_to_use = self.tracks_to_use()
         offset = self.track_offset()
-        return tracks_to_use[offset[:offset + self.width()]]
+        return tracks_to_use[offset:offset + self.width()]
 
     def _get_minimal_track_offset(self):
         if self._is_linked():
@@ -433,7 +433,7 @@ class SessionComponent(CompoundComponent):
 
     def _reassign_scenes(self):
         scenes = self.song().scenes
-        for index, scene in enumerate(self._scenes):
+        for (index, scene) in enumerate(self._scenes):
             scene_index = self._scene_offset + index
             if len(scenes) > scene_index:
                 scene.set_scene(scenes[scene_index])
@@ -467,33 +467,30 @@ class SessionComponent(CompoundComponent):
 
     @subject_slot("value")
     def _on_next_scene_value(self, value):
-        if self.is_enabled():
-            if not (value != 0 or self._next_scene_button.is_momentary()):
-                selected_scene = self.song().view.selected_scene
-                all_scenes = self.song().scenes
-                if selected_scene != all_scenes[-1]:
-                    index = list(all_scenes).index(selected_scene)
-                    self.song().view.selected_scene = all_scenes[index + 1]
+        if not (self.is_enabled() and value != 0 or self._next_scene_button.is_momentary()):
+            selected_scene = self.song().view.selected_scene
+            all_scenes = self.song().scenes
+            if selected_scene != all_scenes[-1]:
+                index = list(all_scenes).index(selected_scene)
+                self.song().view.selected_scene = all_scenes[index + 1]
 
     @subject_slot("value")
     def _on_prev_scene_value(self, value):
-        if self.is_enabled():
-            if not (value != 0 or self._prev_scene_button.is_momentary()):
-                selected_scene = self.song().view.selected_scene
-                all_scenes = self.song().scenes
-                if selected_scene != all_scenes[0]:
-                    index = list(all_scenes).index(selected_scene)
-                    self.song().view.selected_scene = all_scenes[index - 1]
+        if not (self.is_enabled() and value != 0 or self._prev_scene_button.is_momentary()):
+            selected_scene = self.song().view.selected_scene
+            all_scenes = self.song().scenes
+            if selected_scene != all_scenes[0]:
+                index = list(all_scenes).index(selected_scene)
+                self.song().view.selected_scene = all_scenes[index - 1]
 
     @subject_slot_group("value")
     def _on_stop_track_value(self, value, button):
-        if self.is_enabled():
-            if not (value != 0 or button.is_momentary()):
-                tracks = self.tracks_to_use()
-                track_index = list(self._stop_track_clip_buttons).index(button) + self.track_offset()
-                if in_range(track_index, 0, len(tracks)):
-                    if tracks[track_index] in self.song().tracks:
-                        tracks[track_index].stop_all_clips()
+        if not (self.is_enabled() and value != 0 or button.is_momentary()):
+            tracks = self.tracks_to_use()
+            track_index = list(self._stop_track_clip_buttons).index(button) + self.track_offset()
+            if in_range(track_index, 0, len(tracks)):
+                if tracks[track_index] in self.song().tracks:
+                    tracks[track_index].stop_all_clips()
 
     def _do_show_highlight(self):
         if self._highlighting_callback != None:
@@ -521,16 +518,16 @@ class SessionComponent(CompoundComponent):
                     button = self._stop_track_clip_buttons[index]
                     if button != None:
                         value_to_send = None
-                        if track_index < len(tracks_to_use) and tracks_to_use[track_index].clip_slots:
-                            track = tracks_to_use[track_index]
-                            if track.fired_slot_index == -2:
-                                value_to_send = self._stop_clip_triggered_value
-                        elif track.playing_slot_index >= 0:
-                            value_to_send = self._stop_clip_value
-                        elif value_to_send == None:
-                            button.turn_off()
-                        else:
-                            if in_range(value_to_send, 0, 128):
+                        if track_index < len(tracks_to_use):
+                            if tracks_to_use[track_index].clip_slots:
+                                track = tracks_to_use[track_index]
+                                if track.fired_slot_index == -2:
+                                    value_to_send = self._stop_clip_triggered_value
+                                elif track.playing_slot_index >= 0:
+                                    value_to_send = self._stop_clip_value
+                            if value_to_send == None:
+                                button.turn_off()
+                            elif in_range(value_to_send, 0, 128):
                                 button.send_value(value_to_send)
                             else:
                                 button.set_light(value_to_send)
@@ -564,11 +561,11 @@ class SessionComponent(CompoundComponent):
                             minimal_track_offset = min(minimal_track_offset, new_track_offset)
                         if minimal_scene_offset < 0:
                             minimal_scene_offset = new_scene_offset
-                else:
-                    minimal_scene_offset = min(minimal_scene_offset, new_scene_offset)
-            else:
-                found_negative_offset = True
-                break
+                        else:
+                            minimal_scene_offset = min(minimal_scene_offset, new_scene_offset)
+                    else:
+                        found_negative_offset = True
+                        break
 
         if not found_negative_offset:
             if instances_covering_session > 0:

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\corpus.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3558 bytes
@@ -22,7 +22,8 @@ class CorpusDeviceDecorator(LiveObjectDecorator, EventObject):
 
     @property
     def options(self):
-        return (self.note_off_option,)
+        return (
+         self.note_off_option,)
 
 
 class CorpusDeviceComponent(DeviceComponentWithTrackColorViewData):
@@ -37,7 +38,7 @@ class CorpusDeviceComponent(DeviceComponentWithTrackColorViewData):
 
     @property
     def _adjustment_view_data(self):
-        touched_parameters = (self.parameters[button.index] for button in self.parameter_touch_buttons if button.is_pressed)
+        touched_parameters = (self.parameters[button.index] for button in self.parameter_touch_buttons)
         adjusting_filter = any((p.name in ('Frequency', 'Bandwidth') for p in touched_parameters))
         return {"AdjustingFilter": adjusting_filter}
 
@@ -54,8 +55,7 @@ class CorpusDeviceComponent(DeviceComponentWithTrackColorViewData):
                 return visualisation_position.left_index <= parameter_index <= visualisation_position.right_index
 
             return [is_shrunk(parameter_index) for parameter_index in range(8)]
-        return [
-         False] * 8
+        return [False] * 8
 
     def _set_bank_index(self, bank):
         super(CorpusDeviceComponent, self)._set_bank_index(bank)

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\components\view_control.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6364 bytes
@@ -159,16 +159,20 @@ class ViewControlComponent(Component):
     def show_view(self, view):
         app_view = self.application.view
         try:
-            if not (view == "Detail/DeviceChain" or app_view.is_view_visible("Detail")):
+            if not view == "Detail/DeviceChain":
+                pass
+            if not app_view.is_view_visible("Detail"):
                 app_view.show_view("Detail")
-            else:
-                app_view.is_view_visible(view) or app_view.show_view(view)
+            if not app_view.is_view_visible(view):
+                app_view.show_view(view)
         except RuntimeError:
             pass
 
     def focus_view(self, view):
         app_view = self.application.view
-        if not (view == "Detail/DeviceChain" or app_view.is_view_visible("Detail")):
+        if not view == "Detail/DeviceChain":
+            pass
+        if not app_view.is_view_visible("Detail"):
             app_view.show_view("Detail")
         if not app_view.is_view_visible(view):
             app_view.focus_view(view)

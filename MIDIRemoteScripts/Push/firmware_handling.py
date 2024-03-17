@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push\firmware_handling.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1307 bytes
@@ -15,7 +15,7 @@ PRESET_FILE_NAME = "Preset.syx"
 def get_version_number_from_string(version_string):
     result = 0.0
     if version_string:
-        figures = [version_string[i[:i + 2]] for i in range(0, len(version_string), 2)]
+        figures = [version_string[i:i + 2] for i in range(0, len(version_string), 2)]
         result = sum([int(fig) * 10 ** (1 - i) for i, fig in enumerate(figures)])
     return result
 
@@ -25,8 +25,8 @@ def get_version_string_from_file_content(content):
     if VERSION_PREFIX in content:
         number_start = content.find(VERSION_PREFIX) + len(VERSION_PREFIX)
         if len(content) >= number_start + NUM_VERSION_BYTES:
-            result = content[number_start[:number_start + NUM_VERSION_BYTES]]
-    return result
+            result = content[number_start:number_start + NUM_VERSION_BYTES]
+        return result
 
 
 def get_provided_firmware_version():

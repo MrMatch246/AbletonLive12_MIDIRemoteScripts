@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\ModeSelectorComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5404 bytes
@@ -81,7 +81,7 @@ class ModeSelectorComponent(ControlSurfaceComponent):
             self.update()
 
     def _clean_heap(self):
-        for _, _, observer in self._modes_heap:
+        for (_, _, observer) in self._modes_heap:
             if observer != None:
                 observer.disconnect()
 
@@ -107,10 +107,10 @@ class ModeSelectorComponent(ControlSurfaceComponent):
                 mode_observer.set_mode_details(new_mode, self._controls_for_mode(new_mode), self._get_public_mode_index)
                 self._modes_heap.append((new_mode, sender, mode_observer))
                 self._update_mode()
-            elif self._modes_heap[-1][1] == sender:
-                self._modes_heap[-1][2].is_mode_momentary() or self.set_mode(new_mode)
+            elif self._modes_heap[-1][1] == sender and not self._modes_heap[-1][2].is_mode_momentary():
+                self.set_mode(new_mode)
             else:
-                for mode, button, observer in self._modes_heap:
+                for (mode, button, observer) in self._modes_heap:
                     if button == sender:
                         self._modes_heap.remove((mode, button, observer))
                         break
@@ -127,7 +127,7 @@ class ModeSelectorComponent(ControlSurfaceComponent):
         pass
 
     def _on_timer(self):
-        for _, _, mode_observer in self._modes_heap:
+        for (_, _, mode_observer) in self._modes_heap:
             if mode_observer != None:
                 mode_observer.on_timer()
 

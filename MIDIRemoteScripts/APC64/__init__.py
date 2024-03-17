@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\APC64\__init__.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 4161 bytes
@@ -56,12 +56,12 @@ class Specification(ControlSurfaceSpecification):
     create_mappings_function = create_mappings
     recording_method_type = FixedLengthRecordingMethod
     component_map = {
-     'Device': DeviceComponent, 
-     'Global_Quantization': GlobalQuantizationComponent, 
-     'Mixer': MixerComponent, 
-     'Render_To_Clip': RenderToClipComponent, 
-     'Session': SessionComponent, 
-     'Transport': TransportComponent}
+      'Device': DeviceComponent,
+      'Global_Quantization': GlobalQuantizationComponent,
+      'Mixer': MixerComponent,
+      'Render_To_Clip': RenderToClipComponent,
+      'Session': SessionComponent,
+      'Transport': TransportComponent}
     display_specification = display_specification
 
 

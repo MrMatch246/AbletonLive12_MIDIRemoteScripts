@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\elements\display_data_source.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3494 bytes
@@ -10,7 +10,7 @@ from functools import partial
 
 def adjust_string_crop(original, length):
     length = int(length)
-    return original[None[:length]].ljust(length)
+    return original[:length].ljust(length)
 
 
 def adjust_string(original, length):
@@ -20,18 +20,19 @@ def adjust_string(original, length):
         unit_db = resulting_string.endswith("dB") and resulting_string.find(".") != -1
         if len(resulting_string.strip()) > length:
             if unit_db:
-                resulting_string = resulting_string[None[:-2]]
-        if len(resulting_string) > length:
-            for char in (' ', '_', 'i', 'o', 'u', 'e', 'a'):
-                offset = 0 if char == " " else 1
-                while len(resulting_string) > length and resulting_string.rfind(char, offset) > 0:
-                    char_pos = resulting_string.rfind(char, offset)
-                    resulting_string = resulting_string[None[:char_pos]] + resulting_string[(char_pos + 1)[:None]]
+                resulting_string = resulting_string[:-2]
+            if len(resulting_string) > length:
+                for char in (' ', '_', 'i', 'o', 'u', 'e', 'a'):
+                    offset = 0 if char == " " else 1
+                    while len(resulting_string) > length:
+                        if resulting_string.rfind(char, offset) > 0:
+                            char_pos = resulting_string.rfind(char, offset)
+                            resulting_string = resulting_string[:char_pos] + resulting_string[char_pos + 1:]
 
-            resulting_string = resulting_string[None[:length]]
-    if len(resulting_string) < length:
-        resulting_string = resulting_string.ljust(length)
-    return resulting_string
+                resulting_string = resulting_string[:length]
+            if len(resulting_string) < length:
+                resulting_string = resulting_string.ljust(length)
+        return resulting_string
 
 
 class DisplayDataSource(object):

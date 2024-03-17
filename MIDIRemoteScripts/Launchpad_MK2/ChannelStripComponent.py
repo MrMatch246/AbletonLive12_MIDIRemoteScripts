@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_MK2\ChannelStripComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7016 bytes
@@ -59,7 +59,7 @@ class ChannelStripComponent(ChannelstripComponentBase):
             if self._track in chain(self.song().tracks, self.song().return_tracks):
                 if self._track.mute != self._invert_mute_feedback:
                     return self._mute_on_value
-            return self._mute_off_value
+                return self._mute_off_value
         else:
             return self.empty_color
 
@@ -68,7 +68,7 @@ class ChannelStripComponent(ChannelstripComponentBase):
             if self._track in chain(self.song().tracks, self.song().return_tracks):
                 if self._track.solo:
                     return self._solo_on_value
-            return self._solo_off_value
+                return self._solo_off_value
         else:
             return self.empty_color
 
@@ -78,8 +78,7 @@ class ChannelStripComponent(ChannelstripComponentBase):
                 if self._track.can_be_armed:
                     if self._track.arm:
                         return self._arm_on_value
-            return self._arm_off_value
-        else:
+                    return self._arm_off_value
             return self.empty_color
 
     def set_track(self, track):

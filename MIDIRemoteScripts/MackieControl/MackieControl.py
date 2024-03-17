@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\MackieControl\MackieControl.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 13640 bytes
@@ -54,7 +54,7 @@ class MackieControl(object):
 
     def connect_script_instances(self, instanciated_scripts):
         try:
-            import MackieControlXT.MackieControlXT as MackieControlXT
+            from MackieControlXT.MackieControlXT import MackieControlXT as MackieControlXT
         except:
             print("failed to load the MackieControl XT script (might not be installed)")
 
@@ -64,6 +64,12 @@ class MackieControl(object):
         for s in instanciated_scripts:
             if s is self:
                 found_self = True
+            if isinstance(s, MackieControlXT):
+                s.set_mackie_control_main(self)
+                if found_self:
+                    right_extensions.append(s)
+                else:
+                    left_extensions.append(s)
 
         self._MackieControl__main_display_controller.set_controller_extensions(left_extensions, right_extensions)
         self._MackieControl__channel_strip_controller.set_controller_extensions(left_extensions, right_extensions)
@@ -113,8 +119,8 @@ class MackieControl(object):
                     c.refresh_state()
 
                 self.request_firmware_version()
-        for c in self._MackieControl__components:
-            c.on_update_display_timer()
+            for c in self._MackieControl__components:
+                c.on_update_display_timer()
 
     def send_midi(self, midi_event_bytes):
         self._MackieControl__c_instance.send_midi(midi_event_bytes)
@@ -142,23 +148,22 @@ class MackieControl(object):
                     self._MackieControl__transport.handle_marker_switch_ids(note, value)
                 if note in jog_wheel_switch_ids:
                     self._MackieControl__transport.handle_jog_wheel_switch_ids(note, value)
-            elif midi_bytes[0] & 240 == CC_STATUS:
-                cc_no = midi_bytes[1]
-                cc_value = midi_bytes[2]
-                if cc_no == JOG_WHEEL_CC_NO:
-                    self._MackieControl__transport.handle_jog_wheel_rotation(cc_value)
+        if midi_bytes[0] & 240 == CC_STATUS:
+            cc_no = midi_bytes[1]
+            cc_value = midi_bytes[2]
+            if cc_no == JOG_WHEEL_CC_NO:
+                self._MackieControl__transport.handle_jog_wheel_rotation(cc_value)
             elif cc_no in range(FID_PANNING_BASE, FID_PANNING_BASE + NUM_CHANNEL_STRIPS):
                 for s in self._MackieControl__channel_strips:
                     s.handle_vpot_rotation(cc_no - FID_PANNING_BASE, cc_value)
 
-        else:
-            if midi_bytes[0] == 240:
-                if len(midi_bytes) == 12:
-                    if midi_bytes[5] == 20:
-                        version_bytes = midi_bytes[6[:-2]]
-                        major_version = version_bytes[1]
-                        self.is_pro_version = major_version > 50
-                        self._received_firmware_version = True
+        elif midi_bytes[0] == 240:
+            if len(midi_bytes) == 12:
+                if midi_bytes[5] == 20:
+                    version_bytes = midi_bytes[6:-2]
+                    major_version = version_bytes[1]
+                    self.is_pro_version = major_version > 50
+                    self._received_firmware_version = True
 
     def can_lock_to_devices(self):
         return False

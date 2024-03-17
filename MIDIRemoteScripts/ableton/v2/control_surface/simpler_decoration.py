@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\simpler_decoration.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 14421 bytes
@@ -21,8 +21,7 @@ BoolWrappingParameter = partial(WrappingParameter,
   from_property_value=(lambda boolean, _simpler: int(boolean)),
   value_items=[
  "Off", "On"],
-  display_value_conversion=(lambda val: if val:
-"On" # Avoid dead code: "Off"))
+  display_value_conversion=(lambda val: "On" if val else "Off"))
 
 def from_user_range(minv, maxv):
     return (lambda v, s: old_div(v - minv, float(maxv - minv)))
@@ -199,9 +198,7 @@ class SimplerDeviceDecorator(EventObject, LiveObjectDecorator):
           parent=self,
           property_host=(self._live_object.sample),
           source_property="gain",
-          display_value_conversion=(lambda _:         if liveobj_valid(self._live_object):
-            if liveobj_valid(self._live_object.sample):
-self._live_object.sample.gain_display_string() # Avoid dead code: ""))
+          display_value_conversion=(lambda _: self._live_object.sample.gain_display_string() if liveobj_valid(self._live_object) and liveobj_valid(self._live_object.sample) else ""))
         self.slicing_style_param = EnumWrappingParameter(name="Slice by",
           parent=self,
           values_host=self,
@@ -257,11 +254,13 @@ self._live_object.sample.gain_display_string() # Avoid dead code: ""))
 
     @property
     def available_playback_modes(self):
-        return ["Classic", "One-Shot", "Slicing"]
+        return [
+         "Classic", "One-Shot", "Slicing"]
 
     @property
     def available_slicing_playback_modes(self):
-        return ["Mono", "Poly", "Thru"]
+        return [
+         "Mono", "Poly", "Thru"]
 
     @property
     def available_voice_numbers(self):
@@ -297,7 +296,7 @@ self._live_object.sample.gain_display_string() # Avoid dead code: ""))
         if liveobj_valid(self._live_object):
             if liveobj_valid(self._live_object.sample):
                 return self._live_object.sample.slices
-        return []
+            return []
 
     @listens("sample")
     def __on_sample_changed(self):

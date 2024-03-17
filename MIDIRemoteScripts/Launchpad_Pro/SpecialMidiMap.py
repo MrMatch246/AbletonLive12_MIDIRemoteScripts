@@ -1,14 +1,14 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_Pro\SpecialMidiMap.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3807 bytes
 from __future__ import absolute_import, print_function, unicode_literals
-import _Framework.ButtonMatrixElement as ButtonMatrixElement
+from _Framework.ButtonMatrixElement import ButtonMatrixElement as ButtonMatrixElement
 from _Framework.Dependency import depends
-import _Framework.MidiMap as MidiMap
+from _Framework.MidiMap import MidiMap as MidiMap
 from _Framework.Resource import PrioritizedResource
 from .ConfigurableButtonElement import ConfigurableButtonElement
 from .consts import USER_MODE_CHANNELS
@@ -64,9 +64,9 @@ class SpecialMidiMap(MidiMap):
         name_factory = two_dimensional_name if len(numbers) > 1 else one_dimensional_name
         elements = []
         id_dict = {}
-        for row, identifiers in enumerate(numbers):
+        for (row, identifiers) in enumerate(numbers):
             element_row = []
-            for column, identifier in enumerate(identifiers):
+            for (column, identifier) in enumerate(identifiers):
                 element_row.append(element_factory(name_factory(name, column, row), channel, identifier, midi_message_type))
                 id_dict[identifier] = (
                  column, row)

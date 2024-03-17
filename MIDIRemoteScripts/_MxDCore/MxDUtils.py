@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_MxDCore\MxDUtils.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 9496 bytes
@@ -100,19 +100,18 @@ class StringHandler(object):
         if len(self._sub_string) > 0:
             if old_hasattr(self, finalize_selector):
                 getattr(self, finalize_selector)()
-        return self._arguments
+            return self._arguments
 
     def _neutral_handle_char(self, char, index):
         if char == '"':
             self._open_quote_index = index
             self._state = STATE_QUOTED_STR
-        else:
-            if char != " ":
-                self._sub_string += char
-                if str(char).isdigit():
-                    self._state = STATE_PENDING_NR
-                else:
-                    self._state = STATE_UNQUOTED_STR
+        elif char != " ":
+            self._sub_string += char
+            if str(char).isdigit():
+                self._state = STATE_PENDING_NR
+            else:
+                self._state = STATE_UNQUOTED_STR
 
     def _number_handle_char(self, char, index):
         if char == " ":
@@ -123,9 +122,8 @@ class StringHandler(object):
         else:
             if char == ".":
                 self._state = STATE_PENDING_FLOAT
-            else:
-                if not str(char).isdigit():
-                    self._state = STATE_UNQUOTED_STR
+            elif not str(char).isdigit():
+                self._state = STATE_UNQUOTED_STR
             self._sub_string += char
 
     def _float_handle_char(self, char, index):
@@ -142,13 +140,11 @@ class StringHandler(object):
     def _unquoted_handle_char(self, char, index):
         if char == " ":
             self._add_argument(self._sub_string)
-        else:
-            if str(char).isdigit():
-                if self._sub_string == "-":
-                    self._state = STATE_PENDING_NR
-                else:
-                    if self._sub_string in ('.', '-.'):
-                        self._state = STATE_PENDING_FLOAT
+        elif str(char).isdigit():
+            if self._sub_string == "-":
+                self._state = STATE_PENDING_NR
+            elif self._sub_string in ('.', '-.'):
+                self._state = STATE_PENDING_FLOAT
             self._sub_string += char
 
     def _quoted_handle_char(self, char, index):

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Novation_Impulse\Novation_Impulse.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 18735 bytes
@@ -10,14 +10,14 @@ from builtins import chr, range, str
 from future.utils import string_types
 from past.utils import old_div
 import Live
-import _Framework.ButtonElement as ButtonElement
-import _Framework.ControlSurface as ControlSurface
-import _Framework.DeviceComponent as DeviceComponent
-import _Framework.DisplayDataSource as DisplayDataSource
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.ControlSurface import ControlSurface as ControlSurface
+from _Framework.DeviceComponent import DeviceComponent as DeviceComponent
+from _Framework.DisplayDataSource import DisplayDataSource as DisplayDataSource
 from _Framework.InputControlElement import *
-import _Framework.PhysicalDisplayElement as PhysicalDisplayElement
-import _Framework.SessionComponent as SessionComponent
-import _Framework.SliderElement as SliderElement
+from _Framework.PhysicalDisplayElement import PhysicalDisplayElement as PhysicalDisplayElement
+from _Framework.SessionComponent import SessionComponent as SessionComponent
+from _Framework.SliderElement import SliderElement as SliderElement
 from .EncoderModeSelector import EncoderModeSelector
 from .PeekableEncoderElement import PeekableEncoderElement
 from .ShiftableTransportComponent import ShiftableTransportComponent
@@ -76,7 +76,7 @@ class Novation_Impulse(ControlSurface):
         self.schedule_message(3, self._send_midi, SYSEX_START + (6, 1, 1, 1, 247))
 
     def handle_sysex(self, midi_bytes):
-        if midi_bytes[0[:-2]] == SYSEX_START + (7, ):
+        if midi_bytes[0:-2] == SYSEX_START + (7, ):
             if midi_bytes[-2] != 0:
                 self._has_sliders = midi_bytes[-2] != 25
                 self.schedule_message(1, self._show_startup_message)
@@ -272,14 +272,13 @@ class Novation_Impulse(ControlSurface):
                     track = self._mixer.channel_strip(self._sliders.index(sender))._track
                 if track == master:
                     display_string = "Master"
+                elif track in tracks:
+                    display_string = str(list(tracks).index(track) + 1)
+                elif track in returns:
+                    display_string = str(chr(ord("A") + list(returns).index(track)))
                 else:
-                    if track in tracks:
-                        display_string = str(list(tracks).index(track) + 1)
-                    else:
-                        if track in returns:
-                            display_string = str(chr(ord("A") + list(returns).index(track)))
-                        else:
-                            display_string += " Volume"
+                    pass
+                display_string += " Volume"
             self._set_string_to_display(display_string)
 
     def _mixer_button_value(self, value, sender):

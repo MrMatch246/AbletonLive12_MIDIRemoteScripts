@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\Control.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 34364 bytes
@@ -73,8 +73,8 @@ class Control(object):
                     self._control_element.set_channel(self._channel)
                 if self._identifier is not None:
                     self._control_element.set_identifier(self._identifier)
-            if self._value_slot:
-                self._value_slot.subject = control_element
+                if self._value_slot:
+                    self._value_slot.subject = control_element
 
         def _register_value_slot(self, manager, control):
             if self._event_listener_required():
@@ -264,22 +264,20 @@ class ButtonControl(Control):
             if self._control_element:
                 if not self._enabled:
                     self._control_element.set_light(self._disabled_color)
+                elif self._pressed_color and self.is_pressed:
+                    self._control_element.set_light(self._pressed_color)
                 else:
-                    if self._pressed_color and self.is_pressed:
-                        self._control_element.set_light(self._pressed_color)
-                    else:
-                        self._control_element.set_light(self._color)
+                    self._control_element.set_light(self._color)
 
         def _on_value(self, value, *a, **k):
             if self._notifications_enabled():
                 if not self.is_momentary:
                     self._press_button()
                     self._release_button()
+                elif value:
+                    self._press_button()
                 else:
-                    if value:
-                        self._press_button()
-                    else:
-                        self._release_button()
+                    self._release_button()
                 (super(ButtonControl.State, self)._on_value)(value, *a, **k)
             self._send_current_color()
 
@@ -302,7 +300,7 @@ class ButtonControl(Control):
                 if is_pressed:
                     if self._released_listener is not None:
                         self._released_listener(self._manager, self)
-                    elif self._repeat:
+                    if self._repeat:
                         self._repeat_task.kill()
                     if self._has_delayed_event():
                         if self._delay_task.is_running:
@@ -356,7 +354,7 @@ class ToggleButtonControl(Control):
                 if self._toggled_listener:
                     if self._notifications_enabled():
                         self._toggled_listener(self._manager, self._is_toggled, self)
-                self._send_current_color()
+                    self._send_current_color()
 
         is_toggled = property(_get_is_toggled, _set_is_toggled)
 
@@ -391,11 +389,10 @@ class ToggleButtonControl(Control):
 
         def _on_value(self, value, *a, **k):
             if self._notifications_enabled():
-                if not value:
-                    self._is_toggled = self._is_momentary() or not self._is_toggled
+                if not (value or self._is_momentary()):
+                    self._is_toggled = not self._is_toggled
                     if self._toggled_listener:
                         self._toggled_listener(self._manager, self._is_toggled, self)
-                else:
                     self._send_current_color()
                 (super(ToggleButtonControl.State, self)._on_value)(value, *a, **k)
 
@@ -465,14 +462,14 @@ class RadioButtonControl(Control):
                 if checked:
                     if not self._checked:
                         self.is_checked = True
-                (super(RadioButtonControl.State, self)._on_value)(value, *a, **k)
+                    (super(RadioButtonControl.State, self)._on_value)(value, *a, **k)
 
         def _notify_checked(self):
             if self._checked:
                 if self._checked_listener:
                     if self._notifications_enabled():
                         self._checked_listener(self._manager, self)
-                self._on_checked()
+                    self._on_checked()
 
         def update(self):
             self._send_current_color()
@@ -509,12 +506,12 @@ class EncoderControl(Control):
         def set_control_element(self, control_element):
             if self._control_element != control_element:
                 self._release_encoder()
-            else:
-                super(EncoderControl.State, self).set_control_element(control_element)
-                if self._touch_value_slot:
-                    self._touch_value_slot.subject = control_element
-                if control_element:
-                    if old_hasattr(control_element, "is_pressed") and control_element.is_pressed():
+            super(EncoderControl.State, self).set_control_element(control_element)
+            if self._touch_value_slot:
+                self._touch_value_slot.subject = control_element
+            if control_element:
+                if old_hasattr(control_element, "is_pressed"):
+                    if control_element.is_pressed():
                         self._touch_encoder()
 
         def _touch_encoder(self):
@@ -540,10 +537,10 @@ class EncoderControl(Control):
                     self._timer_based = True
                     self._touch_encoder()
                     self._release_task.restart()
-                else:
-                    if self._timer_based:
-                        self._release_task.restart()
-                    elif self._value_listener and self._control_element:
+                elif self._timer_based:
+                    self._release_task.restart()
+                if self._value_listener:
+                    if self._control_element:
                         normalized_value = self._control_element.normalize_value(value)
                         (self._value_listener)(self._manager, normalized_value, self, *a, **k)
 
@@ -579,7 +576,7 @@ class PlayableControl(ButtonControl):
 
         def _set_enabled(self, enabled):
             super(PlayableControl.State, self)._set_enabled(enabled)
-            if (enabled or self)._control_element:
+            if not enabled or self._control_element:
                 self._control_element.reset_state()
                 self._send_current_color()
             else:
@@ -635,9 +632,10 @@ class ControlList(Control):
         def _set_unavailable_color(self, value):
             self._unavailable_color = value
             control_elements = self._control_elements or []
-            for control, element in zip_longest(self._controls, control_elements):
-                if control or element:
-                    self._send_unavailable_color(element)
+            for (control, element) in zip_longest(self._controls, control_elements):
+                if not control:
+                    if element:
+                        self._send_unavailable_color(element)
 
         unavailable_color = property(_get_unavailable_color, _set_unavailable_color)
 
@@ -669,9 +667,12 @@ class ControlList(Control):
 
         def _update_controls(self):
             control_elements = self._control_elements or []
-            for control, element in zip_longest(self._controls, control_elements):
+            for (control, element) in zip_longest(self._controls, control_elements):
                 if control:
                     control._get_state(self._manager).set_control_element(element)
+                if element:
+                    element.reset_state()
+                    self._send_unavailable_color(element)
 
         def _send_unavailable_color(self, element):
             if old_hasattr(element, "set_light"):
@@ -761,22 +762,22 @@ class MatrixControl(ControlList):
             dimensions = (None, None)
             if old_hasattr(control_elements, "width") and old_hasattr(control_elements, "height"):
                 dimensions = (control_elements.height(), control_elements.width())
-                control_elements = self._dynamic_create or [control_elements.get_button(col, row) for row, col in product(range(self.height), range(self.width))]
-            else:
-                if is_matrix(control_elements):
-                    dimensions = (
-                     len(control_elements), len(first(control_elements)))
-                    if not self._dynamic_create:
-                        control_elements = [row[0[:self.width]] for row in control_elements]
-                    control_elements = [_ for _ in flatten(control_elements)]
-                else:
-                    if control_elements is not None:
-                        raise RuntimeError("Control Elements must be a matrix")
-                    elif self._dynamic_create and None not in dimensions:
-                        self._dimensions = dimensions
-                        self._create_controls(first(dimensions) * second(dimensions))
-                        self._update_controls()
-                    super(MatrixControl.State, self).set_control_element(control_elements)
+                if not self._dynamic_create:
+                    control_elements = [control_elements.get_button(col, row) for row, col in product(range(self.height), range(self.width))]
+            elif is_matrix(control_elements):
+                dimensions = (
+                 len(control_elements), len(first(control_elements)))
+                if not self._dynamic_create:
+                    control_elements = [row[0:self.width] for row in control_elements]
+                control_elements = [_ for _ in flatten(control_elements)]
+            elif control_elements is not None:
+                raise RuntimeError("Control Elements must be a matrix")
+            if self._dynamic_create:
+                if None not in dimensions:
+                    self._dimensions = dimensions
+                    self._create_controls(first(dimensions) * second(dimensions))
+                    self._update_controls()
+            super(MatrixControl.State, self).set_control_element(control_elements)
 
         def get_control(self, row, column):
             index = row * self.width + column

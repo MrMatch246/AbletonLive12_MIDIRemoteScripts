@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\Layer.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6736 bytes
@@ -93,7 +93,7 @@ class Layer(LayerBase, ExclusiveResource):
         self._name_to_controls = dict(zip(iter(controls.keys()), repeat(None)))
         self._control_to_names = dict()
         self._control_clients = dict()
-        for name, control in controls.items():
+        for (name, control) in controls.items():
             self._control_to_names.setdefault(control, []).append(name)
 
     def __add__(self, other):

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\LV2_LX2_LC2_LD2\LV2MixerController.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6462 bytes
@@ -62,19 +62,20 @@ class LV2MixerController(FaderfoxMixerController):
     def receive_midi_note(self, channel, status, note_no, note_vel):
         if status == NOTEOFF_STATUS:
             return
+        if channel == CHANNEL_SETUP2:
+            if note_no in TRACK_SELECT_NOTES:
+                idx = note_no - TRACK_SELECT_NOTES[0]
+                track = self.helper.get_track(idx)
+                self.set_selected_track(track)
             if channel == CHANNEL_SETUP2:
-                if note_no in TRACK_SELECT_NOTES:
-                    idx = note_no - TRACK_SELECT_NOTES[0]
-                    track = self.helper.get_track(idx)
-                    self.set_selected_track(track)
-        elif channel == CHANNEL_SETUP2:
-            if note_no == MASTER_TRACK_SELECT_NOTE:
-                self.set_selected_track(self.parent.song().master_track)
-        if channel == TRACK_CHANNEL_SETUP2 and status == NOTEON_STATUS:
-            self.handle_status_note(note_no, MUTE_NOTES, "mute")
-            self.handle_status_note(note_no, ARM_NOTES, "arm")
-            self.handle_status_note(note_no, SOLO_NOTES, "solo")
-            self.handle_status_note(note_no, MONITOR_NOTES, "monitor")
+                if note_no == MASTER_TRACK_SELECT_NOTE:
+                    self.set_selected_track(self.parent.song().master_track)
+            if channel == TRACK_CHANNEL_SETUP2:
+                if status == NOTEON_STATUS:
+                    self.handle_status_note(note_no, MUTE_NOTES, "mute")
+                    self.handle_status_note(note_no, ARM_NOTES, "arm")
+                    self.handle_status_note(note_no, SOLO_NOTES, "solo")
+                    self.handle_status_note(note_no, MONITOR_NOTES, "monitor")
 
     def on_tracks_added_or_deleted(self):
         self.reset_status_cache()
@@ -110,21 +111,21 @@ class LV2MixerController(FaderfoxMixerController):
             status = 0
             if len(tracks) > idx:
                 track = tracks[idx]
-                if not old_hasattr(track, attr):
+                if not not old_hasattr(track, attr):
                     continue
-                if not track.can_be_armed:
+                if not not track.can_be_armed:
                     if attr == "arm":
                         continue
-                status = track.__getattribute__(attr)
-                if attr == "mute":
-                    status = not status
-                if attr == "current_monitoring_state":
-                    self.log("current monitoring state of %s : %s" % (track, status))
-                    status = status != 2
-                    self.log("status is now %s" % track.monitoring_states.OFF)
-            if self.status_cache[attr][idx] != status:
-                self.send_track_status_midi(status, notes[idx])
-                self.status_cache[attr][idx] = status
+                    status = track.__getattribute__(attr)
+                    if attr == "mute":
+                        status = not status
+                    if attr == "current_monitoring_state":
+                        self.log("current monitoring state of %s : %s" % (track, status))
+                        status = status != 2
+                        self.log("status is now %s" % track.monitoring_states.OFF)
+                    if self.status_cache[attr][idx] != status:
+                        self.send_track_status_midi(status, notes[idx])
+                        self.status_cache[attr][idx] = status
 
     def set_tracks_mute_status(self):
         self.set_tracks_status("mute", MUTE_NOTES)

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchkey_MK3\elements.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6357 bytes
@@ -77,5 +77,9 @@ class Elements(LaunchkeyElements):
         for element in vars(self).values():
             if isinstance(element, SimpleDisplayElement):
                 element.initialize(display_header)
+            if isinstance(element, ButtonMatrixElement):
+                if isinstance(element[0], SimpleDisplayElement):
+                    for sub_element in element:
+                        sub_element.initialize(display_header)
 
 # okay decompiling ./MIDIRemoteScripts/Launchkey_MK3/elements.pyc

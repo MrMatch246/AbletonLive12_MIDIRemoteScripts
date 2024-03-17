@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push\handshake_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7084 bytes
@@ -59,7 +59,7 @@ class HandshakeComponent(Component):
         (super(HandshakeComponent, self).__init__)(*a, **k)
         self._identity_control = identity_control
         self._presentation_control = presentation_control
-        self._dongle_one, self._dongle_two = dongle
+        (self._dongle_one, self._dongle_two) = dongle
         self._on_identity_value.subject = identity_control
         self._on_dongle_value.subject = dongle_control
         self._delay_dongle_task = self._tasks.add(task.sequence(task.wait(DONGLE_DELAY), task.run(dongle_control.enquire_value)))
@@ -86,7 +86,7 @@ class HandshakeComponent(Component):
     def has_version_requirements(self, major_version, minor_version):
         if self._hardware_identity is None:
             return False
-        return self._hardware_identity.major_version > major_version or self._hardware_identity.major_version == major_version and self._hardware_identity.minor_version >= minor_version
+        return (self._hardware_identity.major_version > major_version) or ((self._hardware_identity.major_version == major_version) and (self._hardware_identity.minor_version >= minor_version))
 
     def on_enabled_changed(self):
         super(HandshakeComponent, self).on_enabled_changed()
@@ -101,12 +101,12 @@ class HandshakeComponent(Component):
     @listens("value")
     def _on_identity_value(self, value):
         if len(value) == 25:
-            if value[9[:None]] == tuple(range(1, 17)):
+            if value[9:] == tuple(range(1, 17)):
                 self._do_fail(bootloader_mode=True)
             else:
-                self._hardware_identity = HardwareIdentity(firmware=(value[None[:4]]),
-                  serial=(value[4[:8]]),
-                  manufacturing=(value[8[:25]]))
+                self._hardware_identity = HardwareIdentity(firmware=(value[:4]),
+                  serial=(value[4:8]),
+                  manufacturing=(value[8:25]))
                 self._presentation_control.enquire_value()
                 self._delay_dongle_task.restart()
         else:
@@ -117,10 +117,10 @@ class HandshakeComponent(Component):
         success = False
         if len(value) >= 18:
             result = (
-             to_integral(value[2[:10]]), to_integral(value[10[:18]]))
+             to_integral(value[2:10]), to_integral(value[10:18]))
             expected = self.encryptor(self._dongle_one, self._dongle_two)
             success = tuple(expected) == tuple(result)
-        elif success:
+        if success:
             self._do_succeed()
         else:
             self._do_fail()

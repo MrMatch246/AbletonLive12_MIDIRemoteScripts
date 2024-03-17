@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\components\device_parameters.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5812 bytes
@@ -38,8 +38,8 @@ class DeviceParameterComponent(Component):
         self._connect_parameters()
 
     def _connect_parameters(self):
-        parameters = self._parameter_provider.parameters[None[:self.controls.control_count]]
-        for control, parameter_info in zip_longest(self.controls, parameters):
+        parameters = self._parameter_provider.parameters[:self.controls.control_count]
+        for (control, parameter_info) in zip_longest(self.controls, parameters):
             parameter = parameter_info.parameter if parameter_info else None
             control.mapped_parameter = parameter
             if parameter:
@@ -83,12 +83,12 @@ class DisplayingDeviceParameterComponent(DeviceParameterComponent):
         return list(map((lambda p: p and p.name or ""), self.parameters))
 
     def set_parameter_name_displays(self, displays):
-        for data_source, display in zip_longest(self._parameter_name_data_sources, displays or []):
+        for (data_source, display) in zip_longest(self._parameter_name_data_sources, displays or []):
             if display:
                 display.set_data_sources([data_source])
 
     def set_parameter_value_displays(self, displays):
-        for data_source, display in zip_longest(self._parameter_value_data_sources, displays or []):
+        for (data_source, display) in zip_longest(self._parameter_value_data_sources, displays or []):
             if display:
                 display.set_data_sources([data_source])
 
@@ -128,13 +128,13 @@ class DisplayingDeviceParameterComponent(DeviceParameterComponent):
     def _update_parameter_names(self):
         if self.is_enabled():
             params = zip(chain(self.parameter_provider.parameters, repeat(None)), self._parameter_name_data_sources)
-            for info, name_data_source in params:
+            for (info, name_data_source) in params:
                 name = self.info_to_name(info)
                 name_data_source.set_display_string(name or "")
 
     def _update_parameter_values(self):
         if self.is_enabled():
-            for parameter, data_source in zip_longest(self.parameters, self._parameter_value_data_sources):
+            for (parameter, data_source) in zip_longest(self.parameters, self._parameter_value_data_sources):
                 value_string = self.parameter_to_string(parameter)
                 if data_source:
                     data_source.set_display_string(value_string)

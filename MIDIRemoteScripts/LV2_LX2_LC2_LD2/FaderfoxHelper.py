@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\LV2_LX2_LC2_LD2\FaderfoxHelper.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 8255 bytes
@@ -56,8 +56,8 @@ class FaderfoxHelper(object):
                         if not clip.is_triggered:
                             clip.fire()
                             return 1
-                    clip.stop()
-                    return 0
+                        clip.stop()
+                        return 0
                     self.song().view.selected_scene = self.song().scenes[clip_idx]
                 else:
                     self.stop_track(track_idx)
@@ -69,14 +69,16 @@ class FaderfoxHelper(object):
             clip_idx = self.track_playing_slot_idx(track)
             if clip_idx >= 0:
                 track.clip_slots[clip_idx].clip.stop()
-                return (track_idx, clip_idx)
+                return (
+                 track_idx, clip_idx)
             return (None, None)
         return (None, None)
 
     def is_track_playing(self, track):
         for slot in track.clip_slots:
-            if slot.has_clip and slot.clip.is_playing:
-                return 1
+            if slot.has_clip:
+                if slot.clip.is_playing:
+                    return 1
 
         return 0
 
@@ -86,7 +88,7 @@ class FaderfoxHelper(object):
             if slot.has_clip:
                 if slot.clip.is_playing:
                     return idx
-            idx += 1
+                idx += 1
 
         return -1
 
@@ -123,8 +125,9 @@ class FaderfoxHelper(object):
 
         else:
             for track2 in tracks:
-                if track2 != track and track2.can_be_armed:
-                    track2.arm = 0
+                if track2 != track:
+                    if track2.can_be_armed:
+                        track2.arm = 0
 
             track.arm = 1
 
@@ -217,11 +220,11 @@ class FaderfoxHelper(object):
             if old_hasattr(i, "original_name"):
                 if i.original_name == name:
                     return i
-                else:
-                    device_name = self.device_name(device)
-                    if device_name in FIVETOSIX_PARAMS_DICT:
-                        if name in FIVETOSIX_PARAMS_DICT[device_name]:
-                            name = FIVETOSIX_PARAMS_DICT[device_name][name]
+            else:
+                device_name = self.device_name(device)
+                if device_name in FIVETOSIX_PARAMS_DICT:
+                    if name in FIVETOSIX_PARAMS_DICT[device_name]:
+                        name = FIVETOSIX_PARAMS_DICT[device_name][name]
                     if i.name == name:
                         return i
 

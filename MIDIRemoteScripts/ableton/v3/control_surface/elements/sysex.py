@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\elements\sysex.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6400 bytes
@@ -60,9 +60,8 @@ class SysexElement(InputControlElement):
         if not (self._is_deferring_send or self)._optimized or message != self._last_sent_message:
             if self.send_midi(message):
                 self._last_sent_message = message
-            else:
-                if self._is_deferring_send:
-                    self._deferred_message = message
+        elif self._is_deferring_send:
+            self._deferred_message = message
 
     @property
     def _last_sent_value(self):
@@ -84,7 +83,7 @@ class CachingSendMessageGenerator:
             if None not in self._cached_argument_values:
                 message = (self._generator)(*self._cached_argument_values)
         else:
-            for i, value in enumerate(a):
+            for (i, value) in enumerate(a):
                 self._cached_argument_values[i] = value
 
             message = (self._generator)(*a)
@@ -92,10 +91,11 @@ class CachingSendMessageGenerator:
 
     @lazy_attribute
     def _cached_argument_values(self):
-        return [None] * len(self._generator_params)
+        return [
+         None] * len(self._generator_params)
 
     def _update_cached_values_from_kwargs(self, kwargs):
-        for key, value in kwargs.items():
+        for (key, value) in kwargs.items():
             kwarg_index = index_if((lambda param_name, kwarg_name=key: param_name == kwarg_name), self._generator_params)
             self._cached_argument_values[kwarg_index] = value
 

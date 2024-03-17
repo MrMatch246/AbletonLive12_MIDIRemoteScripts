@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_X\launchpad_x.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 12427 bytes
@@ -76,7 +76,7 @@ class Launchpad_X(InstrumentControlMixin, NovationBase):
           mute_button=(self._elements.scene_launch_buttons_raw[5]),
           solo_button=(self._elements.scene_launch_buttons_raw[6]),
           arm_button=(self._elements.scene_launch_buttons_raw[7])))
-        bottom_row = self._elements.clip_launch_matrix.submatrix[(None[:None], 7[:8])]
+        bottom_row = self._elements.clip_launch_matrix.submatrix[:, 7:8]
         select_none_mode = partial(setattr, self._mixer_modes, "selected_mode", "none")
         self._mixer_modes.add_mode("none", self._session_layout_mode)
         button_fader_layout_mode = partial(self._elements.layout_switch.send_value, sysex.FADERS_LAYOUT_BYTE)

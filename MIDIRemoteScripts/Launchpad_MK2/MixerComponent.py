@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_MK2\MixerComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 6134 bytes
@@ -55,7 +55,7 @@ class MixerComponent(MixerComponentBase):
 
         super(MixerComponent, self).set_volume_controls(controls)
         if controls is not None:
-            for index, control in enumerate(controls):
+            for (index, control) in enumerate(controls):
                 control.index = index
                 control.type = consts.FADER_STANDARD_TYPE
                 control.color = self._volume_on_value
@@ -68,7 +68,7 @@ class MixerComponent(MixerComponentBase):
 
         super(MixerComponent, self).set_pan_controls(controls)
         if controls is not None:
-            for index, control in enumerate(controls):
+            for (index, control) in enumerate(controls):
                 control.index = index
                 control.type = consts.FADER_BIPOLAR_TYPE
                 control.color = self._pan_on_value
@@ -83,11 +83,10 @@ class MixerComponent(MixerComponentBase):
         translation_channel = 0
         if send_index == 0:
             translation_channel = consts.SEND_A_MODE_CHANNEL
-        else:
-            if send_index == 1:
-                translation_channel = consts.SEND_B_MODE_CHANNEL
+        elif send_index == 1:
+            translation_channel = consts.SEND_B_MODE_CHANNEL
         if controls is not None:
-            for index, control in enumerate(controls):
+            for (index, control) in enumerate(controls):
                 if control is not None:
                     self.channel_strip(index).set_send_controls((None, ) * send_index + (control,))
                     control.set_channel(translation_channel)
@@ -101,7 +100,7 @@ class MixerComponent(MixerComponentBase):
 
     def set_volume_reset_buttons(self, buttons):
         if buttons is not None:
-            for index, strip in enumerate(self._channel_strips):
+            for (index, strip) in enumerate(self._channel_strips):
                 strip.volume_reset_button.set_control_element(buttons.get_button(index, 0))
 
         else:
@@ -110,7 +109,7 @@ class MixerComponent(MixerComponentBase):
 
     def set_pan_reset_buttons(self, buttons):
         if buttons is not None:
-            for index, strip in enumerate(self._channel_strips):
+            for (index, strip) in enumerate(self._channel_strips):
                 strip.pan_reset_button.set_control_element(buttons.get_button(index, 0))
 
         else:
@@ -119,7 +118,7 @@ class MixerComponent(MixerComponentBase):
 
     def set_send_a_reset_buttons(self, buttons):
         if buttons is not None:
-            for index, strip in enumerate(self._channel_strips):
+            for (index, strip) in enumerate(self._channel_strips):
                 strip.send_a_reset_button.set_control_element(buttons.get_button(index, 0))
 
         else:
@@ -128,7 +127,7 @@ class MixerComponent(MixerComponentBase):
 
     def set_send_b_reset_buttons(self, buttons):
         if buttons is not None:
-            for index, strip in enumerate(self._channel_strips):
+            for (index, strip) in enumerate(self._channel_strips):
                 strip.send_b_reset_button.set_control_element(buttons.get_button(index, 0))
 
         else:

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\SubjectSlot.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 13732 bytes
@@ -86,9 +86,9 @@ class SubjectMeta(type):
         if events:
             if "disconnect" not in dct:
                 dct["disconnect"] = lambda self: super(cls, self).disconnect()
-        cls = super(SubjectMeta, cls).__new__(cls, name, bases, dct)
-        setup_subject(cls, events)
-        return cls
+            cls = super(SubjectMeta, cls).__new__(cls, name, bases, dct)
+            setup_subject(cls, events)
+            return cls
 
 
 class Subject(with_metaclass(SubjectMeta, Disconnectable)):
@@ -98,14 +98,16 @@ class Subject(with_metaclass(SubjectMeta, Disconnectable)):
 class SlotManager(CompoundDisconnectable):
 
     def register_slot(self, *a, **k):
-        slot = a[0] if (a and isinstance(a[0], SubjectSlot)) else (SubjectSlot(*a, **k))
-        self.register_disconnectable(slot)
-        return slot
+        if a:
+            slot = a[0] if isinstance(a[0], SubjectSlot) else SubjectSlot(*a, **k)
+            self.register_disconnectable(slot)
+            return slot
 
     def register_slot_manager(self, *a, **k):
-        manager = a[0] if (a and isinstance(a[0], SlotManager)) else (SlotManager(*a, **k))
-        self.register_disconnectable(manager)
-        return manager
+        if a:
+            manager = a[0] if isinstance(a[0], SlotManager) else SlotManager(*a, **k)
+            self.register_disconnectable(manager)
+            return manager
 
 
 class SubjectSlot(Disconnectable):
@@ -132,20 +134,22 @@ class SubjectSlot(Disconnectable):
     def _check_subject_interface(self, subject):
         if not callable(getattr(subject, "add_" + self._event + "_listener", None)):
             raise SubjectSlotError('Subject %s missing "add" method for event: %s' % (subject, self._event))
-        elif not callable(getattr(subject, "remove_" + self._event + "_listener", None)):
+        if not callable(getattr(subject, "remove_" + self._event + "_listener", None)):
             raise SubjectSlotError('Subject %s missing "remove" method for event: %s' % (
              subject, self._event))
-        assert callable(getattr(subject, self._event + "_has_listener", None)), 'Subject %s missing "has" method for event: %s' % (subject, self._event)
+        if not callable(getattr(subject, self._event + "_has_listener", None)):
+            raise SubjectSlotError('Subject %s missing "has" method for event: %s' % (subject, self._event))
 
     def connect(self):
         if not self.is_connected:
-            if self._subject != None and self._listener != None:
-                add_method = getattr(self._subject, "add_" + self._event + "_listener")
-                all_args = tuple(self._extra_args) + (self._listener,)
-                try:
-                    add_method(*all_args, **self._extra_kws)
-                except RuntimeError:
-                    pass
+            if self._subject != None:
+                if self._listener != None:
+                    add_method = getattr(self._subject, "add_" + self._event + "_listener")
+                    all_args = tuple(self._extra_args) + (self._listener,)
+                    try:
+                        add_method(*all_args, **self._extra_kws)
+                    except RuntimeError:
+                        pass
 
     def soft_disconnect(self):
         if self.is_connected:
@@ -222,7 +226,7 @@ class SubjectSlotGroup(SlotManager):
 
     def replace_subjects(self, subjects, identifiers=repeat(None)):
         self.disconnect()
-        for subject, identifier in zip(subjects, identifiers):
+        for (subject, identifier) in zip(subjects, identifiers):
             self.add_subject(subject, identifier=identifier)
 
     def add_subject(self, subject, identifier=None):
@@ -254,7 +258,7 @@ class MultiSubjectSlot(SlotManager, SubjectSlot):
           extra_kws=extra_kws,
           extra_args=extra_args)
         if len(event) > 1:
-            self._nested_slot = self.register_disconnectable(MultiSubjectSlot(event=(event[1[:None]]),
+            self._nested_slot = self.register_disconnectable(MultiSubjectSlot(event=(event[1:]),
               listener=listener,
               subject=subject,
               extra_kws=extra_kws,

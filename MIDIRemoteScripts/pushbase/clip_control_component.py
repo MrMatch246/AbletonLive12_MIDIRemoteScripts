@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\clip_control_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 29787 bytes
@@ -40,20 +40,19 @@ def convert_beat_time_to_bars_beats_sixteenths(numerator_denominator, beat_time)
     numerator, denominator = numerator_denominator
     if beat_time is None:
         return "-"
+    beats_per_bar = one_bar_in_note_values((numerator, denominator), 4.0)
+    musical_beats_per_beat = old_div(denominator, 4.0)
+    if beat_time >= 0:
+        bars = 1 + int(old_div(beat_time, beats_per_bar))
     else:
-        beats_per_bar = one_bar_in_note_values((numerator, denominator), 4.0)
-        musical_beats_per_beat = old_div(denominator, 4.0)
-        if beat_time >= 0:
-            bars = 1 + int(old_div(beat_time, beats_per_bar))
-        else:
-            bars = int(old_div(beat_time, beats_per_bar)) if beat_time % beats_per_bar == 0 else int(old_div(beat_time, beats_per_bar)) - 1
+        bars = int(old_div(beat_time, beats_per_bar)) if beat_time % beats_per_bar == 0 else int(old_div(beat_time, beats_per_bar)) - 1
     beats = 1 + int(beat_time % beats_per_bar * musical_beats_per_beat)
     sixteenths = 1 + int(beat_time % old_div(1.0, musical_beats_per_beat) * 4.0)
     return "%i.%i.%i" % (bars, beats, sixteenths)
 
 
 def convert_beat_length_to_bars_beats_sixteenths(numerator_denominator, beat_length):
-    numerator, denominator = numerator_denominator
+    (numerator, denominator) = numerator_denominator
     if beat_length is None:
         return "-"
     beats_per_bar = one_bar_in_note_values((numerator, denominator), 4.0)
@@ -69,7 +68,7 @@ def is_new_recording(clip):
 
 
 def one_bar_in_note_values(numerator_denominator, note_value=4.0):
-    numerator, denominator = numerator_denominator
+    (numerator, denominator) = numerator_denominator
     return old_div(note_value * numerator, denominator)
 
 
@@ -141,7 +140,7 @@ class LoopSettingsModel(EventObject):
 
     @property
     def can_loop(self):
-        return self.clip.is_midi_clip or self.clip.is_audio_clip and self.clip.warping
+        return (self.clip.is_midi_clip) or ((self.clip.is_audio_clip) and (self.clip.warping))
 
     def move_start_marker(self, value, fine_grained):
         marker = self.clip.start_marker if self.looping else self.clip.loop_start
@@ -270,9 +269,8 @@ class LoopSettingsControllerComponent(Component):
         if self._loop_model.can_loop:
             currently_looping = self._loop_model.looping
             if not value >= 0 or currently_looping:
-                if value < 0:
-                    if currently_looping:
-                        self._loop_model.looping = not currently_looping
+                if not value < 0 or currently_looping:
+                    self._loop_model.looping = not currently_looping
 
     def _on_clip_start_marker_touched(self):
         pass
@@ -382,8 +380,8 @@ class LoopSettingsComponent(LoopSettingsControllerComponent):
         self._value_sources[0].set_display_string(self.convert_beat_time_to_bars_beats_sixteenths(self.clip, self._loop_model.loop_start) if self.clip else "-")
 
     def _update_loop_end_source(self):
-        if liveobj_valid(self.clip):
-            looping = is_new_recording(self.clip) or self._loop_model.looping
+        if liveobj_valid(self.clip) and not is_new_recording(self.clip):
+            looping = self._loop_model.looping
             self._value_sources[1].set_display_string(self.convert_beat_length_to_bars_beats_sixteenths(self.clip, self._loop_model.loop_length) if looping else self.convert_beat_time_to_bars_beats_sixteenths(self.clip, self._loop_model.loop_end))
             self._value_sources[3].set_display_string("On" if looping else "Off")
         else:
@@ -396,7 +394,7 @@ class LoopSettingsComponent(LoopSettingsControllerComponent):
     def update(self):
         super(LoopSettingsComponent, self).update()
         if self.is_enabled():
-            for index, label in enumerate(["Position", "Length", "Offset", "Loop"]):
+            for (index, label) in enumerate(["Position", "Length", "Offset", "Loop"]):
                 self._name_sources[index].set_display_string(label)
 
             self._LoopSettingsComponent__on_loop_start_changed()
@@ -584,7 +582,8 @@ class AudioClipSettingsComponent(AudioClipSettingsControllerComponent):
     def _update_warp_mode_source(self):
         display_value = "-"
         if liveobj_valid(self.clip):
-            display_value = WARP_MODE_NAMES[self.clip.warp_mode] if (liveobj_valid(self.clip) and self.clip.warping) else "Off"
+            if liveobj_valid(self.clip):
+                display_value = WARP_MODE_NAMES[self.clip.warp_mode] if self.clip.warping else "Off"
         self._value_sources[0].set_display_string(display_value)
 
     def _update_gain_source(self):
@@ -602,7 +601,7 @@ class AudioClipSettingsComponent(AudioClipSettingsControllerComponent):
     def update(self):
         super(AudioClipSettingsComponent, self).update()
         if self.is_enabled():
-            for index, label in enumerate(["WarpMode", "Transpose", "Detune", "Gain"]):
+            for (index, label) in enumerate(["WarpMode", "Transpose", "Detune", "Gain"]):
                 self._name_sources[index].set_display_string(label)
 
             self._update_warp_mode_source()
@@ -708,7 +707,7 @@ class ClipControlComponent(ModesComponent):
     def _update_clip(self):
         self._update_mode()
         clip = self.song.view.detail_clip if self.is_enabled() else None
-        audio_clip = clip if (liveobj_valid(clip) and clip.is_audio_clip) else None
+        audio_clip = clip if (liveobj_valid(clip)) and (clip.is_audio_clip) else None
         self._clip_name.clip = clip
         self._loop_settings.clip = clip
         self._audio_clip_settings.clip = audio_clip

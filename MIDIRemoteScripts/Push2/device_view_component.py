@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\device_view_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5965 bytes
@@ -26,7 +26,7 @@ def get_view_parameter(parameter, name):
         if name != parameter.name:
             parameter = ProxyParameter(proxied_object=parameter,
               proxied_interface=(NamedParameter(name)))
-    return parameter
+        return parameter
 
 
 class DeviceViewConnector(Component):
@@ -90,7 +90,7 @@ class DeviceViewComponent(ModesComponent):
     def __init__(self, device_component=None, view_model=None, *a, **k):
         (super(DeviceViewComponent, self).__init__)(*a, **k)
         self._get_device = device_component.device
-        for view, connector, name in (
+        for (view, connector, name) in (
          (
           view_model.deviceParameterView, DeviceViewConnector, "default"),
          (

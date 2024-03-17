@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\grid_resolution.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2502 bytes
@@ -13,13 +13,13 @@ from ableton.v2.control_surface.control import ControlManager, RadioButtonContro
 GridQuantization = Live.Clip.GridQuantization
 QUANTIZATION_FACTOR = 24
 QUANTIZATION_LIST = [
- 2.0, 
- 3.0, 
- 4.0, 
- 6.0, 
- 8.0, 
- 12.0, 
- 16.0, 
+ 2.0,
+ 3.0,
+ 4.0,
+ 6.0,
+ 8.0,
+ 12.0,
+ 16.0,
  24.0]
 CLIP_VIEW_GRID_LIST = tuple(product([
  GridQuantization.g_thirtysecond,
@@ -28,13 +28,13 @@ CLIP_VIEW_GRID_LIST = tuple(product([
  GridQuantization.g_quarter], [
  True, False]))
 CLIP_LENGTH_LIST = [
- 2.0, 
- 4.0, 
- 4.0, 
- 8.0, 
- 8.0, 
- 16.0, 
- 16.0, 
+ 2.0,
+ 4.0,
+ 4.0,
+ 8.0,
+ 8.0,
+ 16.0,
+ 16.0,
  32.0]
 DEFAULT_INDEX = 3
 

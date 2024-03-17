@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Komplete_Kontrol_S_Mk2\channel_strip_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3521 bytes
@@ -23,7 +23,7 @@ class ChannelStripComponent(ChannelStripComponentBase):
 
     def set_track(self, track):
         super(ChannelStripComponent, self).set_track(track)
-        self._on_implicit_arm_changed.subject = self._track if (liveobj_valid(self._track) and self._track.can_be_armed) else None
+        self._on_implicit_arm_changed.subject = self._track if (liveobj_valid(self._track)) and (self._track.can_be_armed) else None
 
     def select_track(self):
         if liveobj_valid(self._track):
@@ -50,15 +50,14 @@ class ChannelStripComponent(ChannelStripComponentBase):
 
     def _update_output_listeners(self):
         has_track = liveobj_valid(self._track)
-        with_audio = self._track if (has_track and self._track.has_audio_output) else None
+        with_audio = self._track if has_track and (self._track.has_audio_output) else None
         self._on_output_meter_left_changed.subject = with_audio
         self._on_output_meter_right_changed.subject = with_audio
         self._on_has_audio_output_changed.subject = self._track if has_track else None
         if with_audio:
             self._on_output_meter_left_changed()
-        else:
-            if self._meter_display_callback:
-                self._meter_display_callback((0, 0))
+        elif self._meter_display_callback:
+            self._meter_display_callback((0, 0))
 
     def _on_arm_changed(self):
         self.track_arm_display.value = int(self._track.can_be_armed and (self._track.arm or self._track.implicit_arm)) if liveobj_valid(self._track) else 0

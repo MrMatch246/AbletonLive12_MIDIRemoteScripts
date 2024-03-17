@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\device_parameter_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3330 bytes
@@ -66,7 +66,7 @@ class DeviceParameterComponent(DeviceParameterComponentBase):
     def _update_parameter_values(self):
         super(DeviceParameterComponent, self)._update_parameter_values()
         if self.is_enabled():
-            for param, data_source in zip_longest(self.parameters, self._parameter_graphic_data_sources):
+            for (param, data_source) in zip_longest(self.parameters, self._parameter_graphic_data_sources):
                 graph = convert_parameter_value_to_graphic(param, self.parameter_to_value)
                 if data_source:
                     data_source.set_display_string(graph)
@@ -77,13 +77,13 @@ class DeviceParameterComponent(DeviceParameterComponentBase):
         if parameter:
             if parameter.automation_state != AutomationState.none:
                 name = consts.CHAR_FULL_BLOCK + name
-        return name
+            return name
 
     def parameter_to_string(self, parameter):
         s = "" if parameter == None else str(parameter)
         if parameter:
             if parameter.automation_state == AutomationState.overridden:
                 s = "[%s]" % s
-        return s
+            return s
 
 # okay decompiling ./MIDIRemoteScripts/pushbase/device_parameter_component.pyc

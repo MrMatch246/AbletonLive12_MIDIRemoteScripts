@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\scrollable_list_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9929 bytes
@@ -106,18 +106,17 @@ class ScrollableListComponent(Component):
         return False
 
     def _on_select_value(self, value, sender):
-        return self.is_enabled() and value or None
+        if not (self.is_enabled() and value):
+            return
         index = list(self._select_buttons).index(sender)
         if index == 0 and self._offset_index != 0:
             self.scroll_left()
+        elif index == self.num_segments - 1 and self._offset_index < self._maximal_offset():
+            self.scroll_right()
+        elif self._offset_index == 0:
+            self.notify_press_option(index if index < len(self._option_names) else None)
         else:
-            if index == self.num_segments - 1 and self._offset_index < self._maximal_offset():
-                self.scroll_right()
-            else:
-                if self._offset_index == 0:
-                    self.notify_press_option(index if index < len(self._option_names) else None)
-                else:
-                    self.notify_press_option(index + self._offset_index - 1)
+            self.notify_press_option(index + self._offset_index - 1)
 
     def _get_display_string(self, option_index):
         if option_index < len(self._option_names):
@@ -140,7 +139,7 @@ class ScrollableListComponent(Component):
             if self._has_select_button(-1):
                 self._select_buttons[-1].set_light("List.ScrollerOn")
             max_segment -= 1
-        for i, j in zip(range(first_segment, max_segment), range(self._offset_index, self._offset_index + self.num_segments)):
+        for (i, j) in zip(range(first_segment, max_segment), range(self._offset_index, self._offset_index + self.num_segments)):
             self._data_sources[i].set_display_string(self._get_display_string(j))
             if self._has_select_button(i):
                 if i < len(self.option_names):
@@ -166,7 +165,7 @@ class ScrollableListWithTogglesComponent(ScrollableListComponent):
 
     def set_state_buttons(self, state_buttons):
         state_buttons = state_buttons or [None for _ in range(self.num_segments)]
-        for slot, button in zip(self._state_button_slots, state_buttons):
+        for (slot, button) in zip(self._state_button_slots, state_buttons):
             slot.subject = button
 
         self._update_state_buttons()
@@ -217,14 +216,14 @@ class ScrollableListWithTogglesComponent(ScrollableListComponent):
             if self._offset_index < self._maximal_offset():
                 buttons[-1].set_light("Option.Off")
                 max_button -= 1
-            for state, button in zip(self._option_states[self._offset_index[:None]], buttons[first_button[:max_button]]):
+            for (state, button) in zip(self._option_states[self._offset_index:], buttons[first_button:max_button]):
                 if button != None:
                     if state:
                         button.set_light("Option.On")
                     else:
                         button.set_light("Option.Off")
 
-            for button in buttons[len(self._option_states)[:None]]:
+            for button in buttons[len(self._option_states):]:
                 if button != None:
                     button.set_light("Option.Off")
 

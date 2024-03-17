@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\components\mixer.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9438 bytes
@@ -102,8 +102,8 @@ class MixerComponent(Component):
                 self._send_index = index
                 self.set_send_controls(self._send_controls)
                 self.on_send_index_changed()
-            else:
-                raise IndexError
+        else:
+            raise IndexError
 
     def on_send_index_changed(self):
         pass
@@ -132,35 +132,35 @@ class MixerComponent(Component):
         self.update()
 
     def set_volume_controls(self, controls):
-        for strip, control in zip_longest(self._channel_strips, controls or []):
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
             strip.set_volume_control(control)
 
     def set_pan_controls(self, controls):
-        for strip, control in zip_longest(self._channel_strips, controls or []):
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
             strip.set_pan_control(control)
 
     def set_send_controls(self, controls):
         self._send_controls = controls
-        for strip, control in zip_longest(self._channel_strips, controls or []):
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
             if self._send_index is None:
                 strip.set_send_controls(None)
             else:
                 strip.set_send_controls((None, ) * self._send_index + (control,))
 
     def set_arm_buttons(self, buttons):
-        for strip, button in zip_longest(self._channel_strips, buttons or []):
+        for (strip, button) in zip_longest(self._channel_strips, buttons or []):
             strip.set_arm_button(button)
 
     def set_solo_buttons(self, buttons):
-        for strip, button in zip_longest(self._channel_strips, buttons or []):
+        for (strip, button) in zip_longest(self._channel_strips, buttons or []):
             strip.set_solo_button(button)
 
     def set_mute_buttons(self, buttons):
-        for strip, button in zip_longest(self._channel_strips, buttons or []):
+        for (strip, button) in zip_longest(self._channel_strips, buttons or []):
             strip.set_mute_button(button)
 
     def set_track_select_buttons(self, buttons):
-        for strip, button in zip_longest(self._channel_strips, buttons or []):
+        for (strip, button) in zip_longest(self._channel_strips, buttons or []):
             strip.set_select_button(button)
 
     def set_shift_button(self, button):
@@ -220,14 +220,14 @@ class MixerComponent(Component):
 
     def _reassign_tracks(self):
         tracks = self._track_assigner.tracks(self._provider)
-        for track, channel_strip in zip(tracks, self._channel_strips):
+        for (track, channel_strip) in zip(tracks, self._channel_strips):
             channel_strip.set_track(track)
 
     def _auto_name(self):
         self.name = "Mixer"
         self.master_strip().name = "Master_Channel_Strip"
         self.selected_strip().name = "Selected_Channel_Strip"
-        for index, strip in enumerate(self._channel_strips):
+        for (index, strip) in enumerate(self._channel_strips):
             strip.name = "Channel_Strip_%d" % index
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v2/control_surface/components/mixer.pyc

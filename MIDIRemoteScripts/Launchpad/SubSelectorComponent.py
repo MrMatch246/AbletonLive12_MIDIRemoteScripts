@@ -1,16 +1,16 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad\SubSelectorComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 14187 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range, str
-import _Framework.ButtonElement as ButtonElement
-import _Framework.ButtonMatrixElement as ButtonMatrixElement
-import _Framework.ModeSelectorComponent as ModeSelectorComponent
-import _Framework.SessionComponent as SessionComponent
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.ButtonMatrixElement import ButtonMatrixElement as ButtonMatrixElement
+from _Framework.ModeSelectorComponent import ModeSelectorComponent as ModeSelectorComponent
+from _Framework.SessionComponent import SessionComponent as SessionComponent
 from .PreciseButtonSliderElement import *
 from .SpecialMixerComponent import SpecialMixerComponent
 LED_OFF = 4
@@ -46,10 +46,10 @@ class SubSelectorComponent(ModeSelectorComponent):
             self._sliders.append(PreciseButtonSliderElement(tuple([matrix.get_button(column, 7 - row) for row in range(8)])))
             self._sliders[-1].name = "Button_Slider_" + str(column)
 
-        self._side_buttons = side_buttons[4[:None]]
+        self._side_buttons = side_buttons[4:]
         self._update_callback = None
         self._session.set_mixer(self._mixer)
-        self.set_modes_buttons(side_buttons[None[:4]])
+        self.set_modes_buttons(side_buttons[:4])
 
     def disconnect(self):
         for button in self._modes_buttons:
@@ -143,23 +143,20 @@ class SubSelectorComponent(ModeSelectorComponent):
             self._session.set_allow_update(False)
             if self._mode_index == -1:
                 self._setup_mixer_overview()
+            elif self._mode_index == 0:
+                self._setup_volume_mode()
+            elif self._mode_index == 1:
+                self._setup_pan_mode()
+            elif self._mode_index == 2:
+                self._setup_send1_mode()
+            elif self._mode_index == 3:
+                self._setup_send2_mode()
             else:
-                if self._mode_index == 0:
-                    self._setup_volume_mode()
-                else:
-                    if self._mode_index == 1:
-                        self._setup_pan_mode()
-                    else:
-                        if self._mode_index == 2:
-                            self._setup_send1_mode()
-                        else:
-                            if self._mode_index == 3:
-                                self._setup_send2_mode()
-                            else:
-                                if self._update_callback != None:
-                                    self._update_callback()
-                                self._mixer.set_allow_update(True)
-                                self._session.set_allow_update(True)
+                pass
+            if self._update_callback != None:
+                self._update_callback()
+            self._mixer.set_allow_update(True)
+            self._session.set_allow_update(True)
         else:
             self.release_controls()
 
@@ -178,10 +175,9 @@ class SubSelectorComponent(ModeSelectorComponent):
                 if row == trkon_index:
                     full_value = AMBER_FULL
                     third_value = AMBER_THIRD
-                else:
-                    if row > 3:
-                        full_value = RED_FULL
-                        third_value = RED_THIRD
+                elif row > 3:
+                    full_value = RED_FULL
+                    third_value = RED_THIRD
                 self._matrix.get_button(track, row).set_on_off_values(full_value, third_value)
 
             strip.set_default_buttons(self._matrix.get_button(track, 0), self._matrix.get_button(track, 1), self._matrix.get_button(track, 2), self._matrix.get_button(track, 3))

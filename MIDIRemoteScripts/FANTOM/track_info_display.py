@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\FANTOM\track_info_display.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2917 bytes
@@ -47,8 +47,8 @@ class TrackInfoDisplayElement(SimpleDisplayElement):
                 track_status_byte |= SEND_A_MASK
                 if num_sends > 1:
                     track_status_byte |= SEND_B_MASK
-            if track.mixer_device.panning_mode:
-                track_status_byte |= SPLIT_PAN_MASK
-        return track_status_byte
+                if track.mixer_device.panning_mode:
+                    track_status_byte |= SPLIT_PAN_MASK
+            return track_status_byte
 
 # okay decompiling ./MIDIRemoteScripts/FANTOM/track_info_display.pyc

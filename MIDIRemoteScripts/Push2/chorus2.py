@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\chorus2.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4178 bytes
@@ -24,7 +24,8 @@ class Chorus2DeviceDecorator(LiveObjectDecorator, EventObject):
 
     @property
     def options(self):
-        return (self.fb_inv_option, self.hpf_enabled_option)
+        return (
+         self.fb_inv_option, self.hpf_enabled_option)
 
     @property
     def parameters(self):
@@ -47,9 +48,10 @@ class Chorus2DeviceComponent(DeviceComponentWithTrackColorViewData):
         for parameter in touched_parameters:
             if parameter.name == "Offset":
                 adjusting_lfo_phase = True
+            if parameter.name in ('Rate', 'Amount', 'Shape'):
+                adjusting_lfo = True
 
-        return {'AdjustingLfo':adjusting_lfo, 
-         'AdjustingLfoPhase':adjusting_lfo_phase}
+        return {'AdjustingLfo':adjusting_lfo,  'AdjustingLfoPhase':adjusting_lfo_phase}
 
     def _set_bank_index(self, bank):
         super(Chorus2DeviceComponent, self)._set_bank_index(bank)
@@ -75,7 +77,7 @@ class Chorus2DeviceComponent(DeviceComponentWithTrackColorViewData):
 
     @property
     def _configuration_view_data(self):
-        lfo_left, lfo_right = self._calculate_view_size(self.LFO_VISUALISATION_CONFIGURATION_IN_BANKS)
+        (lfo_left, lfo_right) = self._calculate_view_size(self.LFO_VISUALISATION_CONFIGURATION_IN_BANKS)
         return {'LfoLeft':lfo_left, 
          'LfoRight':lfo_right}
 

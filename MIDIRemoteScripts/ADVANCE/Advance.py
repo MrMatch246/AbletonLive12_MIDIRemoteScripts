@@ -1,22 +1,22 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ADVANCE\Advance.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2844 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 import Live
-import _Framework.ButtonElement as ButtonElement
-import _Framework.ButtonMatrixElement as ButtonMatrixElement
-import _Framework.ControlSurface as ControlSurface
-import _Framework.DeviceComponent as DeviceComponent
-import _Framework.DrumRackComponent as DrumRackComponent
-import _Framework.EncoderElement as EncoderElement
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.ButtonMatrixElement import ButtonMatrixElement as ButtonMatrixElement
+from _Framework.ControlSurface import ControlSurface as ControlSurface
+from _Framework.DeviceComponent import DeviceComponent as DeviceComponent
+from _Framework.DrumRackComponent import DrumRackComponent as DrumRackComponent
+from _Framework.EncoderElement import EncoderElement as EncoderElement
 from _Framework.InputControlElement import MIDI_CC_TYPE, MIDI_NOTE_TYPE
-import _Framework.Layer as Layer
-import _Framework.TransportComponent as TransportComponent
+from _Framework.Layer import Layer as Layer
+from _Framework.TransportComponent import TransportComponent as TransportComponent
 PAD_CHANNEL = 1
 PAD_IDS = ((81, 83, 84, 86), (74, 76, 77, 79), (67, 69, 71, 72), (60, 62, 64, 65))
 

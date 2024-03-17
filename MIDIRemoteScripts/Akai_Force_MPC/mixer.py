@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Akai_Force_MPC\mixer.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4174 bytes
@@ -27,8 +27,8 @@ class MixerComponent(MixerComponentBase):
     def __getattr__(self, name):
         if name.startswith("set_"):
             if name.endswith("s"):
-                return partial(self._set_channel_strip_controls, name[4[:-1]])
-        raise AttributeError
+                return partial(self._set_channel_strip_controls, name[4:-1])
+            raise AttributeError
 
     def on_num_sends_changed(self):
         self.num_sends_control.value = clamp(self.num_sends, 0, MAX_NUM_SENDS)
@@ -53,11 +53,11 @@ class MixerComponent(MixerComponentBase):
 
     def set_send_controls(self, controls):
         self._send_controls = controls
-        for strip, row in zip_longest(self._channel_strips, controls.rows() if controls else []):
+        for (strip, row) in zip_longest(self._channel_strips, controls.rows() if controls else []):
             strip.set_send_controls(row)
 
     def set_send_value_displays(self, displays):
-        for strip, row in zip_longest(self._channel_strips, displays.rows() if displays else []):
+        for (strip, row) in zip_longest(self._channel_strips, displays.rows() if displays else []):
             strip.set_send_value_displays(row)
 
     def set_selected_track_mute_button(self, button):
@@ -67,18 +67,18 @@ class MixerComponent(MixerComponentBase):
     set_selected_track_solo_button = forward_property("_selected_strip")("set_solo_button")
 
     def set_track_type_controls(self, controls):
-        for strip, control in zip_longest(self._channel_strips, controls or []):
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
             strip.track_type_control.set_control_element(control)
 
     def _set_channel_strip_controls(self, name, controls):
-        for strip, control in zip_longest(self._channel_strips, controls or []):
+        for (strip, control) in zip_longest(self._channel_strips, controls or []):
             set_method = getattr(strip, "set_{}".format(name), None)
             if not set_method:
                 set_method = getattr(strip, name, None).set_control_element
             set_method(control)
 
     def set_solo_mute_buttons(self, buttons):
-        for strip, button in zip_longest(self._channel_strips, buttons or []):
+        for (strip, button) in zip_longest(self._channel_strips, buttons or []):
             strip.solo_mute_button.set_control_element(button)
 
     @master_button.pressed

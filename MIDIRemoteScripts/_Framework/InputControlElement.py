@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\InputControlElement.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 17504 bytes
@@ -289,26 +289,23 @@ class InputControlElement(NotifyingControlElement):
         status_byte = channel
         if self._msg_type == MIDI_NOTE_TYPE:
             status_byte += MIDI_NOTE_ON_STATUS
+        elif self._msg_type == MIDI_CC_TYPE:
+            status_byte += MIDI_CC_STATUS
+        elif self._msg_type == MIDI_PB_TYPE:
+            status_byte += MIDI_PB_STATUS
         else:
-            if self._msg_type == MIDI_CC_TYPE:
-                status_byte += MIDI_CC_STATUS
-            else:
-                if self._msg_type == MIDI_PB_TYPE:
-                    status_byte += MIDI_PB_STATUS
-                else:
-                    raise NotImplementedError
+            raise NotImplementedError
         return status_byte
 
     def identifier_bytes(self):
         if self._msg_type == MIDI_PB_TYPE:
+            return ((self._status_byte(self._msg_channel),),)
+        if self._msg_type == MIDI_SYSEX_TYPE:
+            return (self.message_sysex_identifier(),)
+        if self._msg_type == MIDI_NOTE_TYPE:
             return (
              (
-              self._status_byte(self._msg_channel),),)
-        if self._msg_type == MIDI_SYSEX_TYPE:
-            return (
-             self.message_sysex_identifier(),)
-        if self._msg_type == MIDI_NOTE_TYPE:
-            return ((self._status_byte(self._msg_channel), self.message_identifier()),
+              self._status_byte(self._msg_channel), self.message_identifier()),
              (
               self._status_byte(self._msg_channel) - 16, self.message_identifier()))
         return (
@@ -317,24 +314,22 @@ class InputControlElement(NotifyingControlElement):
 
     def _send_delayed_messages(self):
         self.clear_send_cache()
-        for value, channel in self._delayed_messages:
+        for (value, channel) in self._delayed_messages:
             self._do_send_value(value, channel=channel)
 
-        self._delayed_messages[None[:None]] = []
+        self._delayed_messages[:] = []
 
     def send_value(self, value, force=False, channel=None):
         value = int(value)
         self._verify_value(value)
         if force or self._force_next_send:
             self._do_send_value(value, channel)
-        else:
-            if not self.send_depends_on_forwarding or self._is_being_forwarded:
-                if self._send_delayed_messages_task.is_running:
-                    first = 1 - self.num_delayed_messages
-                    self._delayed_messages = self._delayed_messages[first[:None]] + [(value, channel)]
-            elif (
-             value, channel) != self._last_sent_message:
-                self._do_send_value(value, channel)
+        elif not self.send_depends_on_forwarding or self._is_being_forwarded and self._send_delayed_messages_task.is_running:
+            first = 1 - self.num_delayed_messages
+            self._delayed_messages = self._delayed_messages[first:] + [(value, channel)]
+        elif (
+         value, channel) != self._last_sent_message:
+            self._do_send_value(value, channel)
         self._force_next_send = False
 
     def _do_send_value(self, value, channel=None):
@@ -384,11 +379,10 @@ class InputControlElement(NotifyingControlElement):
         message = str(self.__class__.__name__) + " ("
         if self._msg_type == MIDI_NOTE_TYPE:
             message += "Note " + str(self._msg_identifier) + ", "
+        elif self._msg_type == MIDI_CC_TYPE:
+            message += "CC " + str(self._msg_identifier) + ", "
         else:
-            if self._msg_type == MIDI_CC_TYPE:
-                message += "CC " + str(self._msg_identifier) + ", "
-            else:
-                message += "PB "
+            message += "PB "
         message += "Chan. " + str(self._msg_channel)
         message += ") "
         message += "received value " if is_input else "sent value "

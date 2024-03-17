@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\mode\selector.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 3526 bytes
@@ -45,12 +45,11 @@ def toggle_mode_on_property_change(event_description, return_to_default=False, c
         def on_property_changed(state=None):
             if bool(state or getattr(subject, event_name)):
                 modes_component.push_mode(mode_name)
+            elif return_to_default and modes_component.selected_mode == mode_name:
+                modes_component.push_mode(modes_component.modes[0])
+                modes_component.pop_unselected_modes()
             else:
-                if return_to_default and modes_component.selected_mode == mode_name:
-                    modes_component.push_mode(modes_component.modes[0])
-                    modes_component.pop_unselected_modes()
-                else:
-                    pop_last_mode(modes_component, mode_name)
+                pop_last_mode(modes_component, mode_name)
 
         modes_component.register_slot(subject, on_property_changed, event_name)
         if can_select_now:

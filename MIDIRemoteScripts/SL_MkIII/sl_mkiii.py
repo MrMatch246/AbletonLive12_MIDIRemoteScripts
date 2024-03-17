@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\SL_MkIII\sl_mkiii.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 28976 bytes
@@ -121,7 +121,7 @@ class SLMkIII(IdentifiableControlSurface):
             success = Live.MidiMap.map_midi_cc_with_feedback_map(midi_map_handle, parameter, control.message_channel(), control.message_identifier(), control.message_map_mode(), feedback_rule, not control.needs_takeover(), control.mapping_sensitivity)
             if success:
                 Live.MidiMap.send_feedback_for_parameter(midi_map_handle, parameter)
-        return success
+            return success
 
     def _create_message(self):
         self._message = MessageComponent(name="Message",

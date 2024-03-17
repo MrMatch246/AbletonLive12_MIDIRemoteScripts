@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\selection.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3222 bytes
@@ -51,7 +51,7 @@ class PushSelection(Selection):
     def _set_selected_object(self, lom_object):
         if isinstance(lom_object, Live.DrumPad.DrumPad):
             lom_object.canonical_parent.view.selected_drum_pad = lom_object
-        elif isinstance(lom_object, Live.Chain.Chain):
+        if isinstance(lom_object, Live.Chain.Chain):
             lom_object.canonical_parent.view.selected_chain = lom_object
         else:
             self._application.get_document().view.select_device(lom_object, False)

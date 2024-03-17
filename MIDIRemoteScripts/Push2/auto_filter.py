@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\auto_filter.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3324 bytes
@@ -24,7 +24,8 @@ class AutoFilterDeviceDecorator(EventObject, LiveObjectDecorator):
 
     @property
     def options(self):
-        return (self.slope_option,)
+        return (
+         self.slope_option,)
 
     @listens("parameters")
     def __on_parameters_changed(self):
@@ -56,11 +57,11 @@ class AutoFilterDeviceComponent(DeviceComponentWithTrackColorViewData):
     def _filter_visualisation_data(self):
         touched_parameters = [self.parameters[button.index] for button in self.parameter_touch_buttons if button.is_pressed]
         parameter_names = [
-         'Filter Type', 
-         'Filter Type (Legacy)', 
-         'Frequency', 
-         'Resonance', 
-         'Resonance (Legacy)']
+         "Filter Type",
+         "Filter Type (Legacy)",
+         "Frequency",
+         "Resonance",
+         "Resonance (Legacy)"]
         filter_focus = any([parameter.parameter.name in parameter_names for parameter in touched_parameters if liveobj_valid(parameter.parameter)])
         return {'FilterLeft':(VisualisationGuides.light_left_x)(0), 
          'FilterRight':(VisualisationGuides.light_right_x)(2), 

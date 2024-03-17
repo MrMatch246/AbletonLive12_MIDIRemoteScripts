@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Generic\Devices.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 42603 bytes
@@ -583,151 +583,151 @@ VOC_BANKS = (
 VOC_BOBS = (VOC_BOB,)
 VOC_BNK_NAMES = ('Global', 'Filters/Voicing', 'Carrier')
 DEVICE_DICT = {
- 'AudioEffectGroupDevice': RCK_BANKS, 
- 'MidiEffectGroupDevice': RCK_BANKS, 
- 'InstrumentGroupDevice': RCK_BANKS, 
- 'DrumGroupDevice': RCK_BANKS, 
- 'InstrumentImpulse': IMP_BANKS, 
- 'Operator': OPR_BANKS, 
- 'UltraAnalog': ALG_BANKS, 
- 'OriginalSimpler': SIM_BANKS, 
- 'MultiSampler': SAM_BANKS, 
- 'MidiArpeggiator': ARP_BANKS, 
- 'LoungeLizard': ELC_BANKS, 
- 'StringStudio': TNS_BANKS, 
- 'Collision': COL_BANKS, 
- 'MidiChord': CRD_BANKS, 
- 'MidiNoteLength': NTL_BANKS, 
- 'MidiPitcher': PIT_BANKS, 
- 'MidiRandom': RND_BANKS, 
- 'MidiScale': SCL_BANKS, 
- 'MidiVelocity': VEL_BANKS, 
- 'AutoFilter': AFL_BANKS, 
- 'AutoPan': APN_BANKS, 
- 'BeatRepeat': BRP_BANKS, 
- 'Chorus': CHR_BANKS, 
- 'Compressor2': CP3_BANKS, 
- 'Corpus': CRP_BANKS, 
- 'Eq8': EQ8_BANKS, 
- 'FilterEQ3': EQ3_BANKS, 
- 'Erosion': ERO_BANKS, 
- 'FilterDelay': FLD_BANKS, 
- 'Flanger': FLG_BANKS, 
- 'FrequencyShifter': FRS_BANKS, 
- 'GrainDelay': GRD_BANKS, 
- 'Looper': LPR_BANKS, 
- 'MultibandDynamics': MBD_BANKS, 
- 'Overdrive': OVR_BANKS, 
- 'Phaser': PHS_BANKS, 
- 'Redux': RDX_BANKS, 
- 'Saturator': SAT_BANKS, 
- 'Resonator': RSN_BANKS, 
- 'StereoGain': UTL_BANKS, 
- 'Tube': DTB_BANKS, 
- 'Reverb': RVB_BANKS, 
- 'Vinyl': VDS_BANKS, 
- 'Gate': GTE_BANKS, 
- 'Vocoder': VOC_BANKS, 
- 'Amp': AMP_BANKS, 
- 'Cabinet': CAB_BANKS, 
- 'GlueCompressor': GLU_BANKS, 
- 'Pedal': PDL_BANKS, 
- 'DrumBuss': DRB_BANKS, 
- 'Echo': ECH_BANKS, 
- 'InstrumentVector': WVT_BANKS}
+  'AudioEffectGroupDevice': RCK_BANKS,
+  'MidiEffectGroupDevice': RCK_BANKS,
+  'InstrumentGroupDevice': RCK_BANKS,
+  'DrumGroupDevice': RCK_BANKS,
+  'InstrumentImpulse': IMP_BANKS,
+  'Operator': OPR_BANKS,
+  'UltraAnalog': ALG_BANKS,
+  'OriginalSimpler': SIM_BANKS,
+  'MultiSampler': SAM_BANKS,
+  'MidiArpeggiator': ARP_BANKS,
+  'LoungeLizard': ELC_BANKS,
+  'StringStudio': TNS_BANKS,
+  'Collision': COL_BANKS,
+  'MidiChord': CRD_BANKS,
+  'MidiNoteLength': NTL_BANKS,
+  'MidiPitcher': PIT_BANKS,
+  'MidiRandom': RND_BANKS,
+  'MidiScale': SCL_BANKS,
+  'MidiVelocity': VEL_BANKS,
+  'AutoFilter': AFL_BANKS,
+  'AutoPan': APN_BANKS,
+  'BeatRepeat': BRP_BANKS,
+  'Chorus': CHR_BANKS,
+  'Compressor2': CP3_BANKS,
+  'Corpus': CRP_BANKS,
+  'Eq8': EQ8_BANKS,
+  'FilterEQ3': EQ3_BANKS,
+  'Erosion': ERO_BANKS,
+  'FilterDelay': FLD_BANKS,
+  'Flanger': FLG_BANKS,
+  'FrequencyShifter': FRS_BANKS,
+  'GrainDelay': GRD_BANKS,
+  'Looper': LPR_BANKS,
+  'MultibandDynamics': MBD_BANKS,
+  'Overdrive': OVR_BANKS,
+  'Phaser': PHS_BANKS,
+  'Redux': RDX_BANKS,
+  'Saturator': SAT_BANKS,
+  'Resonator': RSN_BANKS,
+  'StereoGain': UTL_BANKS,
+  'Tube': DTB_BANKS,
+  'Reverb': RVB_BANKS,
+  'Vinyl': VDS_BANKS,
+  'Gate': GTE_BANKS,
+  'Vocoder': VOC_BANKS,
+  'Amp': AMP_BANKS,
+  'Cabinet': CAB_BANKS,
+  'GlueCompressor': GLU_BANKS,
+  'Pedal': PDL_BANKS,
+  'DrumBuss': DRB_BANKS,
+  'Echo': ECH_BANKS,
+  'InstrumentVector': WVT_BANKS}
 DEVICE_BOB_DICT = {
- 'AudioEffectGroupDevice': RCK_BOBS, 
- 'MidiEffectGroupDevice': RCK_BOBS, 
- 'InstrumentGroupDevice': RCK_BOBS, 
- 'DrumGroupDevice': RCK_BOBS, 
- 'InstrumentImpulse': IMP_BOBS, 
- 'Operator': OPR_BOBS, 
- 'UltraAnalog': ALG_BOBS, 
- 'OriginalSimpler': SIM_BOBS, 
- 'MultiSampler': SAM_BOBS, 
- 'MidiArpeggiator': ARP_BOBS, 
- 'LoungeLizard': ELC_BOBS, 
- 'StringStudio': TNS_BOBS, 
- 'Collision': COL_BOBS, 
- 'MidiChord': CRD_BOBS, 
- 'MidiNoteLength': NTL_BOBS, 
- 'MidiPitcher': PIT_BOBS, 
- 'MidiRandom': RND_BOBS, 
- 'MidiScale': SCL_BOBS, 
- 'MidiVelocity': VEL_BOBS, 
- 'AutoFilter': AFL_BOBS, 
- 'AutoPan': APN_BOBS, 
- 'BeatRepeat': BRP_BOBS, 
- 'Chorus': CHR_BOBS, 
- 'Compressor2': CP3_BOBS, 
- 'Corpus': CRP_BOBS, 
- 'Eq8': EQ8_BOBS, 
- 'FilterEQ3': EQ3_BOBS, 
- 'Erosion': ERO_BOBS, 
- 'FilterDelay': FLD_BOBS, 
- 'Flanger': FLG_BOBS, 
- 'FrequencyShifter': FRS_BOBS, 
- 'GrainDelay': GRD_BOBS, 
- 'Looper': LPR_BOBS, 
- 'MultibandDynamics': MBD_BOBS, 
- 'Overdrive': OVR_BOBS, 
- 'Phaser': PHS_BOBS, 
- 'Redux': RDX_BOBS, 
- 'Saturator': SAT_BOBS, 
- 'Resonator': RSN_BOBS, 
- 'StereoGain': UTL_BOBS, 
- 'Tube': DTB_BOBS, 
- 'Reverb': RVB_BOBS, 
- 'Vinyl': VDS_BOBS, 
- 'Gate': GTE_BOBS, 
- 'Vocoder': VOC_BOBS, 
- 'Amp': AMP_BOBS, 
- 'Cabinet': CAB_BOBS, 
- 'GlueCompressor': GLU_BOBS, 
- 'Pedal': PDL_BOBS, 
- 'DrumBuss': DRB_BOBS, 
- 'Echo': ECH_BOBS, 
- 'InstrumentVector': WVT_BOBS}
+  'AudioEffectGroupDevice': RCK_BOBS,
+  'MidiEffectGroupDevice': RCK_BOBS,
+  'InstrumentGroupDevice': RCK_BOBS,
+  'DrumGroupDevice': RCK_BOBS,
+  'InstrumentImpulse': IMP_BOBS,
+  'Operator': OPR_BOBS,
+  'UltraAnalog': ALG_BOBS,
+  'OriginalSimpler': SIM_BOBS,
+  'MultiSampler': SAM_BOBS,
+  'MidiArpeggiator': ARP_BOBS,
+  'LoungeLizard': ELC_BOBS,
+  'StringStudio': TNS_BOBS,
+  'Collision': COL_BOBS,
+  'MidiChord': CRD_BOBS,
+  'MidiNoteLength': NTL_BOBS,
+  'MidiPitcher': PIT_BOBS,
+  'MidiRandom': RND_BOBS,
+  'MidiScale': SCL_BOBS,
+  'MidiVelocity': VEL_BOBS,
+  'AutoFilter': AFL_BOBS,
+  'AutoPan': APN_BOBS,
+  'BeatRepeat': BRP_BOBS,
+  'Chorus': CHR_BOBS,
+  'Compressor2': CP3_BOBS,
+  'Corpus': CRP_BOBS,
+  'Eq8': EQ8_BOBS,
+  'FilterEQ3': EQ3_BOBS,
+  'Erosion': ERO_BOBS,
+  'FilterDelay': FLD_BOBS,
+  'Flanger': FLG_BOBS,
+  'FrequencyShifter': FRS_BOBS,
+  'GrainDelay': GRD_BOBS,
+  'Looper': LPR_BOBS,
+  'MultibandDynamics': MBD_BOBS,
+  'Overdrive': OVR_BOBS,
+  'Phaser': PHS_BOBS,
+  'Redux': RDX_BOBS,
+  'Saturator': SAT_BOBS,
+  'Resonator': RSN_BOBS,
+  'StereoGain': UTL_BOBS,
+  'Tube': DTB_BOBS,
+  'Reverb': RVB_BOBS,
+  'Vinyl': VDS_BOBS,
+  'Gate': GTE_BOBS,
+  'Vocoder': VOC_BOBS,
+  'Amp': AMP_BOBS,
+  'Cabinet': CAB_BOBS,
+  'GlueCompressor': GLU_BOBS,
+  'Pedal': PDL_BOBS,
+  'DrumBuss': DRB_BOBS,
+  'Echo': ECH_BOBS,
+  'InstrumentVector': WVT_BOBS}
 BANK_NAME_DICT = {
- 'AudioEffectGroupDevice': RCK_BNK_NAMES, 
- 'MidiEffectGroupDevice': RCK_BNK_NAMES, 
- 'InstrumentGroupDevice': RCK_BNK_NAMES, 
- 'DrumGroupDevice': RCK_BNK_NAMES, 
- 'InstrumentImpulse': IMP_BNK_NAMES, 
- 'Operator': OPR_BNK_NAMES, 
- 'UltraAnalog': ALG_BNK_NAMES, 
- 'OriginalSimpler': SIM_BNK_NAMES, 
- 'MultiSampler': SAM_BNK_NAMES, 
- 'MidiArpeggiator': ARP_BNK_NAMES, 
- 'LoungeLizard': ELC_BNK_NAMES, 
- 'StringStudio': TNS_BNK_NAMES, 
- 'Collision': COL_BNK_NAMES, 
- 'MidiChord': CRD_BNK_NAMES, 
- 'BeatRepeat': BRP_BNK_NAMES, 
- 'Compressor2': CP3_BNK_NAMES, 
- 'Corpus': CRP_BNK_NAMES, 
- 'Eq8': EQ8_BNK_NAMES, 
- 'FilterDelay': FLD_BNK_NAMES, 
- 'Flanger': FLG_BNK_NAMES, 
- 'Gate': GTE_BNK_NAMES, 
- 'MultibandDynamics': MBD_BNK_NAMES, 
- 'Phaser': PHS_BNK_NAMES, 
- 'Saturator': SAT_BNK_NAMES, 
- 'Resonator': RSN_BNK_NAMES, 
- 'Reverb': RVB_BNK_NAMES, 
- 'Vocoder': VOC_BNK_NAMES, 
- 'Amp': AMP_BNK_NAMES, 
- 'GlueCompressor': GLU_BNK_NAMES, 
- 'AutoFilter': AFL_BNK_NAMES, 
- 'StereoGain': UTL_BNK_NAMES, 
- 'DrumBuss': DRB_BANK_NAMES, 
- 'Echo': ECH_BANK_NAMES, 
- 'Pedal': PDL_BANK_NAMES, 
- 'InstrumentVector': WVT_BANK_NAMES}
+  'AudioEffectGroupDevice': RCK_BNK_NAMES,
+  'MidiEffectGroupDevice': RCK_BNK_NAMES,
+  'InstrumentGroupDevice': RCK_BNK_NAMES,
+  'DrumGroupDevice': RCK_BNK_NAMES,
+  'InstrumentImpulse': IMP_BNK_NAMES,
+  'Operator': OPR_BNK_NAMES,
+  'UltraAnalog': ALG_BNK_NAMES,
+  'OriginalSimpler': SIM_BNK_NAMES,
+  'MultiSampler': SAM_BNK_NAMES,
+  'MidiArpeggiator': ARP_BNK_NAMES,
+  'LoungeLizard': ELC_BNK_NAMES,
+  'StringStudio': TNS_BNK_NAMES,
+  'Collision': COL_BNK_NAMES,
+  'MidiChord': CRD_BNK_NAMES,
+  'BeatRepeat': BRP_BNK_NAMES,
+  'Compressor2': CP3_BNK_NAMES,
+  'Corpus': CRP_BNK_NAMES,
+  'Eq8': EQ8_BNK_NAMES,
+  'FilterDelay': FLD_BNK_NAMES,
+  'Flanger': FLG_BNK_NAMES,
+  'Gate': GTE_BNK_NAMES,
+  'MultibandDynamics': MBD_BNK_NAMES,
+  'Phaser': PHS_BNK_NAMES,
+  'Saturator': SAT_BNK_NAMES,
+  'Resonator': RSN_BNK_NAMES,
+  'Reverb': RVB_BNK_NAMES,
+  'Vocoder': VOC_BNK_NAMES,
+  'Amp': AMP_BNK_NAMES,
+  'GlueCompressor': GLU_BNK_NAMES,
+  'AutoFilter': AFL_BNK_NAMES,
+  'StereoGain': UTL_BNK_NAMES,
+  'DrumBuss': DRB_BANK_NAMES,
+  'Echo': ECH_BANK_NAMES,
+  'Pedal': PDL_BANK_NAMES,
+  'InstrumentVector': WVT_BANK_NAMES}
 MAX_DEVICES = ('MxDeviceInstrument', 'MxDeviceAudioEffect', 'MxDeviceMidiEffect')
 
 def device_parameters_to_map(device):
-    return tuple(device.parameters[1[:None]])
+    return tuple(device.parameters[1:])
 
 
 def parameter_bank_names(device, bank_name_dict=BANK_NAME_DICT):
@@ -756,8 +756,8 @@ def parameter_bank_names(device, bank_name_dict=BANK_NAME_DICT):
                     return _default_bank_name(bank_index)
 
                 return list(map(_bank_name, list(range(0, banks))))
-        return list(map(_default_bank_name, list(range(0, banks))))
-    return []
+            return list(map(_default_bank_name, list(range(0, banks))))
+        return []
 
 
 def parameter_banks(device, device_dict=DEVICE_DICT):
@@ -787,8 +787,8 @@ def parameter_banks(device, device_dict=DEVICE_DICT):
                     return [device.parameters[i] if i != -1 else None for i in parameter_indices]
 
                 return list(map(_bank_parameters, list(range(0, banks))))
-        return group(device_parameters_to_map(device), 8)
-    return []
+            return group(device_parameters_to_map(device), 8)
+        return []
 
 
 def best_of_parameter_bank(device, device_bob_dict=DEVICE_BOB_DICT):
@@ -796,14 +796,14 @@ def best_of_parameter_bank(device, device_bob_dict=DEVICE_BOB_DICT):
         if device.class_name in device_bob_dict:
             bobs = device_bob_dict[device.class_name]
             return list(map(partial(get_parameter_by_name, device), bobs[0]))
-    if device.class_name in MAX_DEVICES:
-        try:
-            parameter_indices = device.get_bank_parameters(-1)
-            return [device.parameters[i] if i != -1 else None for i in parameter_indices]
-        except:
-            return []
+        if device.class_name in MAX_DEVICES:
+            try:
+                parameter_indices = device.get_bank_parameters(-1)
+                return [device.parameters[i] if i != -1 else None for i in parameter_indices]
+            except:
+                return []
 
-    return device.parameters[1[:9]]
+        return device.parameters[1:9]
 
 
 def number_of_parameter_banks(device, device_dict=DEVICE_DICT):
@@ -819,9 +819,9 @@ def number_of_parameter_banks(device, device_dict=DEVICE_DICT):
 
             if banks != 0:
                 return banks
-        param_count = len(device.parameters[1[:None]])
-        return old_div(param_count, 8) + (1 if param_count % 8 else 0)
-    return 0
+            param_count = len(device.parameters[1:])
+            return old_div(param_count, 8) + (1 if param_count % 8 else 0)
+        return 0
 
 
 def get_parameter_by_name(device, name):

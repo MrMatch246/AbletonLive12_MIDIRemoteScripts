@@ -1,17 +1,17 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\AxiomPro\MixerOrDeviceModeSelector.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 8685 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
-import _Framework.ButtonElement as ButtonElement
-import _Framework.DisplayDataSource as DisplayDataSource
-import _Framework.LogicalDisplaySegment as LogicalDisplaySegment
-import _Framework.ModeSelectorComponent as ModeSelectorComponent
-import _Framework.PhysicalDisplayElement as PhysicalDisplayElement
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.DisplayDataSource import DisplayDataSource as DisplayDataSource
+from _Framework.LogicalDisplaySegment import LogicalDisplaySegment as LogicalDisplaySegment
+from _Framework.ModeSelectorComponent import ModeSelectorComponent as ModeSelectorComponent
+from _Framework.PhysicalDisplayElement import PhysicalDisplayElement as PhysicalDisplayElement
 from .EncoderMixerModeSelector import EncoderMixerModeSelector
 from .PageableDeviceComponent import PageableDeviceComponent
 
@@ -132,9 +132,9 @@ class MixerOrDeviceModeSelector(ModeSelectorComponent):
             if self._clean_value_display_in == 0:
                 self._parameter_source.set_display_string("")
                 self._clean_value_display_in = -1
-        if self._must_update_encoder_display:
-            self._encoders_display.update()
-            self._must_update_encoder_display = False
+            if self._must_update_encoder_display:
+                self._encoders_display.update()
+                self._must_update_encoder_display = False
 
     def _peek_value(self, value):
         new_peek_mode = value != 0

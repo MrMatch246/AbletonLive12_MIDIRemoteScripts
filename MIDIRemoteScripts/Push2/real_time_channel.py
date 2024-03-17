@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\real_time_channel.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3005 bytes
@@ -77,7 +77,7 @@ class RealTimeDataComponent(Component):
         if not self._valid:
             data = self._data if self.is_enabled() else None
             if data != None:
-                self._real_time_channel_id, self._object_id = self._real_time_mapper.attach_object(data, self._channel_type)
+                (self._real_time_channel_id, self._object_id) = self._real_time_mapper.attach_object(data, self._channel_type)
             self.notify_channel_id()
             self.notify_object_id()
             self._valid = True

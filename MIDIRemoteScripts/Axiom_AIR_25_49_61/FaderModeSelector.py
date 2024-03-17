@@ -1,13 +1,13 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Axiom_AIR_25_49_61\FaderModeSelector.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3689 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
-import _Framework.ModeSelectorComponent as ModeSelectorComponent
+from _Framework.ModeSelectorComponent import ModeSelectorComponent as ModeSelectorComponent
 from .consts import *
 
 class FaderModeSelector(ModeSelectorComponent):
@@ -61,28 +61,26 @@ class FaderModeSelector(ModeSelectorComponent):
                 self._fader_button_modes.set_mix_mode()
                 self._mixer.master_strip().set_select_button(None)
                 self._master_fader_button.turn_off()
+            elif self._mode_index == 1:
+                self._modes_buttons[0].send_value(GRN_FULL, True)
+                self._modes_buttons[1].send_value(LED_OFF, True)
+                self._fader_button_modes.set_track_select_mode()
+                self._mixer.master_strip().set_select_button(self._master_fader_button)
             else:
-                if self._mode_index == 1:
-                    self._modes_buttons[0].send_value(GRN_FULL, True)
-                    self._modes_buttons[1].send_value(LED_OFF, True)
-                    self._fader_button_modes.set_track_select_mode()
-                    self._mixer.master_strip().set_select_button(self._master_fader_button)
-                else:
-                    self._modes_buttons[0].send_value(LED_OFF, True)
-                    self._modes_buttons[1].send_value(RED_FULL, True)
-                    self._device.set_parameter_controls(self._faders)
-                    self._fader_button_modes.set_track_select_mode()
-                    self._mixer.master_strip().set_select_button(self._master_fader_button)
+                self._modes_buttons[0].send_value(LED_OFF, True)
+                self._modes_buttons[1].send_value(RED_FULL, True)
+                self._device.set_parameter_controls(self._faders)
+                self._fader_button_modes.set_track_select_mode()
+                self._mixer.master_strip().set_select_button(self._master_fader_button)
             self._device.set_allow_update(True)
             self._mixer.set_allow_update(True)
 
     def _mode_value(self, value, sender):
-        if self.is_enabled():
-            if value != 0 or sender.is_momentary() or self._modes_buttons.index(sender) == 0:
-                if self._mode_index != self.number_of_modes() - 1:
-                    self._submode_index = (self._submode_index + 1) % (self.number_of_modes() - 1)
-                self.set_mode(self._submode_index)
-            else:
-                self.set_mode(self.number_of_modes() - 1)
+        if not (self.is_enabled() and value != 0 or sender.is_momentary()) and self._modes_buttons.index(sender) == 0:
+            if self._mode_index != self.number_of_modes() - 1:
+                self._submode_index = (self._submode_index + 1) % (self.number_of_modes() - 1)
+            self.set_mode(self._submode_index)
+        else:
+            self.set_mode(self.number_of_modes() - 1)
 
 # okay decompiling ./MIDIRemoteScripts/Axiom_AIR_25_49_61/FaderModeSelector.pyc

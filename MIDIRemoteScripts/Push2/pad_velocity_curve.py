@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\pad_velocity_curve.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7495 bytes
@@ -16,50 +16,47 @@ LAST_INDEX_FOR_DISPLAY = 58
 
 class LookupTable(object):
     MAXW = [
-     1700.0, 
-     1660.0, 
-     1590.0, 
-     1510.0, 
-     1420.0, 
-     1300.0, 
-     1170.0, 
-     1030.0, 
-     860.0, 
-     640.0, 
+     1700.0,
+     1660.0,
+     1590.0,
+     1510.0,
+     1420.0,
+     1300.0,
+     1170.0,
+     1030.0,
+     860.0,
+     640.0,
      400.0]
     CPMIN = [
-     1650.0, 
-     1580.0, 
-     1500.0, 
-     1410.0, 
-     1320.0, 
-     1220.0, 
-     1110.0, 
-     1000.0, 
-     900.0, 
-     800.0, 
+     1650.0,
+     1580.0,
+     1500.0,
+     1410.0,
+     1320.0,
+     1220.0,
+     1110.0,
+     1000.0,
+     900.0,
+     800.0,
      700.0]
     CPMAX = [
-     2050.0, 
-     1950.0, 
-     1850.0, 
-     1750.0, 
-     1650.0, 
-     1570.0, 
-     1490.0, 
-     1400.0, 
-     1320.0, 
-     1240.0, 
+     2050.0,
+     1950.0,
+     1850.0,
+     1750.0,
+     1650.0,
+     1570.0,
+     1490.0,
+     1400.0,
+     1320.0,
+     1240.0,
      1180.0]
     GAMMA = [
-     0.7, 0.64, 0.58, 0.54, 0.5, 0.46, 0.43, 0.4, 0.36, 0.32, 
-     0.25]
-    MINV = [1.0, 1, 1.0, 1.0, 1.0, 1.0, 3.0, 6.0, 12.0, 24.0, 36.0]
-    MAXV = [96.0, 102.0, 116.0, 121.0, 124.0, 127.0, 127.0, 127.0, 127.0, 127.0, 
-     127.0]
+     0.7,0.64,0.58,0.54,0.5,0.46,0.43,0.4,0.36,0.32,0.25]
+    MINV = [1.0,1,1.0,1.0,1.0,1.0,3.0,6.0,12.0,24.0,36.0]
+    MAXV = [96.0,102.0,116.0,121.0,124.0,127.0,127.0,127.0,127.0,127.0,127.0]
     ALPHA = [
-     90.0, 70.0, 54.0, 40.0, 28.0, 20.0, 10.0, -5.0, -25.0, -55.0, 
-     -90.0]
+     90.0,70.0,54.0,40.0,28.0,20.0,10.0,-5.0,-25.0,-55.0,-90.0]
 
 
 def gamma_func(x, gamma):
@@ -74,7 +71,8 @@ def calculate_points(alpha):
     p1y = 0.5 + r * math.sin(a1)
     p2x = 0.5 + r * math.cos(a2)
     p2y = 0.5 + r * math.sin(a2)
-    return (p1x, p1y, p2x, p2y)
+    return (
+     p1x, p1y, p2x, p2y)
 
 
 def bezier(x, t, p1x, p1y, p2x, p2y):
@@ -90,9 +88,9 @@ def bezier(x, t, p1x, p1y, p2x, p2y):
         s3 = s2 * s
         xt = s3 * p0x + 3 * t * s2 * p1x + 3 * t2 * s * p2x + t3 * p3x
         if xt >= x:
-            return (
-             s3 * p0y + 3 * t * s2 * p1y + 3 * t2 * s * p2y + t3 * p3y, t)
-        t += 0.0001
+            return (s3 * p0y + 3 * t * s2 * p1y + 3 * t2 * s * p2y + t3 * p3y, t)
+        else:
+            t += 0.0001
 
     return (
      1.0, t)
@@ -105,7 +103,7 @@ def generate_velocity_curve(sensitivity, gain, dynamics):
     minv = LookupTable.MINV[gain]
     maxv = LookupTable.MAXV[gain]
     alpha = LookupTable.ALPHA[dynamics]
-    p1x, p1y, p2x, p2y = calculate_points(alpha)
+    (p1x, p1y, p2x, p2y) = calculate_points(alpha)
     curve = []
     minw_index = old_div(int(minw), 32)
     maxw_index = old_div(int(maxw), 32)
@@ -114,14 +112,13 @@ def generate_velocity_curve(sensitivity, gain, dynamics):
         w = index * 32.0
         if w <= minw:
             velocity = 1.0 + (minv - 1.0) * old_div(float(index), float(minw_index))
+        elif w >= maxw:
+            velocity = maxv + (127.0 - maxv) * old_div(float(index - maxw_index), float(128 - maxw_index))
         else:
-            if w >= maxw:
-                velocity = maxv + (127.0 - maxv) * old_div(float(index - maxw_index), float(128 - maxw_index))
-            else:
-                wnorm = old_div(w - minw, maxw - minw)
-                b, t = bezier(wnorm, t, p1x, p1y, p2x, p2y)
-                velonorm = gamma_func(b, gamma)
-                velocity = minv + velonorm * (maxv - minv)
+            wnorm = old_div(w - minw, maxw - minw)
+            (b, t) = bezier(wnorm, t, p1x, p1y, p2x, p2y)
+            velonorm = gamma_func(b, gamma)
+            velocity = minv + velonorm * (maxv - minv)
         curve.append(clamp(int(round(velocity)), 1, 127))
 
     return curve
@@ -173,7 +170,7 @@ class PadVelocityCurveSender(Component):
     def _send_velocity_curve(self):
         velocities = self._generate_curve()
         velocity_chunks = chunks(velocities, self._chunk_size)
-        for index, velocities in enumerate(velocity_chunks):
+        for (index, velocities) in enumerate(velocity_chunks):
             self._curve_sysex_element.send_value(index * self._chunk_size, velocities)
 
     def _send_thresholds(self):
@@ -192,7 +189,7 @@ class PadVelocityCurveSender(Component):
         self._update_curve_model()
 
     def _update_curve_model(self):
-        self.curve_points = self._generate_curve()[None[:LAST_INDEX_FOR_DISPLAY]]
+        self.curve_points = self._generate_curve()[:LAST_INDEX_FOR_DISPLAY]
 
     def _on_send_task_finished(self):
         if self._settings_changed:

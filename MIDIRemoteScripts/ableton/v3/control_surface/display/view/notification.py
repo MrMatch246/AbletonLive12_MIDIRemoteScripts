@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\display\view\notification.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4662 bytes
@@ -43,22 +43,22 @@ class NotificationView(View[ContentType], Generic[(ContentType, NotificationData
     def react(self, state: State, event: Event):
         if event is INIT_EVENT:
             self.init(state)
-        else:
-            notification_data = self._notification_signal(state, event)
-            if notification_data:
-                setattr(state, self._name, notification_data)
-                if self._exclusive:
-                    suppress_notifications(state, exclude=[self._name])
-                if self._duration != inf:
-                    self.reset_state(state,
-                      delay=(self._duration if self._duration else DEFAULT_NOTIFICATION_DURATION))
-            elif any((suppressing_signal(state, event) for suppressing_signal in self._suppressing_signals)):
-                self.reset_state(state)
+        notification_data = self._notification_signal(state, event)
+        if notification_data:
+            setattr(state, self._name, notification_data)
+            if self._exclusive:
+                suppress_notifications(state, exclude=[self._name])
+            if self._duration != inf:
+                self.reset_state(state,
+                  delay=(self._duration if self._duration else DEFAULT_NOTIFICATION_DURATION))
+        elif any((suppressing_signal(state, event) for suppressing_signal in self._suppressing_signals)):
+            self.reset_state(state)
         return state
 
     def render(self, state: State):
         notification_data = getattr(state, self._name)
-        return self._supports_new_line or isinstance(notification_data, str) or self._render(state, notification_data)
+        if not (self._supports_new_line or isinstance(notification_data, str)):
+            return self._render(state, notification_data)
         return self._render(state, notification_data.replace("\n", " "))
 
     def render_condition(self, state: State) -> bool:

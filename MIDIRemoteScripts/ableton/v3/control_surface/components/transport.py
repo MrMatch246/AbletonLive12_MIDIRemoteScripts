@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\transport.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 11341 bytes
@@ -46,10 +46,10 @@ class TransportComponent(Component, Renderable):
     nudge_up_button = ButtonControl(color="Transport.Nudge",
       pressed_color="Transport.NudgePressed")
     seek_dict = {
-     'color': '"Transport.Seek"', 
-     'pressed_color': '"Transport.SeekPressed"', 
-     'repeat': True, 
-     'delay_time': 0}
+      'color': "Transport.Seek",
+      'pressed_color': "Transport.SeekPressed",
+      'repeat': True,
+      'delay_time': 0}
     rewind_button = ButtonControl(**seek_dict)
     fastforward_button = ButtonControl(**seek_dict)
     prev_cue_button = ButtonControl(color="Transport.CannotJumpToCue",

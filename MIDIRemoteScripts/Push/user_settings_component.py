@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push\user_settings_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5106 bytes
@@ -73,12 +73,11 @@ class UserSettingsComponent(Component):
         setting_index = -1
         if index % 2 == 0:
             setting_index = old_div(index, 2)
-        else:
-            if index == num_encoders - 1:
-                setting_index = old_div(num_encoders, 2)
-            elif 0 <= setting_index < len(self._settings):
-                if self._settings[setting_index].change_relative(value):
-                    self._update_display()
+        elif index == num_encoders - 1:
+            setting_index = old_div(num_encoders, 2)
+        if 0 <= setting_index < len(self._settings):
+            if self._settings[setting_index].change_relative(value):
+                self._update_display()
 
     def _update_display(self):
         num_segments = len(self._name_sources)
@@ -92,7 +91,7 @@ class UserSettingsComponent(Component):
                     separators = num_segments - 1
                     segment_length = old_div(display.width - separators, num_segments) if display else consts.DISPLAY_LENGTH
                     value = combine_strings(value, getter(self._settings[index]), segment_length)
-            return value
+                return value
 
         for index in range(num_segments):
             self._name_sources[index].set_display_string(setting_property(index, self._name_display, (lambda s: s.name)))

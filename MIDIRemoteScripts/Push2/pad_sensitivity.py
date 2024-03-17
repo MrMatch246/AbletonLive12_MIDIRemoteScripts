@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\pad_sensitivity.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1920 bytes
@@ -16,7 +16,8 @@ PadSettings = namedtuple("PadSettings", ["sensitivity", "aftertouch_enabled"])
 
 def index_to_pad_coordinate(index):
     x, y = divmod(index, 8)
-    return (8 - x, y + 1)
+    return (
+     8 - x, y + 1)
 
 
 def pad_parameter_sender(global_control, pad_control, aftertouch_control):
@@ -26,7 +27,7 @@ def pad_parameter_sender(global_control, pad_control, aftertouch_control):
             global_control.send_value(0, 0, pad_settings.sensitivity)
             aftertouch_control.send_value(0, 0, pad_settings.aftertouch_enabled)
         else:
-            scene, track = index_to_pad_coordinate(pad)
+            (scene, track) = index_to_pad_coordinate(pad)
             pad_control.send_value(scene, track, pad_settings.sensitivity)
             aftertouch_control.send_value(scene, track, pad_settings.aftertouch_enabled)
 

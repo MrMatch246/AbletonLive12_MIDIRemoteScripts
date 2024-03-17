@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ATOM\keyboard.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1491 bytes
@@ -40,7 +40,7 @@ class KeyboardComponent(NotePadMixin, PlayableComponent, ScrollComponent):
         button.color = "Keyboard.{}".format("Sharp" if button.index in SHARP_INDICES else "Natural")
 
     def _note_translation_for_button(self, button):
-        row, column = button.coordinate
+        (row, column) = button.coordinate
         inverted_row = self.matrix.height - row - 1
         return (
          inverted_row * self.matrix.width + column + self._start_note,

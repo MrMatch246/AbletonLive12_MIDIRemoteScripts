@@ -1,12 +1,12 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Axiom_AIR_25_49_61\ConfigurableButtonElement.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3538 bytes
 from __future__ import absolute_import, print_function, unicode_literals
-import _Framework.ButtonElement as ButtonElement
+from _Framework.ButtonElement import ButtonElement as ButtonElement
 from _Framework.InputControlElement import MIDI_CC_STATUS, MIDI_CC_TYPE, MIDI_NOTE_TYPE
 from .consts import *
 
@@ -67,20 +67,18 @@ class ConfigurableButtonElement(ButtonElement):
             if self._send_msg_type:
                 if self._send_msg_type == MIDI_NOTE_TYPE:
                     status_byte += MIDI_NOTE_ON_STATUS
-            elif self._send_msg_type == MIDI_CC_TYPE:
+                elif self._send_msg_type == MIDI_CC_TYPE:
+                    status_byte += MIDI_CC_STATUS
+            elif self._msg_type == MIDI_NOTE_TYPE:
+                status_byte += MIDI_NOTE_ON_STATUS
+            elif self._msg_type == MIDI_CC_TYPE:
                 status_byte += MIDI_CC_STATUS
-            else:
-                if self._msg_type == MIDI_NOTE_TYPE:
-                    status_byte += MIDI_NOTE_ON_STATUS
-                else:
-                    if self._msg_type == MIDI_CC_TYPE:
-                        status_byte += MIDI_CC_STATUS
-                    elif self.send_midi((status_byte, data_byte1, data_byte2)):
-                        self._last_sent_message = (
-                         value, None)
-                        if self._report_output:
-                            is_input = True
-                            self._report_value(value, not is_input)
-        self._force_next_value = False
+            if self.send_midi((status_byte, data_byte1, data_byte2)):
+                self._last_sent_message = (
+                 value, None)
+                if self._report_output:
+                    is_input = True
+                    self._report_value(value, not is_input)
+            self._force_next_value = False
 
 # okay decompiling ./MIDIRemoteScripts/Axiom_AIR_25_49_61/ConfigurableButtonElement.pyc

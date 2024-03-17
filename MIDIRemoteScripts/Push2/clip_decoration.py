@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\clip_decoration.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 8654 bytes
@@ -53,7 +53,7 @@ class ClipPositions(EventObject):
         if not self._clip.is_midi_clip:
             if not self.is_warping:
                 beat_time_or_seconds = self._clip.seconds_to_sample_time(beat_time_or_seconds)
-        return beat_time_or_seconds
+            return beat_time_or_seconds
 
     @listens("start_marker")
     def __on_start_marker_changed(self):
@@ -105,7 +105,7 @@ class ClipPositions(EventObject):
           from_pitch=0,
           time_span=(self.MAX_TIME),
           pitch_span=128)
-        start_times, end_times = list(zip(*[(note.start_time, note.start_time + note.duration) for note in all_notes])) if len(all_notes) > 0 else (
+        (start_times, end_times) = list(zip(*[(note.start_time, note.start_time + note.duration) for note in all_notes])) if len(all_notes) > 0 else (
          [
           self.MAX_TIME], [self.MIN_TIME])
         self.start_of_first_note = min(start_times)
@@ -128,13 +128,12 @@ class ClipPositions(EventObject):
         if self.is_warping:
             start = self._clip.sample_to_beat_time(0)
             end = self._clip.sample_to_beat_time(self._clip.sample_length)
+        elif self._clip.is_audio_clip:
+            start = 0
+            end = self._clip.sample_length
         else:
-            if self._clip.is_audio_clip:
-                start = 0
-                end = self._clip.sample_length
-            else:
-                start = self.start_of_first_note
-                end = self.end_of_last_note
+            start = self.start_of_first_note
+            end = self.end_of_last_note
         self.start = min(start, self.loop_start if self._clip.looping else self.start_marker)
         self.end = max(end, self.loop_end)
 

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Blackstar_Live_Logic\time_display.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3007 bytes
@@ -25,7 +25,7 @@ def truncate_to_n_least_significant_digits(num, n):
         divisor = pow(10, i)
         digits.append(old_div(num_up_to_digit_n - num_up_to_digit_n_minus_one, divisor))
 
-    return digits[None[None:-1]]
+    return digits[::-1]
 
 
 class TimeDisplayElement(NotifyingControlElement):
@@ -74,11 +74,10 @@ class TimeDisplayControl(Control):
                     num_digits = num_beat_digits
                 if not display_bars:
                     dots = (0, )
+                elif num_beat_digits >= 2:
+                    dots = (1, )
                 else:
-                    if num_beat_digits >= 2:
-                        dots = (1, )
-                    else:
-                        dots = (2, )
+                    dots = (2, )
                 self._control_element.display_time(digits, NUM_DIGITS_TO_BYTE[num_digits], dots)
 
 # okay decompiling ./MIDIRemoteScripts/Blackstar_Live_Logic/time_display.pyc

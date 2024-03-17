@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\components\session.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 12515 bytes
@@ -103,13 +103,13 @@ class SessionComponent(Component):
 
     def set_clip_launch_buttons(self, buttons):
         if buttons:
-            for button, (x, y) in buttons.iterbuttons():
+            for (button, (x, y)) in buttons.iterbuttons():
                 scene = self.scene(y)
                 slot = scene.clip_slot(x)
                 slot.set_launch_button(button)
 
         else:
-            for x, y in product(range(self._session_ring.num_tracks), range(self._session_ring.num_scenes)):
+            for (x, y) in product(range(self._session_ring.num_tracks), range(self._session_ring.num_scenes)):
                 scene = self.scene(y)
                 slot = scene.clip_slot(x)
                 slot.set_launch_button(None)
@@ -117,7 +117,7 @@ class SessionComponent(Component):
     def set_scene_launch_buttons(self, buttons):
         num_scenes = self._session_ring.num_scenes
         if buttons:
-            for x, button in enumerate(buttons):
+            for (x, button) in enumerate(buttons):
                 scene = self.scene(x)
                 scene.set_launch_button(button)
 
@@ -179,7 +179,7 @@ class SessionComponent(Component):
 
     def _reassign_scenes(self):
         scenes = self.song.scenes
-        for index, scene in enumerate(self._scenes):
+        for (index, scene) in enumerate(self._scenes):
             scene_index = self._session_ring.scene_offset + index
             scene.set_scene(scenes[scene_index] if len(scenes) > scene_index else None)
             scene.set_track_offset(self._session_ring.track_offset)
@@ -189,8 +189,7 @@ class SessionComponent(Component):
 
     def _reassign_tracks(self):
         tracks_to_use = self._session_ring.tracks_to_use()
-        tracks = list(map((lambda t:         if isinstance(t, Live.Track.Track):
-t # Avoid dead code: None), tracks_to_use))
+        tracks = list(map((lambda t: t if isinstance(t, Live.Track.Track) else None), tracks_to_use))
         self._SessionComponent__on_fired_slot_index_changed.replace_subjects(tracks, count())
         self._SessionComponent__on_playing_slot_index_changed.replace_subjects(tracks, count())
         self._update_stop_all_clips_button()
@@ -208,13 +207,12 @@ t # Avoid dead code: None), tracks_to_use))
 
     @listens_group("value")
     def __on_stop_track_value(self, value, button):
-        if self.is_enabled():
-            if not (value != 0 or button.is_momentary()):
-                tracks = self._session_ring.tracks_to_use()
-                track_index = list(self._stop_track_clip_buttons).index(button) + self._session_ring.track_offset
-                if in_range(track_index, 0, len(tracks)):
-                    if tracks[track_index] in self.song.tracks:
-                        tracks[track_index].stop_all_clips()
+        if not (self.is_enabled() and value != 0 or button.is_momentary()):
+            tracks = self._session_ring.tracks_to_use()
+            track_index = list(self._stop_track_clip_buttons).index(button) + self._session_ring.track_offset
+            if in_range(track_index, 0, len(tracks)):
+                if tracks[track_index] in self.song.tracks:
+                    tracks[track_index].stop_all_clips()
 
     @listens_group("fired_slot_index")
     def __on_fired_slot_index_changed(self, track_index):
@@ -250,15 +248,13 @@ t # Avoid dead code: None), tracks_to_use))
                                 track = tracks_to_use[track_index]
                                 if track.fired_slot_index == -2:
                                     value_to_send = self._stop_clip_triggered_value
+                                elif track.playing_slot_index >= 0:
+                                    value_to_send = self._stop_clip_value
                                 else:
-                                    if track.playing_slot_index >= 0:
-                                        value_to_send = self._stop_clip_value
-                                    else:
-                                        value_to_send = self._stop_clip_disabled_value
-                        elif value_to_send is None:
-                            button.set_light(False)
-                        else:
-                            if in_range(value_to_send, 0, 128):
+                                    value_to_send = self._stop_clip_disabled_value
+                            if value_to_send is None:
+                                button.set_light(False)
+                            elif in_range(value_to_send, 0, 128):
                                 button.send_value(value_to_send)
                             else:
                                 button.set_light(value_to_send)

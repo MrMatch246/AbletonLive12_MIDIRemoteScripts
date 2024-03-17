@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\MackieControl\MainDisplay.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3343 bytes
@@ -33,20 +33,20 @@ class MainDisplay(MackieControlComponent):
     def send_display_string(self, display_string, display_row, cursor_offset):
         if display_row == 0:
             offset = cursor_offset
+        elif display_row == 1:
+            offset = NUM_CHARS_PER_DISPLAY_LINE + 2 + cursor_offset
         else:
-            if display_row == 1:
-                offset = NUM_CHARS_PER_DISPLAY_LINE + 2 + cursor_offset
+            pass
+        message_string = as_ascii(display_string)
+        if self._MainDisplay__last_send_messages[display_row] != message_string:
+            self._MainDisplay__last_send_messages[display_row] = message_string
+            if self.main_script().is_extension():
+                device_type = SYSEX_DEVICE_TYPE_XT
             else:
-                message_string = as_ascii(display_string)
-                if self._MainDisplay__last_send_messages[display_row] != message_string:
-                    self._MainDisplay__last_send_messages[display_row] = message_string
-                    if self.main_script().is_extension():
-                        device_type = SYSEX_DEVICE_TYPE_XT
-                    else:
-                        device_type = SYSEX_DEVICE_TYPE
-                    display_sysex = (
-                     240, 0, 0, 102, device_type, 18, offset) + tuple(message_string) + (247, )
-                    self.send_midi(display_sysex)
+                device_type = SYSEX_DEVICE_TYPE
+            display_sysex = (
+             240, 0, 0, 102, device_type, 18, offset) + tuple(message_string) + (247, )
+            self.send_midi(display_sysex)
 
     def refresh_state(self):
         self._MainDisplay__last_send_messages = [[], []]

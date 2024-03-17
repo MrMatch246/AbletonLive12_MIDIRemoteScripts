@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\setup_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9913 bytes
@@ -75,10 +75,8 @@ class GeneralSettingsComponent(Component):
         (super(GeneralSettingsComponent, self).__init__)(*a, **k)
         self._settings = settings
         self._hardware_settings = hardware_settings
-        self.workflow_encoder.connect_property(settings, "workflow", lambda v:         if v > 0:
-"clip" # Avoid dead code: "scene")
-        self.aftertouch_mode_encoder.connect_property(settings, "aftertouch_mode", lambda v:         if v > 0:
-"polyphonic" # Avoid dead code: "mono")
+        self.workflow_encoder.connect_property(settings, "workflow", lambda v: "clip" if v > 0 else "scene")
+        self.aftertouch_mode_encoder.connect_property(settings, "aftertouch_mode", lambda v: "polyphonic" if v > 0 else "mono")
 
     @led_brightness_encoder.value
     def led_brightness_encoder(self, value, encoder):

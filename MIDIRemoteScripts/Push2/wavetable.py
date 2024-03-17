@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\wavetable.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 32307 bytes
@@ -192,7 +192,7 @@ class WavetableDeviceDecorator(WavetableDeviceDecoratorBase):
             lfo_sync_param = get_parameter_by_name(self, "LFO {} Sync".format(lfo_number))
             if lfo_sync_param.value == 0:
                 return "LFO {} Rate".format(lfo_number)
-        return target_parameter_name
+            return target_parameter_name
 
     def _get_current_mod_target_parameter(self):
         target_parameter_name = self._resolve_ambiguous_modulation_target_name(self.get_modulation_target_parameter_name(self.current_mod_target_index.index))
@@ -260,8 +260,8 @@ class WavetableDeviceComponent(DeviceComponentWithTrackColorViewData):
     LFO_PARAMETER_NAMES = re.compile("^(LFO (1|2) (Shape|Shaping|S. Rate|Rate|Amount|Attack Time|Phase Offset))$|^LFO$|^LFO Type$|^Shape$|^Rate$|^Amount$|^Attack$|^Offset$")
     VISUALISATION_CONFIGURATION = {'wavetable':{'position_in_banks':{0:ButtonRange(0, 2), 
        1:ButtonRange(1, 3)}, 
-      'visible_in_bank':lambda component, bank: component.selected_oscillator in [
-       WavetableOscillatorType.one, WavetableOscillatorType.two]}, 
+      'visible_in_bank':lambda component, bank: (component.selected_oscillator in [
+       WavetableOscillatorType.one, WavetableOscillatorType.two])}, 
      'filter':{"position_in_banks": {0:ButtonRange(3, 5),  2:ButtonRange(2, 4)}}, 
      'lfo':{"position_in_banks": {5: (ButtonRange(0, 3))}}, 
      'envelope':{"position_in_banks": {4: (ButtonRange(2, 5))}}}
@@ -281,17 +281,17 @@ class WavetableDeviceComponent(DeviceComponentWithTrackColorViewData):
                 if self._is_resetting_parameter():
                     if self._is_custom_parameter(parameter):
                         self._delete_default_component.delete_clip_envelope(parameter)
-                view_data = {}
-                self._update_single_selected_parameter()
-                if self.OSCILLATOR_POSITION_PARAMETER_NAMES.match(parameter.name):
-                    view_data["AdjustingPosition"] = True
-                if self.FILTER_PARAMETER_NAMES.match(parameter.name):
-                    view_data["AdjustingFilter"] = True
-                if self.LFO_PARAMETER_NAMES.match(parameter.name):
-                    view_data["AdjustingLfo"] = True
-                view_data.update(self._envelope_visualisation_data())
-                if view_data:
-                    self._update_visualisation_view_data(view_data)
+                    view_data = {}
+                    self._update_single_selected_parameter()
+                    if self.OSCILLATOR_POSITION_PARAMETER_NAMES.match(parameter.name):
+                        view_data["AdjustingPosition"] = True
+                    if self.FILTER_PARAMETER_NAMES.match(parameter.name):
+                        view_data["AdjustingFilter"] = True
+                    if self.LFO_PARAMETER_NAMES.match(parameter.name):
+                        view_data["AdjustingLfo"] = True
+                    view_data.update(self._envelope_visualisation_data())
+                    if view_data:
+                        self._update_visualisation_view_data(view_data)
 
     def _parameter_released(self, parameter):
         if liveobj_valid(self._decorated_device):
@@ -315,9 +315,10 @@ class WavetableDeviceComponent(DeviceComponentWithTrackColorViewData):
         return isinstance(parameter, ModMatrixParameter) or isinstance(parameter, PitchParameter)
 
     def _get_provided_parameters(self):
-        _, parameters = self._current_bank_details() if self.device() else (None, ())
+        (_, parameters) = self._current_bank_details() if self.device() else (None,
+                                                                              ())
         provided_parameters = []
-        for param, name in parameters:
+        for (param, name) in parameters:
             if param == self._decorated_device.current_mod_target:
                 param = self._decorated_device.current_mod_target_parameter
                 name = param.name if param is not None else ""
@@ -424,8 +425,7 @@ class WavetableDeviceComponent(DeviceComponentWithTrackColorViewData):
                 return any([self._visualisation_type_visible(visualisation) and parameter_over_visualisation(visualisation, index) for visualisation in self.VISUALISATION_CONFIGURATION])
 
             return [is_shrunk(parameter_index) for parameter_index in range(8)]
-        return [
-         False] * 8
+        return [False] * 8
 
     def _initial_visualisation_view_data(self):
         view_data = super(WavetableDeviceComponent, self)._initial_visualisation_view_data()

@@ -1,12 +1,12 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Komplete_Kontrol_S_Mk3\focus_follow.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1789 bytes
 from __future__ import absolute_import, print_function, unicode_literals
-import Live.PluginDevice as PluginDevice
+from Live.PluginDevice import PluginDevice as PluginDevice
 from ableton.v3.control_surface import InstrumentFinderComponent, find_instrument_meeting_requirement
 from ableton.v3.control_surface.controls import SendValueControl
 from ableton.v3.live import liveobj_valid
@@ -19,8 +19,9 @@ def get_parameter_name_for_instance(instance):
         if instance.name.startswith("Komplete Kontrol"):
             return param_names[0]
         for index in (2048, 4096):
-            if index < len(param_names) and param_names[index].startswith(KONTAKT_PARAMETER_NAME_PREFIX):
-                return param_names[index]
+            if index < len(param_names):
+                if param_names[index].startswith(KONTAKT_PARAMETER_NAME_PREFIX):
+                    return param_names[index]
 
     return ""
 

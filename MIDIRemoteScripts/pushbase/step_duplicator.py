@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\step_duplicator.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5275 bytes
@@ -19,9 +19,8 @@ def get_transposition_amount(source_step, destination_step):
     transposition = destination_step[0] - source_step[0]
     if ALL_NOTES == source_step[0]:
         transposition = 0
-    else:
-        if destination_step[0] == ALL_NOTES:
-            transposition = source_step[0]
+    elif destination_step[0] == ALL_NOTES:
+        transposition = source_step[0]
     return transposition
 
 
@@ -111,7 +110,8 @@ class StepDuplicatorComponent(Component, Messenger):
         loop_start = destination_step[1]
         loop_end = loop_start + self._source_step[2]
         if destination_step[4]:
-            loop_start >= self._clip.loop_start and loop_end <= self._clip.loop_end or set_loop(self._clip, loop_start, loop_end)
+            if not (loop_start >= self._clip.loop_start and loop_end <= self._clip.loop_end):
+                set_loop(self._clip, loop_start, loop_end)
         self._notification_reference = self.show_notification(message)
         self._source_step = None
 

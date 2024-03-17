@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Akai_Force_MPC\clip_slot.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3918 bytes
@@ -49,19 +49,19 @@ class ClipSlotComponent(ClipSlotComponentBase):
         if slot_or_clip.is_triggered:
             if slot_or_clip.will_record_on_start:
                 return self._triggered_to_record_color
-        else:
             return self._triggered_to_play_color
-            if slot_or_clip.is_playing:
-                if slot_or_clip.is_recording:
-                    return self._recording_color
-                return self._started_value
-            if slot_or_clip.color != None or getattr(slot_or_clip, "controls_other_clips", True):
-                return self._stopped_value
-            if self._track_is_armed(track) and self._clip_slot.has_stop_button:
+        if slot_or_clip.is_playing:
+            if slot_or_clip.is_recording:
+                return self._recording_color
+            return self._started_value
+        if slot_or_clip.color != None or getattr(slot_or_clip, "controls_other_clips", True):
+            return self._stopped_value
+        if self._track_is_armed(track):
+            if self._clip_slot.has_stop_button:
                 return self._record_button_color
-        if self._clip_slot.has_stop_button:
-            return self._empty_slot_with_stop_button_color
-        return self._empty_slot_color
+            if self._clip_slot.has_stop_button:
+                return self._empty_slot_with_stop_button_color
+            return self._empty_slot_color
 
     @listens("name")
     def __on_clip_name_changed(self):
@@ -77,17 +77,16 @@ class ClipSlotComponent(ClipSlotComponentBase):
 
     def _update_clip_name_display(self):
         clip_slot = self._clip_slot
-        self.clip_name_display[0] = clip_slot.clip.name if (liveobj_valid(clip_slot) and self.has_clip()) else ""
+        self.clip_name_display[0] = clip_slot.clip.name if (liveobj_valid(clip_slot)) and (self.has_clip()) else ""
 
     def _update_clip_color_control(self):
         color_to_send = "DefaultButton.Off"
         clip_slot = self._clip_slot
         if liveobj_valid(clip_slot):
             if self.has_clip():
-                color_to_send = "Session.ClipSelected" if (self.select_button_is_pressed and clip_slot == self.song.view.highlighted_clip_slot) else (clip_slot.clip.color_index + LIVE_COLOR_TABLE_INDEX_OFFSET)
-            else:
-                if clip_slot.color != None:
-                    color_to_send = clip_slot.color_index + LIVE_COLOR_TABLE_INDEX_OFFSET
+                color_to_send = "Session.ClipSelected" if (self.select_button_is_pressed) and (clip_slot == self.song.view.highlighted_clip_slot) else (clip_slot.clip.color_index + LIVE_COLOR_TABLE_INDEX_OFFSET)
+            elif clip_slot.color != None:
+                color_to_send = clip_slot.color_index + LIVE_COLOR_TABLE_INDEX_OFFSET
         self.clip_color_control.color = color_to_send
 
 # okay decompiling ./MIDIRemoteScripts/Akai_Force_MPC/clip_slot.pyc

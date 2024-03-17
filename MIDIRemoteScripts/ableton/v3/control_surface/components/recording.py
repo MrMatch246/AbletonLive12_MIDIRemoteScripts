@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\recording.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 8921 bytes
@@ -64,7 +64,7 @@ class NextSlotWithOverdubRecordingMethod(NextSlotRecordingMethod):
     def trigger_recording(self):
         track = self.target_track.target_track
         playing_slot = playing_clip_slot(track)
-        if (is_track_recording(track) or playing_slot) is not None:
+        if not is_track_recording(track) or playing_slot is not None:
             self.song.overdub = not self.song.overdub
             self.song.is_playing = self.song.is_playing or True
         else:
@@ -112,11 +112,10 @@ class RecordingComponent(Component, Renderable):
         status = song.session_record_status
         if status == SessionRecordStatus.transition:
             self.session_record_button.color = "Recording.SessionRecordTransition"
+        elif status == SessionRecordStatus.on or song.session_record:
+            self.session_record_button.color = "Recording.SessionRecordOn"
         else:
-            if status == SessionRecordStatus.on or song.session_record:
-                self.session_record_button.color = "Recording.SessionRecordOn"
-            else:
-                self.session_record_button.color = "Recording.SessionRecordOff"
+            self.session_record_button.color = "Recording.SessionRecordOff"
 
     def _update_new_button(self):
         self.new_button.enabled = liveobj_valid(self._target_track.target_clip)

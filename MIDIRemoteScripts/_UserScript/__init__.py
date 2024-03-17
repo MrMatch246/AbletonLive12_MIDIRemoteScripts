@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_UserScript\__init__.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 13024 bytes
@@ -13,7 +13,7 @@ from functools import partial
 from _Generic.GenericScript import TRANSPORT_BUTTON_SPECIFICATIONS, GenericScript
 from ableton.v3.control_surface import MapMode
 from .DeviceComponent import DeviceComponent
-map_modes = {k: v for k, v in vars(MapMode).items() if not callable(v)}
+map_modes = {k: v for k, v in vars(MapMode).items() if k[:1] != "_" if not callable(v)}
 logger = logging.getLogger(__name__)
 HIDE_SCRIPT = True
 
@@ -48,7 +48,7 @@ def parse_int(config_parser, integer_range, section_name, option_name):
                 e = None
                 del e
 
-    return integer
+        return integer
 
 
 open_file = open
@@ -71,18 +71,18 @@ def create_instance(c_instance, user_path=''):
             trackarm_controls = [
              -1] * 8
             bank_controls = {
-             'ONOFF': -1, 
-             'TOGGLELOCK': -1, 
-             'NEXTBANK': -1, 
-             'PREVBANK': -1, 
-             'BANK1': -1, 
-             'BANK2': -1, 
-             'BANK3': -1, 
-             'BANK4': -1, 
-             'BANK5': -1, 
-             'BANK6': -1, 
-             'BANK7': -1, 
-             'BANK8': -1}
+              'ONOFF': -1,
+              'TOGGLELOCK': -1,
+              'NEXTBANK': -1,
+              'PREVBANK': -1,
+              'BANK1': -1,
+              'BANK2': -1,
+              'BANK3': -1,
+              'BANK4': -1,
+              'BANK5': -1,
+              'BANK6': -1,
+              'BANK7': -1,
+              'BANK8': -1}
             controller_descriptions = {"CHANNEL": (-1)}
             mixer_options = {'NUMSENDS':2, 
              'INVERTMUTELEDS':True, 
@@ -129,15 +129,15 @@ def create_instance(c_instance, user_path=''):
                             option_name = "Pad{}Channel".format(pad + 1)
                             if config_parser.has_option("Globals", option_name):
                                 channel = config_parser.getint("Globals", option_name)
-                    if channel == -1:
-                        if controller_descriptions["CHANNEL"] != -1:
-                            channel = controller_descriptions["CHANNEL"]
-                        if channel in range(16):
-                            pad_info.append(pad % 4)
-                            pad_info.append(pad // 4)
-                            pad_info.append(note)
-                            pad_info.append(channel)
-                            pad_translation.append(tuple(pad_info))
+                            if channel == -1:
+                                if controller_descriptions["CHANNEL"] != -1:
+                                    channel = controller_descriptions["CHANNEL"]
+                                if channel in range(16):
+                                    pad_info.append(pad % 4)
+                                    pad_info.append(pad // 4)
+                                    pad_info.append(note)
+                                    pad_info.append(channel)
+                                    pad_translation.append(tuple(pad_info))
 
                 if len(pad_translation) > 0:
                     controller_descriptions["PAD_TRANSLATION"] = tuple(pad_translation)
@@ -154,28 +154,29 @@ def create_instance(c_instance, user_path=''):
                 if config_parser.has_option("MixerControls", "MixerButtonsToggle"):
                     if not config_parser.getboolean("MixerControls", "MixerButtonsToggle"):
                         mixer_options["NOTOGGLE"] = True
-                if config_parser.has_option("MixerControls", "InvertMuteButtonFeedback"):
-                    mixer_options["INVERTMUTELEDS"] = config_parser.getboolean("MixerControls", "InvertMuteButtonFeedback")
-                mixer_options["NEXTBANK"] = parse_identifier("MixerControls", "NextBankButton")
-                mixer_options["PREVBANK"] = parse_identifier("MixerControls", "PrevBankButton")
-            for index in range(8):
-                friendly_index = index + 1
-                if config_parser.has_section("DeviceControls"):
-                    bank_controls["BANK{}".format(friendly_index)] = parse_identifier("DeviceControls", "Bank{}Button".format(friendly_index))
-                if config_parser.has_section("MixerControls"):
-                    volume_controls[index] = tuple([
-                     parse_identifier("MixerControls", "VolumeSlider{}".format(friendly_index)),
-                     parse_channel("MixerControls", "Slider{}Channel".format(friendly_index))])
-                    trackarm_controls[index] = parse_identifier("MixerControls", "TrackArmButton{}".format(friendly_index))
-                    mixer_options["MUTE"][index] = parse_identifier("MixerControls", "TrackMuteButton{}".format(friendly_index))
-                    mixer_options["SOLO"][index] = parse_identifier("MixerControls", "TrackSoloButton{}".format(friendly_index))
-                    mixer_options["SELECT"][index] = parse_identifier("MixerControls", "TrackSelectButton{}".format(friendly_index))
-                    mixer_options["SEND1"][index] = parse_identifier("MixerControls", "Send1Knob{}".format(friendly_index))
-                    mixer_options["SEND2"][index] = parse_identifier("MixerControls", "Send2Knob{}".format(friendly_index))
+                    if config_parser.has_option("MixerControls", "InvertMuteButtonFeedback"):
+                        mixer_options["INVERTMUTELEDS"] = config_parser.getboolean("MixerControls", "InvertMuteButtonFeedback")
+                    mixer_options["NEXTBANK"] = parse_identifier("MixerControls", "NextBankButton")
+                    mixer_options["PREVBANK"] = parse_identifier("MixerControls", "PrevBankButton")
+                for index in range(8):
+                    friendly_index = index + 1
+                    if config_parser.has_section("DeviceControls"):
+                        bank_controls["BANK{}".format(friendly_index)] = parse_identifier("DeviceControls", "Bank{}Button".format(friendly_index))
+                    if config_parser.has_section("MixerControls"):
+                        volume_controls[index] = tuple([
+                         parse_identifier("MixerControls", "VolumeSlider{}".format(friendly_index)),
+                         parse_channel("MixerControls", "Slider{}Channel".format(friendly_index))])
+                        trackarm_controls[index] = parse_identifier("MixerControls", "TrackArmButton{}".format(friendly_index))
+                        mixer_options["MUTE"][index] = parse_identifier("MixerControls", "TrackMuteButton{}".format(friendly_index))
+                        mixer_options["SOLO"][index] = parse_identifier("MixerControls", "TrackSoloButton{}".format(friendly_index))
+                        mixer_options["SELECT"][index] = parse_identifier("MixerControls", "TrackSelectButton{}".format(friendly_index))
+                        mixer_options["SEND1"][index] = parse_identifier("MixerControls", "Send1Knob{}".format(friendly_index))
+                        mixer_options["SEND2"][index] = parse_identifier("MixerControls", "Send2Knob{}".format(friendly_index))
 
+            else:
+                pass
         else:
             pass
-    else:
         return type(get_name_for_script(user_path), (GenericScript,), {})(c_instance,
           device_map_mode,
           volume_map_mode,

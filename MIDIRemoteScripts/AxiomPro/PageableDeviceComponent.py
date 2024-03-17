@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\AxiomPro\PageableDeviceComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 13708 bytes
@@ -9,18 +9,18 @@ from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range, str
 import Live
 from _Generic.Devices import *
-import _Framework.ButtonElement as ButtonElement
-import _Framework.DeviceComponent as DeviceComponent
-import _Framework.DisplayDataSource as DisplayDataSource
-import _Framework.EncoderElement as EncoderElement
+from _Framework.ButtonElement import ButtonElement as ButtonElement
+from _Framework.DeviceComponent import DeviceComponent as DeviceComponent
+from _Framework.DisplayDataSource import DisplayDataSource as DisplayDataSource
+from _Framework.EncoderElement import EncoderElement as EncoderElement
 SPECIAL_NAME_DICT = {
- 'InstrumentImpulse': (('Pad1', 'Pad2'), ('Pad3', 'Pad4'), ('Pad5', 'Pad6'), ('Pad7', 'Pad8')), 
- 'Operator': (('OscA', 'OscB', 'OscC', 'OscD'), ('LFO', 'Fltr'), ('Pitch',), ('Glob.',)), 
- 'MultiSampler': (('Vol.', 'Pitch'), ('Fltr', 'FEnv'), ('LFO1', 'LFO2', 'LFO3'), ('Osc',)), 
- 'UltraAnalog': (('Osc',), ('Fltr', 'FEnv', 'FMod'), ('VEnv', 'Mix'), ('Out',)), 
- 'LoungeLizard': (('Ma&Ti',), ('To&Da',), ('Pick', 'Mod'), ('Glob.',)), 
- 'StringStudio': (('Ex&St', 'Damp'), ('Te&Pi', 'Body'), ('Fltr', 'LFO'), ('Glob.', 'Vibr')), 
- 'Eq8': (('Bands', 'EQ1-3'), ('Freq', 'Gain'), ('Reso', 'Fltr'), ('Glob.',))}
+  'InstrumentImpulse': (('Pad1', 'Pad2'), ('Pad3', 'Pad4'), ('Pad5', 'Pad6'), ('Pad7', 'Pad8')),
+  'Operator': (('OscA', 'OscB', 'OscC', 'OscD'), ('LFO', 'Fltr'), ('Pitch',), ('Glob.',)),
+  'MultiSampler': (('Vol.', 'Pitch'), ('Fltr', 'FEnv'), ('LFO1', 'LFO2', 'LFO3'), ('Osc',)),
+  'UltraAnalog': (('Osc',), ('Fltr', 'FEnv', 'FMod'), ('VEnv', 'Mix'), ('Out',)),
+  'LoungeLizard': (('Ma&Ti',), ('To&Da',), ('Pick', 'Mod'), ('Glob.',)),
+  'StringStudio': (('Ex&St', 'Damp'), ('Te&Pi', 'Body'), ('Fltr', 'LFO'), ('Glob.', 'Vibr')),
+  'Eq8': (('Bands', 'EQ1-3'), ('Freq', 'Gain'), ('Reso', 'Fltr'), ('Glob.',))}
 SPECIAL_DEVICE_DICT = {'InstrumentImpulse':[
   (
    IMP_BANK1, IMP_BANK2),
@@ -147,11 +147,10 @@ class PageableDeviceComponent(DeviceComponent):
     def _assign_parameters(self):
         if self._device.class_name in list(SPECIAL_DEVICE_DICT.keys()):
             self._PageableDeviceComponent__assign_parameters_special()
+        elif self._device.class_name in list(DEVICE_DICT.keys()):
+            self._PageableDeviceComponent__assign_parameters_normal()
         else:
-            if self._device.class_name in list(DEVICE_DICT.keys()):
-                self._PageableDeviceComponent__assign_parameters_normal()
-            else:
-                self._PageableDeviceComponent__assign_parameters_plugin()
+            self._PageableDeviceComponent__assign_parameters_plugin()
         self._parameter_value_data_source.set_display_string("")
         for index in range(len(self._parameter_controls)):
             if self._parameter_controls[index].mapped_parameter() != None:
@@ -191,35 +190,34 @@ class PageableDeviceComponent(DeviceComponent):
             if self._device.class_name in list(BANK_NAME_DICT.keys()):
                 if len(BANK_NAME_DICT[self._device.class_name]) > 1:
                     bank_names = BANK_NAME_DICT[self._device.class_name]
-            else:
                 bank = banks[self._bank_index]
                 if self._bank_index in range(len(bank_names)):
                     self._bank_name = bank_names[self._bank_index]
                 else:
                     self._bank_name = "Bank " + str(self._bank_index + 1)
-            for index in range(len(self._parameter_controls)):
-                parameter = get_parameter_by_name(self._device, bank[index])
-                if parameter != None:
-                    self._parameter_controls[index].connect_to(parameter)
-                else:
-                    self._parameter_controls[index].release_parameter()
+                for index in range(len(self._parameter_controls)):
+                    parameter = get_parameter_by_name(self._device, bank[index])
+                    if parameter != None:
+                        self._parameter_controls[index].connect_to(parameter)
+                    else:
+                        self._parameter_controls[index].release_parameter()
 
-        for index in range(len(self._page_name_data_sources)):
-            if index < len(bank_names):
-                self._page_name_data_sources[index].set_display_string(bank_names[index])
-            else:
-                self._page_name_data_sources[index].set_display_string(" - ")
+            for index in range(len(self._page_name_data_sources)):
+                if index < len(bank_names):
+                    self._page_name_data_sources[index].set_display_string(bank_names[index])
+                else:
+                    self._page_name_data_sources[index].set_display_string(" - ")
 
     def __assign_parameters_plugin(self):
         num_controls = len(self._parameter_controls)
         num_banks = min(8, number_of_parameter_banks(self._device))
         num_double_pages = 0
         num_double_pages_before = 0
-        parameters_to_use = self._device.parameters[1[:None]]
+        parameters_to_use = self._device.parameters[1:]
         self._bank_name = "Bank " + str(self._bank_index + 1)
         if num_banks > 4:
             num_double_pages = num_banks - 4
-        elif self._bank_index < num_double_pages:
+        if self._bank_index < num_double_pages:
             self._page_index[self._bank_index] %= 2
             num_double_pages_before = self._bank_index
         else:

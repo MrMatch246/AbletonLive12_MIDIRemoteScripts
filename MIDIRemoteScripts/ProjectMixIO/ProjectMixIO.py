@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ProjectMixIO\ProjectMixIO.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9948 bytes
@@ -9,12 +9,12 @@ from __future__ import absolute_import, print_function, unicode_literals
 from builtins import object, range
 import Live
 from MackieControl.ChannelStrip import ChannelStrip, MasterChannelStrip
-import MackieControl.ChannelStripController as ChannelStripController
+from MackieControl.ChannelStripController import ChannelStripController as ChannelStripController
 from MackieControl.consts import *
-import MackieControl.MainDisplay as MainDisplay
-import MackieControl.MainDisplayController as MainDisplayController
-import MackieControl.SoftwareController as SoftwareController
-import MackieControl.Transport as Transport
+from MackieControl.MainDisplay import MainDisplay as MainDisplay
+from MackieControl.MainDisplayController import MainDisplayController as MainDisplayController
+from MackieControl.SoftwareController import SoftwareController as SoftwareController
+from MackieControl.Transport import Transport as Transport
 
 class ProjectMixIO(object):
 
@@ -122,10 +122,9 @@ class ProjectMixIO(object):
             cc_value = midi_bytes[2]
             if cc_no == JOG_WHEEL_CC_NO:
                 self._ProjectMixIO__transport.handle_jog_wheel_rotation(cc_value)
-            else:
-                if cc_no in range(FID_PANNING_BASE, FID_PANNING_BASE + NUM_CHANNEL_STRIPS):
-                    for s in self._ProjectMixIO__channel_strips:
-                        s.handle_vpot_rotation(cc_no - FID_PANNING_BASE, cc_value)
+            elif cc_no in range(FID_PANNING_BASE, FID_PANNING_BASE + NUM_CHANNEL_STRIPS):
+                for s in self._ProjectMixIO__channel_strips:
+                    s.handle_vpot_rotation(cc_no - FID_PANNING_BASE, cc_value)
 
     def shift_is_pressed(self):
         return self._ProjectMixIO__shift_is_pressed

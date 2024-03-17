@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\SL_MkIII\device_parameters.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 1965 bytes
@@ -32,16 +32,17 @@ class DeviceParameterComponent(DisplayingDeviceParameterComponent):
 
     def _update_parameter_values(self):
         super()._update_parameter_values()
-        for parameter, control in zip_longest(self.parameters, self._parameter_controls or []):
-            if is_internal_parameter(parameter) and control:
-                control.send_value(convert_parameter_value_to_midi_value(parameter))
+        for (parameter, control) in zip_longest(self.parameters, self._parameter_controls or []):
+            if is_internal_parameter(parameter):
+                if control:
+                    control.send_value(convert_parameter_value_to_midi_value(parameter))
 
     def _update_parameters(self):
         super()._update_parameters()
         self._update_color_fields()
 
     def _update_color_fields(self):
-        for color_field_index, parameter_info in zip_longest(range(WIDTH), self._parameter_provider.parameters[None[:WIDTH]]):
+        for (color_field_index, parameter_info) in zip_longest(range(WIDTH), self._parameter_provider.parameters[:WIDTH]):
             parameter = parameter_info.parameter if parameter_info else None
             color = "Device.On" if parameter else "DefaultButton.Disabled"
             self.parameter_color_fields[color_field_index].color = color

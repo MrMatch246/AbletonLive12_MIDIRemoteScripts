@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\layer.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7553 bytes
@@ -115,7 +115,7 @@ class Layer(LayerBase):
         self._name_to_elements = dict(zip([key for key in elements], repeat(None)))
         self._element_to_names = dict()
         self._element_clients = dict()
-        for name, element in iteritems(elements):
+        for (name, element) in iteritems(elements):
             self._element_to_names.setdefault(get_element(element), []).append(name)
 
     def __getattr__(self, name):

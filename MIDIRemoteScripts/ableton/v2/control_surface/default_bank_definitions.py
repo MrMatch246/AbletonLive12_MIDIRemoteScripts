@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\default_bank_definitions.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 259128 bytes
@@ -2442,10 +2442,10 @@ BANK_DEFINITIONS = {'AudioEffectGroupDevice':RACK_BANKS,
    {BANK_PARAMETERS_KEY: ('Filter Bandwidth', 'Upper Filter Band', 'Lower Filter Band', 'Precise/Retro', 'Unvoiced Level',
  'Unvoiced Sensitivity', 'Unvoiced Speed', 'Enhance')})))}
 PARAMETERS_BLACKLIST_FOR_CPP_SANITY_CHECK = {
- 'OriginalSimpler': ('Start', 'End', 'Sensitivity', 'Mode', 'Playback', 'Pad Slicing', 'Multi Sample', 'Warp', 'Warp Mode', 'Voices', 'Preserve', 'Loop Mode', 'Envelope', 'Grain Size Tones', 'Grain Size Texture', 'Flux', 'Formants', 'Envelope Complex Pro', 'Gain'), 
- 'InstrumentVector': ('Osc 1 Effect Type', 'Osc 2 Effect Type', 'Osc 1 Table', 'Osc 2 Table', 'Osc 1 Category', 'Osc 2 Category', 'Osc 1 Pitch', 'Osc 2 Pitch', 'Unison Mode', 'Mono On'), 
- 'Delay': ('L Sync Enum', 'R Sync Enum'), 
- 'Drift': ('Voice Mode', 'Voice Count', 'LP Mod Src 1', 'LP Mod Src 2'), 
- 'Roar': '"Routing"'}
+  'OriginalSimpler': ('Start', 'End', 'Sensitivity', 'Mode', 'Playback', 'Pad Slicing', 'Multi Sample', 'Warp', 'Warp Mode', 'Voices', 'Preserve', 'Loop Mode', 'Envelope', 'Grain Size Tones', 'Grain Size Texture', 'Flux', 'Formants', 'Envelope Complex Pro', 'Gain'),
+  'InstrumentVector': ('Osc 1 Effect Type', 'Osc 2 Effect Type', 'Osc 1 Table', 'Osc 2 Table', 'Osc 1 Category', 'Osc 2 Category', 'Osc 1 Pitch', 'Osc 2 Pitch', 'Unison Mode', 'Mono On'),
+  'Delay': ('L Sync Enum', 'R Sync Enum'),
+  'Drift': ('Voice Mode', 'Voice Count', 'LP Mod Src 1', 'LP Mod Src 2'),
+  'Roar': "Routing"}
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v2/control_surface/default_bank_definitions.pyc

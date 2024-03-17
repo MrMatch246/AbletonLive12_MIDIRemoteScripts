@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\banking_util.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3892 bytes
@@ -24,7 +24,7 @@ def has_bank_count(device):
         except (AttributeError, RuntimeError):
             pass
 
-    return False
+        return False
 
 
 def has_main_bank(device, definitions):
@@ -53,7 +53,7 @@ def has_bank_names(device, definitions):
 
 def all_parameters(device):
     if liveobj_valid(device):
-        return list(device.parameters[1[:None]])
+        return list(device.parameters[1:])
     return []
 
 
@@ -63,11 +63,10 @@ def device_bank_count(device, bank_size=8, definition=None, definitions=None):
         definition = definition or definitions.get(device.class_name, {})
         if has_bank_count(device):
             count = device.get_bank_count() + int(has_main_bank(device, definitions))
+        elif definition:
+            count = len(definition.keys())
         else:
-            if definition:
-                count = len(definition.keys())
-            else:
-                count = int(ceil(old_div(float(len(all_parameters(device))), bank_size)))
+            count = int(ceil(old_div(float(len(all_parameters(device))), bank_size)))
     return count
 
 
@@ -83,17 +82,17 @@ def device_bank_names(device, bank_size=8, definitions=None):
         class_name = device.class_name
         if class_name in definitions:
             names = definitions[class_name].keys()
-        else:
-            if has_bank_count(device) and has_bank_names(device, definitions):
+        elif has_bank_count(device):
+            if has_bank_names(device, definitions):
                 offset = int(has_main_bank(device, definitions))
                 names = [device.get_bank_name(index - offset) for index in range(device_bank_count(device, definitions=definitions))]
-                if has_main_bank(device, definitions):
-                    names[0] = names[0] or BANK_MAIN_KEY
-            else:
-                bank_count = device_bank_count(device,
-                  bank_size=bank_size, definitions=definitions)
-                names = [BANK_FORMAT % (index + 1) for index in range(bank_count)]
-    return names
+                if has_main_bank(device, definitions) and not names[0]:
+                    names[0] = BANK_MAIN_KEY
+                else:
+                    bank_count = device_bank_count(device,
+                      bank_size=bank_size, definitions=definitions)
+                    names = [BANK_FORMAT % (index + 1) for index in range(bank_count)]
+        return names
 
 
 class BankingInfo(object):

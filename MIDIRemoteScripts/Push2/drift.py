@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\drift.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 13162 bytes
@@ -95,7 +95,7 @@ class DriftDeviceDecorator(LiveObjectDecorator, EventObject):
         self._add_switch_option(name="Osc 2 Wave",
           pname="Osc 2 Wave",
           labels=[
-         'Sin', 'Tri', 'Sat', 'Saw', 'Rec'])
+         "Sin","Tri","Sat","Saw","Rec"])
         self._add_switch_option(name="Env 2 Cyc On",
           pname="Env 2 Cyc On",
           labels=["Env", "Cyc"])
@@ -156,18 +156,21 @@ class DriftDeviceComponent(DeviceComponentWithTrackColorViewData):
         for parameter in touched_parameters:
             if parameter.name == "HP Freq":
                 adjusting_filter_hp = True
-            elif parameter.name in ('LP Freq', 'LP Reso'):
+            if parameter.name in ('LP Freq', 'LP Reso'):
                 adjusting_filter_lp = True
-            else:
-                if parameter.name in ('Cyc Tilt', 'Cyc Hold', 'Cyc Mode', 'Cyc Rate',
-                                      'Cyc Ratio', 'Cyc Time', 'Cyc Synced'):
-                    adjusting_cycling_envelope = True
+            if parameter.name in ('Cyc Tilt', 'Cyc Hold', 'Cyc Mode', 'Cyc Rate', 'Cyc Ratio',
+                                  'Cyc Time', 'Cyc Synced'):
+                adjusting_cycling_envelope = True
+            if parameter.name in ('Osc 1 Wave', 'Osc 2 Wave', 'Osc 1 Shape', 'Osc 1 Oct',
+                                  'Osc 2 Oct', 'Osc 2 Detune', 'Osc 1 Gain', 'Osc 2 Gain',
+                                  'Noise Gain'):
+                adjusting_waveform = True
 
         return {
-         'AdjustingWaveform': adjusting_waveform, 
-         'AdjustingFilterHighPass': adjusting_filter_hp, 
-         'AdjustingFilterLowPass': adjusting_filter_lp, 
-         'AdjustingCyclingEnvelope': adjusting_cycling_envelope}
+          'AdjustingWaveform': adjusting_waveform,
+          'AdjustingFilterHighPass': adjusting_filter_hp,
+          'AdjustingFilterLowPass': adjusting_filter_lp,
+          'AdjustingCyclingEnvelope': adjusting_cycling_envelope}
 
     def _set_bank_index(self, bank):
         super(DriftDeviceComponent, self)._set_bank_index(bank)
@@ -195,19 +198,19 @@ class DriftDeviceComponent(DeviceComponentWithTrackColorViewData):
     def _configuration_view_data(self):
         if not liveobj_valid(self._decorated_device):
             return {}
-        waveform_left, waveform_right = self._calculate_view_size(self.WAVEFORM_VISUALISATION_CONFIGURATION_IN_BANKS)
-        filter_left, filter_right = self._calculate_view_size(self.FILTER_VISUALISATION_CONFIGURATION_IN_FILTER_BANK)
-        env1_left, env1_right = self._calculate_view_size(self.ENV1_VISUALISATION_CONFIGURATION_IN_ENV_BANK)
-        env2_left, env2_right = self._calculate_view_size(self.ENV2_VISUALISATION_CONFIGURATION_IN_ENV_BANK)
+        (waveform_left, waveform_right) = self._calculate_view_size(self.WAVEFORM_VISUALISATION_CONFIGURATION_IN_BANKS)
+        (filter_left, filter_right) = self._calculate_view_size(self.FILTER_VISUALISATION_CONFIGURATION_IN_FILTER_BANK)
+        (env1_left, env1_right) = self._calculate_view_size(self.ENV1_VISUALISATION_CONFIGURATION_IN_ENV_BANK)
+        (env2_left, env2_right) = self._calculate_view_size(self.ENV2_VISUALISATION_CONFIGURATION_IN_ENV_BANK)
         return {
-         'WaveformLeft': waveform_left, 
-         'WaveformRight': waveform_right, 
-         'FilterLeft': filter_left, 
-         'FilterRight': filter_right, 
-         'Env1Left': env1_left, 
-         'Env1Right': env1_right, 
-         'Env2Left': env2_left, 
-         'Env2Right': env2_right}
+          'WaveformLeft': waveform_left,
+          'WaveformRight': waveform_right,
+          'FilterLeft': filter_left,
+          'FilterRight': filter_right,
+          'Env1Left': env1_left,
+          'Env1Right': env1_right,
+          'Env2Left': env2_left,
+          'Env2Right': env2_right}
 
     def _envelope_visualisation_data(self):
         shown_features = set(["AttackLine", "DecayLine", "SustainLine", "ReleaseLine"])

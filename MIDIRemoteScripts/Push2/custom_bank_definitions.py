@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\custom_bank_definitions.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 427850 bytes
@@ -2678,26 +2678,26 @@ BANK_DEFINITIONS = {'AudioEffectGroupDevice':RACK_BANKS,
    {BANK_PARAMETERS_KEY: ('Filter Bandwidth', 'Upper Filter Band', 'Lower Filter Band', 'Precise/Retro', 'Unvoiced Level',
  'Unvoiced Sensitivity', 'Unvoiced Speed', 'Enhance')})))}
 PARAMETERS_BLACKLIST_FOR_CPP_SANITY_CHECK = {
- 'OriginalSimpler': ('Start', 'End', 'Sensitivity', 'Mode', 'Playback', 'Pad Slicing', 'Multi Sample', 'Zoom', 'Env. Type', 'Warp', 'Warp Mode', 'Voices', 'Preserve', 'Loop Mode', 'Envelope', 'Grain Size Tones', 'Grain Size Texture', 'Flux', 'Formants', 'Envelope Complex Pro', 'Gain', 'PB Range', 'Note PB'), 
- 'Operator': ('Oscillator', 'Envelope Feature Time/Level', 'Envelope Feature Time/Slope/Level'), 
- 'Eq8': ('Band', 'Eq Mode', 'Edit Mode', 'Oversampling'), 
- 'Compressor2': ('Input Type', 'Input Channel', 'Position'), 
- 'InstrumentVector': ('Oscillator', 'Osc 1 Effect Type', 'Osc 2 Effect Type', 'Osc 1 Table', 'Osc 2 Table', 'Osc 1 Pitch', 'Osc 2 Pitch', 'Filter', 'Envelopes', 'LFO', 'Amp Env View', 'Mod Env View', 'Modulation Target Names', 'Amp Env Mod Amount', 'Env 2 Mod Amount', 'Env 3 Mod Amount', 'Lfo 1 Mod Amount', 'Lfo 2 Mod Amount', 'MIDI Velocity Mod Amount', 'MIDI Note Mod Amount', 'MIDI Pitch Bend Mod Amount', 'MIDI Aftertouch Mod Amount', 'MIDI Mod Wheel Mod Amount', 'MIDI Random On Note On', 'Current Mod Target', 'Unison Mode', 'Unison Voices', 'Mono On', 'Poly Voices', 'Filter Routing'), 
- 'Hybrid': ('Band', 'Section', 'Shape', 'IR', 'IR Category', 'Ir Attack Time', 'Ir Decay Time', 'Ir Size Factor', 'Vintage Copy', 'Routing Eq Off', 'Routing Eq On PreAlgo Off', 'Routing Eq On PreAlgo On'), 
- 'Shifter': ('Pitch Bend Range', 'Pitch Mode'), 
- 'Transmute': ('Frequency Dial Mode', 'Midi Gate', 'Mod Mode', 'Mono Poly', 'Pitch Mode', 'Pitch Bend Range', 'Polyphony'), 
- 'Echo': ('Channel Toggle',), 
- 'Delay': ('Channel', 'L Sync Enum', 'R Sync Enum', 'Link Switch'), 
- 'Drift': ('Osc Select', 'LP Mod Src 1', 'LP Mod Src 2', 'LFO Mod Src', 'Mod Dest', 'Mod Slot', 'Voice Mode', 'Voice Count', 'PB Range', 'Shape Mod Src', 'Pitch Mod Src 1', 'Pitch Mod Src 2', 'Mod Source 1', 'Mod Source 2', 'Mod Source 3', 'Mod Dest 1', 'Mod Dest 2', 'Mod Dest 3'), 
- 'Resonator': '"Select"', 
- 'UltraAnalog': ('Osc Select', 'Osc / Amp', 'Env Select', 'LFO Select', 'Mod Source', 'Mod Dest', 'Select'), 
- 'Collision': ('Resonator', 'LFO Select', 'Mod Source', 'Mod Dest'), 
- 'StringStudio': ('Section', 'Vib & Uni', 'Mod Source'), 
- 'FilterDelay': '"Chan Select"', 
- 'Vinyl': '"Module"', 
- 'Roar': ('Routing', 'Stage Select', 'Source'), 
- 'DrumCell': '"Select"', 
- 'MidiCcControl': ('Custom Button Target', 'Custom Target 1', 'Custom Target 2', 'Custom Target 3', 'Custom Target 4', 'Custom Target 5', 'Custom Target 6', 'Custom Target 7', 'Custom Target 8', 'Custom Target 9', 'Custom Target 10', 'Custom Target 11', 'Custom Target 12'), 
- 'InstrumentMeld': ('Selected Engine', 'Selected Env', 'LFO1 Effect', 'Envelope View', 'Stack Voices', 'Mono Poly', 'Poly Voices')}
+  'OriginalSimpler': ('Start', 'End', 'Sensitivity', 'Mode', 'Playback', 'Pad Slicing', 'Multi Sample', 'Zoom', 'Env. Type', 'Warp', 'Warp Mode', 'Voices', 'Preserve', 'Loop Mode', 'Envelope', 'Grain Size Tones', 'Grain Size Texture', 'Flux', 'Formants', 'Envelope Complex Pro', 'Gain', 'PB Range', 'Note PB'),
+  'Operator': ('Oscillator', 'Envelope Feature Time/Level', 'Envelope Feature Time/Slope/Level'),
+  'Eq8': ('Band', 'Eq Mode', 'Edit Mode', 'Oversampling'),
+  'Compressor2': ('Input Type', 'Input Channel', 'Position'),
+  'InstrumentVector': ('Oscillator', 'Osc 1 Effect Type', 'Osc 2 Effect Type', 'Osc 1 Table', 'Osc 2 Table', 'Osc 1 Pitch', 'Osc 2 Pitch', 'Filter', 'Envelopes', 'LFO', 'Amp Env View', 'Mod Env View', 'Modulation Target Names', 'Amp Env Mod Amount', 'Env 2 Mod Amount', 'Env 3 Mod Amount', 'Lfo 1 Mod Amount', 'Lfo 2 Mod Amount', 'MIDI Velocity Mod Amount', 'MIDI Note Mod Amount', 'MIDI Pitch Bend Mod Amount', 'MIDI Aftertouch Mod Amount', 'MIDI Mod Wheel Mod Amount', 'MIDI Random On Note On', 'Current Mod Target', 'Unison Mode', 'Unison Voices', 'Mono On', 'Poly Voices', 'Filter Routing'),
+  'Hybrid': ('Band', 'Section', 'Shape', 'IR', 'IR Category', 'Ir Attack Time', 'Ir Decay Time', 'Ir Size Factor', 'Vintage Copy', 'Routing Eq Off', 'Routing Eq On PreAlgo Off', 'Routing Eq On PreAlgo On'),
+  'Shifter': ('Pitch Bend Range', 'Pitch Mode'),
+  'Transmute': ('Frequency Dial Mode', 'Midi Gate', 'Mod Mode', 'Mono Poly', 'Pitch Mode', 'Pitch Bend Range', 'Polyphony'),
+  'Echo': ('Channel Toggle',),
+  'Delay': ('Channel', 'L Sync Enum', 'R Sync Enum', 'Link Switch'),
+  'Drift': ('Osc Select', 'LP Mod Src 1', 'LP Mod Src 2', 'LFO Mod Src', 'Mod Dest', 'Mod Slot', 'Voice Mode', 'Voice Count', 'PB Range', 'Shape Mod Src', 'Pitch Mod Src 1', 'Pitch Mod Src 2', 'Mod Source 1', 'Mod Source 2', 'Mod Source 3', 'Mod Dest 1', 'Mod Dest 2', 'Mod Dest 3'),
+  'Resonator': "Select",
+  'UltraAnalog': ('Osc Select', 'Osc / Amp', 'Env Select', 'LFO Select', 'Mod Source', 'Mod Dest', 'Select'),
+  'Collision': ('Resonator', 'LFO Select', 'Mod Source', 'Mod Dest'),
+  'StringStudio': ('Section', 'Vib & Uni', 'Mod Source'),
+  'FilterDelay': "Chan Select",
+  'Vinyl': "Module",
+  'Roar': ('Routing', 'Stage Select', 'Source'),
+  'DrumCell': "Select",
+  'MidiCcControl': ('Custom Button Target', 'Custom Target 1', 'Custom Target 2', 'Custom Target 3', 'Custom Target 4', 'Custom Target 5', 'Custom Target 6', 'Custom Target 7', 'Custom Target 8', 'Custom Target 9', 'Custom Target 10', 'Custom Target 11', 'Custom Target 12'),
+  'InstrumentMeld': ('Selected Engine', 'Selected Env', 'LFO1 Effect', 'Envelope View', 'Stack Voices', 'Mono Poly', 'Poly Voices')}
 
 # okay decompiling ./MIDIRemoteScripts/Push2/custom_bank_definitions.pyc

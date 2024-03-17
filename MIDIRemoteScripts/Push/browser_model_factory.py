@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push\browser_model_factory.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4326 bytes
@@ -30,7 +30,7 @@ def make_midi_effect_browser_model(browser):
     places = PlacesBrowserQuery(subfolder=PLACES_LABEL)
     color_tags = ColorTagsBrowserQuery()
     return QueryingBrowserModel(browser=browser,
-      queries=[color_tags, midi_effects, max, plugins, places])
+      queries=[color_tags,midi_effects,max,plugins,places])
 
 
 def make_audio_effect_browser_model(browser):
@@ -44,7 +44,7 @@ def make_audio_effect_browser_model(browser):
     places = PlacesBrowserQuery(subfolder=PLACES_LABEL)
     color_tags = ColorTagsBrowserQuery()
     return QueryingBrowserModel(browser=browser,
-      queries=[color_tags, audio_effects, max, plugins, places])
+      queries=[color_tags,audio_effects,max,plugins,places])
 
 
 def make_instruments_browser_model(browser):
@@ -76,13 +76,13 @@ def make_instruments_browser_model(browser):
     color_tags = ColorTagsBrowserQuery()
     return QueryingBrowserModel(browser=browser,
       queries=[
-     color_tags, 
-     instrument_rack, 
-     drums, 
-     instruments, 
-     max, 
-     drum_hits, 
-     plugins, 
+     color_tags,
+     instrument_rack,
+     drums,
+     instruments,
+     max,
+     drum_hits,
+     plugins,
      places])
 
 
@@ -103,7 +103,7 @@ def make_drum_pad_browser_model(browser):
     color_tags = ColorTagsBrowserQuery()
     return QueryingBrowserModel(browser=browser,
       queries=[
-     color_tags, drums, samples, instruments, max, plugins, places])
+     color_tags,drums,samples,instruments,max,plugins,places])
 
 
 def make_fallback_browser_model(browser):

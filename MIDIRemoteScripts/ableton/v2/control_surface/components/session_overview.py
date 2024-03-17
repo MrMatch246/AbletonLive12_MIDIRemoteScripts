@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\components\session_overview.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7345 bytes
@@ -86,22 +86,25 @@ class SessionOverviewComponent(Component):
                                 playing = False
                                 for track in range(track_offset, track_offset + width):
                                     for scene in range(scene_offset, scene_offset + height):
-                                        if track in range(len(tracks)) and scene in range(len(scenes)):
-                                            if not liveobj_valid(slots_registry[scene]):
-                                                slots_registry[scene] = scenes[scene].clip_slots
-                                            slot = slots_registry[scene][track] if len(slots_registry[scene]) > track else None
-                                            if liveobj_valid(slot) and slot.has_clip and slot.clip.is_playing:
-                                                value_to_send = self._playing_value
-                                                playing = True
-                                                break
+                                        if track in range(len(tracks)):
+                                            if scene in range(len(scenes)):
+                                                if not liveobj_valid(slots_registry[scene]):
+                                                    slots_registry[scene] = scenes[scene].clip_slots
+                                                slot = slots_registry[scene][track] if len(slots_registry[scene]) > track else None
+                                                if liveobj_valid(slot):
+                                                    if slot.has_clip:
+                                                        if slot.clip.is_playing:
+                                                            value_to_send = self._playing_value
+                                                            playing = True
+                                                            break
 
                                     if playing:
                                         break
 
                         if in_range(value_to_send, 0, 128):
                             self._buttons.send_value(x, y, value_to_send)
-                    else:
-                        self._buttons.set_light(x, y, value_to_send)
+                        else:
+                            self._buttons.set_light(x, y, value_to_send)
 
     @listens("offset")
     def __on_session_offset_changes(self, track_offset, scene_offset):
@@ -116,12 +119,11 @@ class SessionOverviewComponent(Component):
 
     @listens("value")
     def __on_matrix_value(self, value, x, y, is_momentary):
-        if self.is_enabled():
-            if not (value != 0 or is_momentary):
-                track_offset = (x + self._track_bank_index * self._buttons.width()) * self._session_ring.num_tracks
-                scene_offset = (y + self._scene_bank_index * self._buttons.height()) * self._session_ring.num_scenes
-                if track_offset in range(len(self._session_ring.tracks_to_use())):
-                    if scene_offset in range(len(self.song.scenes)):
-                        self._session_ring.set_offsets(track_offset, scene_offset)
+        if not (self.is_enabled() and value != 0 or is_momentary):
+            track_offset = (x + self._track_bank_index * self._buttons.width()) * self._session_ring.num_tracks
+            scene_offset = (y + self._scene_bank_index * self._buttons.height()) * self._session_ring.num_scenes
+            if track_offset in range(len(self._session_ring.tracks_to_use())):
+                if scene_offset in range(len(self.song.scenes)):
+                    self._session_ring.set_offsets(track_offset, scene_offset)
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v2/control_surface/components/session_overview.pyc

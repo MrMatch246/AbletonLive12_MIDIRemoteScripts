@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\session_overview.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5619 bytes
@@ -50,7 +50,7 @@ class SessionOverviewComponent(Component):
         if self.is_enabled() and self.matrix.control_elements:
             self._update_bank_offsets()
             self._update_matrix()
-            self._SessionOverviewComponent__on_playing_slot_index_changed.replace_subjects(self._session_ring.tracks_to_use()[self._track_bank_offset[:self._track_bank_offset + self._track_bank_size]])
+            self._SessionOverviewComponent__on_playing_slot_index_changed.replace_subjects(self._session_ring.tracks_to_use()[self._track_bank_offset:self._track_bank_offset + self._track_bank_size])
         else:
             self._SessionOverviewComponent__on_playing_slot_index_changed.replace_subjects([])
 
@@ -58,9 +58,10 @@ class SessionOverviewComponent(Component):
         return self._session_ring.track_offset - self._track_bank_offset in range(num_tracks * (x - 1) + 1, num_tracks * (x + 1)) and self._session_ring.scene_offset - self._scene_bank_offset in range(num_scenes * (y - 1) + 1, num_scenes * (y + 1))
 
     def _block_has_playing_clips(self, tracks, num_tracks, num_scenes, track_offset, scene_offset):
-        for track in tracks[track_offset[:track_offset + num_tracks]]:
-            if track in self.song.tracks and track.playing_slot_index in range(scene_offset, scene_offset + num_scenes):
-                return True
+        for track in tracks[track_offset:track_offset + num_tracks]:
+            if track in self.song.tracks:
+                if track.playing_slot_index in range(scene_offset, scene_offset + num_scenes):
+                    return True
 
         return False
 
@@ -72,16 +73,15 @@ class SessionOverviewComponent(Component):
             for y in range(self.matrix.height):
                 track_offset = x * num_tracks + self._track_bank_offset
                 scene_offset = y * num_scenes + self._scene_bank_offset
-                if not track_offset not in range(len(tracks)):
-                    if scene_offset not in range(len(self.song.scenes)):
-                        self.matrix.get_control(y, x).color = "Zooming.Empty"
-                        continue
-                    if self._block_is_within_selection(x, y, num_tracks, num_scenes):
-                        self.matrix.get_control(y, x).color = "Zooming.Selected"
-                    elif self._block_has_playing_clips(tracks, num_tracks, num_scenes, track_offset, scene_offset):
-                        self.matrix.get_control(y, x).color = "Zooming.Playing"
-                    else:
-                        self.matrix.get_control(y, x).color = "Zooming.Stopped"
+                if track_offset not in range(len(tracks)) or scene_offset not in range(len(self.song.scenes)):
+                    self.matrix.get_control(y, x).color = "Zooming.Empty"
+                    continue
+                if self._block_is_within_selection(x, y, num_tracks, num_scenes):
+                    self.matrix.get_control(y, x).color = "Zooming.Selected"
+                elif self._block_has_playing_clips(tracks, num_tracks, num_scenes, track_offset, scene_offset):
+                    self.matrix.get_control(y, x).color = "Zooming.Playing"
+                else:
+                    self.matrix.get_control(y, x).color = "Zooming.Stopped"
 
     def _update_bank_offsets(self):
         scene_bank_size = self.matrix.height * self._session_ring.num_scenes

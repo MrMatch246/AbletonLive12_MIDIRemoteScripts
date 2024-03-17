@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\APC64\session.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3161 bytes
@@ -23,10 +23,11 @@ class ClipSlotComponent(ClipSlotComponentBase):
         self._fixed_length = settings_component.fixed_length
 
     def do_launch_slot(self):
-        if self._fixed_length.enabled and liveobj_valid(self._clip_slot):
-            self._clip_slot.is_group_slot or self._has_clip() or self._clip_slot.fire(record_length=(self._fixed_length.record_length))
-        else:
-            super()._do_launch_slot()
+        if self._fixed_length.enabled:
+            if liveobj_valid(self._clip_slot) and not self._clip_slot.is_group_slot:
+                self._has_clip() or self._clip_slot.fire(record_length=(self._fixed_length.record_length))
+            else:
+                super()._do_launch_slot()
 
     def _do_launch_slot(self):
         self.do_launch_slot()
@@ -35,11 +36,10 @@ class ClipSlotComponent(ClipSlotComponentBase):
         has_clip = self._has_clip()
         if has_clip and self.select_button.is_pressed and self.duplicate_button.is_pressed:
             action.duplicate_loop(self._clip_slot.clip)
+        elif has_clip and self.quantize_button.is_pressed:
+            self._quantization.quantize_clip(self._clip_slot.clip)
         else:
-            if has_clip and self.quantize_button.is_pressed:
-                self._quantization.quantize_clip(self._clip_slot.clip)
-            else:
-                super()._on_launch_button_pressed()
+            super()._on_launch_button_pressed()
 
     def _any_modifier_pressed(self):
         return super()._any_modifier_pressed() or self.quantize_button.is_pressed

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Akai_Force_MPC\session.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 8913 bytes
@@ -29,7 +29,7 @@ def find_first_playing_grouped_track(group_track, all_tracks):
     def is_playing_and_grouped(track):
         return is_child_of_group_track(group_track, track) and not track.is_foldable and track.playing_slot_index >= 0
 
-    return find_if(is_playing_and_grouped, all_tracks[index_if((lambda t: t == group_track), all_tracks)[:None]])
+    return find_if(is_playing_and_grouped, all_tracks[index_if((lambda t: t == group_track), all_tracks):])
 
 
 def is_child_of_group_track(group_track, track):
@@ -77,7 +77,7 @@ class SessionComponent(SessionComponentBase):
         self._set_scene_controls("force_launch_button", buttons)
 
     def set_select_button(self, button):
-        for scene_index, slot_index in product(range(self._session_ring.num_scenes), range(self._session_ring.num_tracks)):
+        for (scene_index, slot_index) in product(range(self._session_ring.num_scenes), range(self._session_ring.num_tracks)):
             self.scene(scene_index).clip_slot(slot_index).set_select_button(button)
 
     def _reassign_tracks(self):
@@ -116,14 +116,14 @@ class SessionComponent(SessionComponentBase):
                         subject_index = index - track_index + group_track_index
                         if in_range(subject_index, 0, session_ring.num_tracks):
                             self._do_update_playing_position_subject(subject_index)
-                elif track.is_foldable:
-                    track = find_first_playing_grouped_track(track, self.song.tracks)
-                if liveobj_valid(track):
-                    playing_slot_index = track.playing_slot_index
-                    if playing_slot_index >= 0:
-                        clip_slot = track.clip_slots[playing_slot_index]
-                        if clip_slot.has_clip:
-                            new_subject = clip_slot.clip
+                        if track.is_foldable:
+                            track = find_first_playing_grouped_track(track, self.song.tracks)
+                        if liveobj_valid(track):
+                            playing_slot_index = track.playing_slot_index
+                            if playing_slot_index >= 0:
+                                clip_slot = track.clip_slots[playing_slot_index]
+                                if clip_slot.has_clip:
+                                    new_subject = clip_slot.clip
         self._playing_position_subjects[index] = new_subject
         self._SessionComponent__on_playing_position_changed.replace_subjects((self._playing_position_subjects),
           identifiers=(count()))
@@ -139,15 +139,14 @@ class SessionComponent(SessionComponentBase):
             start_marker = clip.start_marker
             if not clip.looping:
                 normalized_value = old_div(playing_position - clip.start_marker, clip.length)
+            elif start_marker < loop_start and playing_position < loop_start:
+                normalized_value = old_div(playing_position - clip.start_marker, loop_start - start_marker)
             else:
-                if start_marker < loop_start and playing_position < loop_start:
-                    normalized_value = old_div(playing_position - clip.start_marker, loop_start - start_marker)
-                else:
-                    length = clip.length
-                    position_in_loop = playing_position - loop_start - max(0, clip.start_marker - loop_start)
-                    if position_in_loop < 0:
-                        position_in_loop += length
-                    normalized_value = old_div(position_in_loop, length)
+                length = clip.length
+                position_in_loop = playing_position - loop_start - max(0, clip.start_marker - loop_start)
+                if position_in_loop < 0:
+                    position_in_loop += length
+                normalized_value = old_div(position_in_loop, length)
         self.playing_position_controls[index].value = clamp(int(normalized_value * 127), 0, 127)
 
     def _update_stop_clips_led(self, index):
@@ -159,10 +158,10 @@ class SessionComponent(SessionComponentBase):
             if track_index < len(tracks_to_use):
                 if tracks_to_use[track_index].clip_slots:
                     color = "Session.StopClip"
-            self.stop_clip_color_controls[index].color = color
+                self.stop_clip_color_controls[index].color = color
 
     def _set_clip_controls(self, name, controls):
-        for x, y in product(range(self._session_ring.num_tracks), range(self._session_ring.num_scenes)):
+        for (x, y) in product(range(self._session_ring.num_tracks), range(self._session_ring.num_scenes)):
             scene = self.scene(y)
             slot = scene.clip_slot(x)
             _set_method(slot, name)(controls.get_button(x, y) if controls else None)
@@ -171,7 +170,7 @@ class SessionComponent(SessionComponentBase):
         for x in range(self._session_ring.num_scenes):
             scene = self.scene(x)
 
-        for scene, control in zip_longest(self._scenes, controls or []):
+        for (scene, control) in zip_longest(self._scenes, controls or []):
             _set_method(scene, name)(control)
 
     def _can_have_playing_slots(self, track):

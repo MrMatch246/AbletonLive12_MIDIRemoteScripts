@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\APC40_MkII\MixerComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3951 bytes
@@ -23,12 +23,10 @@ class ChannelStripComponent(ChannelStripComponentBase):
                 value_to_send = None
                 if state == 0:
                     value_to_send = "Mixer.Crossfade.A"
-                else:
-                    if state == 1:
-                        value_to_send = "Mixer.Crossfade.Off"
-                    else:
-                        if state == 2:
-                            value_to_send = "Mixer.Crossfade.B"
+                elif state == 1:
+                    value_to_send = "Mixer.Crossfade.Off"
+                elif state == 2:
+                    value_to_send = "Mixer.Crossfade.B"
                 self._crossfade_toggle.set_light(value_to_send)
 
 
@@ -62,10 +60,10 @@ class MixerComponent(MixerComponentBase):
     def on_send_index_changed(self):
         if self.send_index is None:
             self.send_select_buttons.control_count = 0
-        else:
-            if self.send_index < self.send_select_buttons.control_count:
-                self.send_select_buttons[self.send_index].is_checked = True
-            elif self.is_enabled() and self._send_controls:
+        elif self.send_index < self.send_select_buttons.control_count:
+            self.send_select_buttons[self.send_index].is_checked = True
+        if self.is_enabled():
+            if self._send_controls:
                 self._show_controlled_sends_message()
 
     def _show_controlled_sends_message(self):
@@ -97,7 +95,7 @@ class MixerComponent(MixerComponentBase):
                 self._show_message("Controlling User Mappings")
 
     def set_crossfade_buttons(self, buttons):
-        for strip, button in zip_longest(self._channel_strips, buttons or []):
+        for (strip, button) in zip_longest(self._channel_strips, buttons or []):
             strip.set_crossfade_toggle(button)
 
     def _update_pan_controls(self):

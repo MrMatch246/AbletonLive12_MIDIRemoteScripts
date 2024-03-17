@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Komplete_Kontrol_S_Mk3\display.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3673 bytes
@@ -92,7 +92,7 @@ def protocol(elements):
 
     def display(content):
         if content:
-            for i, detail in enumerate(content.track_details):
+            for (i, detail) in enumerate(content.track_details):
                 elements.track_type_displays[i].send_value(detail.track_type)
                 elements.track_select_displays[i].send_value(detail.selected)
                 elements.track_mute_displays[i].send_value(detail.muted)

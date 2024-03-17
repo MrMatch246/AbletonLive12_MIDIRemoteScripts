@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launch_Control\LaunchControl.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 12604 bytes
@@ -10,17 +10,17 @@ from builtins import chr, range, str
 from functools import partial
 import Live
 from _Framework import Task
-import _Framework.ButtonMatrixElement as ButtonMatrixElement
-import _Framework.ControlSurface as ControlSurface
-import _Framework.DeviceBankRegistry as DeviceBankRegistry
-import _Framework.DeviceComponent as DeviceComponent
-import _Framework.EncoderElement as EncoderElement
+from _Framework.ButtonMatrixElement import ButtonMatrixElement as ButtonMatrixElement
+from _Framework.ControlSurface import ControlSurface as ControlSurface
+from _Framework.DeviceBankRegistry import DeviceBankRegistry as DeviceBankRegistry
+from _Framework.DeviceComponent import DeviceComponent as DeviceComponent
+from _Framework.EncoderElement import EncoderElement as EncoderElement
 from _Framework.InputControlElement import MIDI_CC_TYPE, MIDI_NOTE_TYPE
-import _Framework.Layer as Layer
+from _Framework.Layer import Layer as Layer
 from _Framework.ModesComponent import LayerMode, ModesComponent
 from _Framework.SubjectSlot import subject_slot
 from _Framework.Util import nop
-import _Framework.ViewControlComponent as ViewControlComponent
+from _Framework.ViewControlComponent import ViewControlComponent as ViewControlComponent
 from . import Colors, Sysex
 from .ButtonSysexControl import ButtonSysexControl
 from .ConfigurableButtonElement import ConfigurableButtonElement
@@ -95,7 +95,7 @@ class LaunchControl(ControlSurface):
     def _init_mixer(self):
         make_button = partial(make_launch_control_button, channel=8)
         make_encoder = partial(make_launch_control_encoder, channel=8)
-        bottom_encoders, top_encoders = make_all_encoders("Mixer", make_encoder)
+        (bottom_encoders, top_encoders) = make_all_encoders("Mixer", make_encoder)
         pan_volume_layer = Layer(volume_controls=ButtonMatrixElement(rows=[bottom_encoders]),
           pan_controls=ButtonMatrixElement(rows=[top_encoders]))
         sends_layer = Layer(sends_controls=ButtonMatrixElement(rows=[bottom_encoders, top_encoders]))
@@ -124,7 +124,7 @@ class LaunchControl(ControlSurface):
     def _init_session(self):
         make_button = partial(make_launch_control_button, channel=9)
         make_encoder = partial(make_launch_control_encoder, channel=9)
-        bottom_encoders, top_encoders = make_all_encoders("Session_Mixer", make_encoder)
+        (bottom_encoders, top_encoders) = make_all_encoders("Session_Mixer", make_encoder)
         pan_volume_layer = Layer(volume_controls=ButtonMatrixElement(rows=[bottom_encoders]),
           pan_controls=ButtonMatrixElement(rows=[top_encoders]))
         self._session_mixer = SpecialMixerComponent(8, Layer(), pan_volume_layer, Layer())
@@ -156,8 +156,8 @@ class LaunchControl(ControlSurface):
     def _init_device(self):
         make_button = partial(make_launch_control_button, channel=10)
         make_encoder = partial(make_launch_control_encoder, channel=10)
-        bottom_encoders, top_encoders = make_all_encoders("Device", make_encoder)
-        parameter_controls = top_encoders[None[:4]] + bottom_encoders[None[:4]]
+        (bottom_encoders, top_encoders) = make_all_encoders("Device", make_encoder)
+        parameter_controls = top_encoders[:4] + bottom_encoders[:4]
         bank_buttons = [make_button(identifier, ("Device_Bank_Button_" + str(i)), is_pad=True) for i, identifier in enumerate(pad_identifiers)]
         for button in bank_buttons:
             button.set_on_off_values(Colors.LED_ON, Colors.LED_OFF)
@@ -241,6 +241,6 @@ class LaunchControl(ControlSurface):
             self.request_rebuild_midi_map()
 
     def _is_user_mode_message(self, midi_bytes):
-        return midi_bytes[None[:7]] == Sysex.MODE_CHANGE_PREFIX and midi_bytes not in SYSEX_MODE_MAP
+        return midi_bytes[:7] == Sysex.MODE_CHANGE_PREFIX and midi_bytes not in SYSEX_MODE_MAP
 
 # okay decompiling ./MIDIRemoteScripts/Launch_Control/LaunchControl.pyc

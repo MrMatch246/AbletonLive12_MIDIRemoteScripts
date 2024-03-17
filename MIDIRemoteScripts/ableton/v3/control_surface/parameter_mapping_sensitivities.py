@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\parameter_mapping_sensitivities.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4703 bytes
@@ -34,9 +34,9 @@ def parameter_mapping_sensitivities(continuous_parameter_sensitivity=DEFAULT_CON
                 if is_quantized:
                     default = get_base_quantized_sensitivity(parameter) * quantized_parameter_sensitivity
 
-        return (
-         default,
-         default if is_quantized else default * FINE_GRAIN_SENSITIVITY_FACTOR)
+            return (
+             default,
+             default if is_quantized else default * FINE_GRAIN_SENSITIVITY_FACTOR)
 
     return inner
 
@@ -49,46 +49,46 @@ def create_sensitivities(quantized_parameter_sensitivity):
     return {'BeatRepeat':{"Pitch": q_default}, 
      'GrainDelay':{"Pitch": q_median}, 
      'InstrumentImpulse':{
-      '1 Transpose': q_median, 
-      '2 Transpose': q_median, 
-      '3 Transpose': q_median, 
-      '4 Transpose': q_median, 
-      '5 Transpose': q_median, 
-      '6 Transpose': q_median, 
-      '7 Transpose': q_median, 
-      '8 Transpose': q_median, 
-      'Global Transpose': q_median}, 
+       '1 Transpose': q_median,
+       '2 Transpose': q_median,
+       '3 Transpose': q_median,
+       '4 Transpose': q_median,
+       '5 Transpose': q_median,
+       '6 Transpose': q_median,
+       '7 Transpose': q_median,
+       '8 Transpose': q_median,
+       'Global Transpose': q_median}, 
      'LoungeLizard':{"Semitone": q_default}, 
      'MidiArpeggiator':{"Transp. Dist.": q_median}, 
      'MidiScale':{"Transpose": q_median}, 
      'MultiSampler':{"O Coarse": q_median}, 
      'Operator':{
-      'A Coarse': q_median, 
-      'B Coarse': q_median, 
-      'C Coarse': q_median, 
-      'D Coarse': q_median}, 
+       'A Coarse': q_median,
+       'B Coarse': q_median,
+       'C Coarse': q_median,
+       'D Coarse': q_median}, 
      'OriginalSimpler':{
-      'Transpose': q_median, 
-      'Start': q_median, 
-      'End': q_median, 
-      'Nudge': q_median, 
-      'Slice by': q_median, 
-      'Playback': q_median, 
-      'Sensitivity': q_max, 
-      'Division': q_median, 
-      'Regions': q_max}, 
+       'Transpose': q_median,
+       'Start': q_median,
+       'End': q_median,
+       'Nudge': q_median,
+       'Slice by': q_median,
+       'Playback': q_median,
+       'Sensitivity': q_max,
+       'Division': q_median,
+       'Regions': q_max}, 
      'Resonator':{
-      'I Note': q_median, 
-      'II Pitch': q_median, 
-      'III Pitch': q_median, 
-      'IV Pitch': q_median, 
-      'V Pitch': q_median}, 
+       'I Note': q_median,
+       'II Pitch': q_median,
+       'III Pitch': q_median,
+       'IV Pitch': q_median,
+       'V Pitch': q_median}, 
      'StringStudio':{'Octave':q_min, 
       'Semitone':q_default}, 
      'UltraAnalog':{
-      'OSC1 Octave': q_min, 
-      'OSC1 Semi': q_default, 
-      'OSC2 Octave': q_min, 
-      'OSC2 Semi': q_default}}
+       'OSC1 Octave': q_min,
+       'OSC1 Semi': q_default,
+       'OSC2 Octave': q_min,
+       'OSC2 Semi': q_default}}
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v3/control_surface/parameter_mapping_sensitivities.pyc

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchkey_MK2\DeviceComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3716 bytes
@@ -44,10 +44,9 @@ class DeviceComponent(DeviceComponentBase):
 
     def _scroll_device_chain(self, direction):
         view = self.application().view
-        if view.is_view_visible("Detail"):
-            if not view.is_view_visible("Detail/DeviceChain"):
-                view.show_view("Detail")
-                view.show_view("Detail/DeviceChain")
+        if not (view.is_view_visible("Detail") and view.is_view_visible("Detail/DeviceChain")):
+            view.show_view("Detail")
+            view.show_view("Detail/DeviceChain")
         else:
             view.scroll_view(direction, "Detail/DeviceChain", False)
 
@@ -72,17 +71,15 @@ class DeviceComponent(DeviceComponentBase):
     def _update_device_bank_buttons(self):
         if self.is_enabled():
             bank_length = len(self._parameter_banks())
-            for index, button in enumerate(self._bank_buttons or []):
+            for (index, button) in enumerate(self._bank_buttons or []):
                 if button:
                     value_to_send = False
                     if index == self._bank_index and self._device:
                         value_to_send = "Device.BankSelected"
-                    else:
-                        if index == 0:
-                            value_to_send = "Device.BestOfBank"
-                        else:
-                            if index in range(bank_length):
-                                value_to_send = "Device.Bank"
+                    elif index == 0:
+                        value_to_send = "Device.BestOfBank"
+                    elif index in range(bank_length):
+                        value_to_send = "Device.Bank"
                     button.set_light(value_to_send)
 
 # okay decompiling ./MIDIRemoteScripts/Launchkey_MK2/DeviceComponent.pyc

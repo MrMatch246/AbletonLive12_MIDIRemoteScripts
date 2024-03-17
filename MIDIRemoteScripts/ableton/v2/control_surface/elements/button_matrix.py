@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\elements\button_matrix.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4402 bytes
@@ -32,7 +32,7 @@ class ButtonMatrixElement(CompoundElement):
     def add_row(self, buttons):
         self._buttons.append([None] * len(buttons))
         self._orig_buttons.append(buttons)
-        for index, button in enumerate(buttons):
+        for (index, button) in enumerate(buttons):
             self._button_coordinates[button] = (
              index, len(self._buttons) - 1)
             self.register_control_element(button)
@@ -74,7 +74,7 @@ class ButtonMatrixElement(CompoundElement):
                 button.reset()
 
     def __iter__(self):
-        for j, i in product(range(self.height()), range(self.width())):
+        for (j, i) in product(range(self.height()), range(self.width())):
             button = self.get_button(j, i)
             yield button
 
@@ -87,28 +87,28 @@ class ButtonMatrixElement(CompoundElement):
         return self._do_get_item(index)
 
     def _do_get_item(self, index):
-        row, col = divmod(index, self.width())
+        (row, col) = divmod(index, self.width())
         return self.get_button(row, col)
 
     def __len__(self):
         return self.width() * self.height()
 
     def iterbuttons(self):
-        for j, i in product(range(self.height()), range(self.width())):
+        for (j, i) in product(range(self.height()), range(self.width())):
             button = self.get_button(j, i)
             yield (button, (i, j))
 
     def on_nested_control_element_value(self, value, sender):
-        x, y = self._button_coordinates[sender]
+        (x, y) = self._button_coordinates[sender]
         is_momentary = getattr(sender, "is_momentary", const(None))()
         self.notify_value(value, x, y, is_momentary)
 
     def on_nested_control_element_received(self, control):
-        x, y = self._button_coordinates[control]
+        (x, y) = self._button_coordinates[control]
         self._buttons[y][x] = control
 
     def on_nested_control_element_lost(self, control):
-        x, y = self._button_coordinates[control]
+        (x, y) = self._button_coordinates[control]
         self._buttons[y][x] = None
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v2/control_surface/elements/button_matrix.pyc

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\controls\control_list.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3242 bytes
@@ -52,7 +52,7 @@ class FixedRadioButtonGroup(RadioButtonGroup):
         @active_control_count.setter
         def active_control_count(self, control_count):
             self._active_control_count = control_count
-            for index, control in enumerate(self._controls):
+            for (index, control) in enumerate(self._controls):
                 control._get_state(self._manager).enabled = index < control_count
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v3/control_surface/controls/control_list.pyc

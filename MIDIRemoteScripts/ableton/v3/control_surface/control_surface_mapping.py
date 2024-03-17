@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\control_surface_mapping.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4337 bytes
@@ -60,7 +60,8 @@ class ControlSurfaceMappingMixin(Disconnectable):
             if isinstance(mode_or_element, str):
                 mode_control_layer[mode_or_control_name] = mode_or_element
                 continue
-            self._add_mode(mode_or_control_name, mode_or_element, component)
+            else:
+                self._add_mode(mode_or_control_name, mode_or_element, component)
 
         component.layer = Layer(**mode_control_layer)
         if component.selected_mode is None:

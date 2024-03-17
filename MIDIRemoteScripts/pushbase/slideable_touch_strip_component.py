@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\slideable_touch_strip_component.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5893 bytes
@@ -77,13 +77,13 @@ class SlideableTouchStripComponent(Component):
                 strip_pos = self._scroll_to_touch_strip_position(model_pos)
                 array = list(self._touch_strip_array)
                 led_page_length = self._touch_strip_led_page_length(strip.state_count)
-                array[led_pos[:led_pos + led_page_length]] = [
+                array[led_pos:led_pos + led_page_length] = [
                  TouchStripStates.STATE_FULL] * led_page_length
                 led_size = old_div(MAX_PITCHBEND, strip.state_count)
                 self._behaviour.handle = TouchStripHandle(range=(
                  -led_size, led_size * led_page_length),
                   position=strip_pos)
-                strip.send_state(array[None[:strip.state_count]])
+                strip.send_state(array[:strip.state_count])
 
     def _update_touch_strip_array(self, num_leds):
         if self.is_enabled():

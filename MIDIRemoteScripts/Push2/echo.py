@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\echo.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 10096 bytes
@@ -122,14 +122,33 @@ class EchoDeviceComponent(DeviceComponentWithTrackColorViewData):
         for parameter in touched_parameters:
             if parameter.name == "Feedback":
                 adjusting_tunnel_left = adjusting_tunnel_right = True
+            if parameter.name.startswith("L "):
+                adjusting_tunnel_left = True
+                if parameter.name != "L Offset" and is_linked:
+                    adjusting_tunnel_right = True
+                else:
+                    if not not parameter.name == "R Offset":
+                        if parameter.name.startswith("R "):
+                            if not not is_linked:
+                                pass
+                            adjusting_tunnel_right = True
+                        if parameter.name in ('HP Freq', 'HP Res'):
+                            adjusting_filter_hp = True
+                        elif parameter.name in ('LP Freq', 'LP Res'):
+                            adjusting_filter_lp = True
+                        elif parameter.name == "Mod Phase":
+                            adjusting_lfo_phase = True
+                        else:
+                            if parameter.name.startswith("Mod "):
+                                adjusting_lfo = True
 
         return {
-         'AdjustingTunnelLeft': adjusting_tunnel_left, 
-         'AdjustingTunnelRight': adjusting_tunnel_right, 
-         'AdjustingFilterHighPass': adjusting_filter_hp, 
-         'AdjustingFilterLowPass': adjusting_filter_lp, 
-         'AdjustingLfo': adjusting_lfo, 
-         'AdjustingLfoPhase': adjusting_lfo_phase}
+          'AdjustingTunnelLeft': adjusting_tunnel_left,
+          'AdjustingTunnelRight': adjusting_tunnel_right,
+          'AdjustingFilterHighPass': adjusting_filter_hp,
+          'AdjustingFilterLowPass': adjusting_filter_lp,
+          'AdjustingLfo': adjusting_lfo,
+          'AdjustingLfoPhase': adjusting_lfo_phase}
 
     def _set_bank_index(self, bank):
         super(EchoDeviceComponent, self)._set_bank_index(bank)
@@ -154,16 +173,16 @@ class EchoDeviceComponent(DeviceComponentWithTrackColorViewData):
 
     @property
     def _configuration_view_data(self):
-        tunnel_left, tunnel_right = self._calculate_view_size(self.TUNNEL_VISUALISATION_CONFIGURATION_IN_BANKS)
-        filter_left, filter_right = self._calculate_view_size(self.FILTER_VISUALISATION_CONFIGURATION_IN_BANKS)
-        lfo_left, lfo_right = self._calculate_view_size(self.LFO_VISUALISATION_CONFIGURATION_IN_BANKS)
+        (tunnel_left, tunnel_right) = self._calculate_view_size(self.TUNNEL_VISUALISATION_CONFIGURATION_IN_BANKS)
+        (filter_left, filter_right) = self._calculate_view_size(self.FILTER_VISUALISATION_CONFIGURATION_IN_BANKS)
+        (lfo_left, lfo_right) = self._calculate_view_size(self.LFO_VISUALISATION_CONFIGURATION_IN_BANKS)
         return {
-         'TunnelLeft': tunnel_left, 
-         'TunnelRight': tunnel_right, 
-         'FilterLeft': filter_left, 
-         'FilterRight': filter_right, 
-         'LfoLeft': lfo_left, 
-         'LfoRight': lfo_right}
+          'TunnelLeft': tunnel_left,
+          'TunnelRight': tunnel_right,
+          'FilterLeft': filter_left,
+          'FilterRight': filter_right,
+          'LfoLeft': lfo_left,
+          'LfoRight': lfo_right}
 
     def _initial_visualisation_view_data(self):
         view_data = super(EchoDeviceComponent, self)._initial_visualisation_view_data()

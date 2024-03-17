@@ -1,28 +1,28 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\APC40\APC40.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 15468 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import map, range
 from functools import partial
-import _Framework.ButtonMatrixElement as ButtonMatrixElement
-import _Framework.ChannelTranslationSelector as ChannelTranslationSelector
-import _Framework.ComboElement as ComboElement
+from _Framework.ButtonMatrixElement import ButtonMatrixElement as ButtonMatrixElement
+from _Framework.ChannelTranslationSelector import ChannelTranslationSelector as ChannelTranslationSelector
+from _Framework.ComboElement import ComboElement as ComboElement
 from _Framework.ControlSurface import OptimizedControlSurface
 from _Framework.Layer import Layer, SimpleLayerOwner
-import _Framework.ModesComponent as ModesComponent
+from _Framework.ModesComponent import ModesComponent as ModesComponent
 from _Framework.Resource import PrioritizedResource
-import _Framework.SessionZoomingComponent as SessionZoomingComponent
+from _Framework.SessionZoomingComponent import SessionZoomingComponent as SessionZoomingComponent
 from _Framework.Util import nop, recursive_map
-import _APC.APC as APC
+from _APC.APC import APC as APC
 from _APC.ControlElementUtils import make_button, make_encoder, make_pedal_button, make_ring_encoder, make_slider
-import _APC.DetailViewCntrlComponent as DetailViewCntrlComponent
-import _APC.DeviceBankButtonElement as DeviceBankButtonElement
-import _APC.DeviceComponent as DeviceComponent
-import _APC.MixerComponent as MixerComponent
+from _APC.DetailViewCntrlComponent import DetailViewCntrlComponent as DetailViewCntrlComponent
+from _APC.DeviceBankButtonElement import DeviceBankButtonElement as DeviceBankButtonElement
+from _APC.DeviceComponent import DeviceComponent as DeviceComponent
+from _APC.MixerComponent import MixerComponent as MixerComponent
 from _APC.SkinDefault import make_biled_skin, make_default_skin
 from .SessionComponent import SessionComponent
 from .TransportComponent import TransportComponent
@@ -225,13 +225,13 @@ class APC40(APC, OptimizedControlSurface):
     def _create_global_control(self):
 
         def set_pan_controls():
-            for index, control in enumerate(self._global_param_controls):
+            for (index, control) in enumerate(self._global_param_controls):
                 self._mixer.channel_strip(index).set_pan_control(control)
                 self._mixer.channel_strip(index).set_send_controls((None, None, None))
                 control.set_channel(0)
 
         def set_send_controls(send_index):
-            for index, control in enumerate(self._global_param_controls):
+            for (index, control) in enumerate(self._global_param_controls):
                 self._mixer.channel_strip(index).set_pan_control(None)
                 send_controls = [None] * 3
                 send_controls[send_index] = control

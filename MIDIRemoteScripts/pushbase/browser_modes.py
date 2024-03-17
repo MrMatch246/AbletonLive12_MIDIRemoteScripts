@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\browser_modes.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5315 bytes
@@ -86,7 +86,7 @@ class BrowserAddEffectMode(Mode):
         index = index_if((lambda device: device == selected), chain.devices)
         is_drum_pad = isinstance(chain.canonical_parent, Live.DrumPad.DrumPad)
         midi_support = chain.has_midi_input
-        supports_instrument = is_drum_pad or chain.has_midi_input and (chain.has_audio_output or isinstance(chain, Live.Track.Track))
+        supports_instrument = is_drum_pad or (chain.has_midi_input) and ((chain.has_audio_output) or (isinstance(chain, Live.Track.Track)))
         if self.insert_left:
             left = chain.devices[index - 1] if index > 0 else None
             return filter_type_between(left, selected, midi_support, is_drum_pad, supports_instrument)
@@ -99,15 +99,15 @@ def filter_type_between(left, right, supports_midi=False, is_drum_pad=False, sup
     if right:
         if right.type in (DeviceType.instrument, DeviceType.midi_effect):
             return Types.midi_effect_hotswap
-    if left:
-        if left.type in (DeviceType.instrument, DeviceType.audio_effect):
-            return Types.audio_effect_hotswap
-    if supports_midi:
-        if supports_instrument:
-            if is_drum_pad:
-                return Types.drum_pad_hotswap
-            return Types.instrument_hotswap
-        return Types.midi_effect_hotswap
-    return Types.audio_effect_hotswap
+        if left:
+            if left.type in (DeviceType.instrument, DeviceType.audio_effect):
+                return Types.audio_effect_hotswap
+            if supports_midi:
+                if supports_instrument:
+                    if is_drum_pad:
+                        return Types.drum_pad_hotswap
+                    return Types.instrument_hotswap
+                return Types.midi_effect_hotswap
+        return Types.audio_effect_hotswap
 
 # okay decompiling ./MIDIRemoteScripts/pushbase/browser_modes.pyc

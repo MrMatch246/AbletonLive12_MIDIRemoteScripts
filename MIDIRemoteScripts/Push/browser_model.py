@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push\browser_model.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 12153 bytes
@@ -47,10 +47,10 @@ class VirtualBrowserItem(object):
 
 class BrowserListItem(ActionListItem):
     URI_TO_NAME_FALLBACK = {
-     'query:Synths': '"Instruments"', 
-     'query:Drums': '"Drums"', 
-     'query:UserLibrary': '"User Library"', 
-     'query:Plugins': '"Plug-Ins"'}
+      'query:Synths': "Instruments",
+      'query:Drums': "Drums",
+      'query:UserLibrary': "User Library",
+      'query:Plugins': "Plug-Ins"}
 
     def __str__(self):
         return self._item_name
@@ -170,13 +170,13 @@ class FullBrowserModel(BrowserModel):
 
     @property
     def content_lists(self):
-        return list(map(first, self._contents[None[:self._num_contents]]))
+        return list(map(first, self._contents[:self._num_contents]))
 
     def can_be_exchanged(self, model):
         return isinstance(model, FullBrowserModel) and super(FullBrowserModel, self).can_be_exchanged(model)
 
     def update_content(self):
-        root, _ = self._contents[0]
+        (root, _) = self._contents[0]
         root.assign_items(self.get_root_children())
         self.update_selection()
 
@@ -185,7 +185,7 @@ class FullBrowserModel(BrowserModel):
         if self._browser.hotswap_target != None:
             list_index = 0
             while list_index < self._num_contents:
-                content_list, _ = self._contents[list_index]
+                (content_list, _) = self._contents[list_index]
                 items = content_list.items
                 index = index_if((lambda x: x.content.is_selected), items)
                 if in_range(index, 0, len(items)):
@@ -221,21 +221,20 @@ class FullBrowserModel(BrowserModel):
 
     def _finalize_content_lists_change(self):
         while self._num_contents < len(self._contents):
-            _, slot = self._contents.pop()
+            (_, slot) = self._contents.pop()
             self.disconnect_disconnectable(slot)
 
     def _on_item_activated(self, level):
         old_num_contents = self._num_contents
         with self._inside_item_activated_notification():
-            contents, _ = self._contents[level]
+            (contents, _) = self._contents[level]
             selected = contents.selected_item
             is_folder = selected != None and selected.content.is_folder
             children = self.get_children(selected.content, level) if selected != None else []
-            if not children:
-                if is_folder or level < 1:
-                    self._fit_content_lists(level + 2)
-                    child_contents, _ = self._contents[level + 1]
-                    child_contents.assign_items(children)
+            if children or is_folder or level < 1:
+                self._fit_content_lists(level + 2)
+                (child_contents, _) = self._contents[level + 1]
+                child_contents.assign_items(children)
             else:
                 self._fit_content_lists(level + 1)
         if not self._inside_item_activated_notification:

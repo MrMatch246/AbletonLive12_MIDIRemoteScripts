@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\ButtonSliderElement.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4760 bytes
@@ -69,8 +69,8 @@ class ButtonSliderElement(SliderElement, SlotManager):
 
     def _button_value(self, value, sender):
         self.clear_send_cache()
-        if not value != 0:
-            index_of_sender = sender.is_momentary() or list(self._buttons).index(sender)
+        if not (value != 0 or sender.is_momentary()):
+            index_of_sender = list(self._buttons).index(sender)
             midi_value = int(old_div(127 * index_of_sender, len(self._buttons) - 1))
             if self._parameter_to_map_to != None:
                 if self._parameter_to_map_to.is_enabled:
@@ -80,8 +80,7 @@ class ButtonSliderElement(SliderElement, SlotManager):
                         param_value += old_div(param_range, 4 * len(self._buttons))
                         if param_value > self._parameter_to_map_to.max:
                             param_value = self._parameter_to_map_to.max
-                    self._parameter_to_map_to.value = param_value
-        else:
+                        self._parameter_to_map_to.value = param_value
             self.notify_value(midi_value)
 
     def _on_parameter_changed(self):

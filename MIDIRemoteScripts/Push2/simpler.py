@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\simpler.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 21077 bytes
@@ -309,10 +309,10 @@ class SimplerDeviceComponent(DeviceComponentWithTrackColorViewData):
                 if parameter.name in self.ZOOM_SENSITIVE_PARAMETERS:
                     if device.waveform_navigation is not None:
                         sensitivity *= device.waveform_navigation.visible_proportion
-                if parameter.name in self.PARAMETERS_RELATIVE_TO_ACTIVE_AREA:
-                    active_area_quotient = device.sample.length / float(device.sample.end_marker - device.sample.start_marker + 1)
-                    sensitivity *= active_area_quotient
-        return sensitivity
+                    if parameter.name in self.PARAMETERS_RELATIVE_TO_ACTIVE_AREA:
+                        active_area_quotient = device.sample.length / float(device.sample.end_marker - device.sample.start_marker + 1)
+                        sensitivity *= active_area_quotient
+            return sensitivity
 
     @listens("channel_id")
     def __on_playhead_channel_changed(self):
@@ -332,7 +332,7 @@ class SimplerDeviceComponent(DeviceComponentWithTrackColorViewData):
 
     def _update_parameter_sensitivities(self):
         changed_parameters = False
-        for index, info in enumerate(self._provided_parameters):
+        for (index, info) in enumerate(self._provided_parameters):
             if info.name in self.ZOOM_SENSITIVE_PARAMETERS:
                 self._provided_parameters[index] = self._create_parameter_info(info.parameter, info.name)
                 changed_parameters = True
@@ -422,12 +422,12 @@ class SimplerDeviceComponent(DeviceComponentWithTrackColorViewData):
         left_button = self.envelope_left_button
         right_button = left_button + 3
         shown_features = set([
-         'AttackLine', 
-         'DecayLine', 
-         'SustainLine', 
-         'ReleaseLine', 
-         'FadeInLine', 
-         'FadeOutLine'])
+         "AttackLine",
+         "DecayLine",
+         "SustainLine",
+         "ReleaseLine",
+         "FadeInLine",
+         "FadeOutLine"])
         for parameter in self.parameters:
             extend_with_envelope_features_for_parameter(shown_features, parameter, self.ENVELOPE_PREFIXES)
 

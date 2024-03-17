@@ -1,13 +1,13 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchpad_Pro\SpecialSessionRecordingComponent.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2641 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 import Live
-import _Framework.ClipCreator as ClipCreator
+from _Framework.ClipCreator import ClipCreator as ClipCreator
 from _Framework.SessionRecordingComponent import SessionRecordingComponent, subject_slot, track_is_recording, track_playing_slot
 
 class SpecialSessionRecordingComponent(SessionRecordingComponent):
@@ -31,9 +31,8 @@ class SpecialSessionRecordingComponent(SessionRecordingComponent):
             if value:
                 if self._modes_component.selected_mode == self._note_mode_name:
                     self._handle_note_mode_record_behavior()
-                else:
-                    if not self._stop_recording():
-                        self._start_recording()
+                elif not self._stop_recording():
+                    self._start_recording()
 
     def _handle_note_mode_record_behavior(self):
         track = self._target_track_component.target_track
@@ -42,14 +41,12 @@ class SpecialSessionRecordingComponent(SessionRecordingComponent):
             should_overdub = not track_is_recording(track) and playing_slot != None
             if should_overdub:
                 self.song().overdub = not self.song().overdub
-                if not self.song().is_playing:
-                    self.song().is_playing = True
-                else:
-                    self._stop_recording() or self._prepare_new_slot(track)
-                    self._start_recording()
-        else:
-            if not self._stop_recording():
+                self.song().is_playing = self.song().is_playing or True
+            elif not self._stop_recording():
+                self._prepare_new_slot(track)
                 self._start_recording()
+        elif not self._stop_recording():
+            self._start_recording()
 
     def _prepare_new_slot(self, track):
         song = self.song()

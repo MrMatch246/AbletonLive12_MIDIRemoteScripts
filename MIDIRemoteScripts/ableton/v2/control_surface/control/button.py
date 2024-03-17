@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\control\button.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 15001 bytes
@@ -82,11 +82,10 @@ class ButtonControlBase(InputControl):
             if self._control_element:
                 if not self._enabled:
                     self._control_element.set_light(self.disabled_color)
+                elif self.pressed_color is not None and self.is_pressed:
+                    self._control_element.set_light(self.pressed_color)
                 else:
-                    if self.pressed_color is not None and self.is_pressed:
-                        self._control_element.set_light(self.pressed_color)
-                    else:
-                        self._send_button_color()
+                    self._send_button_color()
 
         def _send_button_color(self):
             raise NotImplementedError
@@ -96,11 +95,10 @@ class ButtonControlBase(InputControl):
                 if not self.is_momentary:
                     self._press_button()
                     self._release_button()
+                elif value:
+                    self._press_button()
                 else:
-                    if value:
-                        self._press_button()
-                    else:
-                        self._release_button()
+                    self._release_button()
                 (super(ButtonControlBase.State, self)._on_value)(value, *a, **k)
             self._send_current_color()
 
@@ -130,7 +128,7 @@ class ButtonControlBase(InputControl):
             self._call_listener("released")
             if self._repeat:
                 self._repeat_task.kill()
-            elif self._has_delayed_event():
+            if self._has_delayed_event():
                 if self._delay_task.is_running:
                     self._call_listener("released_immediately")
                     self._delay_task.kill()
@@ -143,8 +141,8 @@ class ButtonControlBase(InputControl):
                 if not self._double_click_task.is_running:
                     self._double_click_task.restart()
                     self._double_click_context.click_count = 0
-            if self._double_click_context.control_state != self:
-                self._double_click_context.set_new_context(self)
+                if self._double_click_context.control_state != self:
+                    self._double_click_context.set_new_context(self)
 
         def _check_double_click_release(self):
             if self._has_listener("double_clicked"):
@@ -240,7 +238,7 @@ class PlayableControl(ButtonControl):
         @enabled.setter
         def enabled(self, enabled):
             super(PlayableControl.State, PlayableControl.State).enabled.fset(self, enabled)
-            if (enabled or self)._control_element:
+            if not enabled or self._control_element:
                 self._control_element.reset_state()
                 self._send_current_color()
             else:

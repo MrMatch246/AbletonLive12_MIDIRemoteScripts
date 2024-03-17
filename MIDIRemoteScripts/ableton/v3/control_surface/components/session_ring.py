@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\session_ring.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 9227 bytes
@@ -85,7 +85,8 @@ class SessionRingComponent(Component, Renderable):
 
     @listenable_property
     def offset(self):
-        return (self.track_offset, self.scene_offset)
+        return (
+         self.track_offset, self.scene_offset)
 
     def tracks_to_use(self):
         return self._cached_track_list
@@ -96,13 +97,13 @@ class SessionRingComponent(Component, Renderable):
     @listenable_property
     def tracks(self):
         index = self.track_offset
-        tracks = self.tracks_to_use()[index[:index + self.num_tracks]]
+        tracks = self.tracks_to_use()[index:index + self.num_tracks]
         return self._controlled_tracks_formatter(tracks)
 
     @listenable_property
     def scenes(self):
         index = self.scene_offset
-        return self.scenes_to_use()[index[:index + self.num_scenes]]
+        return self.scenes_to_use()[index:index + self.num_scenes]
 
     def set_offsets(self, track_offset, scene_offset):
         track_increment = 0
@@ -149,7 +150,7 @@ class SessionRingComponent(Component, Renderable):
     def _right_align_non_player_tracks(self, tracks):
         num_tracks = self.num_tracks
         insertion_index = index_if((lambda t: t not in self.song.tracks), tracks)
-        tracks[insertion_index[:insertion_index]] = [None] * (num_tracks - len(tracks))
+        tracks[insertion_index:insertion_index] = [None] * (num_tracks - len(tracks))
         return tracks
 
     def _get_tracks_to_use(self, include_returns, include_master):

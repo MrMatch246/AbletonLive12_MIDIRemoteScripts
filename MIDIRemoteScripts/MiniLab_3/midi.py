@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\MiniLab_3\midi.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2565 bytes
@@ -44,28 +44,28 @@ ARTURIA_PROGRAM_GENERIC_PARAMETER_FEEDBACK_MESSAGE = SYSEX_HEADER + (
  SYSEX_END)
 COMMAND_ID_TO_DAW_PROGRAM_ID = {REQUEST_DATA_BYTE: 1, PROGRAM_LOAD_BYTE: 2}
 ENCODER_ID_TO_SYSEX_ID = {
- 86: 7, 87: 8, 89: 9, 90: 10, 110: 11, 111: 12, 116: 13, 117: 14}
+  86: 7, 87: 8, 89: 9, 90: 10, 110: 11, 111: 12, 116: 13, 117: 14}
 PAD_ID_TO_SYSEX_ID = {
- 36: 52, 
- 37: 53, 
- 38: 54, 
- 39: 55, 
- 40: 56, 
- 41: 57, 
- 42: 58, 
- 43: 59, 
- 44: 68, 
- 45: 69, 
- 46: 70, 
- 47: 71, 
- 48: 72, 
- 49: 73, 
- 50: 74, 
- 51: 75, 
- 105: 87, 
- 106: 88, 
- 107: 89, 
- 108: 90, 
- 109: 91}
+  36: 52,
+  37: 53,
+  38: 54,
+  39: 55,
+  40: 56,
+  41: 57,
+  42: 58,
+  43: 59,
+  44: 68,
+  45: 69,
+  46: 70,
+  47: 71,
+  48: 72,
+  49: 73,
+  50: 74,
+  51: 75,
+  105: 87,
+  106: 88,
+  107: 89,
+  108: 90,
+  109: 91}
 
 # okay decompiling ./MIDIRemoteScripts/MiniLab_3/midi.pyc

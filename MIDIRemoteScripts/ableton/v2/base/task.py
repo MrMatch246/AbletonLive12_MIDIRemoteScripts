@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\base\task.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 11776 bytes
@@ -72,7 +72,7 @@ class Task(object):
                 manager = self._task_manager
                 self._task_manager = None
                 manager.add(self)
-        return self
+            return self
 
     def kill(self):
         self._state = KILLED
@@ -150,9 +150,8 @@ class FuncTask(Task):
         action = self._func(timer)
         if not action or action == KILLED:
             self.kill()
-        else:
-            if action == PAUSED:
-                self.pause()
+        elif action == PAUSED:
+            self.pause()
 
     def _task_equivalent(self, other):
         return self == other or self._func == other or self._equivalent == other
@@ -188,9 +187,8 @@ class GeneratorTask(Task):
 
         if not action or action == KILLED:
             self.kill()
-        else:
-            if action == PAUSED:
-                self.pause()
+        elif action == PAUSED:
+            self.pause()
 
     def _task_equivalent(self, other):
         return self == other or self._orig == other or self._equivalent == other
@@ -237,10 +235,9 @@ class TaskGroup(Task):
         all_killed = len(list(filter((lambda t: t.is_killed), self._tasks))) == self.count
         if self.auto_kill and all_killed:
             self.kill()
-        else:
-            if self.loop:
-                if all_killed:
-                    self.restart()
+        elif self.loop:
+            if all_killed:
+                self.restart()
 
     def add(self, task):
         task = totask(task)
@@ -461,8 +458,7 @@ except ImportError as err:
         del err
 
 def run(func, *a, **k):
-    return FuncTask((lambda t:     if func(*a, **k):
-None # Avoid dead code: None))
+    return FuncTask((lambda t: None if func(*a, **k) else None))
 
 
 def repeat(task):

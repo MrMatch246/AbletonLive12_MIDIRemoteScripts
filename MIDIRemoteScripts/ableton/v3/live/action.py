@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\live\action.py
 # Compiled at: 2024-02-20 00:54:37
 # Size of source mod 2**32: 11985 bytes
@@ -11,12 +11,12 @@ from functools import singledispatch, wraps
 from sys import maxsize
 from typing import Optional, Union
 from Live.Base import LimitationError
-import Live.Clip as Clip
-import Live.ClipSlot as ClipSlot
-import Live.DeviceParameter as DeviceParameter
-import Live.Scene as Scene
+from Live.Clip import Clip as Clip
+from Live.ClipSlot import ClipSlot as ClipSlot
+from Live.DeviceParameter import DeviceParameter as DeviceParameter
+from Live.Scene import Scene as Scene
 from Live.Song import Quantization
-import Live.Track as Track
+from Live.Track import Track as Track
 from . import liveobj_changed, liveobj_valid, scene_index, song, track_index
 from .util import is_clip_new_recording, raise_type_error_for_liveobj
 logger = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ def action(func):
                     e = None
                     del e
 
-        return False
+            return False
 
     wrapper.register = singledispatch_func.register
     return wrapper
@@ -55,11 +55,12 @@ def arm(track: Track, exclusive=None) -> bool:
         new_value = not track.arm
         for t in song().tracks:
             if t.can_be_armed:
-                if (t == track or track).is_part_of_selection:
-                    if t.is_part_of_selection:
+                if not not t == track:
+                    if not track.is_part_of_selection or t.is_part_of_selection:
                         t.arm = new_value
-                if exclusive and t.arm:
-                    t.arm = False
+                    if exclusive:
+                        if t.arm:
+                            t.arm = False
 
         return True
     return False
@@ -214,14 +215,14 @@ def fire(fireable: Union[(Clip, ClipSlot, Scene)], button_state=None) -> bool:
     if isinstance(fireable, ClipSlot):
         if fireable.has_clip:
             fireable = fireable.clip
-    if button_state is None:
-        fireable.fire()
-    else:
-        fireable.set_fire_button_state(button_state)
-        if button_state:
-            if song().select_on_launch:
-                select(fireable)
-    return True
+        if button_state is None:
+            fireable.fire()
+        else:
+            fireable.set_fire_button_state(button_state)
+            if button_state:
+                if song().select_on_launch:
+                    select(fireable)
+        return True
 
 
 @action

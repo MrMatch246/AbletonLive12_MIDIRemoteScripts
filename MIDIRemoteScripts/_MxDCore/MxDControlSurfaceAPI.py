@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_MxDCore\MxDControlSurfaceAPI.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 7323 bytes
@@ -45,10 +45,10 @@ class MxDControlSurfaceAPI(object):
         def send_reply(self, selector, message):
             message_str = self.mxdcore.str_representation_for_object(message)
             selector_str = {
-             'send_receive': '"send_receive_sysex"', 
-             'grab': '"grab_midi"', 
-             'release': '"release_midi"', 
-             'received': '"received_midi"'}.get(selector, str(selector))
+              'send_receive': "send_receive_sysex",
+              'grab': "grab_midi",
+              'release': "release_midi",
+              'received': "received_midi"}.get(selector, str(selector))
             try:
                 self.mxdcore.manager.send_message(self.device_id, self.object_id, "obj_output", '"' + selector_str + '"  ' + message_str)
             except:
@@ -62,7 +62,7 @@ class MxDControlSurfaceAPI(object):
 
     def object_send_midi(self, device_id, object_id, lom_object, parameters):
         check_has_mxd_midi_scheduler(lom_object, "send_midi")
-        midi_message = tuple(map(midi_byte_to_int, parameters[1[:None]]))
+        midi_message = tuple(map(midi_byte_to_int, parameters[1:]))
         lom_object.mxd_midi_scheduler.send(self.MxDMidiOwner(device_id, object_id, self._mxdcore), midi_message)
 
     def object_send_receive_sysex(self, device_id, object_id, lom_object, parameters):
@@ -70,7 +70,7 @@ class MxDControlSurfaceAPI(object):
         owner = self.MxDMidiOwner(device_id, object_id, self._mxdcore)
         has_timeout = len(parameters) > 2 and parameters[-2] == "timeout"
         timeout = parameters[-1] if has_timeout else RECEIVE_MIDI_TIMEOUT
-        midi_parameters = parameters[1[:-2]] if has_timeout else parameters[1[:None]]
+        midi_parameters = parameters[1:-2] if has_timeout else parameters[1:]
         midi_message = tuple(map(midi_byte_to_int, midi_parameters))
         if midi_bytes_are_sysex(midi_message):
             lom_object.mxd_midi_scheduler.send_receive(owner, midi_message, timeout)
@@ -109,14 +109,13 @@ class MxDControlSurfaceAPI(object):
     def _get_control_or_raise(self, cs, control_or_name, command):
         if not is_control_surface(cs):
             raise AttributeError("object '{}' has no attribute {}".format(type(cs).__name__, command))
-        elif not control_or_name:
+        if not control_or_name:
             raise AttributeError("control id or name required for {}".format(command))
+        if isinstance(control_or_name, string_types):
+            control = cs.get_control_by_name(control_or_name)
+            assert control, "{} is not a control of '{}'".format(control_or_name, type(cs).__name__)
         else:
-            if isinstance(control_or_name, string_types):
-                control = cs.get_control_by_name(control_or_name)
-                assert control, "{} is not a control of '{}'".format(control_or_name, type(cs).__name__)
-            else:
-                control = control_or_name
+            control = control_or_name
             if not cs.has_control(control):
                 id_str = self._mxdcore.str_representation_for_object(control)
                 raise AttributeError("'{}' ({}) is not a control of '{}'".format(type(control).__name__, id_str, type(cs).__name__))

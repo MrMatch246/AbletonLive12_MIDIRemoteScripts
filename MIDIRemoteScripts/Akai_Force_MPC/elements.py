@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Akai_Force_MPC\elements.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 38025 bytes
@@ -407,9 +407,9 @@ class MPCElementsBase(Elements):
         self.jump_backward_button = self._make_note_button(12, 82, "Jump_Backward_Button")
         self.jump_forward_button = self._make_note_button(12, 83, "Jump_Forward_Button")
         self.quantize_button = self._tui_quantize_button
-        self.mpc_scene_launch_buttons = ButtonMatrixElement(rows=[[button for button in row[None[:4]]] for row in self.physical_clip_launch_buttons_raw[None[:4]]],
+        self.mpc_scene_launch_buttons = ButtonMatrixElement(rows=[[button for button in row[:4]] for row in self.physical_clip_launch_buttons_raw[:4]],
           name="MPC_Scene_Launch_Buttons")
-        self.mpc_scene_color_controls = ButtonMatrixElement(rows=[[col[row_index] for col in self.physical_clip_color_controls_raw[None[:4]]] for row_index in range(4)],
+        self.mpc_scene_color_controls = ButtonMatrixElement(rows=[[col[row_index] for col in self.physical_clip_color_controls_raw[:4]] for row_index in range(4)],
           name="MPC_Scene_Color_Controls")
 
 

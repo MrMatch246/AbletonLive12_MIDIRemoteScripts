@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Blackstar_Live_Logic\looper.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 13498 bytes
@@ -46,7 +46,7 @@ class LooperComponent(Component):
             return
         track = self._tracks[switch.index]
         if not is_group_track(track):
-            self._delete_target_for_track[track] = self._get_controlled_clip_slot(track) if not fired_clip_slot(track) else None
+            self._delete_target_for_track[track] = self._get_controlled_clip_slot(track) if (not fired_clip_slot(track)) else None
             self._begin_or_finish_loop(track)
 
     @foot_switches.pressed_delayed
@@ -65,13 +65,12 @@ class LooperComponent(Component):
     def __on_song_time_changed(self):
         if not self.song.is_playing:
             return
+        time = self.song.get_current_beats_song_time()
+        self.foot_switches.update_time(time)
+        if liveobj_valid(self._longest_playing_clip):
+            bars, beats = get_clip_time(self._longest_playing_clip)
         else:
-            time = self.song.get_current_beats_song_time()
-            self.foot_switches.update_time(time)
-            if liveobj_valid(self._longest_playing_clip):
-                bars, beats = get_clip_time(self._longest_playing_clip)
-            else:
-                bars, beats = 0, time.beats
+            bars, beats = 0, time.beats
         self.time_display.update_time(bars, beats)
 
     @listens("is_playing")
@@ -120,15 +119,15 @@ class LooperComponent(Component):
             if not is_group_track(track):
                 return self._exclusive_arm(track)
             return self._exclusive_arm_next_track(self._tracks.index(track))
-            if is_group_track(track):
-                return self._start_or_stop_group_track(track)
-            if playing_or_recording_clip_slot(track):
-                if not self.song.is_playing:
-                    self.song.is_playing = True
-                    return
-                stop_all_clips(track)
-                if self.song.exclusive_arm:
-                    any(map(recording_clip_slot, filter((lambda t: t != track), self._tracks))) or self._exclusive_arm(track)
+        if is_group_track(track):
+            return self._start_or_stop_group_track(track)
+        if playing_or_recording_clip_slot(track):
+            if not self.song.is_playing:
+                self.song.is_playing = True
+                return
+            stop_all_clips(track)
+            if self.song.exclusive_arm:
+                any(map(recording_clip_slot, filter((lambda t: t != track), self._tracks))) or self._exclusive_arm(track)
         else:
             fire(self._get_controlled_clip_slot(track))
 
@@ -149,7 +148,7 @@ class LooperComponent(Component):
         delete_target = self._delete_target_for_track.get(track, None)
         if track in self._delete_target_for_track:
             del self._delete_target_for_track[track]
-        elif liveobj_valid(delete_target):
+        if liveobj_valid(delete_target):
             delete_clip(delete_target)
             delete_clip(playing_or_recording_clip_slot(track))
             stop_all_clips(track, quantized=False)
@@ -170,7 +169,7 @@ class LooperComponent(Component):
         self._LooperComponent__on_fired_slot_index_changed.replace_subjects(self._tracks)
         self._LooperComponent__on_playing_slot_index_changed.replace_subjects(flatten_tracks(self._tracks))
         self._LooperComponent__on_input_routing_type_changed.replace_subjects(self._tracks)
-        for i, track in enumerate(self._tracks):
+        for (i, track) in enumerate(self._tracks):
             self._update_leds(i, track)
             self._is_clip_recording_slots[i].subject = playing_or_recording_clip(track)
 
@@ -180,34 +179,33 @@ class LooperComponent(Component):
                 parent_group = group_track(track)
                 if parent_group in self._tracks:
                     self._update_track(parent_group, update_parent_group=True)
-        if track in filter(liveobj_valid, self._tracks):
-            index = self._tracks.index(track)
-            if recording_clip_slot(track):
-                self._exclusive_arm(track)
-            if playing_clip_slot(track):
-                clip = playing_clip(track)
-                if clip in self._clips_triggered_to_play_by_looper:
-                    self._exclusive_arm_next_track(index)
-                    self._clips_triggered_to_play_by_looper.remove(clip)
-            self._update_leds(self._tracks.index(track), track)
+            if track in filter(liveobj_valid, self._tracks):
+                index = self._tracks.index(track)
+                if recording_clip_slot(track):
+                    self._exclusive_arm(track)
+                if playing_clip_slot(track):
+                    clip = playing_clip(track)
+                    if clip in self._clips_triggered_to_play_by_looper:
+                        self._exclusive_arm_next_track(index)
+                        self._clips_triggered_to_play_by_looper.remove(clip)
+                self._update_leds(self._tracks.index(track), track)
 
     def _update_leds(self, index, track):
         color = "DefaultButton.Off"
         if is_fired(track):
             color = "Subdivision_Pulse"
+        elif recording_clip_slot(track) or any(map(recording_clip_slot, grouped_tracks(track))):
+            color = "Beat_Pulse"
         else:
-            if recording_clip_slot(track) or any(map(recording_clip_slot, grouped_tracks(track))):
-                color = "Beat_Pulse"
-            else:
-                if playing_clip_slot(track) or any(map(playing_clip_slot, grouped_tracks(track))):
-                    color = "DefaultButton.On"
+            if playing_clip_slot(track) or any(map(playing_clip_slot, grouped_tracks(track))):
+                color = "DefaultButton.On"
         self.foot_switches[index].color = color
 
     def _exclusive_arm_next_track(self, index):
         if not self.song.exclusive_arm:
             return
         next_index = (index + 1) % len(self._tracks)
-        self._exclusive_arm(find_if((lambda t: liveobj_valid(t) and not is_group_track(t) and not playing_or_recording_clip_slot(t)), chain(self._tracks[next_index[:None]], self._tracks[None[:next_index]])) or self._tracks[next_index])
+        self._exclusive_arm(find_if((lambda t: liveobj_valid(t) and not is_group_track(t) and not playing_or_recording_clip_slot(t)), chain(self._tracks[next_index:], self._tracks[:next_index])) or self._tracks[next_index])
 
     def _exclusive_arm(self, track):
         if not self.song.exclusive_arm or is_group_track(track):

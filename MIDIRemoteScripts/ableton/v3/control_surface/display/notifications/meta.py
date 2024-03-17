@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\display\notifications\meta.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 2425 bytes
@@ -22,23 +22,25 @@ def transform_notification(default: "Notification", transform_fn: "Callable[[str
 
 def update_special_attributes(cls, exclude_by_default=True):
     base_class = getmro(cls)[-2]
-    for name, value in vars(base_class).items():
+    for (name, value) in vars(base_class).items():
         subclass_value = vars(cls).get(name, None)
         if subclass_value is None:
             if isinstance(value, type):
                 subclass_value = type(name, (value,), {})
                 setattr(cls, name, subclass_value)
-            else:
-                if isinstance(subclass_value, type):
-                    include_all = getattr(subclass_value, "INCLUDE_ALL", False)
-                    update_special_attributes(subclass_value, False if include_all else exclude_by_default)
-            if name.startswith("__") or exclude_by_default:
-                if subclass_value is None:
-                    setattr(cls, name, None)
-            if subclass_value is None or isinstance(subclass_value, _DefaultText):
+            if isinstance(subclass_value, type):
+                include_all = getattr(subclass_value, "INCLUDE_ALL", False)
+                update_special_attributes(subclass_value, False if include_all else exclude_by_default)
+            if not name.startswith("__"):
+                if exclude_by_default:
+                    if subclass_value is None:
+                        setattr(cls, name, None)
+        if not not subclass_value is None:
+            if isinstance(subclass_value, _DefaultText):
                 setattr(cls, name, getattr(base_class, name))
-            elif isinstance(subclass_value, _TransformDefaultText):
-                setattr(cls, name, transform_notification(getattr(base_class, name), subclass_value.transform_fn))
+            else:
+                if isinstance(subclass_value, _TransformDefaultText):
+                    setattr(cls, name, transform_notification(getattr(base_class, name), subclass_value.transform_fn))
 
 
 class DefaultNotificationsMeta(type):

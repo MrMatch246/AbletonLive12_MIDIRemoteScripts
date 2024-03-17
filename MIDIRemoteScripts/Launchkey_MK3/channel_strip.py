@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchkey_MK3\channel_strip.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 3461 bytes
@@ -43,8 +43,8 @@ class ChannelStripComponent(ChannelStripComponentBase):
     def update(self):
         super(ChannelStripComponent, self).update()
         mixer = self._track.mixer_device if liveobj_valid(self._track) else None
-        self._ChannelStripComponent__on_send_a_value_changed.subject = mixer.sends[0] if (mixer and mixer.sends) else None
-        self._ChannelStripComponent__on_send_b_value_changed.subject = mixer.sends[1] if (mixer and len(mixer.sends) > 1) else None
+        self._ChannelStripComponent__on_send_a_value_changed.subject = mixer.sends[0] if mixer and (mixer.sends) else None
+        self._ChannelStripComponent__on_send_b_value_changed.subject = mixer.sends[1] if mixer and (len(mixer.sends) > 1) else None
         self._update_send_display(self.send_a_display, 0)
         self._update_send_display(self.send_b_display, 1)
 

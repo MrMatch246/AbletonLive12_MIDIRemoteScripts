@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\novation\launchpad_elements.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 5840 bytes
@@ -79,10 +79,6 @@ class LaunchpadElements(object):
           name="Scale_Pads")
 
     def _fader_setup_message_generator(self, bank, orientation, polarity):
-        return sysex.STD_MSG_HEADER + (self.model_id, sysex.FADER_COMMAND_BYTE, bank, orientation) + tuple((byte for index in range(SESSION_WIDTH) for byte in (
-         index,
-         polarity,
-         index + bank * SESSION_WIDTH + self.button_fader_cc_offset,
-         0))) + (sysex.SYSEX_END_BYTE,)
+        return sysex.STD_MSG_HEADER + (self.model_id, sysex.FADER_COMMAND_BYTE, bank, orientation) + tuple((byte for index in range(SESSION_WIDTH))) + (sysex.SYSEX_END_BYTE,)
 
 # okay decompiling ./MIDIRemoteScripts/novation/launchpad_elements.pyc

@@ -1,7 +1,7 @@
-# uncompyle6 version 3.9.1.dev0
+# decompyle3 version 3.9.1
 # Python bytecode version base 3.7.0 (3394)
-# Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
-# [GCC 9.3.0]
+# Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
+# [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\elements_base.py
 # Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 18352 bytes
@@ -60,7 +60,7 @@ def create_matrix_identifiers(start, stop, width=1, flip_rows=False):
 def create_name_for_modified_control(control=None, modifier=None):
     modifier_name = modifier.name
     if modifier_name.lower().endswith("button"):
-        modifier_name = modifier_name[None[:-7]]
+        modifier_name = modifier_name[:-7]
     preposition = "With" if any((c.isupper() for c in control.name)) else "with"
     return "{}_{}_{}".format(control.name, preposition, modifier_name)
 
@@ -126,7 +126,7 @@ class ElementsBase:
             return "{}_{}_{}".format(x, name, y)
 
         name_factory = name_factory or (two_dimensional_name if len(identifiers) > 1 else one_dimensional_name)
-        sub_element_name = base_name[None[:-1]] if base_name.endswith("s") else base_name
+        sub_element_name = base_name[:-1] if base_name.endswith("s") else base_name
         elements = [[element_factory(identifier, name=name_factory(sub_element_name, column, row), channel=channel, is_private=is_private, **k) for column, (identifier, channel) in enumerate(zip(inner_identifiers, inner_channels))] for row, (inner_identifiers, inner_channels) in enumerate(zip(identifiers, channels))]
         attr_name = self._create_attribute_name(base_name)
         self._add_raw_elements(attr_name, elements)
@@ -149,7 +149,7 @@ class ElementsBase:
         if not rows:
             rows = (
              0, matrix.height() + 1)
-        submatrix = matrix.submatrix[(columns[0][:columns[1]], rows[0][:rows[1]])]
+        submatrix = matrix.submatrix[columns[0]:columns[1], rows[0]:rows[1]]
         submatrix.name = name
         submatrix.is_private = is_private
         attr_name = self._create_attribute_name(name)
