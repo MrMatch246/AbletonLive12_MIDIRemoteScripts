@@ -51,6 +51,6 @@ class Colors(object):
         On = Rgb.AQUA
 
 
-skin = merge_skins(base_skin, Skin(Colors)*())
+skin = merge_skins(base_skin, Skin(Colors))
 
 # okay decompiling ./MIDIRemoteScripts/Launchpad_Pro_MK3/skin.pyc

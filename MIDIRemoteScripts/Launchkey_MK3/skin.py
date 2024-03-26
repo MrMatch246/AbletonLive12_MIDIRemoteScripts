@@ -38,6 +38,6 @@ class Colors:
                 Available = Rgb.PURPLE_HALF
 
 
-skin = merge_skins(base_skin, Skin(Colors)*())
+skin = merge_skins(base_skin, Skin(Colors))
 
 # okay decompiling ./MIDIRemoteScripts/Launchkey_MK3/skin.pyc

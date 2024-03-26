@@ -34,6 +34,6 @@ class Colors(object):
         NavigationPressed = Rgb.WHITE
 
 
-skin = merge_skins(base_skin, Skin(Colors)*())
+skin = merge_skins(base_skin, Skin(Colors))
 
 # okay decompiling ./MIDIRemoteScripts/Launchkey_Mini_MK3/skin.pyc

@@ -21,6 +21,6 @@ class Colors(object):
             Overview = Color((Rgb.BLUE.midi_value, Rgb.WHITE_HALF.midi_value))
 
 
-skin = merge_skins(base_skin, Skin(Colors)*())
+skin = merge_skins(base_skin, Skin(Colors))
 
 # okay decompiling ./MIDIRemoteScripts/Launchpad_Mini_MK3/skin.pyc
