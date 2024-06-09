@@ -3,15 +3,15 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\loop_selector.py
-# Compiled at: 2024-01-31 17:08:32
-# Size of source mod 2**32: 8035 bytes
+# Size of source mod 2**32: 10733 bytes
 from __future__ import absolute_import, print_function, unicode_literals
-from ...base import depends, listens
-from ...live import action, get_bar_length, liveobj_changed, liveobj_valid
+from ...base import depends, listenable_property, listens
+from ...live import action, get_bar_length, is_clip_playing, liveobj_changed, liveobj_valid
 from .. import Component
 from ..controls import ButtonControl, control_matrix
 from ..display import Renderable
 from ..skin import LiveObjSkinEntry
+from .clipboard import BufferedClipboardComponent
 
 def quantize_page_time(page_time, bar_length):
     return int(page_time / bar_length) * bar_length
@@ -26,7 +26,7 @@ class LoopSelectorComponent(Component, Renderable):
     matrix = control_matrix(ButtonControl)
 
     @depends(target_track=None, sequencer_clip=None)
-    def __init__(self, name='Loop_Selector', target_track=None, sequencer_clip=None, paginator=None, *a, **k):
+    def __init__(self, name='Loop_Selector', target_track=None, sequencer_clip=None, paginator=None, clipboard_component_type=None, *a, **k):
         (super().__init__)(a, name=name, **k)
         self._pressed_matrix_indices = []
         self._target_track = target_track
@@ -43,7 +43,13 @@ class LoopSelectorComponent(Component, Renderable):
         self.register_slot(paginator, self.update, "page_time")
         self.register_slot(self.song, self._update_matrix, "session_record")
         self.register_slot(self.song, self._update_matrix, "is_playing")
+        clipboard_component_type = clipboard_component_type or NoteRegionClipboardComponent
+        self._clipboard = clipboard_component_type(parent=self)
         self.set_clip(self._sequencer_clip.clip)
+
+    @listenable_property
+    def clipboard(self):
+        return self._clipboard
 
     @property
     def bar_length(self):
@@ -53,11 +59,15 @@ class LoopSelectorComponent(Component, Renderable):
         self.matrix.set_control_element(matrix)
         self._update_matrix()
 
+    def set_copy_button(self, button):
+        self._clipboard.set_copy_button(button)
+
     def set_clip(self, clip):
         if liveobj_changed(clip, self._clip):
             self._LoopSelectorComponent__on_playing_position_changed.subject = clip
             self._LoopSelectorComponent__on_playing_status_changed.subject = clip
             self._clip = clip
+            self._clipboard.set_clip(clip)
             if clip:
                 if self._paginator.can_change_page:
                     self._paginator.page_time = clip.loop_start
@@ -71,6 +81,8 @@ class LoopSelectorComponent(Component, Renderable):
                 self.notify(self.notifications.Notes.delete)
             else:
                 self.notify(self.notifications.Notes.error_no_notes_to_delete)
+        elif self._clipboard.is_copying:
+            self._update_clipboard(button)
         else:
             self._pressed_matrix_indices.append(button.index)
             if len(self._pressed_matrix_indices) > 1:
@@ -79,13 +91,16 @@ class LoopSelectorComponent(Component, Renderable):
 
     @matrix.released
     def matrix(self, button):
-        if button.index in self._pressed_matrix_indices:
+        if self._clipboard.is_copying:
+            self._update_clipboard(button)
+        elif button.index in self._pressed_matrix_indices:
             self._pressed_matrix_indices.remove(button.index)
 
     @matrix.double_clicked
     def matrix(self, button):
-        start = button.index * self.bar_length
-        action.set_loop_position(self._clip, start, start + self.bar_length)
+        if not self._clipboard.is_copying:
+            start = button.index * self.bar_length
+            action.set_loop_position(self._clip, start, start + self.bar_length)
 
     @next_page_button.pressed
     def next_page_button(self, _):
@@ -108,6 +123,23 @@ class LoopSelectorComponent(Component, Renderable):
     def _has_clip(self):
         return liveobj_valid(self._clip)
 
+    def _make_room_for_region(self, region_end):
+        if region_end > self._clip.loop_end:
+            action.set_loop_end(self._clip, region_end)
+
+    def _update_clipboard(self, button):
+        bar_length = self.bar_length
+        region_start = button.index * bar_length
+        any_button_pressed = any((button.is_pressed for button in self.matrix))
+        if self._clipboard.has_content:
+            if not any_button_pressed:
+                self._make_room_for_region(region_start + self._clipboard.buffer[-1])
+                self._clipboard.paste(region_start)
+        elif button.is_pressed:
+            self._clipboard.extend_buffer((region_start, region_start + bar_length))
+        elif not any_button_pressed:
+            self._clipboard.copy(self._clipboard.buffer)
+
     def update(self):
         super().update()
         self._update_matrix()
@@ -125,7 +157,7 @@ class LoopSelectorComponent(Component, Renderable):
             playing_page = int(self._clip.playing_position / bar_length)
             editing_page = int(self._paginator.page_time / bar_length)
             for (index, button) in enumerate(self.matrix):
-                self._update_matrix_button(button, index == editing_page, self._clip.is_playing or self._clip.is_triggered and self.song.is_playing and index == playing_page, loop_start <= button.index * bar_length < loop_end)
+                self._update_matrix_button(button, index == editing_page, is_clip_playing(self._clip) and index == playing_page, loop_start <= button.index * bar_length < loop_end)
 
     def _update_matrix_button(self, button, selected, playing, inside_loop):
         color = "OutsideLoop"
@@ -157,5 +189,30 @@ class LoopSelectorComponent(Component, Renderable):
     @listens("target_track.color")
     def __on_target_track_color_changed(self):
         self._update_matrix()
+
+
+class NoteRegionClipboardComponent(BufferedClipboardComponent):
+
+    def __init__(self, *a, **k):
+        (super().__init__)(*a, **k)
+        self._clip = None
+
+    def set_clip(self, clip):
+        self._clip = clip
+        self.clear()
+
+    def extend_buffer(self, obj):
+        super().extend_buffer(obj)
+        self._buffer = [
+         min(self._buffer), max(self._buffer)]
+        self.notify(self.notifications.Notes.CopyPaste.copy)
+
+    def _do_paste(self, obj):
+        self._clip.duplicate_region(self._buffer[0], self._buffer[1], obj, -1)
+        self.notify(self.notifications.Notes.CopyPaste.paste)
+        return True
+
+    def _is_source_valid(self):
+        return super()._is_source_valid() and liveobj_valid(self._clip)
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v3/control_surface/components/loop_selector.pyc

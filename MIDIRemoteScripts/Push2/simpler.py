@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\simpler.py
-# Compiled at: 2024-01-31 17:08:32
-# Size of source mod 2**32: 21077 bytes
+# Size of source mod 2**32: 21430 bytes
 from __future__ import absolute_import, division, print_function, unicode_literals
 from builtins import range
 from past.utils import old_div
@@ -120,6 +119,10 @@ class SimplerDeviceDecorator(SimplerDeviceDecoratorBase, Messenger):
         self.retrigger_option = DeviceOnOffOption(name="Retrigger",
           property_host=(self._live_object),
           value_property_name="retrigger")
+        self.lfo_retrigger_option = DeviceOnOffOption(name="LFO Retrig",
+          property_host=(get_parameter_by_name(self, "L Retrig")))
+        self.lfo_on_option = DeviceOnOffOption(name="LFO",
+          property_host=(get_parameter_by_name(self, "L On")))
         self.warp_as_x_bars_option = DeviceTriggerOption(name="Warp as X Bars",
           default_label=(self.get_warp_as_option_label()),
           callback=(lambda: call_simpler_function("warp_as", call_simpler_function("guess_playback_length"))),
@@ -159,6 +162,8 @@ class SimplerDeviceDecorator(SimplerDeviceDecoratorBase, Messenger):
          self.reverse_option,
          self.one_shot_sustain_mode_option,
          self.retrigger_option,
+         self.lfo_retrigger_option,
+         self.lfo_on_option,
          self.warp_as_x_bars_option,
          self.warp_half_option,
          self.warp_double_option,

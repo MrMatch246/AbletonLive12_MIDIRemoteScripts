@@ -2,53 +2,12 @@
 # Python bytecode version base 3.7.0 (3394)
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
-# Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_MxDCore\MxDUtils.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 9496 bytes
+# Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_MxDCore\MxStringHandler.py
+# Size of source mod 2**32: 4933 bytes
 from __future__ import absolute_import, print_function, unicode_literals
-from builtins import object, range, str
-from future.utils import string_types
-from past.builtins import cmp
 import logging
 from ableton.v2.base import old_hasattr
 logger = logging.getLogger(__name__)
-
-class TupleWrapper(object):
-    _tuple_wrapper_registry = {}
-
-    def forget_tuple_wrapper_instances():
-        TupleWrapper._tuple_wrapper_registry = {}
-
-    forget_tuple_wrapper_instances = staticmethod(forget_tuple_wrapper_instances)
-
-    def get_tuple_wrapper(parent, attribute, element_filter=None, element_transform=None):
-        if (
-         parent, attribute) not in TupleWrapper._tuple_wrapper_registry:
-            TupleWrapper._tuple_wrapper_registry[(parent, attribute)] = TupleWrapper(parent, attribute, element_filter, element_transform)
-        return TupleWrapper._tuple_wrapper_registry[(parent, attribute)]
-
-    get_tuple_wrapper = staticmethod(get_tuple_wrapper)
-
-    def __init__(self, parent, attribute, element_filter=None, element_transform=None):
-        self._parent = parent
-        self._attribute = attribute
-        self._element_filter = element_filter
-        self._element_transform = element_transform
-
-    def get_list(self):
-        result = ()
-        parent = self._parent
-        if isinstance(parent, dict):
-            if self._attribute in list(parent.keys()):
-                result = parent[self._attribute]
-        elif old_hasattr(parent, self._attribute):
-            result = getattr(parent, self._attribute)
-        filtered_result = [e if self._element_filter(e) else None for e in result] if self._element_filter else result
-        if self._element_transform:
-            return list(map(self._element_transform, filtered_result))
-        return filtered_result
-
-
 STATE_NEUTRAL = "neutral"
 STATE_QUOTED_STR = "quoted"
 STATE_UNQUOTED_STR = "unquoted"
@@ -57,42 +16,42 @@ STATE_PENDING_FLOAT = "float"
 QUOTE_ENTITY = "&quot;"
 QUOTE_SIMPLE = '"'
 
-class StringHandler(object):
+class MxStringHandler:
 
+    @staticmethod
     def prepare_incoming(string):
         return string.replace(QUOTE_ENTITY, QUOTE_SIMPLE)
 
-    prepare_incoming = staticmethod(prepare_incoming)
-
+    @staticmethod
     def prepare_outgoing(string):
         result = string.replace(QUOTE_SIMPLE, QUOTE_ENTITY)
         if result.find(" ") >= 0:
             result = QUOTE_SIMPLE + result + QUOTE_SIMPLE
         return result
 
-    prepare_outgoing = staticmethod(prepare_outgoing)
-
+    @staticmethod
     def parse(string, id_callback):
-        return StringHandler(id_callback).parse_string(string)
-
-    parse = staticmethod(parse)
+        return MxStringHandler(id_callback).parse_string(string)
 
     def __init__(self, id_callback):
+        self._input_string = ""
+        self._current_parse_index = None
         self._state = STATE_NEUTRAL
         self._sub_string = ""
-        self._open_quote_index = -1
         self._id_callback = id_callback
 
     def parse_string(self, string):
+        self._input_string = string
         self._arguments = []
         self._sub_string = ""
         self._state = STATE_NEUTRAL
-        self._open_quote_index = -1
-        for index in range(len(string)):
-            char = string[index]
+        self._current_parse_index = 0
+        while self._current_parse_index < len(string):
+            char = self._input_string[self._current_parse_index]
             handle_selector = "_" + str(self._state) + "_handle_char"
             if old_hasattr(self, handle_selector):
-                getattr(self, handle_selector)(char, index)
+                getattr(self, handle_selector)(char, self._current_parse_index)
+                self._current_parse_index += 1
             else:
                 logger.info("Unknown state " + str(self._state))
 
@@ -104,7 +63,6 @@ class StringHandler(object):
 
     def _neutral_handle_char(self, char, index):
         if char == '"':
-            self._open_quote_index = index
             self._state = STATE_QUOTED_STR
         elif char != " ":
             self._sub_string += char
@@ -148,14 +106,11 @@ class StringHandler(object):
             self._sub_string += char
 
     def _quoted_handle_char(self, char, index):
-        if char == '"':
-            self._open_quote_index = -1
-            self._add_argument(self._sub_string)
-        else:
-            self._sub_string += char
-
-    def _finalize_quoted(self):
-        raise RuntimeError("no match for quote at index %d found" % self._open_quote_index)
+        close_quote_index = self._input_string.find('"', index + 1)
+        if close_quote_index == -1:
+            raise RuntimeError("no match for quote at index %d found" % index)
+        self._add_argument(self._input_string[index:close_quote_index])
+        self._current_parse_index = close_quote_index
 
     def _finalize_unquoted(self):
         self._add_argument(self._sub_string)
@@ -165,20 +120,21 @@ class StringHandler(object):
 
     def _finalize_number(self):
         argument = int(self._sub_string)
-        if str(self._arguments[-1]) == "id":
-            self._arguments.pop()
-            try:
-                argument = self._id_callback(argument)
-            except KeyError:
-                raise RuntimeError("Invalid id")
+        if len(self._arguments) > 0:
+            if self._arguments[-1] == "id":
+                self._arguments.pop()
+                try:
+                    argument = self._id_callback(argument)
+                except KeyError:
+                    raise RuntimeError("Invalid id")
 
         self._add_argument(argument)
 
     def _add_argument(self, argument):
-        if isinstance(argument, string_types):
-            argument = StringHandler.prepare_incoming(argument)
+        if isinstance(argument, str):
+            argument = MxStringHandler.prepare_incoming(argument)
         self._arguments.append(argument)
         self._sub_string = ""
         self._state = STATE_NEUTRAL
 
-# okay decompiling ./MIDIRemoteScripts/_MxDCore/MxDUtils.pyc
+# okay decompiling ./MIDIRemoteScripts/_MxDCore/MxStringHandler.pyc

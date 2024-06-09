@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\transport.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 11341 bytes
+# Size of source mod 2**32: 12309 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from Live.Song import RecordingQuantization
 from ...base import clamp, listens, sign, task
@@ -17,6 +16,7 @@ from ..skin import OptionalSkinEntry
 class TransportComponent(Component, Renderable):
     arrangement_position_encoder = StepEncoderControl(num_steps=64)
     loop_start_encoder = StepEncoderControl(num_steps=64)
+    loop_length_encoder = StepEncoderControl(num_steps=64)
     tempo_coarse_encoder = StepEncoderControl(num_steps=64)
     tempo_fine_encoder = StepEncoderControl(num_steps=64)
     play_button = ButtonControl(color="Transport.PlayOff", on_color="Transport.PlayOn")
@@ -66,9 +66,13 @@ class TransportComponent(Component, Renderable):
         self._end_undo_step_task = self._tasks.add(task.sequence(task.wait(1.5), task.run(self.song.end_undo_step)))
         self._end_undo_step_task.kill()
         song = self.song
+        self._position_encoder_increment_fn = lambda: 1
         self.loop_start_encoder.connect_property(song,
           "loop_start",
-          transform=(lambda x: max(0.0, song.loop_start + get_bar_length() * sign(x))))
+          transform=(lambda x: max(0.0, song.loop_start + self._position_encoder_increment_fn() * sign(x))))
+        self.loop_length_encoder.connect_property(song,
+          "loop_length",
+          transform=(lambda x: max(0.1, song.loop_length + self._position_encoder_increment_fn() * sign(x))))
         self.tempo_coarse_encoder.connect_property(song,
           "tempo", transform=(lambda x: clamp(song.tempo + sign(x), 20, 999)))
         self.tempo_fine_encoder.connect_property(song,
@@ -93,9 +97,12 @@ class TransportComponent(Component, Renderable):
         self._TransportComponent__on_record_quantization_changed.subject = song
         self._TransportComponent__on_record_quantization_changed()
 
+    def set_position_encoders_use_bar_increments(self, use_bar):
+        self._position_encoder_increment_fn = get_bar_length if use_bar else (lambda: 1)
+
     @arrangement_position_encoder.value
     def arrangement_position_encoder(self, value, _):
-        move_current_song_time(self.song, sign(value))
+        move_current_song_time(self.song, self._position_encoder_increment_fn() * sign(value))
 
     @metronome_button.pressed
     def metronome_button(self, button):

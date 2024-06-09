@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\drum_group.py
-# Compiled at: 2024-01-31 17:08:32
-# Size of source mod 2**32: 16628 bytes
+# Size of source mod 2**32: 16325 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from typing import cast
 from ...base import clamp, depends, first, listenable_property, listens, listens_group
@@ -24,7 +23,6 @@ class DrumGroupComponent(PlayableComponent, PitchProvider, Renderable):
     solo_button = ButtonControl(color=None)
     delete_button = ButtonControl(color=None)
     quantize_button = ButtonControl(color=None)
-    copy_button = ButtonControl(color=None)
 
     @depends(set_pad_translations=None, target_track=None)
     def __init__(self, name="Drum_Group", translation_channel=DEFAULT_DRUM_TRANSLATION_CHANNEL, set_pad_translations=None, target_track=None, scroll_component_type=None, clipboard_component_type=None, *a, **k):
@@ -36,7 +34,7 @@ class DrumGroupComponent(PlayableComponent, PitchProvider, Renderable):
         self._drum_group_scroller = scroll_component_type(parent=self)
         clipboard_component_type = clipboard_component_type or DrumPadClipboardComponent
         self._clipboard = clipboard_component_type(parent=self)
-        self.register_slot(self._clipboard, lambda _: self._set_control_pads_from_script(self._is_copying()), "has_content")
+        self.register_slot(self._clipboard, lambda _: self._set_control_pads_from_script(self._clipboard.is_copying), "is_copying")
         self._drum_group_device = None
         self._selected_drum_pad = None
         self._all_drum_pads = []
@@ -58,8 +56,11 @@ class DrumGroupComponent(PlayableComponent, PitchProvider, Renderable):
         super().set_matrix(matrix)
         self._update_assigned_drum_pads()
         self._create_and_set_pad_translations()
-        if self._any_modifier_pressed() or self._is_copying():
+        if self._any_modifier_pressed() or self._clipboard.is_copying:
             self._set_control_pads_from_script(True)
+
+    def set_copy_button(self, button):
+        self._clipboard.set_copy_button(button)
 
     def __getattr__(self, name):
         if name.startswith("set_"):
@@ -85,10 +86,6 @@ class DrumGroupComponent(PlayableComponent, PitchProvider, Renderable):
             self._update_assigned_drum_pads()
             self._update_led_feedback()
 
-    def set_copy_button(self, button):
-        self.copy_button.set_control_element(button)
-        self._clipboard.set_copy_button(button)
-
     def quantize_pitch(self, note):
         pass
 
@@ -111,7 +108,7 @@ class DrumGroupComponent(PlayableComponent, PitchProvider, Renderable):
         if self.quantize_button.is_pressed:
             button.color = "DrumGroup.PadAction"
             self.quantize_pitch(pad.note)
-        if self._is_copying():
+        if self._clipboard.is_copying:
             button.color = "DrumGroup.PadAction"
             self._clipboard.copy_or_paste(pad)
         if self.delete_button.is_pressed:
@@ -149,10 +146,6 @@ class DrumGroupComponent(PlayableComponent, PitchProvider, Renderable):
     def delete_button(self, _, button):
         self._set_control_pads_from_script(button.is_pressed)
 
-    @copy_button.value
-    def copy_button(self, *_):
-        self._set_control_pads_from_script(self._is_copying())
-
     @quantize_button.value
     def quantize_button(self, _, button):
         self._set_control_pads_from_script(button.is_pressed)
@@ -161,16 +154,12 @@ class DrumGroupComponent(PlayableComponent, PitchProvider, Renderable):
         if liveobj_valid(self._drum_group_device):
             return self._drum_group_device.view.selected_drum_pad
 
-    def _is_copying(self):
-        return self.copy_button.is_pressed or self._clipboard.has_content
-
     def _any_modifier_pressed(self):
         return any([
          self.select_button.is_pressed,
          self.mute_button.is_pressed,
          self.solo_button.is_pressed,
          self.delete_button.is_pressed,
-         self.copy_button.is_pressed,
          self.quantize_button.is_pressed])
 
     def update(self):
@@ -353,6 +342,6 @@ class DrumPadClipboardComponent(ClipboardComponent):
         return False
 
     def _is_source_valid(self):
-        return liveobj_valid(self._drum_group_device) and liveobj_valid(self._source_obj) and self._source_obj.chains
+        return liveobj_valid(self._drum_group_device) and liveobj_valid(self._source_obj) and bool(self._source_obj.chains)
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v3/control_surface/components/drum_group.pyc

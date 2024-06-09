@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\auto_arm.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 3482 bytes
+# Size of source mod 2**32: 3692 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from ...base import depends, listens, listens_group, task
 from ...live import any_track_armed, liveobj_changed, liveobj_valid
@@ -22,6 +21,7 @@ class AutoArmComponent(Component):
         self._target_track = target_track
         self._auto_arm_target = None
         self._update_auto_arm_task = self._tasks.add(task.run(self._update_auto_arm))
+        self.register_slot(self.application, self.update, "control_surfaces")
         self.register_slot(self._target_track, self.update, "target_track")
         self._AutoArmComponent__on_tracks_changed.subject = self.song
         self._AutoArmComponent__on_tracks_changed()
@@ -35,7 +35,7 @@ class AutoArmComponent(Component):
         self._update_auto_arm()
 
     def _can_auto_arm(self):
-        return self.is_enabled() and not any_track_armed()
+        return self.is_enabled() and self.application.number_of_push_apps_running == 0 and not any_track_armed()
 
     def _auto_arm_target_changed(self, target_track):
         return liveobj_changed(target_track, self._auto_arm_target) or not track_can_be_auto_armed(self._auto_arm_target)

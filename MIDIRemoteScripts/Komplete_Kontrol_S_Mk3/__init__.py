@@ -3,10 +3,8 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Komplete_Kontrol_S_Mk3\__init__.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 3019 bytes
+# Size of source mod 2**32: 3038 bytes
 from __future__ import absolute_import, print_function, unicode_literals
-from functools import partial
 from ableton.v3.control_surface import ControlSurface, ControlSurfaceSpecification, create_skin
 from ableton.v3.control_surface.capabilities import CONTROLLER_ID_KEY, NOTES_CC, PORTS_KEY, SCRIPT, controller_id, inport, outport
 from ableton.v3.control_surface.midi import CC_STATUS
@@ -18,6 +16,7 @@ from .mappings import create_mappings
 from .midi import MIDI_CHANNEL
 from .session_navigation import SessionNavigationComponent
 from .skin import Skin
+from .transport import TransportComponent
 from .view_control import ViewControlComponent
 
 def get_capabilities():
@@ -49,10 +48,12 @@ class Specification(ControlSurfaceSpecification):
     custom_identity_response = (MIDI_CHANNEL + CC_STATUS, 1)
     goodbye_messages = ((MIDI_CHANNEL + CC_STATUS, 2, 0),)
     send_goodbye_messages_last = False
-    component_map = {'Focus_Follow':FocusFollowComponent, 
-     'Launch_And_Stop':LaunchAndStopComponent, 
-     'Session_Navigation':partial(SessionNavigationComponent, snap_track_offset=True), 
-     'View_Control':ViewControlComponent}
+    component_map = {
+      'Focus_Follow': FocusFollowComponent,
+      'Launch_And_Stop': LaunchAndStopComponent,
+      'Session_Navigation': SessionNavigationComponent,
+      'Transport': TransportComponent,
+      'View_Control': ViewControlComponent}
 
 
 class Komplete_Kontrol_S_Mk3(ControlSurface):

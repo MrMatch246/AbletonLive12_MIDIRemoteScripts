@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ATOMSQ\__init__.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 3193 bytes
+# Size of source mod 2**32: 3125 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from functools import partial
 from ableton.v3.base import listens
@@ -31,7 +30,7 @@ def get_capabilities():
 
 
 def create_instance(c_instance):
-    return ATOMSQ(c_instance=c_instance)
+    return ATOMSQ(specification=Specification, c_instance=c_instance)
 
 
 class Specification(ControlSurfaceSpecification):
@@ -53,9 +52,6 @@ class Specification(ControlSurfaceSpecification):
 
 
 class ATOMSQ(ControlSurface):
-
-    def __init__(self, *a, **k):
-        (super().__init__)(a, specification=Specification, **k)
 
     def setup(self):
         super().setup()

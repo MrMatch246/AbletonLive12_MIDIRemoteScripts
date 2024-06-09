@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\scroll.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 5388 bytes
+# Size of source mod 2**32: 5526 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from ...base import task
 from .. import MOMENTARY_DELAY, Component
@@ -55,18 +54,20 @@ class ScrollComponent(Component, Scrollable):
 
     def set_scroll_up_button(self, button):
         self.scroll_up_button.set_control_element(button)
-        self._update_scroll_buttons()
+        self._update_scroll_controls()
 
     def set_scroll_down_button(self, button):
         self.scroll_down_button.set_control_element(button)
-        self._update_scroll_buttons()
+        self._update_scroll_controls()
 
     def set_scroll_encoder(self, encoder):
         self.scroll_encoder.set_control_element(encoder)
+        self._update_scroll_controls()
 
-    def _update_scroll_buttons(self):
+    def _update_scroll_controls(self):
         self.scroll_up_button.enabled = self.can_scroll_up()
         self.scroll_down_button.enabled = self.can_scroll_down()
+        self.scroll_encoder.enabled = self.can_scroll_up() or self.can_scroll_down()
 
     @scroll_up_button.pressed
     def scroll_up_button(self, button):
@@ -88,21 +89,21 @@ class ScrollComponent(Component, Scrollable):
     def scroll_encoder(self, value, _):
         if value < 0:
             if self.can_scroll_up():
-                self.scroll_up()
+                self._do_scroll_up()
         elif self.can_scroll_down():
-            self.scroll_down()
+            self._do_scroll_down()
 
     def _do_scroll_up(self):
         self.scroll_up()
-        self._update_scroll_buttons()
+        self._update_scroll_controls()
 
     def _do_scroll_down(self):
         self.scroll_down()
-        self._update_scroll_buttons()
+        self._update_scroll_controls()
 
     def update(self):
         super().update()
-        self._update_scroll_buttons()
+        self._update_scroll_controls()
 
     def _on_scroll_pressed(self, button, scroll_step, scroll_task):
         is_scrolling = not self._scroll_task_up.is_killed or not self._scroll_task_down.is_killed

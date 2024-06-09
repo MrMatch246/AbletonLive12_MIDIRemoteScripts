@@ -3,11 +3,10 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v2\control_surface\control\control.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 16119 bytes
+# Size of source mod 2**32: 16173 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from functools import partial
-from ...base import Disconnectable, EventObject, NamedTuple, lazy_attribute, mixin, nop, old_hasattr, task
+from ...base import Disconnectable, EventObject, NamedTuple, lazy_attribute, listenable_property, mixin, nop, old_hasattr, task
 __all__ = ('Control', 'InputControl', 'ControlManager', 'control_event', 'control_color',
            'Connectable')
 
@@ -71,7 +70,7 @@ class control_color(object):
 class Control(object):
 
     class State(EventObject):
-        enabled = True
+        enabled = listenable_property.managed(True)
 
         def __init__(self, control=None, manager=None, *a, **k):
             (super(Control.State, self).__init__)(*a, **k)

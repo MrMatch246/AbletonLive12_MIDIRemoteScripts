@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\MiniLab_3\transport.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 1664 bytes
+# Size of source mod 2**32: 1598 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 import Live
 from ableton.v3.base import sign
@@ -27,10 +26,10 @@ class TransportComponent(TransportComponentBase):
 
     @tap_tempo_button.pressed
     def tap_tempo_button(self, _):
-        if not self._end_undo_step_task.is_running:
-            self.song.begin_undo_step()
-        self._end_undo_step_task.restart()
-        self.song.tap_tempo()
+        self._trigger_tap_tempo()
+
+    @tap_tempo_button.released
+    def tap_tempo_button(self, _):
         self.notify_transport_event("Tap Tempo", "{} BPM".format(int(self.song.tempo)))
 
     @loop_button.released

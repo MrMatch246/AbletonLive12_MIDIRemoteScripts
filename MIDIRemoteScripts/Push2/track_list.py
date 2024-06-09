@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\track_list.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 17997 bytes
+# Size of source mod 2**32: 18087 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import filter, range, zip
 from functools import partial
@@ -290,8 +289,7 @@ class TrackListComponent(ModesComponent, Messenger):
     @track_action_buttons.pressed_delayed
     def track_action_buttons(self, button):
         if self.selected_mode == "select":
-            (
-             self._arm_track(self.tracks[button.index]),)
+            self._arm_track((self.tracks[button.index]), allows_triggering_recording=True)
 
     @track_action_buttons.released_immediately
     def track_action_buttons(self, button):
@@ -343,12 +341,12 @@ class TrackListComponent(ModesComponent, Messenger):
             except RuntimeError:
                 self.show_notification(MessageBoxText.TRACK_DUPLICATION_FAILED)
 
-    def _arm_track(self, track_or_chain):
+    def _arm_track(self, track_or_chain, allows_triggering_recording=False):
         if not is_chain(track_or_chain):
             if track_or_chain.can_be_armed:
                 song = self.song
                 toggle_arm(track_or_chain, song, exclusive=(song.exclusive_arm))
-        self._can_trigger_recording_callback(False)
+        self._can_trigger_recording_callback(allows_triggering_recording)
 
     def _stop_track_clip(self, mixable):
         if not is_chain(mixable):

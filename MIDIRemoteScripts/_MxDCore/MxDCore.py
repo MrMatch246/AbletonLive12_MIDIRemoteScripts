@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
 # [GCC 9.3.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_MxDCore\MxDCore.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 67065 bytes
+# Size of source mod 2**32: 67632 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import map, object, range, str
 from future.utils import string_types
@@ -14,11 +13,12 @@ from functools import partial, reduce, wraps
 import Live.Base, _Framework
 import _Framework.Disconnectable as Disconnectable
 from ableton.v2.base import PY2, old_hasattr
-from .LomTypes import CONTROL_SURFACES, ENUM_TYPES, LIVE_APP, PROPERTY_TYPES, ROOT_KEYS, LomAttributeError, LomNoteOperationError, LomNoteOperationWarning, LomObjectError, MFLPropertyFormats, data_dict_to_json, get_exposed_lom_types, get_exposed_property_info, get_root_prop, is_control_surface, is_cplusplus_lom_object, is_lom_object, is_object_iterable, verify_object_property
+from .LomTypes import CONTROL_SURFACES, ENUM_TYPES, LIVE_APP, PROPERTY_TYPES, ROOT_KEYS, LomAttributeError, LomNoteOperationError, LomNoteOperationWarning, LomObjectError, MFLPropertyFormats, data_dict_to_json, get_available_lom_types, get_available_property_info, get_root_prop, is_control_surface, is_cplusplus_lom_object, is_lom_object, is_object_iterable, verify_object_property
 from .LomUtils import LomInformation, LomIntrospection, LomPathCalculator, LomPathResolver, is_control_surfaces_list, wrap_control_surfaces_list
 from .MxDControlSurfaceAPI import MxDControlSurfaceAPI
-from .MxDUtils import StringHandler, TupleWrapper
+from .MxStringHandler import MxStringHandler
 from .NotesAPIUtils import MIDI_NOTE_ATTRS, VALID_DUPLICATE_NOTES_BY_ID_PARAMETERS, midi_note_to_dict, verify_note_specification_requirements
+from .TupleWrapper import TupleWrapper
 logger = logging.getLogger(__name__)
 
 def get_current_max_device(device_id):
@@ -122,7 +122,7 @@ class MxDCore(object):
          'grab_midi':(self._cs_api).object_grab_midi, 
          'release_midi':(self._cs_api).object_release_midi, 
          'add_warp_marker':self._object_warp_marker_handler}
-        self.lom_classes = get_exposed_lom_types()
+        self.lom_classes = get_available_lom_types()
         self.lom_classes += LomIntrospection(_Framework).lom_classes
         self.appointed_lom_ids = {0: None}
 
@@ -226,7 +226,7 @@ class MxDCore(object):
                 else:
                     if type == "mod":
                         self._update_timeable(device_id, object_id, 5, True)
-        device_context[CONTAINS_CS_ID_KEY] |= lom_id in self.appointed_lom_ids.keys()
+        device_context[CONTAINS_CS_ID_KEY] |= lom_id < 0 and lom_id in self.appointed_lom_ids.keys()
 
     def _get_current_lom_id(self, device_id, object_id):
         current_id = self.manager.get_current_lom_id(device_id, object_id)
@@ -463,7 +463,7 @@ class MxDCore(object):
     def _set_property_value(self, lom_object, property_name, value):
         verify_object_property(lom_object, property_name, self.epii_version)
         prop = getattr(lom_object, property_name)
-        prop_info = get_exposed_property_info(type(lom_object), property_name, self.epii_version)
+        prop_info = get_available_property_info(type(lom_object), property_name, self.epii_version)
         if prop_info and prop_info.from_json:
             value = prop_info.from_json(lom_object, value)
             if value is None:
@@ -493,7 +493,7 @@ class MxDCore(object):
                             value = str(value)
                         else:
                             if isinstance(prop, tuple):
-                                prop_info = get_exposed_property_info(type(lom_object), property_name, self.epii_version)
+                                prop_info = get_available_property_info(type(lom_object), property_name, self.epii_version)
                                 if prop_info and prop_info.format == MFLPropertyFormats.JSON:
                                     package = json.loads(value)
                                     value = tuple(package[property_name])
@@ -548,7 +548,7 @@ class MxDCore(object):
                     if isinstance(result_value, ENUM_TYPES):
                         result_value = int(result_value)
                     else:
-                        prop_info = get_exposed_property_info(type(current_object), parameters, self.epii_version)
+                        prop_info = get_available_property_info(type(current_object), parameters, self.epii_version)
                         if prop_info and prop_info.to_json:
                             result = self.str_representation_for_object(prop_info.to_json(current_object))
                         else:
@@ -641,8 +641,14 @@ class MxDCore(object):
     def rmt_set_id(self, device_id, object_id, parameter):
         self._set_current_lom_id_from_param(device_id, object_id, "rmt", parameter)
 
+    def rmt_get_id(self, device_id, object_id, parameter):
+        self.manager.send_message(device_id, object_id, "rmt_id", str(self._get_current_lom_id(device_id, object_id)))
+
     def mod_set_id(self, device_id, object_id, parameter):
         self._set_current_lom_id_from_param(device_id, object_id, "mod", parameter)
+
+    def mod_get_id(self, device_id, object_id, parameter):
+        self.manager.send_message(device_id, object_id, "mod_id", str(self._get_current_lom_id(device_id, object_id)))
 
     def _object_attr_path_iter(self, device_id, object_id, path_components):
         if len(path_components) == 0:
@@ -707,7 +713,7 @@ class MxDCore(object):
                 if isinstance(lom_object, (int, bool)):
                     result = str(int(lom_object))
                 else:
-                    result = StringHandler.prepare_outgoing(str(lom_object))
+                    result = MxStringHandler.prepare_outgoing(str(lom_object))
         return result
 
     def _install_path_listeners(self, device_id, object_id, listener_callback):
@@ -1133,7 +1139,7 @@ class MxDCore(object):
     def _observer_property_callback(self, device_id, object_id, *args):
         current_object = self._get_current_lom_object(device_id, object_id)
         property_name = self._get_current_property(device_id, object_id)
-        prop_info = get_exposed_property_info(type(current_object), property_name, self.epii_version)
+        prop_info = get_available_property_info(type(current_object), property_name, self.epii_version)
         if len(args) > 0:
             formatter = lambda arg: str(int(arg) if isinstance(arg, bool) else arg)
             args_type = self._observer_property_message_type(args if len(args) > 1 else args[0], prop_info)
@@ -1206,7 +1212,7 @@ class MxDCore(object):
         return getattr(lom_object, property_name)
 
     def _parse(self, device_id, object_id, string):
-        return StringHandler.parse(string, self._object_for_id(device_id))
+        return MxStringHandler.parse(string, self._object_for_id(device_id))
 
     def _print_error(self, device_id, object_id, message):
         logger.error("Error: " + str(message))

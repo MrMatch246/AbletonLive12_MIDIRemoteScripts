@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Push2\analog.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 4788 bytes
+# Size of source mod 2**32: 5032 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from enum import IntEnum
 from ableton.v2.base import EventObject, liveobj_valid
@@ -41,13 +40,18 @@ class AnalogDeviceDecorator(LiveObjectDecorator, EventObject):
         filter = 1
         osc = 2
 
+    class ModSelect2(IntEnum):
+        amp = 0
+        env = 1
+
     class ModSource(IntEnum):
         key = 0
-        env = 1
-        lfo = 2
-        pb = 3
-        press = 4
-        slide = 5
+        vel = 1
+        env = 2
+        lfo = 3
+        pb = 4
+        press = 5
+        slide = 6
 
     def __init__(self, *a, **k):
         (super(AnalogDeviceDecorator, self).__init__)(*a, **k)
@@ -74,9 +78,13 @@ class AnalogDeviceDecorator(LiveObjectDecorator, EventObject):
           values=[
          "Amp", "Filter", "Osc"],
           default_value=(self.ModSelect.amp))
+        self._add_enum_parameter(name="Mod Dest Vel",
+          values=[
+         "Amp/Flt", "Env"],
+          default_value=(self.ModSelect2.amp))
         self._add_enum_parameter(name="Mod Source",
           values=[
-         "Key","Env","LFO","PB","Press","Slide"],
+         "Key","Vel","Env","LFO","PB","Press","Slide"],
           default_value=(self.ModSource.key))
         self._add_switch_option(name="OSC1 Mode",
           pname="OSC1 Mode",
@@ -112,8 +120,8 @@ class AnalogDeviceDecorator(LiveObjectDecorator, EventObject):
         self._add_on_off_option(name="Flt 2 Free", pname="FEG2 Free")
         self._add_on_off_option(name="LFO 1", pname="LFO1 On/Off")
         self._add_on_off_option(name="LFO 2", pname="LFO2 On/Off")
-        self._add_on_off_option(name="LFO 1 Retrig", pname="LFO1 On/Retrig")
-        self._add_on_off_option(name="LFO 2 Retrig", pname="LFO2 On/Retrig")
+        self._add_on_off_option(name="LFO 1 Retrig", pname="LFO1 Retrig")
+        self._add_on_off_option(name="LFO 2 Retrig", pname="LFO2 Retrig")
         self._add_on_off_option(name="Glide", pname="Glide On/Off")
         self._add_on_off_option(name="Unison", pname="Unison On/Off")
         self._add_on_off_option(name="Vibrato", pname="Vib On/Off")

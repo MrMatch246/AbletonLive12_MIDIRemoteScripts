@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\scene.py
-# Compiled at: 2024-01-31 17:08:32
-# Size of source mod 2**32: 5236 bytes
+# Size of source mod 2**32: 5325 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from ...base import depends, listens
 from ...live import action, display_name, liveobj_changed, liveobj_valid, scene_index
@@ -58,7 +57,8 @@ class SceneComponent(Component, Renderable):
             if action.select(self._scene):
                 self.notify(self.notifications.Scene.select, scene_name)
         elif self.duplicate_button.is_pressed:
-            action.duplicate(self._scene)
+            if action.duplicate(self._scene):
+                self.notify(self.notifications.Scene.duplicate, scene_name)
         elif self.delete_button.is_pressed:
             if action.delete(self._scene):
                 self.notify(self.notifications.Scene.delete, scene_name)

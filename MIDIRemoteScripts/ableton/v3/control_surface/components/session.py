@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\session.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 11924 bytes
+# Size of source mod 2**32: 11787 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from itertools import count, zip_longest
 from ...base import const, depends, inject, listenable_property, listens, listens_group
@@ -80,11 +79,9 @@ class SessionComponent(Component, Renderable):
 
     def set_copy_button(self, button):
         self._clipboard.set_copy_button(button)
-        self.set_modifier_button(button, "copy_button", clip_slots_only=True)
 
     def set_modifier_button(self, button, name, clip_slots_only=False):
-        for y in range(self._session_ring.num_scenes):
-            scene = self.scene(y)
+        for scene in self._scenes:
             if not clip_slots_only:
                 getattr(scene, name).set_control_element(button)
             for x in range(self._session_ring.num_tracks):

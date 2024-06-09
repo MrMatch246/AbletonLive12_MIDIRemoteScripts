@@ -3,13 +3,12 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\view_control.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 7308 bytes
+# Size of source mod 2**32: 7298 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from functools import partial
 from typing import cast
 from ...base import EventObject, ObservablePropertyAlias, clamp, depends
-from ...live import all_visible_tracks, scene_index, track_index
+from ...live import action, all_visible_tracks, scene_index, track_index
 from .. import Component
 from ..display import Renderable
 from . import Scrollable, ScrollComponent
@@ -45,14 +44,14 @@ class NotifyingViewScroller(Scrollable, EventObject):
     def _scroll_tracks(self, delta):
         tracks = all_visible_tracks()
         new_index = track_index(track_list=tracks) + delta
-        self.song.view.selected_track = tracks[clamp(new_index, 0, len(tracks) - 1)]
-        self.notify_scrolled()
+        if action.select(tracks[clamp(new_index, 0, len(tracks) - 1)]):
+            self.notify_scrolled()
 
     def _scroll_scenes(self, delta):
         scenes = list(self.song.scenes)
         new_index = scene_index() + delta
-        self.song.view.selected_scene = scenes[clamp(new_index, 0, len(scenes) - 1)]
-        self.notify_scrolled()
+        if action.select(scenes[clamp(new_index, 0, len(scenes) - 1)]):
+            self.notify_scrolled()
 
 
 class ViewControlComponent(Component, Renderable):

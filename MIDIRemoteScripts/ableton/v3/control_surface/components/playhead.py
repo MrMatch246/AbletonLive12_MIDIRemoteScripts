@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\playhead.py
-# Compiled at: 2024-01-31 17:08:32
-# Size of source mod 2**32: 3810 bytes
+# Size of source mod 2**32: 3702 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from ...base import depends, is_iterable, listens
 from ...live import liveobj_valid
@@ -27,7 +26,7 @@ class PlayheadComponent(Component):
         self.register_slot(self._paginator, self.update, "page")
         self.register_slot(self.song, self.update, "is_playing")
         self._PlayheadComponent__on_sequencer_clip_playing_status_changed.subject = sequencer_clip
-        self._PlayheadComponent__on_sequencer_clip_changed()
+        self.update()
 
     def update(self):
         super().update()
@@ -47,10 +46,6 @@ class PlayheadComponent(Component):
 
     def _update_playhead_notes(self):
         self._playhead.notes = list(self._triplet_notes if self._grid_resolution.is_triplet else self._notes)
-
-    @listens("clip")
-    def __on_sequencer_clip_changed(self):
-        self.update()
 
     @listens("clip.playing_status")
     def __on_sequencer_clip_playing_status_changed(self):

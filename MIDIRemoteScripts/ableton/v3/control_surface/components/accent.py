@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\accent.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 1513 bytes
+# Size of source mod 2**32: 1865 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from ...base import depends, listenable_property
 from .. import Component
@@ -34,5 +33,10 @@ class AccentComponent(Component, Renderable):
     @accent_button.released_delayed
     def accent_button(self, _):
         self.activated = False
+
+    def update(self):
+        super().update()
+        if self._full_velocity.enabled != self.accent_button.is_on:
+            self._full_velocity.enabled = self.accent_button.is_on
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v3/control_surface/components/accent.pyc

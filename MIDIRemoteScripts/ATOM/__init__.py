@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ATOM\__init__.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 2499 bytes
+# Size of source mod 2**32: 2431 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from functools import partial
 from ableton.v3.control_surface import ControlSurface, ControlSurfaceSpecification, create_skin
@@ -30,7 +29,7 @@ def get_capabilities():
 
 
 def create_instance(c_instance):
-    return ATOM(c_instance=c_instance)
+    return ATOM(specification=Specification, c_instance=c_instance)
 
 
 class Specification(ControlSurfaceSpecification):
@@ -50,9 +49,6 @@ class Specification(ControlSurfaceSpecification):
 
 
 class ATOM(ControlSurface):
-
-    def __init__(self, *a, **k):
-        (super().__init__)(a, specification=Specification, **k)
 
     def port_settings_changed(self):
         self._send_midi(midi.NATIVE_MODE_OFF_MESSAGE)

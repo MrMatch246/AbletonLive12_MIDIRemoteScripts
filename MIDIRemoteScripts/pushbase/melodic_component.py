@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\melodic_component.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 14270 bytes
+# Size of source mod 2**32: 14553 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import range
 from future.moves.itertools import zip_longest
@@ -31,6 +30,7 @@ class MelodicComponent(MessengerModesComponent):
         (super(MelodicComponent, self).__init__)(*a, **k)
         self._matrices = None
         self._grid_resolution = grid_resolution
+        self._detail_clip = None
         self.instrument = InstrumentComponent(parent=self, note_layout=note_layout)
         self._step_duplicator = StepDuplicatorComponent(parent=self)
         self._accent_component = AccentComponent(parent=self)
@@ -177,6 +177,7 @@ class MelodicComponent(MessengerModesComponent):
                 self._loop_selector.set_detail_clip(clip)
                 self._playhead_component.set_clip(clip)
                 self.instrument.set_detail_clip(clip)
+                self._detail_clip = clip
 
     @listens("activated")
     def __on_accent_activated_changed(self):
@@ -311,8 +312,12 @@ class MelodicComponent(MessengerModesComponent):
                     start_note = self._note_editors[0].editing_notes[0]
                     end_editor = find_if((lambda editor: len(editor.editing_notes) > 0), reversed(self._note_editors))
                     end_note = end_editor.editing_notes[0]
+                    if liveobj_valid(self._detail_clip):
+                        index_to_name_func = self._detail_clip.note_number_to_name
+                    else:
+                        index_to_name_func = pitch_index_to_string
                     self.show_notification(message % (
-                     pitch_index_to_string(start_note), pitch_index_to_string(end_note)))
+                     index_to_name_func(start_note), index_to_name_func(end_note)))
                 else:
                     self.instrument.show_pitch_range_notification()
 

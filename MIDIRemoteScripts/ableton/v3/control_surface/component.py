@@ -3,17 +3,18 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\component.py
-# Compiled at: 2024-01-31 17:08:32
-# Size of source mod 2**32: 6957 bytes
+# Size of source mod 2**32: 8171 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 import Live
-from ..base import BooleanContext, depends, is_iterable, lazy_attribute, task
+from ..base import BooleanContext, depends, is_iterable, lazy_attribute, listenable_property, task
 from .controls import ControlManager
 
 class Component(ControlManager):
     __events__ = ('enabled', )
+    any_clipboard_has_content = listenable_property.managed(False)
     canonical_parent = None
     num_layers = 0
+    _clipboard_component_instances = []
 
     @depends(register_component=None, song=None)
     def __init__(self, name='', parent=None, register_component=None, song=None, layer=None, is_enabled=True, is_private=True, *a, **k):
@@ -38,6 +39,9 @@ class Component(ControlManager):
         if self._has_task_group:
             self._tasks.kill()
             self._tasks.clear()
+        if self in Component._clipboard_component_instances:
+            Component._clipboard_component_instances.remove(self)
+        Component.any_clipboard_has_content = False
         super().disconnect()
 
     @property
@@ -84,6 +88,14 @@ class Component(ControlManager):
 
     def control_notifications_enabled(self):
         return self.is_enabled()
+
+    def register_clipboard(self):
+        Component._clipboard_component_instances.append(self)
+
+        def on_has_content_changed(_):
+            Component.any_clipboard_has_content = any((cb.has_content for cb in Component._clipboard_component_instances))
+
+        self.register_slot(self, on_has_content_changed, "has_content")
 
     def add_children(self, *children):
         components = list(map(self._add_child, children))

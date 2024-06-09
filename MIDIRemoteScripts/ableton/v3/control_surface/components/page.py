@@ -3,10 +3,9 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\page.py
-# Compiled at: 2024-01-31 17:08:32
-# Size of source mod 2**32: 4703 bytes
+# Size of source mod 2**32: 4565 bytes
 from __future__ import absolute_import, print_function, unicode_literals
-from ...base import EventObject, clamp, listens
+from ...base import EventObject, clamp
 from .. import Component
 from .scroll import Scrollable, ScrollComponent
 
@@ -31,7 +30,7 @@ class PageComponent(Component, Scrollable):
         self._page_scroll.can_scroll_down = self.can_scroll_page_down
         self._page_scroll.scroll_down = self.scroll_page_down
         self._page_scroll.scroll_up = self.scroll_page_up
-        self._PageComponent__on_position_changed.subject = self._pageable
+        self.register_slot(self._pageable, self.update, "position")
 
     def set_scroll_up_button(self, button):
         self._position_scroll.set_scroll_up_button(button)
@@ -95,11 +94,6 @@ class PageComponent(Component, Scrollable):
 
     def update(self):
         super().update()
-        self._position_scroll.update()
-        self._page_scroll.update()
-
-    @listens("position")
-    def __on_position_changed(self):
         self._position_scroll.update()
         self._page_scroll.update()
 

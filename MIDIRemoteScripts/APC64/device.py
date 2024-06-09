@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\APC64\device.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 3749 bytes
+# Size of source mod 2**32: 3755 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from typing import NamedTuple, Optional
 from ableton.v3.base import listens
@@ -38,11 +37,11 @@ MACRO_MAPPINGS = {1:MacroMapping(bank_0=[0,None,None,None,None,None,None]),
 
 class DeviceBankNavigationComponent(DeviceBankNavigationComponentBase):
 
-    def can_scroll_up(self):
+    def can_scroll_down(self):
         if self._bank_provider is not None:
             if is_device_rack(self._bank_provider.device):
                 return self._bank_provider.index == 0 and self._bank_provider.device.visible_macro_count > 8
-            return super().can_scroll_up()
+            return super().can_scroll_down()
 
 
 class DeviceComponent(DeviceComponentBase):

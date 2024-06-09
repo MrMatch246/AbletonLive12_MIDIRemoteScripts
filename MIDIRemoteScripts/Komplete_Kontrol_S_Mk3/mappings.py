@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Komplete_Kontrol_S_Mk3\mappings.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 2046 bytes
+# Size of source mod 2**32: 2115 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from ableton.v3.control_surface.mode import select_mode_for_main_view
 
@@ -18,7 +17,8 @@ def create_mappings(_):
       metronome_button="metro_button",
       tap_tempo_button="tempo_button",
       automation_arm_button="auto_button",
-      loop_start_encoder="loop_start_encoder")
+      loop_start_encoder="loop_start_encoder",
+      arrangement_position_encoder="arrangement_position_encoder")
     mappings["Launch_And_Stop"] = dict(launch_button="clip_launch_button",
       stop_button="track_stop_button")
     mappings["Undo_Redo"] = dict(undo_button="undo_button", redo_button="redo_button")

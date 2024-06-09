@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\clip_actions.py
-# Compiled at: 2024-01-31 17:08:32
-# Size of source mod 2**32: 5309 bytes
+# Size of source mod 2**32: 5141 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from Live.Song import RecordingQuantization
 from ...base import depends, listens
@@ -36,7 +35,6 @@ class ClipActionsComponent(Component, Renderable):
     def __init__(self, target_track=None, *a, **k):
         (super().__init__)(a, name="Clip_Actions", **k)
         self._target_track = target_track
-        self._ClipActionsComponent__on_target_clip_changed.subject = target_track
         self._ClipActionsComponent__on_target_clip_recording_changed.subject = target_track
         self._ClipActionsComponent__on_target_clip_playing_status_changed.subject = target_track
         self._update_action_buttons()
@@ -92,10 +90,6 @@ class ClipActionsComponent(Component, Renderable):
             if not clip.is_recording:
                 if not clip.will_record_on_start:
                     return clip
-
-    @listens("target_clip")
-    def __on_target_clip_changed(self):
-        self._update_action_buttons()
 
     @listens("target_clip.is_recording")
     def __on_target_clip_recording_changed(self):

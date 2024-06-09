@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\mode\modes.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 12552 bytes
+# Size of source mod 2**32: 12277 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from functools import partial
 from typing import cast
@@ -153,7 +152,7 @@ class ModesComponent(Component, Renderable):
          'mode_group_active_color':("{}.On".format)(mode_color_basename)}
         button_control = make_mode_button_control(self, mode_name, behaviour, **colors)
         self.add_control("{}_button".format(mode_name), button_control)
-        self._update_mode_buttons(self.selected_mode)
+        self._update_mode_controls(self.selected_mode)
 
     @mode_selection_control.value
     def mode_selection_control(self, value, _):
@@ -175,15 +174,13 @@ class ModesComponent(Component, Renderable):
     def _do_enter_mode(self, name):
         entry = self._mode_map[name]
         entry.mode.enter_mode()
-        self._update_mode_buttons(name)
-        self._update_cycle_mode_button(name)
+        self._update_mode_controls(name)
         self.notify_selected_mode(name)
 
     def _do_leave_mode(self, name):
         self._mode_map[name].mode.leave_mode()
         if self._mode_stack.stack_size == 0:
-            self._update_mode_buttons(None)
-            self._update_cycle_mode_button(None)
+            self._update_mode_controls(None)
             self.notify_selected_mode(None)
 
     def _get_mode_behaviour(self, name):
@@ -203,18 +200,12 @@ class ModesComponent(Component, Renderable):
         elif self._last_selected_mode:
             self.push_mode(self._last_selected_mode)
 
-    def _update_mode_buttons(self, selected):
-        if self.is_enabled():
-            for name in self._mode_map:
-                self._get_mode_behaviour(name).update_button(self, name, selected)
-
-        if selected in self._mode_list:
-            self.mode_selection_control.value = self._mode_list.index(selected)
-
-    def _update_cycle_mode_button(self, selected):
-        entry = self._mode_map.get(selected)
+    def _update_mode_controls(self, selected_mode):
+        entry = self._mode_map.get(selected_mode)
         color = entry.cycle_mode_button_color if entry else None
         if color is not None:
             self.cycle_mode_button.color = color
+        if selected_mode in self._mode_list:
+            self.mode_selection_control.value = self._mode_list.index(selected_mode)
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v3/control_surface/mode/modes.pyc

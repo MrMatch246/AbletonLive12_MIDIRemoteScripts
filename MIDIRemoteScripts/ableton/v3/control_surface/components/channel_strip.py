@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\channel_strip.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 9693 bytes
+# Size of source mod 2**32: 9710 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from itertools import chain
 from typing import cast
@@ -13,7 +12,7 @@ from ...live import action, is_track_armed, liveobj_changed, liveobj_valid
 from .. import Component
 from ..controls import ButtonControl, MappedButtonControl, MappedControl, control_list
 from ..display import Renderable
-from ..skin import LiveObjSkinEntry
+from ..skin import LiveObjSkinEntry, OptionalSkinEntry
 MAX_NUM_SENDS = 12
 CROSSFADE_COLORS = ('Mixer.CrossfadeA', 'Mixer.CrossfadeOff', 'Mixer.CrossfadeB')
 
@@ -92,8 +91,7 @@ class ChannelStripComponent(Component, Renderable):
 
     @track_select_button.pressed
     def track_select_button(self, _):
-        if liveobj_changed(self.song.view.selected_track, self._track):
-            self.song.view.selected_track = self._track
+        if action.select(self._track):
             self.notify(self.notifications.Track.select, cast(str, self._track.name))
 
     @solo_button.pressed
@@ -111,7 +109,7 @@ class ChannelStripComponent(Component, Renderable):
     @arm_button.pressed
     def arm_button(self, _):
         arm_exclusive = self.song.exclusive_arm != self.shift_button.is_pressed and not ChannelStripComponent.other_arm_buttons_pressed(self)
-        action.arm((self._track), exclusive=arm_exclusive)
+        action.toggle_arm((self._track), exclusive=arm_exclusive)
 
     @crossfade_cycle_button.pressed
     def crossfade_cycle_button(self, _):
@@ -175,7 +173,7 @@ class ChannelStripComponent(Component, Renderable):
         track_valid = liveobj_valid(self._track) and self._track.can_be_armed
         self.arm_button.enabled = track_valid
         if track_valid:
-            self.arm_button.on_color = "Mixer.ArmOn" if self._track.arm else "Mixer.ImplicitArmOn"
+            self.arm_button.on_color = "Mixer.ArmOn" if self._track.arm else OptionalSkinEntry("Mixer.ImplicitArmOn", "Mixer.ArmOn")
             self.arm_button.is_on = is_track_armed(self._track)
 
     def _update_crossfade_cycle_button(self):

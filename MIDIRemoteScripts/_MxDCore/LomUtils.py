@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_MxDCore\LomUtils.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 14785 bytes
+# Size of source mod 2**32: 14819 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import filter, object
 from past.builtins import basestring
@@ -12,8 +11,8 @@ import sys, types
 from itertools import chain
 from ableton.v2.base import liveobj_valid, old_hasattr
 from .ControlSurfaceWrapper import is_real_control_surface
-from .LomTypes import ENUM_TYPES, EXTRA_CS_FUNCTIONS, LIVE_APP, PROPERTY_TYPES, ROOT_KEYS, THIS_DEVICE, TUPLE_TYPES, LomAttributeError, LomObjectError, MFLPropertyFormats, cs_base_classes, get_control_surfaces, get_exposed_property_info, get_exposed_property_names_for_type, get_root_prop, is_class, is_cplusplus_lom_object, is_lom_object, is_object_iterable
-from .MxDUtils import TupleWrapper
+from .LomTypes import ENUM_TYPES, EXTRA_CS_FUNCTIONS, LIVE_APP, PROPERTY_TYPES, ROOT_KEYS, THIS_DEVICE, TUPLE_TYPES, LomAttributeError, LomObjectError, MFLPropertyFormats, cs_base_classes, get_available_property_info, get_available_property_names_for_type, get_control_surfaces, get_root_prop, is_class, is_cplusplus_lom_object, is_lom_object, is_object_iterable
+from .TupleWrapper import TupleWrapper
 
 def create_lom_doc_string(lom_object):
     description = ""
@@ -68,7 +67,8 @@ class LomInformation(object):
             property_names = list(filter((lambda prop: not prop.startswith("_")), dir(lom_object)))
             functions_implemented_by_mxdcore = EXTRA_CS_FUNCTIONS
         else:
-            property_names = get_exposed_property_names_for_type(type(lom_object), epii_version)
+            property_names = get_available_property_names_for_type((type(lom_object)),
+              epii_version, include_hidden=False)
             functions_implemented_by_mxdcore = []
         for name in property_names:
             self._generate_property_info(name, lom_object, epii_version)
@@ -82,7 +82,7 @@ class LomInformation(object):
     def _generate_property_info(self, prop_name, lom_object, epii_version):
         try:
             real_prop = getattr(lom_object, prop_name)
-            prop_info = (is_class(real_prop) or get_exposed_property_info)(type(lom_object), prop_name, epii_version)
+            prop_info = (is_class(real_prop) or get_available_property_info)(type(lom_object), prop_name, epii_version)
             prop_type = real_prop.__class__.__name__
             if prop_info and prop_info.format == MFLPropertyFormats.JSON:
                 self._properties.append((prop_name, "dict"))

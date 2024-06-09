@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\clip_slot.py
-# Compiled at: 2024-01-31 17:08:32
-# Size of source mod 2**32: 8124 bytes
+# Size of source mod 2**32: 8334 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from ...base import const, depends, listens
 from ...live import action, display_name, is_track_armed, liveobj_changed, liveobj_valid
@@ -18,7 +17,6 @@ class ClipSlotComponent(Component, Renderable):
     select_button = ButtonControl(color=None)
     delete_button = ButtonControl(color=None)
     duplicate_button = ButtonControl(color=None)
-    copy_button = ButtonControl(color=None)
     include_in_top_level_state = False
 
     @depends(clipboard=(const(None)))
@@ -45,6 +43,8 @@ class ClipSlotComponent(Component, Renderable):
          make_property_slot("color", self._update_launch_button_color),
          make_property_slot("playing_status", self._update_launch_button_color),
          make_property_slot("is_recording", self._update_launch_button_color)]
+        for property_name in ('selected_scene', 'selected_track'):
+            self.register_slot(self.song.view, self._update_launch_button_color, property_name)
 
     @property
     def clip_slot(self):
@@ -86,7 +86,8 @@ class ClipSlotComponent(Component, Renderable):
             else:
                 action.select(self._non_player_track)
         elif self.duplicate_button.is_pressed:
-            action.duplicate(self._clip_slot)
+            if action.duplicate(self._clip_slot):
+                self.notify(self.notifications.Clip.duplicate, slot_name)
         elif self._is_copying():
             self._clipboard.copy_or_paste(self._clip_slot)
         elif self.delete_button.is_pressed:
@@ -114,10 +115,10 @@ class ClipSlotComponent(Component, Renderable):
         return liveobj_valid(self._clip_slot) and self._clip_slot.has_clip
 
     def _is_copying(self):
-        return (self.copy_button.is_pressed) or ((self._clipboard) and (self._clipboard.has_content))
+        return self._clipboard and self._clipboard.is_copying
 
     def _any_modifier_pressed(self):
-        return self.select_button.is_pressed or self.delete_button.is_pressed or self.duplicate_button.is_pressed or self.copy_button.is_pressed
+        return self.select_button.is_pressed or self.delete_button.is_pressed or self.duplicate_button.is_pressed
 
     def update(self):
         super().update()
@@ -140,6 +141,8 @@ class ClipSlotComponent(Component, Renderable):
             value = "Session.Clip{}".format("Recording" if slot_or_clip.is_recording else "Playing")
         elif is_clip:
             value = "Session.ClipStopped"
+        elif self._clip_slot == self.song.view.highlighted_clip_slot:
+            value = OptionalSkinEntry("Session.SlotSelected", "Session.Slot")
         elif not self._clip_slot.has_stop_button:
             value = OptionalSkinEntry("Session.SlotLacksStop", "Session.Slot")
         elif is_track_armed(track):

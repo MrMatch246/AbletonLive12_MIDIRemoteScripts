@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\control_surface.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 20413 bytes
+# Size of source mod 2**32: 20721 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from contextlib import contextmanager, nullcontext
 from ableton.v2.control_surface import SimpleControlSurface
@@ -125,6 +124,9 @@ class ControlSurface(SimpleControlSurface, ControlSurfaceMappingMixin):
             if liveobj_valid(device):
                 with self.component_guard():
                     self.device_bank_registry.set_device_bank(device, bank_index)
+
+    def identification_state_changed(self, state):
+        pass
 
     def target_track_changed(self, target_track):
         pass
@@ -325,5 +327,6 @@ class ControlSurface(SimpleControlSurface, ControlSurfaceMappingMixin):
         if self._can_enable_session_ring:
             self._session_ring.set_enabled(is_identified)
         self._update_auto_arm()
+        self.identification_state_changed(self._identification.is_identified)
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v3/control_surface/control_surface.pyc

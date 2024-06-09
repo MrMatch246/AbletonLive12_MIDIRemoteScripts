@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Framework\MixerComponent.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 13747 bytes
+# Size of source mod 2**32: 13731 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import map, range
 from future.moves.itertools import zip_longest
@@ -266,18 +265,18 @@ class MixerComponent(CompoundComponent):
         return ChannelStripComponent()
 
     def _bank_up_value(self, value):
-        if not (self.is_enabled() and value is not 0 or self._bank_up_button.is_momentary()):
+        if not (self.is_enabled() and value != 0 or self._bank_up_button.is_momentary()):
             new_offset = self._track_offset + len(self._channel_strips)
             if len(self.tracks_to_use()) > new_offset:
                 self.set_track_offset(new_offset)
 
     def _bank_down_value(self, value):
         if self.is_enabled():
-            if not (value is not 0 or self._bank_down_button.is_momentary()):
+            if not (value != 0 or self._bank_down_button.is_momentary()):
                 self.set_track_offset(max(0, self._track_offset - len(self._channel_strips)))
 
     def _next_track_value(self, value):
-        if not (self.is_enabled() and value is not 0 or self._next_track_button.is_momentary()):
+        if not (self.is_enabled() and value != 0 or self._next_track_button.is_momentary()):
             selected_track = self.song().view.selected_track
             all_tracks = tuple(self.song().visible_tracks) + tuple(self.song().return_tracks) + (self.song().master_track,)
             if selected_track != all_tracks[-1]:
@@ -285,7 +284,7 @@ class MixerComponent(CompoundComponent):
                 self.song().view.selected_track = all_tracks[index + 1]
 
     def _prev_track_value(self, value):
-        if not (self.is_enabled() and value is not 0 or self._prev_track_button.is_momentary()):
+        if not (self.is_enabled() and value != 0 or self._prev_track_button.is_momentary()):
             selected_track = self.song().view.selected_track
             all_tracks = tuple(self.song().visible_tracks) + tuple(self.song().return_tracks) + (self.song().master_track,)
             if selected_track != all_tracks[0]:

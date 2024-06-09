@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Keystage\__init__.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 2501 bytes
+# Size of source mod 2**32: 2515 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from ableton.v3.control_surface import BasicColors, ControlSurface, ControlSurfaceSpecification, create_skin
 from ableton.v3.control_surface.capabilities import CONTROLLER_ID_KEY, NOTES_CC, PORTS_KEY, SCRIPT, controller_id, inport, outport
@@ -26,7 +25,7 @@ def get_capabilities():
 
 
 def create_instance(c_instance):
-    return Keystage(Specification, c_instance=c_instance)
+    return Keystage(specification=Specification, c_instance=c_instance)
 
 
 def make_sysex_header(response_bytes):

@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\session_recording_component.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 9014 bytes
+# Size of source mod 2**32: 9497 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import filter
 import Live
@@ -51,6 +50,8 @@ class FixedLengthRecording(EventObject):
         self._clip_creator.legato_launch = self._fixed_length_setting.legato_launch
         self._FixedLengthRecording__on_setting_selected_index_changes.subject = self._fixed_length_setting
         self._FixedLengthRecording__on_setting_legato_launch_changes.subject = self._fixed_length_setting
+        self._FixedLengthRecording__on_signature_numerator_changed.subject = self._song
+        self._FixedLengthRecording__on_signature_denominator_changed.subject = self._song
 
     def should_start_fixed_length_recording(self, clip_slot):
         return track_can_record(clip_slot.canonical_parent) and not clip_slot.is_recording and not clip_slot.has_clip and self._fixed_length_setting.enabled
@@ -94,6 +95,17 @@ class FixedLengthRecording(EventObject):
 
     @listens("selected_index")
     def __on_setting_selected_index_changes(self, _):
+        self._update_clip_creator_length()
+
+    @listens("signature_numerator")
+    def __on_signature_numerator_changed(self):
+        self._update_clip_creator_length()
+
+    @listens("signature_denominator")
+    def __on_signature_denominator_changed(self):
+        self._update_clip_creator_length()
+
+    def _update_clip_creator_length(self):
         (length, _) = self._fixed_length_setting.get_selected_length(self._song)
         self._clip_creator.fixed_length = length
 

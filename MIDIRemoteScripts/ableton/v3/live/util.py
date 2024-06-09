@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\live\util.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 12478 bytes
+# Size of source mod 2**32: 13328 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from functools import singledispatch
 from typing import Any, Union
@@ -82,6 +81,10 @@ def is_track_recording(track):
 
 def is_clip_new_recording(clip):
     return clip.is_recording and not clip.is_overdubbing
+
+
+def is_clip_playing(clip):
+    return song().is_playing and (clip.is_playing or clip.is_triggered)
 
 
 def playing_clip_slot(track):
@@ -196,6 +199,23 @@ def liveobj_name(obj, strip_space=True):
 
 def is_device_rack(device):
     return liveobj_valid(device) and device.can_have_chains
+
+
+def selected_chain(device):
+    if is_device_rack(device):
+        if device.view.is_showing_chain_devices:
+            if not device.view.is_collapsed:
+                return device.view.selected_chain
+
+
+def flatten_device_chain(track_or_chain):
+    devices = []
+    chain_devices = track_or_chain.devices if liveobj_valid(track_or_chain) else []
+    for device in chain_devices:
+        devices.append(device)
+        devices.extend(flatten_device_chain(selected_chain(device)))
+
+    return devices
 
 
 def get_parameter_by_name(name, device):

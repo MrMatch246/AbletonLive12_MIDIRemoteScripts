@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.9.5 (default, Nov 23 2021, 15:27:38) 
 # [GCC 9.3.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\pushbase\instrument_component.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 23789 bytes
+# Size of source mod 2**32: 24011 bytes
 from __future__ import absolute_import, division, print_function, unicode_literals
 from builtins import map, round
 from past.utils import old_div
@@ -302,7 +301,7 @@ class InstrumentComponent(PlayableComponent, Slideable, Messenger):
     def _do_delete_pitch(self, pitch):
         clip = self._detail_clip
         if clip:
-            note_name = pitch_index_to_string(pitch)
+            note_name = clip.note_number_to_name(pitch)
             loop_length = clip.loop_end - clip.loop_start
             clip.remove_notes_extended(from_time=(clip.loop_start),
               from_pitch=pitch,
@@ -358,8 +357,14 @@ class InstrumentComponent(PlayableComponent, Slideable, Messenger):
     def show_pitch_range_notification(self):
         if self.is_enabled():
             if self.show_notifications:
-                self.show_notification("Play {start_note} to {end_note}".format(start_note=(pitch_index_to_string(self.pattern.note(0, 0).index)),
-                  end_note=(pitch_index_to_string(self.pattern.note(self.width - 1, self.height - 1).index))))
+                start_note = self.pattern.note(0, 0).index
+                end_note = self.pattern.note(self.width - 1, self.height - 1).index
+                if liveobj_valid(self._detail_clip):
+                    index_to_name_func = self._detail_clip.note_number_to_name
+                else:
+                    index_to_name_func = pitch_index_to_string
+                self.show_notification("Play {start_note} to {end_note}".format(start_note=(index_to_name_func(start_note)),
+                  end_note=(index_to_name_func(end_note))))
 
     def _update_scale(self):
         self._align_first_note()

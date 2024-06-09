@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\mixer.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 13028 bytes
+# Size of source mod 2**32: 14523 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from functools import partial
 from itertools import zip_longest
@@ -41,18 +40,25 @@ class SendIndexManager(EventObject, Renderable):
     @send_index.setter
     def send_index(self, index):
         if index is not None:
-            index = self._quantize_to_cycle_size(index)
+            index = clamp(index, 0, self.num_sends - 1)
         if self._send_index != index:
             self._send_index = index
             self.notify_send_index()
+
+    def increment_send_index(self, delta):
+        self.send_index += delta
+
+    def can_increment_send_index(self, delta):
+        return self.num_sends and delta + self._send_index in range(self.num_sends)
 
     def cycle_send_index(self, range_name='Send'):
         num_sends = self.num_sends
         if num_sends:
             if self._send_index < num_sends - self._cycle_size:
-                self.send_index += self._cycle_size
+                new_index = self._send_index + self._cycle_size
             else:
-                self.send_index = 0
+                new_index = 0
+            self.send_index = self._quantize_to_cycle_size(new_index)
             self._notify_send_range(range_name)
 
     def _quantize_to_cycle_size(self, value):
@@ -86,8 +92,11 @@ class MixerComponent(Component):
     prehear_volume_control = MappedControl()
     crossfader_control = MappedControl()
     cycle_send_index_button = ButtonControl(color="Mixer.CycleSendIndex",
-      pressed_color="Mixer.CycleSendIndexPressed",
-      disabled_color="Mixer.CycleSendIndexDisabled")
+      pressed_color="Mixer.CycleSendIndexPressed")
+    prev_send_index_button = ButtonControl(color="Mixer.IncrementSendIndex",
+      pressed_color="Mixer.IncrementSendIndexPressed")
+    next_send_index_button = ButtonControl(color="Mixer.IncrementSendIndex",
+      pressed_color="Mixer.IncrementSendIndexPressed")
     send_index = forward_property("_send_index_manager")("send_index")
 
     @depends(session_ring=None, target_track=None)
@@ -103,13 +112,14 @@ class MixerComponent(Component):
         self._reassign_tracks()
         self._target_can_be_master = target_can_be_master
         self._target_strip = self._create_channel_strip(is_target=True)
-        self._MixerComponent__on_target_track_changed.subject = self._target_track
+        self.register_slot(target_track, self._update_target_strip, "target_track")
         self._update_target_strip()
         self._master_strip = self._create_channel_strip(is_master=True)
         self._master_strip.set_track(self.song.master_track)
         self._send_index_manager = self.register_disconnectable(SendIndexManager())
         self.register_slot(self._send_index_manager, self._on_send_index_changed, "send_index")
-        self.register_slot(self._send_index_manager, self._update_cycle_send_index_button, "num_sends")
+        self.register_slot(self._send_index_manager, self._update_send_index_buttons, "num_sends")
+        self._update_send_index_buttons()
 
     def channel_strip(self, index):
         return self._channel_strips[index]
@@ -130,6 +140,12 @@ class MixerComponent(Component):
 
     def set_cycle_send_index_button(self, button):
         self.cycle_send_index_button.set_control_element(button)
+
+    def set_prev_send_index_button(self, button):
+        self.prev_send_index_button.set_control_element(button)
+
+    def set_next_send_index_button(self, button):
+        self.next_send_index_button.set_control_element(button)
 
     def set_shift_button(self, button):
         for strip in self._channel_strips:
@@ -178,11 +194,20 @@ class MixerComponent(Component):
     def cycle_send_index_button(self, _):
         self.cycle_send_index()
 
+    @prev_send_index_button.pressed
+    def prev_send_index_button(self, _):
+        self._send_index_manager.increment_send_index(-1)
+
+    @next_send_index_button.pressed
+    def next_send_index_button(self, _):
+        self._send_index_manager.increment_send_index(1)
+
     def cycle_send_index(self):
         self._send_index_manager.cycle_send_index()
 
     def _on_send_index_changed(self):
         self.set_send_controls(self._send_controls)
+        self._update_send_index_buttons()
 
     @listens("offset")
     def __on_offset_changed(self, *_):
@@ -191,10 +216,6 @@ class MixerComponent(Component):
     def _reassign_tracks(self):
         for (track, channel_strip) in zip(self._provider.tracks, self._channel_strips):
             channel_strip.set_track(track)
-
-    @listens("target_track")
-    def __on_target_track_changed(self):
-        self._update_target_strip()
 
     def _update_target_strip(self):
         target_track = self._target_track.target_track
@@ -213,8 +234,11 @@ class MixerComponent(Component):
             self.prehear_volume_control.mapped_parameter = None
             self.crossfader_control.mapped_parameter = None
 
-    def _update_cycle_send_index_button(self):
-        self.cycle_send_index_button.enabled = self._send_index_manager.num_sends
+    def _update_send_index_buttons(self):
+        manager = self._send_index_manager
+        self.cycle_send_index_button.enabled = manager.num_sends
+        self.prev_send_index_button.enabled = manager.can_increment_send_index(-1)
+        self.next_send_index_button.enabled = manager.can_increment_send_index(1)
 
     def _create_channel_strip(self, is_master=False, is_target=False):
         return self._channel_strip_component_type(parent=self)

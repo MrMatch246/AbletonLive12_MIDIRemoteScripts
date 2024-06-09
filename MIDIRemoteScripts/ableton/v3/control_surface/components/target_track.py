@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\target_track.py
-# Compiled at: 2024-01-31 17:08:32
-# Size of source mod 2**32: 7813 bytes
+# Size of source mod 2**32: 7831 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from typing import cast
 from ...base import MultiSlot, listenable_property, listens, listens_group

@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\elements\encoder.py
-# Compiled at: 2024-01-31 17:08:32
-# Size of source mod 2**32: 10512 bytes
+# Size of source mod 2**32: 10379 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from ableton.v2.control_surface.elements import EncoderElement as EncoderElementBase
 from ableton.v2.control_surface.elements.encoder import _map_modes
@@ -47,7 +46,6 @@ class MappingSensitivity:
 
 
 class EncoderElement(EncoderElementBase, Renderable):
-    __events__ = ('parameter', )
     mapped_object = listenable_property.managed(None)
 
     def __init__(self, identifier, channel=0, msg_type=MIDI_CC_TYPE, map_mode=_map_modes.absolute, mapping_sensitivity=DEFAULT_CONTINUOUS_PARAMETER_SENSITIVITY, sensitivity_modifier=None, needs_takeover=True, is_feedback_enabled=False, feedback_delay=0, *a, **k):
@@ -71,7 +69,7 @@ class EncoderElement(EncoderElementBase, Renderable):
         self.mapped_object = None
         super().disconnect()
 
-    @property
+    @listenable_property
     def parameter(self):
         if liveobj_valid(self._parameter_to_map_to):
             if not self.is_mapped_manually():

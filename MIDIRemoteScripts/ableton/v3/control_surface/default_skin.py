@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\default_skin.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 9123 bytes
+# Size of source mod 2**32: 9896 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from .colors import BasicColors
 from .skin import Skin, merge_skins
@@ -93,10 +92,15 @@ class DefaultColors:
         BrowserOn = BasicColors.ON
         BrowserOff = BasicColors.OFF
 
+    class Zoom:
+        VerticalPressed = BasicColors.ON
+        Vertical = BasicColors.ON
+        HorizontalPressed = BasicColors.ON
+        Horizontal = BasicColors.ON
+
     class Mixer:
         ArmOn = BasicColors.ON
         ArmOff = BasicColors.OFF
-        ImplicitArmOn = BasicColors.ON
         MuteOn = BasicColors.ON
         MuteOff = BasicColors.OFF
         SoloOn = BasicColors.ON
@@ -106,9 +110,10 @@ class DefaultColors:
         CrossfadeA = BasicColors.ON
         CrossfadeB = BasicColors.ON
         CrossfadeOff = BasicColors.OFF
-        CycleSendIndexPressed = BasicColors.OFF
-        CycleSendIndex = BasicColors.ON
-        CycleSendIndexDisabled = BasicColors.OFF
+        CycleSendIndexPressed = BasicColors.ON
+        CycleSendIndex = BasicColors.OFF
+        IncrementSendIndexPressed = BasicColors.OFF
+        IncrementSendIndex = BasicColors.ON
         NoTrack = BasicColors.OFF
 
     class Session:
@@ -153,7 +158,7 @@ class DefaultColors:
         LockOn = BasicColors.ON
         LockOff = BasicColors.OFF
         NavigationPressed = BasicColors.ON
-        Navigation = BasicColors.OFF
+        Navigation = BasicColors.ON
 
         class Bank:
             Selected = BasicColors.ON
@@ -205,11 +210,12 @@ class DefaultColors:
         Playhead = BasicColors.OFF
         PlayheadRecord = BasicColors.OFF
         NavigationPressed = BasicColors.ON
-        Navigation = BasicColors.OFF
+        Navigation = BasicColors.ON
 
     class Clipboard:
         Empty = BasicColors.OFF
         Filled = BasicColors.ON
+        CopyPressed = BasicColors.ON
 
     class Translation:
 

@@ -3,16 +3,18 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\note_editor.py
-# Compiled at: 2024-01-31 17:08:32
-# Size of source mod 2**32: 22487 bytes
+# Size of source mod 2**32: 25868 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from math import inf
+from operator import attrgetter
 from Live.Clip import MidiNoteSpecification
 from ...base import EventObject, clamp, depends, in_range, listenable_property, listens
 from ...live import liveobj_changed, liveobj_valid
 from .. import Component
 from ..controls import ButtonControl, control_matrix
+from ..display import Renderable
 from ..skin import LiveObjSkinEntry
+from .clipboard import BufferedClipboardComponent
 PROPERTY_RANGE_KEYS = ('pitch', 'start_time', 'duration', 'velocity')
 RELATIVE_OFFSET = 0.24
 DEFAULT_HEIGHT = 4
@@ -108,7 +110,7 @@ class StepButtonControl(ButtonControl):
         is_active = False
 
 
-class NoteEditorComponent(Component):
+class NoteEditorComponent(Component, Renderable):
     __events__ = ('clip_notes', )
     matrix = control_matrix(StepButtonControl)
 
@@ -116,7 +118,7 @@ class NoteEditorComponent(Component):
       sequencer_clip=None,
       full_velocity=None,
       grid_resolution=None)
-    def __init__(self, name="Note_Editor", translation_channel=DEFAULT_STEP_TRANSLATION_CHANNEL, full_velocity=None, target_track=None, sequencer_clip=None, grid_resolution=None, *a, **k):
+    def __init__(self, name="Note_Editor", translation_channel=DEFAULT_STEP_TRANSLATION_CHANNEL, full_velocity=None, target_track=None, sequencer_clip=None, grid_resolution=None, clipboard_component_type=None, *a, **k):
         (super().__init__)(a, name=name, **k)
         self._full_velocity = full_velocity
         self._translation_channel = translation_channel
@@ -128,6 +130,8 @@ class NoteEditorComponent(Component):
         self._clip = None
         self._sequencer_clip = sequencer_clip
         self._active_steps = []
+        clipboard_component_type = clipboard_component_type or NoteClipboardComponent
+        self._clipboard = clipboard_component_type(parent=self)
         self._grid_resolution = grid_resolution
         self._NoteEditorComponent__on_resolution_changed.subject = self._grid_resolution
         self._nudge_offset = 0
@@ -141,6 +145,10 @@ class NoteEditorComponent(Component):
         self._NoteEditorComponent__on_target_track_color_changed.subject = target_track
         self._NoteEditorComponent__on_sequencer_clip_changed.subject = sequencer_clip
         self._NoteEditorComponent__on_sequencer_clip_changed()
+
+    @listenable_property
+    def clipboard(self):
+        return self._clipboard
 
     @property
     def width(self):
@@ -202,6 +210,7 @@ class NoteEditorComponent(Component):
             self._clip = clip
             if self.can_change_page:
                 self.page_time = 0.0
+            self._clipboard.set_clip(clip)
             self._NoteEditorComponent__on_clip_notes_changed.subject = clip
             self._NoteEditorComponent__on_clip_notes_changed()
 
@@ -233,6 +242,9 @@ class NoteEditorComponent(Component):
             button.channel = self._translation_channel
 
         self._update_editor_matrix()
+
+    def set_copy_button(self, button):
+        self._clipboard.set_copy_button(button)
 
     def is_pitch_active(self, pitch):
         if self._has_clip():
@@ -315,12 +327,16 @@ class NoteEditorComponent(Component):
 
     def _on_pad_pressed(self, pad):
         if self.is_enabled():
-            if not self._has_clip():
-                self.set_clip(self._sequencer_clip.create_clip())
-                self._update_from_grid()
-            if self._can_press_or_release_step(pad):
-                pad.is_active = True
-                self._refresh_active_steps()
+            can_press = self._can_press_or_release_step(pad)
+            if self._clipboard.is_copying and can_press:
+                self._update_clipboard(pad)
+            else:
+                if not self._has_clip():
+                    self.set_clip(self._sequencer_clip.create_clip())
+                    self._update_from_grid()
+                if can_press:
+                    pad.is_active = True
+                    self._refresh_active_steps()
 
     @matrix.released_immediately
     def matrix(self, pad):
@@ -333,7 +349,10 @@ class NoteEditorComponent(Component):
     def _on_pad_released(self, pad, **k):
         if self.is_enabled():
             if self._can_press_or_release_step(pad):
-                (self._on_release_step)(pad, **k)
+                if self._clipboard.is_copying:
+                    self._update_clipboard(pad)
+                else:
+                    (self._on_release_step)(pad, **k)
 
     def _on_release_step(self, step, can_add_or_remove=False):
         if step.is_active:
@@ -417,6 +436,22 @@ class NoteEditorComponent(Component):
             self._clip.view.grid_quantization = quantization
             self._clip.view.grid_is_triplet = self._is_triplet
 
+    def _update_clipboard(self, pad):
+        if self._has_clip():
+            any_pad_pressed = any((pad.is_pressed for pad in self.matrix))
+            if self._clipboard.has_content:
+                if not any_pad_pressed:
+                    self._clipboard.paste(self._get_step_start_time(pad))
+            elif pad.is_pressed:
+                visible_steps = self._visible_steps()
+                notes = visible_steps[pad.index].filter_notes(self._clip_notes)
+                if notes:
+                    self._clipboard.extend_buffer(notes)
+            elif not any_pad_pressed:
+                self._clipboard.copy(self._clipboard.buffer)
+        else:
+            self._clipboard.clear()
+
     def update(self):
         super().update()
         self._update_editor_matrix()
@@ -482,9 +517,36 @@ class NoteEditorComponent(Component):
 
     @listens("index")
     def __on_resolution_changed(self, *_):
+        self._clipboard.clear()
         self._release_active_steps()
         self._update_from_grid()
         self.notify_page_length()
         self._NoteEditorComponent__on_clip_notes_changed()
+
+
+class NoteClipboardComponent(BufferedClipboardComponent):
+
+    def __init__(self, *a, **k):
+        (super().__init__)(*a, **k)
+        self._clip = None
+
+    def set_clip(self, clip):
+        self._clip = clip
+        self.clear()
+
+    def extend_buffer(self, obj):
+        super().extend_buffer(obj)
+        self.notify(self.notifications.Notes.CopyPaste.copy)
+
+    def _do_paste(self, obj):
+        self._buffer = sorted((self._buffer), key=(attrgetter("start_time")))
+        offset = obj - self._buffer[0].start_time
+        self._clip.add_new_notes([MidiNoteSpecification(pitch=(note.pitch), start_time=(note.start_time + offset), duration=(note.duration), velocity=(note.velocity), mute=(note.mute), probability=(note.probability), velocity_deviation=(note.velocity_deviation), release_velocity=(note.release_velocity)) for note in self._buffer])
+        self._clip.deselect_all_notes()
+        self.notify(self.notifications.Notes.CopyPaste.paste)
+        return True
+
+    def _is_source_valid(self):
+        return super()._is_source_valid() and liveobj_valid(self._clip)
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v3/control_surface/components/note_editor.pyc

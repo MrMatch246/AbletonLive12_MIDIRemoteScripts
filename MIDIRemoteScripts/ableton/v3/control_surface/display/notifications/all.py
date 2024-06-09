@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\display\notifications\all.py
-# Compiled at: 2024-01-31 17:08:32
-# Size of source mod 2**32: 8711 bytes
+# Size of source mod 2**32: 8909 bytes
 from __future__ import absolute_import, annotations, print_function, unicode_literals
 from typing import NewType
 from Live.ClipSlot import ClipSlot as ClipSlot
@@ -80,6 +79,8 @@ class Notifications:
         select: "Notification[Fn[SceneName]]"
         delete = "{}\ndeleted".format
         delete: "Notification[Fn[SceneName]]"
+        duplicate = "{}\nduplicated".format
+        duplicate: "Notification[Fn[SceneName]]"
 
     class Track:
         lock = lambda name, state: "{}\n{}".format(name, "locked" if state else "unlocked")
@@ -198,6 +199,12 @@ class Notifications:
         error_no_notes_to_delete: "Notification"
         nudge = "Notes\nnudged"
         nudge: "Notification"
+
+        class CopyPaste:
+            copy = "Notes\ncopied"
+            copy: "Notification"
+            paste = "Notes\npasted"
+            paste: "Notification"
 
         class Pitch:
             select = lambda index: "Pitch {}\nselected".format(pitch_index_to_string(index))

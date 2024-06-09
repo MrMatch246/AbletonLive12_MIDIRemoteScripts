@@ -3,10 +3,9 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\__init__.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 4150 bytes
+# Size of source mod 2**32: 4214 bytes
 from __future__ import absolute_import, print_function, unicode_literals
-from ableton.v2.control_surface import BANK_FORMAT, BANK_MAIN_KEY, BANK_PARAMETERS_KEY, MIDI_CC_TYPE, MIDI_NOTE_TYPE, MIDI_PB_TYPE, MIDI_SYSEX_TYPE, CompoundElement, ControlElement, DeviceBankRegistry, DeviceProvider, EnumWrappingParameter, InputControlElement, NotifyingControlElement, NotifyingList, ParameterProvider, PrioritizedResource, RelativeInternalParameter, SharedResource, all_parameters, find_instrument_devices, find_instrument_meeting_requirement, use
+from ableton.v2.control_surface import BANK_FORMAT, BANK_MAIN_KEY, BANK_PARAMETERS_KEY, MIDI_CC_TYPE, MIDI_NOTE_TYPE, MIDI_PB_TYPE, MIDI_SYSEX_TYPE, CompoundElement, ControlElement, DeviceBankRegistry, DeviceProvider, EnumWrappingParameter, InputControlElement, NotifyingControlElement, NotifyingList, ParameterProvider, PrioritizedResource, RelativeInternalParameter, SharedResource, all_parameters, find_instrument_devices, find_instrument_meeting_requirement, select_and_appoint_device, use
 from ableton.v2.control_surface.default_bank_definitions import BANK_DEFINITIONS as V2_BANK_DEFINITIONS
 from ableton.v2.control_surface.defaults import DOUBLE_CLICK_DELAY
 from ableton.v2.control_surface.elements.encoder import ABSOLUTE_MAP_MODES
@@ -45,6 +44,7 @@ __all__ = ('ABSOLUTE_MAP_MODES', 'ACTIVE_PARAMETER_TIMEOUT', 'BANK_DEFINITIONS',
            'create_encoder', 'create_matrix_identifiers', 'create_parameter_bank',
            'create_skin', 'create_sysex_element', 'create_sysex_sending_button',
            'default_skin', 'find_instrument_devices', 'find_instrument_meeting_requirement',
-           'merge_skins', 'midi', 'parameter_mapping_sensitivities', 'use')
+           'merge_skins', 'midi', 'parameter_mapping_sensitivities', 'select_and_appoint_device',
+           'use')
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v3/control_surface/__init__.pyc

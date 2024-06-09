@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Komplete_Kontrol_S_Mk3\elements.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 4629 bytes
+# Size of source mod 2**32: 4690 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from ableton.v3.base import nop
 from ableton.v3.control_surface import ElementsBase, MapMode, create_encoder
@@ -60,6 +59,7 @@ class Elements(ElementsBase):
         self.add_encoder(48, "Track_Encoder")
         self.add_encoder(49, "Track_Bank_Encoder")
         self.add_encoder(50, "Scene_Encoder")
+        self.add_encoder(52, "Arrangement_Position_Encoder")
         self.add_encoder(53, "Loop_Start_Encoder")
         self.add_encoder(100, "Track_Volume_Encoder")
         self.add_encoder(101, "Track_Pan_Encoder")

@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ATOM\skin.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 2455 bytes
+# Size of source mod 2**32: 2423 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from functools import partial
 from ableton.v3.control_surface import BasicColors
@@ -18,7 +17,6 @@ class Skin:
     class Mixer:
         ArmOn = Rgb.RED
         ArmOff = Rgb.RED_HALF
-        ImplicitArmOn = Rgb.RED
         SoloOn = Rgb.BLUE
         SoloOff = Rgb.BLUE_HALF
         Selected = Rgb.WHITE

@@ -3,12 +3,11 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\component_map.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 3731 bytes
+# Size of source mod 2**32: 3775 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from functools import partial
 from . import Component
-from .components import AccentComponent, ActiveParameterComponent, ClipActionsComponent, DeviceComponent, DrumGroupComponent, MixerComponent, ModifierBackgroundComponent, RecordingComponent, SessionComponent, SessionNavigationComponent, SessionOverviewComponent, SimpleDeviceNavigationComponent, SlicedSimplerComponent, TranslatingBackgroundComponent, TransportComponent, UndoRedoComponent, ViewBasedRecordingComponent, ViewControlComponent, ViewToggleComponent
+from .components import AccentComponent, ActiveParameterComponent, ClipActionsComponent, DeviceComponent, DeviceNavigationComponent, DrumGroupComponent, MixerComponent, ModifierBackgroundComponent, RecordingComponent, SessionComponent, SessionNavigationComponent, SessionOverviewComponent, SlicedSimplerComponent, TranslatingBackgroundComponent, TransportComponent, UndoRedoComponent, ViewBasedRecordingComponent, ViewControlComponent, ViewToggleComponent, ZoomComponent
 
 class ComponentMap(dict):
 
@@ -39,7 +38,7 @@ class ComponentMap(dict):
           bank_size=(specification.parameter_bank_size),
           continuous_parameter_sensitivity=(specification.continuous_parameter_sensitivity),
           quantized_parameter_sensitivity=(specification.quantized_parameter_sensitivity))
-        self["Device_Navigation"] = SimpleDeviceNavigationComponent
+        self["Device_Navigation"] = DeviceNavigationComponent
         self["Drum_Group"] = DrumGroupComponent
         self["Mixer"] = MixerComponent
         self["Modifier_Background"] = ModifierBackgroundComponent
@@ -57,6 +56,7 @@ class ComponentMap(dict):
           recording_method_type=(specification.recording_method_type))
         self["View_Control"] = ViewControlComponent
         self["View_Toggle"] = ViewToggleComponent
+        self["Zoom"] = ZoomComponent
         self.update(specification.component_map)
 
 # okay decompiling ./MIDIRemoteScripts/ableton/v3/control_surface/component_map.pyc

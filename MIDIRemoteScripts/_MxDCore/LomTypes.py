@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_MxDCore\LomTypes.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 41977 bytes
+# Size of source mod 2**32: 42773 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import object, range
 from past.builtins import basestring
@@ -22,11 +21,11 @@ class MFLPropertyFormats(object):
     Default, JSON = (0, 1)
 
 
-_MFLProperty = namedtuple("MFLProperty", "name format to_json from_json min_epii_version")
+_MFLProperty = namedtuple("MFLProperty", "name format to_json from_json min_epii_version hidden")
 SORT_KEYS = False
 
-def MFLProperty(name, format=MFLPropertyFormats.Default, to_json=None, from_json=None, min_epii_version=(-1, -1)):
-    return _MFLProperty(name, format, to_json, from_json, min_epii_version)
+def MFLProperty(name, format=MFLPropertyFormats.Default, to_json=None, from_json=None, min_epii_version=(-1, -1), hidden=False):
+    return _MFLProperty(name, format, to_json, from_json, min_epii_version, hidden)
 
 
 def data_dict_to_json(property_name, data_dict):
@@ -190,7 +189,7 @@ _CHAIN_BASE_PROPS = [
  MFLProperty("muted_via_solo"),
  MFLProperty("name"),
  MFLProperty("solo")]
-EXPOSED_TYPE_PROPERTIES = {(Live.Application.Application): (
+AVAILABLE_TYPE_PROPERTIES = {(Live.Application.Application): (
                                   MFLProperty("control_surfaces"),
                                   MFLProperty("current_dialog_button_count"),
                                   MFLProperty("current_dialog_message"),
@@ -248,10 +247,10 @@ EXPOSED_TYPE_PROPERTIES = {(Live.Application.Application): (
                     MFLProperty("gain"),
                     MFLProperty("gain_display_string"),
                     MFLProperty("get_all_notes_extended"),
-                    MFLProperty("get_notes"),
+                    MFLProperty("get_notes", hidden=True),
                     MFLProperty("get_notes_by_id", min_epii_version=(4, 3)),
                     MFLProperty("get_notes_extended", min_epii_version=(4, 3)),
-                    MFLProperty("get_selected_notes"),
+                    MFLProperty("get_selected_notes", hidden=True),
                     MFLProperty("get_selected_notes_extended", min_epii_version=(4, 3)),
                     MFLProperty("groove"),
                     MFLProperty("has_envelopes"),
@@ -281,18 +280,18 @@ EXPOSED_TYPE_PROPERTIES = {(Live.Application.Application): (
                     MFLProperty("quantize"),
                     MFLProperty("quantize_pitch"),
                     MFLProperty("ram_mode"),
-                    MFLProperty("remove_notes"),
+                    MFLProperty("remove_notes", hidden=True),
                     MFLProperty("remove_notes_by_id", min_epii_version=(4, 3)),
                     MFLProperty("remove_notes_extended", min_epii_version=(4, 3)),
                     MFLProperty("remove_warp_marker"),
-                    MFLProperty("replace_selected_notes"),
+                    MFLProperty("replace_selected_notes", hidden=True),
                     MFLProperty("sample_length"),
                     MFLProperty("sample_rate"),
                     MFLProperty("scrub"),
                     MFLProperty("select_all_notes"),
                     MFLProperty("select_notes_by_id"),
                     MFLProperty("set_fire_button_state"),
-                    MFLProperty("set_notes"),
+                    MFLProperty("set_notes", hidden=True),
                     MFLProperty("signature_denominator"),
                     MFLProperty("signature_numerator"),
                     MFLProperty("start_marker"),
@@ -333,6 +332,7 @@ EXPOSED_TYPE_PROPERTIES = {(Live.Application.Application): (
                             MFLProperty("color"),
                             MFLProperty("color_index"),
                             MFLProperty("controls_other_clips"),
+                            MFLProperty("create_audio_clip"),
                             MFLProperty("create_clip"),
                             MFLProperty("delete_clip"),
                             MFLProperty("duplicate_clip_to"),
@@ -428,29 +428,35 @@ EXPOSED_TYPE_PROPERTIES = {(Live.Application.Application): (
  (Live.Eq8Device.Eq8Device.View): (tuple(_DEVICE_VIEW_BASE_PROPS + [MFLProperty("selected_band")])), 
  
  (Live.DriftDevice.DriftDevice): (tuple(_DEVICE_BASE_PROPS + [
-                                  MFLProperty("voice_mode_index"),
-                                  MFLProperty("voice_mode_list"),
-                                  MFLProperty("voice_count_index"),
-                                  MFLProperty("voice_count_list"),
-                                  MFLProperty("mod_matrix_shape_source_index"),
-                                  MFLProperty("mod_matrix_shape_source_list"),
-                                  MFLProperty("mod_matrix_lfo_source_index"),
-                                  MFLProperty("mod_matrix_lfo_source_list"),
                                   MFLProperty("mod_matrix_filter_source_1_index"),
                                   MFLProperty("mod_matrix_filter_source_1_list"),
                                   MFLProperty("mod_matrix_filter_source_2_index"),
                                   MFLProperty("mod_matrix_filter_source_2_list"),
+                                  MFLProperty("mod_matrix_lfo_source_index"),
+                                  MFLProperty("mod_matrix_lfo_source_list"),
                                   MFLProperty("mod_matrix_pitch_source_1_index"),
                                   MFLProperty("mod_matrix_pitch_source_1_list"),
                                   MFLProperty("mod_matrix_pitch_source_2_index"),
                                   MFLProperty("mod_matrix_pitch_source_2_list"),
+                                  MFLProperty("mod_matrix_shape_source_index"),
+                                  MFLProperty("mod_matrix_shape_source_list"),
                                   MFLProperty("mod_matrix_source_1_index"),
                                   MFLProperty("mod_matrix_source_1_list"),
                                   MFLProperty("mod_matrix_source_2_index"),
                                   MFLProperty("mod_matrix_source_2_list"),
                                   MFLProperty("mod_matrix_source_3_index"),
                                   MFLProperty("mod_matrix_source_3_list"),
-                                  MFLProperty("pitch_bend_range")])), 
+                                  MFLProperty("mod_matrix_target_1_index"),
+                                  MFLProperty("mod_matrix_target_1_list"),
+                                  MFLProperty("mod_matrix_target_2_index"),
+                                  MFLProperty("mod_matrix_target_2_list"),
+                                  MFLProperty("mod_matrix_target_3_index"),
+                                  MFLProperty("mod_matrix_target_3_list"),
+                                  MFLProperty("pitch_bend_range"),
+                                  MFLProperty("voice_count_index"),
+                                  MFLProperty("voice_count_list"),
+                                  MFLProperty("voice_mode_index"),
+                                  MFLProperty("voice_mode_list")])), 
  
  (Live.HybridReverbDevice.HybridReverbDevice): (tuple(_DEVICE_BASE_PROPS + [
                                                 MFLProperty("ir_attack_time"),
@@ -461,6 +467,23 @@ EXPOSED_TYPE_PROPERTIES = {(Live.Application.Application): (
                                                 MFLProperty("ir_file_list"),
                                                 MFLProperty("ir_size_factor"),
                                                 MFLProperty("ir_time_shaping_on")])), 
+ 
+ (Live.LooperDevice.LooperDevice): (tuple(_DEVICE_BASE_PROPS + [
+                                    MFLProperty("clear"),
+                                    MFLProperty("double_length"),
+                                    MFLProperty("double_speed"),
+                                    MFLProperty("half_length"),
+                                    MFLProperty("half_speed"),
+                                    MFLProperty("loop_length"),
+                                    MFLProperty("overdub"),
+                                    MFLProperty("overdub_after_record"),
+                                    MFLProperty("play"),
+                                    MFLProperty("record"),
+                                    MFLProperty("record_length_index"),
+                                    MFLProperty("record_length_list"),
+                                    MFLProperty("stop"),
+                                    MFLProperty("tempo"),
+                                    MFLProperty("undo")])), 
  
  (Live.MaxDevice.MaxDevice): (tuple(_DEVICE_BASE_PROPS + [
                               MFLProperty("audio_inputs"),
@@ -670,6 +693,7 @@ EXPOSED_TYPE_PROPERTIES = {(Live.Application.Application): (
                     MFLProperty("return_tracks"),
                     MFLProperty("root_note"),
                     MFLProperty("scale_intervals"),
+                    MFLProperty("scale_mode"),
                     MFLProperty("scale_name"),
                     MFLProperty("scenes"),
                     MFLProperty("scrub_by"),
@@ -732,6 +756,7 @@ EXPOSED_TYPE_PROPERTIES = {(Live.Application.Application): (
                         format=(MFLPropertyFormats.JSON),
                         to_json=available_routing_output_types_to_json,
                         min_epii_version=(4, 3)),
+                      MFLProperty("back_to_arranger"),
                       MFLProperty("can_be_armed"),
                       MFLProperty("can_be_frozen"),
                       MFLProperty("can_show_chains"),
@@ -739,11 +764,12 @@ EXPOSED_TYPE_PROPERTIES = {(Live.Application.Application): (
                       MFLProperty("clip_slots"),
                       MFLProperty("color"),
                       MFLProperty("color_index"),
-                      MFLProperty("current_input_routing"),
-                      MFLProperty("current_input_sub_routing"),
-                      MFLProperty("current_monitoring_state"),
-                      MFLProperty("current_output_routing"),
-                      MFLProperty("current_output_sub_routing"),
+                      MFLProperty("create_audio_clip"),
+                      MFLProperty("current_input_routing", hidden=True),
+                      MFLProperty("current_input_sub_routing", hidden=True),
+                      MFLProperty("current_monitoring_state", hidden=True),
+                      MFLProperty("current_output_routing", hidden=True),
+                      MFLProperty("current_output_sub_routing", hidden=True),
                       MFLProperty("delete_clip"),
                       MFLProperty("delete_device"),
                       MFLProperty("devices"),
@@ -770,8 +796,8 @@ EXPOSED_TYPE_PROPERTIES = {(Live.Application.Application): (
                         to_json=routing_input_type_to_json,
                         from_json=json_to_input_routing_type,
                         min_epii_version=(4, 3)),
-                      MFLProperty("input_routings"),
-                      MFLProperty("input_sub_routings"),
+                      MFLProperty("input_routings", hidden=True),
+                      MFLProperty("input_sub_routings", hidden=True),
                       MFLProperty("is_foldable"),
                       MFLProperty("is_frozen"),
                       MFLProperty("is_grouped"),
@@ -796,8 +822,8 @@ EXPOSED_TYPE_PROPERTIES = {(Live.Application.Application): (
                         to_json=routing_output_type_to_json,
                         from_json=json_to_output_routing_type,
                         min_epii_version=(4, 3)),
-                      MFLProperty("output_routings"),
-                      MFLProperty("output_sub_routings"),
+                      MFLProperty("output_routings", hidden=True),
+                      MFLProperty("output_sub_routings", hidden=True),
                       MFLProperty("performance_impact"),
                       MFLProperty("playing_slot_index"),
                       MFLProperty("solo"),
@@ -841,7 +867,6 @@ EXPOSED_TYPE_PROPERTIES = {(Live.Application.Application): (
                                           MFLProperty("unison_mode"),
                                           MFLProperty("unison_voice_count"),
                                           MFLProperty("visible_modulation_target_names")]))}
-PROPERTY_NAMES_EXCLUDED_FROM_DOCUMENTATION = ('canonical_parent', )
 EXTRA_CS_FUNCTIONS = ('get_control', 'get_control_names', 'grab_control', 'grab_midi',
                       'release_control', 'release_midi', 'send_midi', 'send_receive_sysex')
 ENUM_TYPES = (
@@ -932,46 +957,32 @@ class LomNoteOperationError(AttributeError):
     pass
 
 
-def get_exposed_lom_types():
-    return list(EXPOSED_TYPE_PROPERTIES.keys())
+def get_available_lom_types():
+    return list(AVAILABLE_TYPE_PROPERTIES.keys())
 
 
-def get_exposed_properties_for_type(lom_type, epii_version=None):
+def get_available_properties_for_type(lom_type, epii_version=None, include_hidden=True):
     if epii_version is None:
         epii_version = (
          float("inf"), float("inf"))
-    return [prop for prop in EXPOSED_TYPE_PROPERTIES.get(lom_type, []) if epii_version >= prop.min_epii_version]
+    return [prop for prop in AVAILABLE_TYPE_PROPERTIES.get(lom_type, []) if epii_version >= prop.min_epii_version if not include_hidden if not prop.hidden]
 
 
-def get_exposed_property_names_for_type(lom_type, epii_version=None):
-    return [prop.name for prop in get_exposed_properties_for_type(lom_type, epii_version)]
+def get_available_property_names_for_type(lom_type, epii_version=None, include_hidden=True):
+    return [prop.name for prop in get_available_properties_for_type(lom_type,
+      epii_version, include_hidden=include_hidden)]
 
 
-def is_property_exposed_for_type(property_name, lom_type, epii_version):
-    return property_name in get_exposed_property_names_for_type(lom_type, epii_version)
+def is_property_available_for_type(property_name, lom_type, epii_version):
+    return property_name in get_available_property_names_for_type(lom_type, epii_version)
 
 
-def get_exposed_property_info(lom_type, property_name, epii_version):
-    properties = get_exposed_properties_for_type(lom_type, epii_version)
+def get_available_property_info(lom_type, property_name, epii_version):
+    properties = get_available_properties_for_type(lom_type, epii_version)
     prop = [p for p in properties if p.name == property_name]
     if not prop:
         return
     return prop[0]
-
-
-def get_exposed_properties_to_document_for_type(lom_type):
-    properties = set(get_exposed_property_names_for_type(lom_type))
-    if issubclass(lom_type, Live.Device.Device):
-        if lom_type != Live.Device.Device:
-            properties -= {prop.name for prop in _DEVICE_BASE_PROPS}
-        if issubclass(lom_type, Live.Chain.Chain):
-            if lom_type != Live.Chain.Chain:
-                properties -= {prop.name for prop in _CHAIN_BASE_PROPS}
-            if issubclass(lom_type, Live.Device.Device.View):
-                if lom_type != Live.Device.Device.View:
-                    properties -= {prop.name for prop in _DEVICE_VIEW_BASE_PROPS}
-        properties -= set(PROPERTY_NAMES_EXCLUDED_FROM_DOCUMENTATION)
-        return list(properties)
 
 
 def is_class(class_object):
@@ -1028,7 +1039,7 @@ def verify_object_property(lom_object, property_name, epii_version):
     if isinstance(lom_object, cs_base_classes()):
         if not old_hasattr(lom_object, property_name):
             raise_error = True
-    elif not is_property_exposed_for_type(property_name, type(lom_object), epii_version):
+    elif not is_property_available_for_type(property_name, type(lom_object), epii_version):
         raise_error = True
     if raise_error:
         raise LomAttributeError("'%s' object has no attribute '%s'" % (

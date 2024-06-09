@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\device_bank_navigation.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 6944 bytes
+# Size of source mod 2**32: 6942 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from math import ceil
 from typing import cast
@@ -42,23 +41,23 @@ class DeviceBankNavigationComponent(ScrollComponent, Renderable, Scrollable):
         self.set_scroll_encoder(encoder)
 
     def set_prev_bank_button(self, button):
-        self.set_scroll_down_button(button)
+        self.set_scroll_up_button(button)
 
     def set_next_bank_button(self, button):
-        self.set_scroll_up_button(button)
+        self.set_scroll_down_button(button)
 
     def set_bank_select_buttons(self, buttons):
         self.bank_select_buttons.set_control_element(buttons)
         self._sync_registry()
 
-    def can_scroll_up(self):
-        return self._bank_provider is not None and (self.scroll_down_button.control_element is None or self._bank_provider.index < self._bank_provider.bank_count() - self._banking_info.num_simultaneous_banks)
-
     def can_scroll_down(self):
+        return self._bank_provider is not None and (self.scroll_up_button.control_element is None or self._bank_provider.index < self._bank_provider.bank_count() - self._banking_info.num_simultaneous_banks)
+
+    def can_scroll_up(self):
         return self._bank_provider is not None and self._bank_provider.index > 0
 
-    def scroll_up(self):
-        roundtrip_banking = self.scroll_down_button.control_element is None and self.scroll_up_button.is_pressed
+    def scroll_down(self):
+        roundtrip_banking = self.scroll_up_button.control_element is None and self.scroll_down_button.is_pressed
         new_index = self._bank_provider.index + self._banking_info.num_simultaneous_banks
         if roundtrip_banking:
             if new_index >= self._bank_provider.bank_count():
@@ -66,7 +65,7 @@ class DeviceBankNavigationComponent(ScrollComponent, Renderable, Scrollable):
         self._bank_provider.index = new_index
         self._notify_bank_name()
 
-    def scroll_down(self):
+    def scroll_up(self):
         self._bank_provider.index = self._bank_provider.index - self._banking_info.num_simultaneous_banks
         self._notify_bank_name()
 

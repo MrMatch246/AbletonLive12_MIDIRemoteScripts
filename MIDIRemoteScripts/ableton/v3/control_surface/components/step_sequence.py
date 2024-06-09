@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\components\step_sequence.py
-# Compiled at: 2024-01-31 17:08:32
-# Size of source mod 2**32: 8240 bytes
+# Size of source mod 2**32: 8632 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from Live.Song import Quantization
 from ...base import EventObject, depends, listenable_property, listens
@@ -123,6 +122,9 @@ class StepSequenceComponent(Component):
     def set_step_buttons(self, buttons):
         self._note_editor.set_matrix(buttons)
 
+    def set_note_copy_button(self, button):
+        self._note_editor.set_copy_button(button)
+
     def set_resolution_buttons(self, buttons):
         self._grid_resolution.resolution_buttons.set_control_element(buttons)
 
@@ -131,6 +133,9 @@ class StepSequenceComponent(Component):
 
     def set_loop_delete_button(self, button):
         self._loop_selector.delete_button.set_control_element(button)
+
+    def set_loop_copy_button(self, button):
+        self._loop_selector.set_copy_button(button)
 
     def set_prev_page_button(self, button):
         self._loop_selector.prev_page_button.set_control_element(button)

@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\control_surface\identification.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 9099 bytes
+# Size of source mod 2**32: 9691 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 import logging
 from abc import ABC, abstractmethod
@@ -81,20 +80,30 @@ class PlainMidiResponder(Responder):
 
 class StandardResponder(Responder):
 
+    def __init__(self, *a, **k):
+        (super().__init__)(*a, **k)
+        if -1 in self._response_bytes:
+            self._response_bytes = list(self._response_bytes)
+
     def create_response_element(self):
         return SysexElement(sysex_identifier=NON_REALTIME_HEADER)
 
     def is_valid_response(self, response_bytes):
         if response_bytes[1:PRODUCT_ID_BYTES_START_INDEX] == STANDARD_RESPONSE_BYTES:
             product_id_bytes = self._extract_product_id_bytes(response_bytes)
-            if product_id_bytes != self._response_bytes:
-                raise IdentityResponseError(expected_bytes=(self._response_bytes),
+            expected_bytes = tuple(self._response_bytes)
+            if product_id_bytes != expected_bytes:
+                raise IdentityResponseError(expected_bytes=expected_bytes,
                   actual_bytes=product_id_bytes)
             return True
         return False
 
     def _extract_product_id_bytes(self, midi_bytes):
-        return midi_bytes[PRODUCT_ID_BYTES_START_INDEX:PRODUCT_ID_BYTES_START_INDEX + len(self._response_bytes)]
+        id_bytes = midi_bytes[PRODUCT_ID_BYTES_START_INDEX:PRODUCT_ID_BYTES_START_INDEX + len(self._response_bytes)]
+        if -1 in self._response_bytes:
+            variable_byte_index = self._response_bytes.index(-1)
+            self._response_bytes[variable_byte_index] = id_bytes[variable_byte_index]
+        return id_bytes
 
 
 class IdentityResponseError(Exception):

@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Komplete_Kontrol_S_Mk3\session_navigation.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 1720 bytes
+# Size of source mod 2**32: 1744 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from ableton.v3.base import listens
 from ableton.v3.control_surface.components import SessionNavigationComponent as SessionNavigationComponentBase
@@ -13,7 +12,7 @@ from .view_control import add_scroll_encoder, update_scroll_encoder
 class SessionNavigationComponent(SessionNavigationComponentBase):
 
     def __init__(self, *a, **k):
-        (super().__init__)(*a, **k)
+        (super().__init__)(a, snap_track_offset=True, **k)
         add_scroll_encoder(self._horizontal_paging)
         self._session_ring = self._SessionNavigationComponent__on_offset_changed.subject
         self._SessionNavigationComponent__on_selected_track_changed.subject = self.song.view

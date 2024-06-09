@@ -3,7 +3,6 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\Launchkey_Mini_MK3\skin.py
-# Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 872 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import object
@@ -34,6 +33,6 @@ class Colors(object):
         NavigationPressed = Rgb.WHITE
 
 
-skin = merge_skins(base_skin, Skin(Colors))
+skin = merge_skins(base_skin, Skin(Colors)*())
 
 # okay decompiling ./MIDIRemoteScripts/Launchkey_Mini_MK3/skin.pyc

@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\APC64\mappings.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 8722 bytes
+# Size of source mod 2**32: 8766 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from ableton.v3.control_surface import ACTIVE_PARAMETER_TIMEOUT, LOW_PRIORITY
 from ableton.v3.control_surface.mode import LatchingBehaviour, MomentaryBehaviour, make_reenter_behaviour
@@ -119,7 +118,7 @@ def create_mappings(control_surface):
       delete_button="clear_button"),
       step_seq=encoder_background,
       step_seq_config=(encoder_background.copy()),
-      project=None,
+      project=dict(modes=[session_navigation.copy(), encoder_background.copy()]),
       custom=dict(component="Background", bg_touch_elements="touch_elements"),
       globals=None)
     mappings["Global_Modes"] = dict(shift_button="shift_button",

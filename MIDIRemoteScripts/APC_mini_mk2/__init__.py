@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\APC_mini_mk2\__init__.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 2309 bytes
+# Size of source mod 2**32: 2255 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from ableton.v3.base import listens
 from ableton.v3.control_surface import ControlSurface, ControlSurfaceSpecification, create_skin
@@ -27,7 +26,7 @@ def get_capabilities():
 
 
 def create_instance(c_instance):
-    return APC_mini_mk2(c_instance=c_instance)
+    return APC_mini_mk2(specification=Specification, c_instance=c_instance)
 
 
 class Specification(ControlSurfaceSpecification):
@@ -45,9 +44,6 @@ class Specification(ControlSurfaceSpecification):
 
 
 class APC_mini_mk2(ControlSurface):
-
-    def __init__(self, *a, **k):
-        (super().__init__)(Specification, *a, **k)
 
     def setup(self):
         super().setup()

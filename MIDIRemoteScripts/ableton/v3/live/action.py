@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\ableton\v3\live\action.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 11985 bytes
+# Size of source mod 2**32: 12104 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 import logging
 from functools import singledispatch, wraps
@@ -49,7 +48,7 @@ def action(func):
 
 
 @action
-def arm(track: Track, exclusive=None) -> bool:
+def toggle_arm(track: Track, exclusive=None) -> bool:
     if track.can_be_armed:
         exclusive = exclusive if exclusive is not None else song().exclusive_arm
         new_value = not track.arm
@@ -263,7 +262,7 @@ def set_loop_end(clip: Clip, loop_end: float, show_loop: Optional[bool]=True) ->
 def set_loop_position(clip, loop_start, loop_end):
     if is_clip_new_recording(clip):
         return False
-    if loop_start < clip.loop_end:
+    if loop_start < clip.loop_end and loop_start < clip.end_marker:
         set_loop_start(clip, loop_start, show_loop=False)
         set_loop_end(clip, loop_end, show_loop=False)
     else:

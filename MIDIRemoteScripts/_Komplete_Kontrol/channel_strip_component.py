@@ -3,7 +3,6 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\_Komplete_Kontrol\channel_strip_component.py
-# Compiled at: 2024-01-31 17:08:32
 # Size of source mod 2**32: 4386 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from builtins import round, str

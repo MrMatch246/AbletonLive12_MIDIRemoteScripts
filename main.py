@@ -4,20 +4,7 @@ def main():
     #iterate over all the files in the current directory and subdirectories
     print("decompiling files ...")
     multi_decompile_files("./MIDIRemoteScripts")
-    return
-    for root, dirs, files in os.walk("./MIDIRemoteScripts"):
-        for file in files:
-            if file.endswith(".pyc"):
-                #print the name of the file
-                print(os.path.join(root, file))
-                #run the uncompyle6 command
-                #os.system("python3.9 python-uncompyle6/uncompyle6/bin/uncompile.py " + os.path.join(root, file) + " > " + os.path.join(root, file)[:-1])
-                #os.system("decompyle3 " + os.path.join(root, file) + " > " + os.path.join(root, file)[:-1])
-                #decompile(os.path.join(root, file), os.path.join(root, file)[:-1])
 
-                decompiled = multi_decompile(os.path.join(root, file))
-                with open(os.path.join(root, file)[:-1], "w") as f:
-                    f.write(decompiled)
 
 
 # use multiprocessing to decompile the files in parallel
@@ -34,8 +21,17 @@ def multi_decompile_files(folder_path):
     with Pool(10) as p:
         p.map(multi_decompile, files_paths)
 
-
-
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            if file.endswith(".py"):
+                with open(os.path.join(root, file), "r") as f:
+                    content = f.read()
+                lines = content.split("\n")
+                for line in lines:
+                    if "# Compiled at: " in line:
+                        content = content.replace(f"{line}\n", "")
+                with open(os.path.join(root, file), "w") as f:
+                    f.write(content)
 
 def multi_decompile(filepath):
     parse_error = "Parse error at or near"

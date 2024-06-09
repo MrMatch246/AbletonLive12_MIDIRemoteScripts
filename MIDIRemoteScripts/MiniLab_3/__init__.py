@@ -3,8 +3,7 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\MiniLab_3\__init__.py
-# Compiled at: 2024-02-20 00:54:37
-# Size of source mod 2**32: 2452 bytes
+# Size of source mod 2**32: 2466 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 from ableton.v3.control_surface import ControlSurface, ControlSurfaceSpecification, create_skin
 from ableton.v3.control_surface.capabilities import CONTROLLER_ID_KEY, NOTES_CC, PORTS_KEY, SCRIPT, controller_id, inport, outport
@@ -30,7 +29,7 @@ def get_capabilities():
 
 
 def create_instance(c_instance):
-    return MiniLab_3(Specification, c_instance=c_instance)
+    return MiniLab_3(specification=Specification, c_instance=c_instance)
 
 
 class Specification(ControlSurfaceSpecification):

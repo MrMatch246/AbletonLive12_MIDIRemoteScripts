@@ -3,7 +3,6 @@
 # Decompiled from: Python 3.8.10 (default, Nov 22 2023, 10:22:35) 
 # [GCC 9.4.0]
 # Embedded file name: ..\..\..\output\Live\win_64_static\Release\python-bundle\MIDI Remote Scripts\AIRA_MX_1\ControlElementUtils.py
-# Compiled at: 2024-02-20 00:55:13
 # Size of source mod 2**32: 1170 bytes
 from __future__ import absolute_import, print_function, unicode_literals
 import Live
