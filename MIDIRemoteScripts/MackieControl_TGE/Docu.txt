@@ -1,0 +1,42 @@
+Here’s a condensed list focusing on the **functionalities** and any **combinations (e.g., Shift + something)**:
+
+---
+
+### Functionalities and Combinations
+
+#### **Automation Controls**
+- **`SID_AUTOMATION_ON`**:
+  - Toggle visibility of "Session" or "Arranger" view.
+  - **Shift + SID_AUTOMATION_ON**: Focus "Session" or "Arranger" view.
+
+- **`SID_AUTOMATION_RECORD`**:
+  - Toggle between "Detail/Clip" and "Detail/DeviceChain" subviews.
+  - **Shift + SID_AUTOMATION_RECORD**: Focus "Detail/Clip" or "Detail/DeviceChain" view.
+
+- **`SID_AUTOMATION_SNAPSHOT`**:
+  - Toggle visibility of "Browser".
+  - **Shift + SID_AUTOMATION_SNAPSHOT**: Focus "Browser".
+
+- **`SID_AUTOMATION_TOUCH`**:
+  - Toggle visibility of "Detail" view.
+  - **Shift + SID_AUTOMATION_TOUCH**: Focus "Detail" view.
+
+#### **Function Keys**
+- **`SID_FUNC_UNDO`**: Perform undo operation.
+- **`SID_FUNC_REDO`**: Perform redo operation.
+- **`SID_FUNC_CANCEL`**: Toggle "Back to Arranger" mode.
+- **`SID_FUNC_ENTER`**: Toggle "Draw Mode".
+- **`SID_FUNC_MARKER`**: Set or delete a cue point.
+- **`SID_FUNC_MIXER`**: Toggle "Follow Song" mode.
+
+#### **Modifier Keys**
+- **`SID_MOD_SHIFT`**: Activate "Shift" mode.
+- **`SID_MOD_OPTION`**: Activate "Option" mode.
+- **`SID_MOD_CTRL`**: Activate "Control" mode.
+- **`SID_MOD_ALT`**: Activate "Alt" mode.
+
+---
+
+Let me know if you need this refined further!
+
+
